@@ -51,6 +51,11 @@ unanswered dispute cannot be finalized as an unchallenged correct result.
 The logarithmic number of dispute rounds reduces on-chain work. It does not
 remove the watcher's full replay cost. Any account may challenge; randomly
 assigned watchers are a monitoring service, not the sole challenge gate.
+The current chain admits one active dispute per task. A losing challenger's
+bond is burned and a full challenge window restarts before the task can be
+paid. This removes the zero-cost worker-controlled false-challenge loop, but
+it does not solve concurrent challenger admission or transaction censorship;
+those remain permissionless-release gates.
 
 ## Lightweight mode
 

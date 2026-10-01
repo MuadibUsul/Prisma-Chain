@@ -103,9 +103,10 @@ request.
   interactive single-step dispute. A Merkle root alone is not a proof.
 - `lightweight`: signed LLM delivery evidence and sampled service checks.
   Subjective model quality is not fraud-proofed and cannot be auto-slashed.
-- `tier0_relative`: transport/storage encryption and workload partitioning.
-  Ingress may see the prompt and egress may see the answer; this is not
-  cryptographic secret sharing.
+- `tier0_relative`: target for encrypted transport/storage and workload
+  partitioning. The local devnet has none of those protections. Ingress may
+  see the prompt and egress may see the answer; this is not cryptographic
+  secret sharing.
 
 The [task protocol](docs/protocol.md) and [threat model](docs/threat-model.md)
 describe the exact promises and failure handling. A testnet PRSM faucet token

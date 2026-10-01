@@ -145,10 +145,20 @@ func TestWrongResultChallengeRefundsAndSlashes(t *testing.T) {
 func TestFalseChallengeLosesBondAndLeavesTaskPending(t *testing.T) {
 	f := newChallengeFixture(t, 1, false)
 	task := f.task(t)
-	if task.Status != "pending" || task.ChallengeEnd != 8 || task.ReservedBond != MinBond ||
-		f.keeper.GetBond(f.ctx, f.worker) != MinBond || f.bank.accounts[f.worker] != 10 ||
-		f.bank.accounts[f.challenger] != 990 || f.bank.module != MinBond+1000 {
+	if task.Status != "pending" || task.ChallengeEnd != 3+ChallengeBlocks || task.ReservedBond != MinBond ||
+		f.keeper.GetBond(f.ctx, f.worker) != MinBond || f.bank.accounts[f.worker] != 0 ||
+		f.bank.accounts[f.challenger] != 990 || f.bank.module != MinBond+1000 || f.bank.burned != 10 {
 		t.Fatalf("false-challenge accounting: task=%+v bank=%+v", task, f.bank)
+	}
+	// A colluding challenger cannot reclaim the bond through the worker and
+	// cannot shorten the next honest challenger's full review window.
+	if _, err := f.msg.StartChallenge(f.ctx.WithBlockHeight(4), &types.MsgStartChallenge{
+		Challenger: f.challenger, TaskId: f.taskID, TraceClaimJson: traceClaimJSON(t, f.challengerTrace),
+	}); err != nil {
+		t.Fatal(err)
+	}
+	if f.bank.burned != 20 || f.bank.accounts[f.worker] != 0 {
+		t.Fatalf("repeated false challenge was profitable: bank=%+v", f.bank)
 	}
 	f.assertConserved(t)
 }
@@ -231,7 +241,7 @@ func TestChallengeResponseTimeoutLedger(t *testing.T) {
 		requester, worker, challenger, module, burned, bond uint64
 	}{
 		{"neither responds", "", "refunded", 1000, 0, 990, 900000, 100010, 900000},
-		{"only worker responds", "worker", "pending", 0, 10, 990, MinBond + 1000, 0, MinBond},
+		{"only worker responds", "worker", "pending", 0, 0, 990, MinBond + 1000, 10, MinBond},
 		{"only challenger responds", "challenger", "refunded", 1000, 0, 101000, 900000, 0, 900000},
 	} {
 		t.Run(tc.name, func(t *testing.T) {

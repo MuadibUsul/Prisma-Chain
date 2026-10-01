@@ -609,14 +609,15 @@ func (s msgServer) resolveChallenge(ctx context.Context, task *Task, outcome vm.
 	if outcome == vm.Pending {
 		return nil
 	}
-	worker, _ := addr(task.Worker)
 	challenger, _ := addr(task.Challenger)
 	if outcome == vm.WorkerWins {
-		if err := s.bank.SendCoinsFromModuleToAccount(ctx, ModuleName, worker, amount(task.ChallengeBond)); err != nil {
+		// Burning a losing challenger's bond prevents a worker-controlled
+		// challenger from recovering the cost through the worker account.
+		if err := s.bank.BurnCoins(ctx, ModuleName, amount(task.ChallengeBond)); err != nil {
 			return err
 		}
 		task.Status = "pending"
-		task.ChallengeEnd = uint64(sdk.UnwrapSDKContext(ctx).BlockHeight()) + ChallengeRoundBlocks
+		task.ChallengeEnd = uint64(sdk.UnwrapSDKContext(ctx).BlockHeight()) + ChallengeBlocks
 	} else {
 		requester, _ := addr(task.Requester)
 		if err := s.bank.SendCoinsFromModuleToAccount(ctx, ModuleName, requester, amount(task.MaxFee)); err != nil {

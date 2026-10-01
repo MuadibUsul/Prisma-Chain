@@ -34,6 +34,13 @@ The chain cannot prove that they belong to independent operators. Random
 monitor assignment, concentration disclosure and collusion tests remain
 release gates.
 
+A losing challenger's bond is burned and the full challenge window restarts,
+so a worker cannot use a controlled challenger to recover the bond or shorten
+the next review period. The current task still admits only one active dispute
+at a time. A worker-controlled challenger can race an honest one; multi-
+challenger admission and censorship tests remain required before permissionless
+paid work.
+
 ## Verification boundary
 
 A Merkle root proves commitment to bytes, not that an AI computation is

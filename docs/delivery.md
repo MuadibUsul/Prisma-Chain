@@ -10,7 +10,9 @@ audited security guarantee exists. The following are release gates.
    with PRSM transfer, staking, governance, upgrade and compute modules.
 2. The deterministic VM and interactive dispute tests cover honest output,
    dishonest output, unavailable data, invalid proof, false challenge and
-   response timeout. Independent watchers can replay public tasks.
+   response timeout. Independent watchers can replay public tasks. Adversarial
+   tests also cover worker-controlled false challengers, challenge admission
+   races and repeated attempts to exclude an honest challenger.
 3. A client can post, claim, submit, challenge and settle a task end to end.
    Retries never pay more than once; failed jobs retain a refund route.
 4. Signed node announcements expire, route based on measured performance and
