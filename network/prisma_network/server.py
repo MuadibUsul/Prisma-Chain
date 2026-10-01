@@ -132,6 +132,7 @@ def create_gateway_app(
     chain_task_query: Callable[[int], Awaitable[dict]] | None = None,
     chain_height_query: Callable[[], Awaitable[int]] | None = None,
     token_counter: Callable[[str], Awaitable[int]] | None = None,
+    billing_pin: ModelPin | None = None,
     allow_unfunded_dev_tasks: bool = False,
     worker_call: Callable[[str, SignedExecution], Awaitable[WorkerResponse]] = _default_worker_call,
     gossip_peers: tuple[str, ...] = (),
@@ -234,7 +235,7 @@ def create_gateway_app(
                 raise HTTPException(404, "unknown local development task")
             return {"task_id": task_id, "delivery_status": "provisional_delivery" if delivered else "none",
                     "chain_status": "unfunded_dev", "settlement_final": False,
-                    "observed_height": None, "challenge_end": None}
+                    "observed_height": None, "challenge_end": None, "billing": None}
         if not numeric:
             raise HTTPException(400, "chain task ID must be a canonical positive uint64")
         if chain_task_query is None or chain_height_query is None:
@@ -246,6 +247,11 @@ def create_gateway_app(
                     {"posted", "accepted", "pending", "challenged", "settled", "refunded"}
                     or not isinstance(observed_height, int) or observed_height < 1):
                 raise ValueError("inconsistent chain task status")
+            escrow = int(task["max_fee"])
+            proposed = int(task.get("charged_fee", 0)) if task["mode"] == "lightweight" else escrow
+            if (task["mode"] not in {"verifiable", "lightweight"} or escrow <= 0 or
+                    proposed < 0 or proposed > escrow or task["status"] == "settled" and proposed == 0):
+                raise ValueError("inconsistent chain task billing")
             if task["status"] in {"pending", "challenged", "settled"} and not task.get("output_digest"):
                 raise ValueError("chain result has no output digest")
             if delivered:
@@ -274,13 +280,18 @@ def create_gateway_app(
                     if digest(delivered) != receipt_digest.hex():
                         raise HTTPException(409, "delivery receipt conflicts with chain result")
             challenge_end = (int(task.get("challenge_end", 0)) or None) if task["status"] == "pending" else None
+            final_charge = proposed if task["status"] == "settled" else 0 if task["status"] == "refunded" else None
+            billing = {"escrowed_uprsm": str(escrow),
+                       "proposed_charge_uprsm": str(proposed) if task["status"] == "pending" and proposed else None,
+                       "charged_uprsm": str(final_charge) if final_charge is not None else None,
+                       "refunded_uprsm": str(escrow - final_charge) if final_charge is not None else None}
         except HTTPException:
             raise
         except Exception as exc:
             raise HTTPException(503, "chain task status query failed") from exc
         return {"task_id": task_id, "delivery_status": "provisional_delivery" if delivered else "none",
                 "chain_status": task["status"], "settlement_final": task["status"] in {"settled", "refunded"},
-                "observed_height": observed_height, "challenge_end": challenge_end}
+                "observed_height": observed_height, "challenge_end": challenge_end, "billing": billing}
 
     @app.post("/v1/inference")
     async def inference(body: InferenceRequest, authorization: str | None = Header(default=None)) -> dict:
@@ -292,8 +303,12 @@ def create_gateway_app(
         if not allow_unfunded_dev_tasks:
             if task_authorizer is None:
                 raise HTTPException(503, "chain task authorizer is not configured")
-            if token_counter is None:
+            if token_counter is None or billing_pin is None:
                 raise HTTPException(503, "pinned tokenizer counter is not configured")
+            if (body.task.model_id != billing_pin.model_id or
+                    body.task.model_digest != billing_pin.model_digest or
+                    body.task.spec_version != billing_pin.spec_version):
+                raise HTTPException(400, "task does not match gateway billing tokenizer")
             if not plane.bound_worker_accounts:
                 raise HTTPException(503, "node-to-chain-account bindings are not configured")
         previous = plane.receipt(body.task.task_id)
@@ -466,7 +481,7 @@ def _bindings_from_env() -> dict[str, str]:
         return json.load(handle)
 
 
-def _verified_pin_from_env() -> ModelPin:
+def _pin_from_env() -> ModelPin:
     pin = ModelPin(model_id=os.environ["PRISMA_MODEL_ID"],
                    weights_digest=os.environ["PRISMA_WEIGHTS_DIGEST"],
                    tokenizer_digest=os.environ["PRISMA_TOKENIZER_DIGEST"],
@@ -474,18 +489,25 @@ def _verified_pin_from_env() -> ModelPin:
                    spec_version=os.environ["PRISMA_SPEC_VERSION"])
     if pin.model_digest != os.environ["PRISMA_MODEL_DIGEST"]:
         raise ValueError("configured model digest is not the registry bundle digest")
-    if os.environ.get("PRISMA_DEV_SKIP_FILE_HASH") == "1":
-        return pin
+    return pin
+
+
+def _verified_artifact_paths(pin: ModelPin, kinds: tuple[str, ...]) -> dict[str, dict[str, Path]]:
     root = Path(os.environ["PRISMA_MODEL_DIR"]).resolve()
     with open(os.environ["PRISMA_MODEL_FILES_FILE"], encoding="utf-8") as handle:
         files = json.load(handle)
-    for kind, expected_digest in (("weights", pin.weights_digest), ("tokenizer", pin.tokenizer_digest)):
+    paths: dict[str, dict[str, Path]] = {}
+    for kind in kinds:
         entries = files[kind]
         if not isinstance(entries, dict) or not entries:
             raise ValueError(f"{kind} file manifest must be a nonempty path-to-SHA256 map")
+        paths[kind] = {}
         for relative, expected_file_digest in entries.items():
+            if (not isinstance(relative, str) or not isinstance(expected_file_digest, str)
+                    or len(expected_file_digest) != 64):
+                raise ValueError(f"invalid {kind} artifact path or digest")
             path = (root / relative).resolve()
-            if not path.is_relative_to(root) or len(expected_file_digest) != 64:
+            if not path.is_relative_to(root):
                 raise ValueError(f"invalid {kind} artifact path or digest")
             hasher = hashlib.sha256()
             with path.open("rb") as source:
@@ -493,9 +515,34 @@ def _verified_pin_from_env() -> ModelPin:
                     hasher.update(chunk)
             if hasher.hexdigest() != expected_file_digest:
                 raise ValueError(f"{kind} artifact hash mismatch: {relative}")
-        if digest(entries) != expected_digest:
+            paths[kind][relative] = path
+        if digest(entries) != getattr(pin, kind + "_digest"):
             raise ValueError(f"{kind} artifact set digest mismatch")
+    return paths
+
+
+def _verified_pin_from_env() -> ModelPin:
+    pin = _pin_from_env()
+    if os.environ.get("PRISMA_DEV_SKIP_FILE_HASH") == "1":
+        return pin
+    _verified_artifact_paths(pin, ("weights", "tokenizer"))
     return pin
+
+
+def _token_counter_from_env(pin: ModelPin) -> Callable[[str], Awaitable[int]]:
+    if os.environ.get("PRISMA_DEV_SKIP_FILE_HASH") == "1":
+        raise ValueError("funded token counting cannot skip tokenizer hash verification")
+    tokenizer_files = _verified_artifact_paths(pin, ("tokenizer",))["tokenizer"]
+    candidates = [path for path in tokenizer_files.values() if path.name == "tokenizer.json"]
+    if len(candidates) != 1:
+        raise ValueError("tokenizer manifest must contain exactly one tokenizer.json")
+    from tokenizers import Tokenizer
+    tokenizer = Tokenizer.from_file(str(candidates[0]))
+
+    async def count(text: str) -> int:
+        return len(tokenizer.encode(text, add_special_tokens=False).ids)
+
+    return count
 
 
 def gateway_app_from_env() -> FastAPI:
@@ -513,11 +560,15 @@ def gateway_app_from_env() -> FastAPI:
             os.environ["PRISMA_CHAIN_GRPC_ADDR"], os.environ["PRISMA_CHAIN_RPC_URL"],
             insecure_dev=os.environ.get("PRISMA_DEV_HTTP") == "1")
         authorizer = ChainTaskAuthorizer(queries)
+    unfunded = os.environ.get("PRISMA_DEV_UNFUNDED") == "1"
+    billing_pin = None if unfunded else _pin_from_env()
+    counter = None if billing_pin is None else _token_counter_from_env(billing_pin)
     return create_gateway_app(plane, identity, os.environ["PRISMA_CLIENT_API_KEY"],
                               task_authorizer=authorizer,
                               chain_task_query=queries.task if queries else None,
                               chain_height_query=queries.height if queries else None,
-                              allow_unfunded_dev_tasks=os.environ.get("PRISMA_DEV_UNFUNDED") == "1",
+                              token_counter=counter, billing_pin=billing_pin,
+                              allow_unfunded_dev_tasks=unfunded,
                               gossip_peers=tuple(filter(None, os.environ.get("PRISMA_GOSSIP_PEERS", "").split(","))))
 
 
@@ -527,12 +578,16 @@ def worker_app_from_env() -> FastAPI:
     if os.environ["PRISMA_STAGE_INDEX"] != "0":
         raise ValueError("worker_app_from_env requires stage index 0")
     pin = _verified_pin_from_env()
+    counter = (None if os.environ.get("PRISMA_DEV_SKIP_FILE_HASH") == "1"
+               else _token_counter_from_env(pin))
     trusted = _keys_from_env()
     vllm_url = os.environ["PRISMA_VLLM_URL"]
     control_url = os.environ["PRISMA_CONTROL_URL"]
 
     async def call(request: ExecutionRequest) -> tuple[str, int]:
-        return await _default_model_call(vllm_url, pin.model_id, request, os.environ.get("PRISMA_VLLM_API_KEY"))
+        output, reported_tokens = await _default_model_call(
+            vllm_url, pin.model_id, request, os.environ.get("PRISMA_VLLM_API_KEY"))
+        return output, await counter(output) if counter else reported_tokens
 
     async def lookup(task_id: str) -> dict:
         return await _default_lease_lookup(control_url, task_id)

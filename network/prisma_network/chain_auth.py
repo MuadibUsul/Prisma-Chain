@@ -119,7 +119,7 @@ class GrpcChainQueries:
         return int(_response_field(raw, 1, 0)), bytes(_response_field(raw, 2, 2))
 
     async def height(self) -> int:
-        async with httpx.AsyncClient(timeout=5) as client:
+        async with httpx.AsyncClient(timeout=5, trust_env=False) as client:
             response = await client.get(self.rpc_url + "/status")
         response.raise_for_status()
         return int(response.json()["result"]["sync_info"]["latest_block_height"])

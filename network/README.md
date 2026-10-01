@@ -24,17 +24,26 @@ gateway and every worker. Node URLs must be HTTPS and have a host in
 `PRISMA_ALLOWED_NODE_HOSTS`. For a loopback-only local devnet, explicitly set
 `PRISMA_DEV_HTTP=1` and `PRISMA_DEV_UNFUNDED=1`. Production mode rejects
 inference until a chain task authorizer and pinned-tokenizer counter are wired
-in. Install `python -m pip install -e '.[chain]'` for the read-only chain query
-adapter, set `PRISMA_CHAIN_GRPC_ADDR` and `PRISMA_CHAIN_RPC_URL`, and provide
+in. Install `python -m pip install -e '.[chain,model]'`, set
+`PRISMA_CHAIN_GRPC_ADDR` and `PRISMA_CHAIN_RPC_URL`, and provide
 `PRISMA_NODE_ACCOUNT_BINDINGS_FILE` as a JSON map of node ID to its bonded
 chain worker address. The adapter checks accepted task state, the full task
 envelope, pinned chain model hashes, latest chain height, each stage's bond,
 and the on-chain Ed25519 key behind each announced node ID.
 It uses the chain's gRPC Query API and does not sign or broadcast transactions.
+In funded mode the gateway also needs `PRISMA_MODEL_ID`, `PRISMA_MODEL_DIGEST`,
+`PRISMA_WEIGHTS_DIGEST`, `PRISMA_TOKENIZER_DIGEST`, `PRISMA_RUNTIME_DIGEST`,
+`PRISMA_SPEC_VERSION`, `PRISMA_MODEL_DIR`, and `PRISMA_MODEL_FILES_FILE`.
+It hashes the manifest's `tokenizer.json` locally and uses that exact tokenizer
+to count tokens in delivered text with no added special tokens. The worker
+uses the same rule; vLLM's generated-token usage remains diagnostic only.
+This tariff excludes hidden reasoning and tokens omitted from delivered text.
 With those chain endpoints configured, authenticated `GET /v1/tasks/{task_id}`
 returns the node-observed chain status, observation height, challenge deadline,
 whether settlement/refund is final, and whether this gateway holds a provisional
-delivery receipt. A read failure returns 503; a receipt that conflicts with the
+delivery receipt. Its `billing` object reports escrow, proposed charge while
+pending, and final charged/refunded `uprsm` amounts as decimal strings; it is
+`null` for unfunded development tasks. A read failure returns 503; a receipt that conflicts with the
 chain task returns 409. The endpoint reports the configured node's query result,
 not an independently verified light-client proof; the height is sampled in a
 separate RPC call. In unfunded local development,
@@ -91,10 +100,10 @@ response disclose the Tier 0 boundary.
    `input_commitment` is SHA-256 of sorted compact UTF-8 JSON containing
    `messages`, `max_tokens` and `temperature`. The gateway checks the chain
    task through its injected authorizer before dispatching to the selected group. Funded
-   tasks also need an injected counter using the pinned tokenizer so a
+   tasks use a locally loaded, hash-verified tokenizer so a
    worker-reported billable token count is checked against delivered text. The
-   environment factory provides the read-only chain adapter when configured,
-   but it does not provide a pinned-tokenizer counter. The
+   environment factory provides the read-only chain adapter and tokenizer
+   counter when configured. The
    `PRISMA_DEV_UNFUNDED=1` switch is solely for local devnet tests.
 4. Gateway acquires a durable task lease, creates an attempt ID, and sends a
    signed execution request to the stage-0 worker. The worker queries the

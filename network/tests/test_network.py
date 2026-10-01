@@ -159,6 +159,28 @@ def test_gateway_requires_chain_authorization_by_default(tmp_path):
     assert client.get("/v1/tasks/1", headers={"Authorization": "Bearer secret"}).status_code == 503
 
 
+def test_funded_gateway_rejects_a_different_billing_model(tmp_path):
+    now = [int(time.time() * 1000)]
+    gateway = Identity.generate()
+    plane = plane_for(tmp_path, (gateway,), now)
+    plane.bound_worker_accounts[gateway.node_id] = "prsmgateway"
+
+    async def authorize(_task, _route):
+        return True
+
+    async def count(_output):
+        return 1
+
+    client = TestClient(create_gateway_app(plane, gateway, "secret", task_authorizer=authorize,
+                                           token_counter=count, billing_pin=PIN))
+    body = task_body().model_dump()
+    body["task"]["model_digest"] = "f" * 64
+    headers = {"Authorization": "Bearer secret"}
+    assert client.post("/v1/inference", json=body, headers=headers).status_code == 400
+    body["task"]["model_digest"] = MODEL_HASH
+    assert client.post("/v1/inference", json=body, headers=headers).status_code == 503
+
+
 def test_gateway_worker_signatures_and_provisional_once(tmp_path):
     now = [int(time.time() * 1000)]
     gateway, worker = Identity.generate(), Identity.generate()
@@ -243,6 +265,7 @@ def test_task_status_separates_chain_settlement_from_delivery(tmp_path):
     chain_task = {"id": 7, "status": "pending", "mode": body.mode,
                   "worker": "prsmworker",
                   "model_id": body.model_id, "spec_version": body.spec_version,
+                  "max_fee": 1000, "charged_fee": 1000,
                   "input_commitment": base64.b64encode(bytes.fromhex(body.input_commitment)).decode(),
                   "output_digest": base64.b64encode(bytes.fromhex("ab" * 32)).decode(),
                   "output_tokens": 3,
@@ -265,7 +288,9 @@ def test_task_status_separates_chain_settlement_from_delivery(tmp_path):
     assert status.status_code == 200
     assert status.json() == {"task_id": "7", "delivery_status": "provisional_delivery",
                              "chain_status": "pending", "settlement_final": False,
-                             "observed_height": 25, "challenge_end": 30}
+                             "observed_height": 25, "challenge_end": 30,
+                             "billing": {"escrowed_uprsm": "1000", "proposed_charge_uprsm": "1000",
+                                         "charged_uprsm": None, "refunded_uprsm": None}}
     chain_task["output_digest"] = base64.b64encode(bytes.fromhex("cd" * 32)).decode()
     assert client.get("/v1/tasks/7", headers=headers).status_code == 409
     chain_task["output_digest"] = base64.b64encode(bytes.fromhex("ab" * 32)).decode()
@@ -276,7 +301,9 @@ def test_task_status_separates_chain_settlement_from_delivery(tmp_path):
     assert client.get("/v1/tasks/7", headers=headers).status_code == 409
     chain_task["receipt_digest"] = base64.b64encode(bytes.fromhex(digest(receipt))).decode()
     chain_task["status"] = "settled"
-    assert client.get("/v1/tasks/7", headers=headers).json()["settlement_final"] is True
+    settled = client.get("/v1/tasks/7", headers=headers).json()
+    assert settled["settlement_final"] is True
+    assert settled["billing"]["charged_uprsm"] == "1000"
     chain_task["status"] = "refunded"
     assert client.get("/v1/tasks/7", headers=headers).json()["chain_status"] == "refunded"
     chain_task["worker"] = "other-worker"

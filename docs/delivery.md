@@ -59,13 +59,15 @@ unilateral authority over on-chain escrow, disputes or settlement.
 
 The current local gateway exposes test-only inference and receipt endpoints
 using a CPU mock model, plus a read-only chain task status endpoint. The caller
-supplies a task envelope, but the unfunded
-development mode does not verify chain acceptance or funding and uses one
-development API key. A separate local chain smoke test settles a synthetic
-lightweight task with bonded worker/gateway signatures and a fixed output-token
-tariff. The gateway still does not stream real Qwen output, sign or broadcast
-chain transactions, independently meter funded tokens, or finalize payment for
-its own inference requests. The unified API product gate remains open.
+supplies a task envelope. Unfunded development mode uses one development API
+key. A separate funded API smoke test connects the gateway and worker to the
+local chain: it verifies an accepted escrowed task, independently counts
+delivered text with a hash-pinned tokenizer, checks a signed receipt, retries a
+worker failure under the same task ID and observes pending and settled billing.
+The test uses a synthetic model and manually broadcasts the receipt and
+settlement transactions through the CLI. The gateway still does not stream real
+Qwen output or automatically sign and broadcast chain transactions for its own
+inference requests. The unified API product gate remains open.
 
 ## Open participation and source release gate
 

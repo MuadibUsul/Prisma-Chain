@@ -75,6 +75,11 @@ stores the public receipt. Two other bonded monitors attest to delivery; once
 the confirmation window closes, testnet settlement charges 1,000 `uprsm` per
 output token up to the escrow cap and refunds the remainder. The charge uses
 the usual 20% burn, 10% combined monitor share and residual worker share.
+For the current inference protocol, billable tokens are the delivered output
+text encoded with the pinned `tokenizer.json` and no added special tokens.
+The worker and gateway compute this count separately; vLLM's generated-token
+usage may differ and does not set the billable count. Hidden reasoning or
+otherwise withheld tokens are outside this tariff.
 This testnet tariff and dual signatures cannot prove subjective answer quality
 or rule out collusion between operators.
 Independent re-execution, canary tasks and user feedback update reputation.

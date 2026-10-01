@@ -117,6 +117,22 @@ refund, burn, payout, final API status, and duplicate-settlement rejection.
 This tests chain accounting and signatures; it does not run a GPU model or
 prove that the two signers belong to independent operators.
 
+Run the funded API integration check:
+
+```sh
+python -m pip install -e './network[chain,model]'
+python deploy/funded_api_smoke.py
+```
+
+It creates a fresh local chain task and bonded identities, uses the actual
+chain gRPC authorization query, sends a signed request through the gateway and
+worker FastAPI applications, injects one worker failure, retries under the
+same task ID, then submits the gateway receipt through the local CLI. It
+checks the API's accepted, pending and settled views, including proposed
+charge and final refund. Its model output and tokenizer are synthetic and
+in-process; this is not a Qwen or multi-host benchmark. Each run uses new
+test PRSM accounts and a new escrow task.
+
 To stop processes while preserving local chain state and receipts:
 
 ```sh
