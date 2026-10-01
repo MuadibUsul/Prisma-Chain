@@ -3,7 +3,9 @@
 This repository implements the Prisma Chain whitepaper as an **application
 chain plus off-chain compute network**. PoS/BFT orders transactions; useful AI
 work is rewarded by the task protocol and does not choose blocks. The source
-whitepaper is [Prisma Chain](https://www.annulus.us/notes/prisma-chain-whitepaper).
+concept paper is [Prisma Chain v0.1](https://www.annulus.us/notes/prisma-chain-whitepaper).
+The [Chinese whitepaper v0.2](docs/whitepaper-v0.2.zh-CN.md) states the revised
+protocol, current evidence and testnet delivery gates.
 
 This is development software. A passing local test is not an audited chain,
 an economically secured network, or evidence of multi-machine GPU inference.

@@ -32,10 +32,11 @@ Every task binds these fields before a worker accepts it:
 | `deadline` | Last acceptable submission height |
 | `privacy_tier` | `public` or `tier0_relative` |
 
-The chain records a `task_id` and an `attempt_id` for each claim. A result is
-provisional until its mode-specific acceptance condition is met. Finalization
-and refund are mutually exclusive. A retry can change the attempt, never the
-task, and only one accepted attempt receives payment.
+The chain records a `task_id`; the off-chain gateway records an `attempt_id`
+for each delivery attempt. A result is provisional until its mode-specific
+acceptance condition is met. Finalization and refund are mutually exclusive.
+A retry can change the attempt, never the task, and only one accepted task
+receives payment.
 
 ## Verifiable mode
 
