@@ -54,6 +54,14 @@ class Identity:
     def sign(self, domain: str, payload: object) -> str:
         return base64.b64encode(self._key.sign(domain.encode() + b"\n" + canonical(payload))).decode()
 
+    def network_key_proof_hex(self, chain_id: str, worker_account: str) -> str:
+        """Prove this network key belongs to one chain and bonded account."""
+        if not chain_id or not worker_account:
+            raise ValueError("chain ID and worker account are required")
+        payload = {"chain_id": chain_id, "worker": worker_account,
+                   "network_public_key": self.public_key.hex()}
+        return base64.b64decode(self.sign("prisma:network-key-binding:v1", payload)).hex()
+
 
 def verify(public_key_b64: str, domain: str, payload: object, signature_b64: str) -> bool:
     try:

@@ -2,8 +2,10 @@ package compute
 
 import (
 	"context"
+	"crypto/ed25519"
 	"crypto/sha256"
 	"encoding/binary"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -109,10 +111,11 @@ func modelKey(id string, version string) []byte {
 
 func ownerKey(id string) []byte { return append([]byte{'o'}, []byte(id)...) }
 
-func bondKey(worker string) []byte    { return append([]byte{'b'}, []byte(worker)...) }
-func reserveKey(worker string) []byte { return append([]byte{'r'}, []byte(worker)...) }
-func networkKey(worker string) []byte { return append([]byte{'k'}, []byte(worker)...) }
-func nodeKey(digest [32]byte) []byte  { return append([]byte{'n'}, digest[:]...) }
+func bondKey(worker string) []byte         { return append([]byte{'b'}, []byte(worker)...) }
+func reserveKey(worker string) []byte      { return append([]byte{'r'}, []byte(worker)...) }
+func networkKey(worker string) []byte      { return append([]byte{'k'}, []byte(worker)...) }
+func networkProofKey(worker string) []byte { return append([]byte{'p'}, []byte(worker)...) }
+func nodeKey(digest [32]byte) []byte       { return append([]byte{'n'}, digest[:]...) }
 
 func (k Keeper) GetTask(ctx context.Context, id uint64) (Task, error) {
 	data := k.store(ctx).Get(taskKey(id))
@@ -303,19 +306,36 @@ func (s msgServer) BondWorker(ctx context.Context, msg *types.MsgBondWorker) (*t
 	if len(msg.NetworkPublicKey) != 0 && len(msg.NetworkPublicKey) != 32 {
 		return nil, errors.New("network Ed25519 public key must be 32 bytes")
 	}
+	if len(msg.NetworkPublicKey) == 0 && len(msg.NetworkKeyProof) != 0 {
+		return nil, errors.New("network key proof requires a public key")
+	}
+	var node [32]byte
 	if len(msg.NetworkPublicKey) == 32 {
+		chainID := sdk.UnwrapSDKContext(ctx).ChainID()
+		payload, err := canonicalJSON(map[string]any{
+			"chain_id": chainID, "worker": msg.Worker,
+			"network_public_key": hex.EncodeToString(msg.NetworkPublicKey),
+		})
+		if err != nil || chainID == "" || len(msg.NetworkKeyProof) != ed25519.SignatureSize ||
+			!ed25519.Verify(msg.NetworkPublicKey,
+				append([]byte("prisma:network-key-binding:v1\n"), payload...), msg.NetworkKeyProof) {
+			return nil, errors.New("network key possession proof is invalid")
+		}
 		if prior := s.store(ctx).Get(networkKey(msg.Worker)); len(prior) != 0 && string(prior) != string(msg.NetworkPublicKey) {
 			return nil, errors.New("bonded network key cannot be replaced")
 		}
-		node := sha256.Sum256(msg.NetworkPublicKey)
+		node = sha256.Sum256(msg.NetworkPublicKey)
 		if prior := s.store(ctx).Get(nodeKey(node)); len(prior) != 0 && string(prior) != msg.Worker {
 			return nil, errors.New("network key belongs to another bonded account")
 		}
-		s.store(ctx).Set(networkKey(msg.Worker), msg.NetworkPublicKey)
-		s.store(ctx).Set(nodeKey(node), []byte(msg.Worker))
 	}
 	if err := s.bank.SendCoinsFromAccountToModule(ctx, worker, ModuleName, amount(msg.Amount)); err != nil {
 		return nil, err
+	}
+	if len(msg.NetworkPublicKey) == 32 {
+		s.store(ctx).Set(networkKey(msg.Worker), msg.NetworkPublicKey)
+		s.store(ctx).Set(nodeKey(node), []byte(msg.Worker))
+		s.store(ctx).Set(networkProofKey(msg.Worker), []byte{1})
 	}
 	s.setBond(ctx, msg.Worker, s.GetBond(ctx, msg.Worker)+msg.Amount)
 	return &types.MsgBondWorkerResponse{}, nil
@@ -396,8 +416,9 @@ func (s msgServer) AcceptTask(ctx context.Context, msg *types.MsgAcceptTask) (*t
 	if bond < reserved || bond-reserved < requiredBond {
 		return nil, errors.New("worker bond below task collateral")
 	}
-	if task.Mode == "lightweight" && len(s.store(ctx).Get(networkKey(msg.Worker))) != 32 {
-		return nil, errors.New("lightweight worker must register a network Ed25519 key")
+	if task.Mode == "lightweight" && (len(s.store(ctx).Get(networkKey(msg.Worker))) != 32 ||
+		len(s.store(ctx).Get(networkProofKey(msg.Worker))) == 0) {
+		return nil, errors.New("lightweight worker must prove possession of a network Ed25519 key")
 	}
 	s.setReserved(ctx, msg.Worker, reserved+requiredBond)
 	task.Worker, task.Status, task.ReservedBond = msg.Worker, "accepted", requiredBond
@@ -863,6 +884,10 @@ func (q queryServer) Worker(ctx context.Context, req *types.QueryWorkerRequest) 
 	if _, err := addr(req.Worker); err != nil {
 		return nil, err
 	}
+	var networkPublicKey []byte
+	if len(q.store(ctx).Get(networkProofKey(req.Worker))) != 0 {
+		networkPublicKey = q.store(ctx).Get(networkKey(req.Worker))
+	}
 	return &types.QueryWorkerResponse{BondedUprsm: q.GetBond(ctx, req.Worker),
-		NetworkPublicKey: q.store(ctx).Get(networkKey(req.Worker)), ReservedUprsm: q.getReserved(ctx, req.Worker)}, nil
+		NetworkPublicKey: networkPublicKey, ReservedUprsm: q.getReserved(ctx, req.Worker)}, nil
 }

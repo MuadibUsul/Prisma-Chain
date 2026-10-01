@@ -46,7 +46,9 @@ def main() -> None:
         submit("bank", "send", "validator", address, "2000000uprsm", signer="validator")
         args = ["compute", "bond-worker", "--amount", str(BOND)]
         if key is not None:
-            args += ["--network-public-key", key.hex()]
+            identity = worker_identity if name == worker_name else gateway_identity
+            args += ["--network-public-key", key.hex(),
+                     "--network-key-proof", identity.network_key_proof_hex(CHAIN_ID, address)]
         submit(*args, signer=name)
         if int(query_worker(address)["bonded_uprsm"]) != BOND:
             raise RuntimeError("network participant bond not recorded")

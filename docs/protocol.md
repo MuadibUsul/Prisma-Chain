@@ -64,6 +64,14 @@ remain permissionless-release gates.
 
 ## Lightweight mode
 
+Initial network-key registration requires `network_key_proof`, a 64-byte
+Ed25519 signature by the registered raw public key over
+`prisma:network-key-binding:v1` + newline + sorted compact UTF-8 JSON for
+`{"chain_id": <chain ID>, "network_public_key": <lowercase hex>,
+"worker": <prsm address>}`. The chain verifies this before reserving the key;
+subsequent bond top-ups may omit both key and proof. Legacy keys with no proof
+marker cannot accept lightweight work or validate lightweight receipts.
+
 The worker and gateway sign a delivery receipt, including the pinned model
 version, attempt ID, output commitment, delivered token count and timestamp.
 For a lightweight result, `receipt_digest` is SHA-256 of the complete signed

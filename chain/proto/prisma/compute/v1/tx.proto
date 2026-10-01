@@ -37,6 +37,9 @@ message MsgBondWorker {
   string worker = 1;
   uint64 amount = 2;
   bytes network_public_key = 3;
+  // Ed25519 signature by network_public_key over the v1 account/chain binding.
+  // Required whenever network_public_key is present; omit both for a top-up.
+  bytes network_key_proof = 4;
 }
 message MsgBondWorkerResponse {}
 

@@ -12,7 +12,7 @@ import httpx
 from fastapi.testclient import TestClient
 from tokenizers import Tokenizer, models, pre_tokenizers
 
-from chain_smoke import height, wait_for
+from chain_smoke import CHAIN_ID, height, wait_for
 from compute_smoke import account, find_task, submit, task_state
 from light_smoke import put_bytes
 
@@ -36,7 +36,9 @@ def main() -> None:
         submit("bank", "send", "validator", address, "2000000uprsm", signer="validator")
         args = ["compute", "bond-worker", "--amount", "1000000"]
         if role in ("worker", "gateway"):
-            args += ["--network-public-key", (worker_key if role == "worker" else gateway_key).public_key.hex()]
+            identity = worker_key if role == "worker" else gateway_key
+            args += ["--network-public-key", identity.public_key.hex(),
+                     "--network-key-proof", identity.network_key_proof_hex(CHAIN_ID, address)]
         submit(*args, signer=name)
 
     temp = tempfile.TemporaryDirectory(prefix="prisma-funded-api-", ignore_cleanup_errors=True)

@@ -93,7 +93,8 @@ func (s msgServer) bondedNodeKey(ctx context.Context, nodeID string) (string, []
 	copy(id[:], node)
 	account := string(s.store(ctx).Get(nodeKey(id)))
 	key := s.store(ctx).Get(networkKey(account))
-	if account == "" || len(key) != ed25519.PublicKeySize || s.GetBond(ctx, account) < MinBond ||
+	if account == "" || len(key) != ed25519.PublicKeySize ||
+		len(s.store(ctx).Get(networkProofKey(account))) == 0 || s.GetBond(ctx, account) < MinBond ||
 		sha256.Sum256(key) != id {
 		return "", nil, errors.New("receipt node is not bonded and registered")
 	}

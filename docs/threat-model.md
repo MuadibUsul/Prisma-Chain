@@ -21,13 +21,14 @@ stake is not exposed to compute-result disputes.
 | Validator subset | Censor dispute transactions or halt chain | Independent operators, stake distribution, partition and fault tests |
 | User | Submit malformed inputs or dispute subjective quality | Canonical bounded public inputs; no automatic quality slashing in lightweight mode |
 
-The current `BondWorker` path accepts a 32-byte Ed25519 network public key and
-enforces uniqueness, but it does not verify a signature proving control of
-that key at registration. A bonded account could reserve another operator's
-public key and deny that operator registration. The gateway still requires
-signed announcements from the private key, so such a reservation does not
-authorize impersonation. Add an account-bound key-possession proof and key
-rotation rules before permissionless funded operation.
+`BondWorker` now requires an Ed25519 possession proof whenever it registers a
+network public key. The signed v1 payload binds the chain ID, worker account
+and raw public key; the chain records a proof marker and hides unproven legacy
+keys from worker queries and lightweight receipt verification. Bond top-ups
+without a network key remain possible. This does not establish that distinct
+accounts belong to distinct operators. Key rotation and a testnet upgrade plan
+for previously registered accounts are still required before permissionless
+funded operation.
 
 Two different bonded monitor addresses are required for a verifiable payout.
 The chain cannot prove that they belong to independent operators. Random

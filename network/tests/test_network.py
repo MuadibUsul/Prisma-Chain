@@ -473,3 +473,16 @@ def test_checked_in_wire_examples_have_valid_independent_signatures():
     assert verify(cap.public_key, "prisma:worker-receipt:v1", att.model_dump(), receipt["worker_signature"])
     signature = receipt.pop("gateway_signature")
     assert verify(sample["gateway_public_key"], "prisma:gateway-receipt:v1", receipt, signature)
+
+
+def test_network_key_proof_binds_chain_and_account():
+    identity = Identity.generate()
+    proof = base64.b64encode(bytes.fromhex(
+        identity.network_key_proof_hex("prisma-test-1", "prsm1worker"))).decode()
+    payload = {"chain_id": "prisma-test-1", "worker": "prsm1worker",
+               "network_public_key": identity.public_key.hex()}
+    assert verify(identity.public_key_b64, "prisma:network-key-binding:v1", payload, proof)
+    assert not verify(identity.public_key_b64, "prisma:network-key-binding:v1",
+                      {**payload, "worker": "prsm1attacker"}, proof)
+    assert not verify(identity.public_key_b64, "prisma:network-key-binding:v1",
+                      {**payload, "chain_id": "another-chain"}, proof)

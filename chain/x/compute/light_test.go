@@ -2,6 +2,7 @@ package compute
 
 import (
 	"bytes"
+	"crypto/ed25519"
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
@@ -13,6 +14,69 @@ import (
 	"github.com/cosmos/cosmos-sdk/testutil"
 	"prismachain/chain/x/compute/types"
 )
+
+func testNetworkKeyProof(t *testing.T, chainID, account string, key []byte, seed byte) []byte {
+	t.Helper()
+	private := ed25519.NewKeyFromSeed(bytes.Repeat([]byte{seed}, ed25519.SeedSize))
+	if !bytes.Equal(private.Public().(ed25519.PublicKey), key) {
+		t.Fatal("test network key does not match deterministic receipt seed")
+	}
+	payload, err := canonicalJSON(map[string]any{
+		"chain_id": chainID, "worker": account, "network_public_key": hex.EncodeToString(key),
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return ed25519.Sign(private, append([]byte("prisma:network-key-binding:v1\n"), payload...))
+}
+
+func TestBondWorkerRequiresNetworkKeyPossession(t *testing.T) {
+	worker, attacker := account(91), account(92)
+	key := storetypes.NewKVStoreKey(ModuleName)
+	ctx := testutil.DefaultContextWithKeys(map[string]*storetypes.KVStoreKey{ModuleName: key}, nil, nil).
+		WithBlockHeight(1).WithChainID("prisma-test-1")
+	bank := &memoryBank{accounts: map[string]uint64{worker: MinBond + 2, attacker: MinBond}}
+	keeper := NewKeeper(key, bank)
+	msg := keeper.MsgServer()
+	publicKey := ed25519.NewKeyFromSeed(bytes.Repeat([]byte{3}, ed25519.SeedSize)).Public().(ed25519.PublicKey)
+	for _, invalid := range [][]byte{
+		nil,
+		testNetworkKeyProof(t, ctx.ChainID(), attacker, publicKey, 3),
+		testNetworkKeyProof(t, "another-chain", worker, publicKey, 3),
+	} {
+		if _, err := msg.BondWorker(ctx, &types.MsgBondWorker{Worker: worker, Amount: MinBond,
+			NetworkPublicKey: publicKey, NetworkKeyProof: invalid}); err == nil {
+			t.Fatal("network key registered without an account-bound proof")
+		}
+	}
+	if keeper.GetBond(ctx, worker) != 0 || keeper.store(ctx).Has(networkKey(worker)) {
+		t.Fatal("rejected key registration changed bond or network identity")
+	}
+	proof := testNetworkKeyProof(t, ctx.ChainID(), worker, publicKey, 3)
+	if _, err := msg.BondWorker(ctx, &types.MsgBondWorker{Worker: worker, Amount: MinBond,
+		NetworkPublicKey: publicKey, NetworkKeyProof: proof}); err != nil {
+		t.Fatal(err)
+	}
+	if len(keeper.store(ctx).Get(networkProofKey(worker))) != 1 {
+		t.Fatal("valid network key was not marked proven")
+	}
+	if _, err := msg.BondWorker(ctx, &types.MsgBondWorker{Worker: worker, Amount: 1}); err != nil {
+		t.Fatal("bond top-up without re-sending the network key should work:", err)
+	}
+	keeper.store(ctx).Delete(networkProofKey(worker)) // Simulate a pre-upgrade registration.
+	queried, err := keeper.QueryServer().Worker(ctx, &types.QueryWorkerRequest{Worker: worker})
+	if err != nil || len(queried.NetworkPublicKey) != 0 {
+		t.Fatal("unproven legacy network key remained visible to authorizers")
+	}
+	if _, err := msg.BondWorker(ctx, &types.MsgBondWorker{Worker: worker, Amount: 1,
+		NetworkPublicKey: publicKey, NetworkKeyProof: proof}); err != nil {
+		t.Fatal("same-key proof refresh failed:", err)
+	}
+	queried, err = keeper.QueryServer().Worker(ctx, &types.QueryWorkerRequest{Worker: worker})
+	if err != nil || !bytes.Equal(queried.NetworkPublicKey, publicKey) {
+		t.Fatal("proved legacy key was not restored to authorizer queries")
+	}
+}
 
 func TestLightweightSignedReceiptMeteredSettlement(t *testing.T) {
 	fixtureBytes, err := os.ReadFile("../../../network/examples/contract.json")
@@ -45,7 +109,8 @@ func TestLightweightSignedReceiptMeteredSettlement(t *testing.T) {
 	gatewayKey, _ := base64.StdEncoding.DecodeString(fixture.GatewayPublicKey)
 	requester, worker, gateway, monitorA, monitorB := account(71), account(72), account(73), account(74), account(75)
 	key := storetypes.NewKVStoreKey(ModuleName)
-	ctx := testutil.DefaultContextWithKeys(map[string]*storetypes.KVStoreKey{ModuleName: key}, nil, nil).WithBlockHeight(1)
+	ctx := testutil.DefaultContextWithKeys(map[string]*storetypes.KVStoreKey{ModuleName: key}, nil, nil).
+		WithBlockHeight(1).WithChainID("prisma-test-1")
 	bank := &memoryBank{accounts: map[string]uint64{
 		requester: 10_000, worker: MinBond, gateway: MinBond,
 		monitorA: MinBond, monitorB: MinBond,
@@ -63,9 +128,14 @@ func TestLightweightSignedReceiptMeteredSettlement(t *testing.T) {
 	for _, bonded := range []struct {
 		address string
 		key     []byte
-	}{{worker, workerKey}, {gateway, gatewayKey}, {monitorA, nil}, {monitorB, nil}} {
+		seed    byte
+	}{{worker, workerKey, 2}, {gateway, gatewayKey, 1}, {monitorA, nil, 0}, {monitorB, nil, 0}} {
+		var proof []byte
+		if bonded.key != nil {
+			proof = testNetworkKeyProof(t, ctx.ChainID(), bonded.address, bonded.key, bonded.seed)
+		}
 		if _, err := msg.BondWorker(ctx, &types.MsgBondWorker{Worker: bonded.address,
-			Amount: MinBond, NetworkPublicKey: bonded.key}); err != nil {
+			Amount: MinBond, NetworkPublicKey: bonded.key, NetworkKeyProof: proof}); err != nil {
 			t.Fatal(err)
 		}
 	}

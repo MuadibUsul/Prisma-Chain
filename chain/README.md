@@ -37,6 +37,12 @@ registered VM programs also remain on-chain throughout challenges. The only
 accepted mode values are `verifiable` and `lightweight`; privacy values are
 `public` and `tier0_relative` respectively. The model version is immutable.
 
+After editing `chain/proto/prisma/compute/v1/*.proto`, install `protoc` and
+`go install github.com/cosmos/gogoproto/protoc-gen-gogofaster@v1.7.2`, put
+`$GOPATH/bin` on `PATH`, then run `sh chain/proto/generate.sh` from the
+repository root with Go 1.24. The script uses the pinned Cosmos SDK proto
+imports and rewrites both checked-in Go bindings.
+
 Verifiable result submission includes a committed trace and endpoint proofs.
 Two separately bonded monitors must attest, the challenge window must close,
 and a valid challenged step can overturn the result. Settlement burns 20% of
@@ -54,6 +60,14 @@ and splits the rest 70% to the worker and 5% to each monitor. A receipt digest
 alone cannot authorize payment. Missing attestations or a legacy hash-only
 pending result keep a refund path open after timeout. This fixed testnet tariff
 does not yet cover input tokens, GPU time, quality or a governed price table.
+
+Registering a network public key also requires `--network-key-proof`: a
+64-byte Ed25519 signature by that key over the v1 chain/account/key binding
+described in [the protocol](../docs/protocol.md). `bond-worker` accepts the
+lowercase hex form of both the 32-byte public key and 64-byte proof. Rebonding
+without a key needs neither field. Existing local keys without a proof marker
+must be re-registered with the same key and a valid proof before they can
+participate in lightweight tasks; this testnet change does not rotate keys.
 
 ## Signed local acceptance (2026-10-01)
 

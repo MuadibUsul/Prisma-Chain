@@ -92,7 +92,10 @@ response disclose the Tier 0 boundary.
    Weight/tokenizer digests are SHA-256 of their sorted file-hash maps. The
    gateway binds routes and requests to this digest and exact spec version.
    Trust keys must be provisioned from bonded chain workers by the operator;
-   a signature alone does not prove a worker has a bond or GPU.
+   a signature alone does not prove a worker has a bond or GPU. A worker binding
+   a new Ed25519 network key supplies the v1 chain/account/key possession proof
+   as `--network-key-proof` in its `bond-worker` transaction; see
+   [the protocol](../docs/protocol.md).
 2. Gateway polls `/v1/probe` on every stage. A route is eligible only with all
    stages present, the same pinned model/runtime hashes and recent successful
    probes. Scores use observed latency/bandwidth and sidecar queue depth.

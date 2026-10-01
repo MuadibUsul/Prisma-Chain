@@ -107,11 +107,17 @@ full Compose stack before using that flag.
 Run the separate lightweight settlement check against the live local chain:
 
 ```sh
+python deploy/key_proof_smoke.py
 python deploy/light_smoke.py
 ```
 
-It creates distinct bonded worker, gateway, and monitor accounts, posts a
-funded synthetic task, rejects a hash-only result, submits a canonical
+`key_proof_smoke.py` first tries to reserve another node's Ed25519 network key
+without a proof, with a proof bound to another account, and with a proof bound
+to another chain. The live chain rejects all three, then accepts the rightful
+account's proof and a later bond top-up without re-sending the key.
+
+`light_smoke.py` creates distinct bonded worker, gateway, and monitor accounts,
+posts a funded synthetic task, rejects a hash-only result, submits a canonical
 worker/gateway signed receipt, then verifies metered charge, unused escrow
 refund, burn, payout, final API status, and duplicate-settlement rejection.
 This tests chain accounting and signatures; it does not run a GPU model or
