@@ -92,7 +92,8 @@ running independent monitor or a proof against common-mode VM bugs. Each run
 creates a new task and uses test PRSM only.
 
 With `--check-gateway`, the script also checks the authenticated API's
-`accepted`, `pending`, and final `settled` or `refunded` chain views. Start the
+`accepted`, `pending`, `challenged` (fraud path), and final `settled` or
+`refunded` chain views. Start the
 full Compose stack before using that flag.
 
 To stop processes while preserving local chain state and receipts:

@@ -174,7 +174,7 @@ def complete_honest(task_id: int, worker: str, requester: str, module: str,
 
 def complete_fraud(task_id: int, worker: str, requester: str, module: str,
                    worker_reserved: int, honest_path: str, fraud_path: str,
-                   fraudulent_claim: dict) -> None:
+                   fraudulent_claim: dict, check_gateway: bool) -> None:
     challenger_name = "compute-smoke-challenger"
     challenger = account(challenger_name)
     if balance(challenger) < BOND:
@@ -190,6 +190,8 @@ def complete_fraud(task_id: int, worker: str, requester: str, module: str,
            "--trace-claim-json", challenger_claim_path, signer=challenger_name)
     if task_state(task_id)["status"] != "challenged":
         raise RuntimeError("fraud dispute did not open")
+    if check_gateway:
+        check_gateway_status(task_id, "challenged")
     for name, path in (("compute-smoke-worker", fraud_path), (challenger_name, honest_path)):
         proof = vm_run(path, "-proof", "1")["proof"]
         if not proof["valid"]:
@@ -298,7 +300,7 @@ def main() -> None:
                         honest_path, claim)
     else:
         complete_fraud(task_id, worker, requester, module, prior_reserved,
-                       honest_path, job_path, claim)
+                       honest_path, job_path, claim, args.check_gateway)
     if args.check_gateway:
         check_gateway_status(task_id, "settled" if scenario == "honest" else "refunded")
 
