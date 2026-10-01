@@ -69,13 +69,23 @@ Run the chain compute protocol acceptance check:
 
 ```sh
 python deploy/compute_smoke.py
+python deploy/compute_smoke.py --scenario honest
+python deploy/compute_smoke.py --scenario fraud
 ```
 
-It registers a bounded public VM model, bonds a separate worker account,
-posts a verifiable task, accepts it, and checks the model, worker, task,
-reserved bond, and module escrow through chain queries. The accepted task and
-its escrow remain on the devnet. This check does not provide an automated
-replay monitor or settle a result.
+The default scenario registers a bounded public VM model, bonds a separate
+worker account, posts a verifiable task, accepts it, and checks the model,
+worker, task, reserved bond, and module escrow through chain queries. Its
+accepted task and escrow remain on the devnet. The `honest` scenario runs the
+VM, submits a result, has two separately bonded accounts replay and attest,
+waits out the challenge window, and verifies settlement, fee split, 20% burn,
+bond release, and duplicate-payment rejection. The `fraud` scenario submits
+an incorrect two-step trace, independently recomputes the canonical trace,
+plays the midpoint dispute on-chain, and verifies requester refund, worker
+slash, challenger bond return, and duplicate-payment rejection. These are
+scripted local checks using the same VM implementation, not a continuously
+running independent monitor or a proof against common-mode VM bugs. Each run
+creates a new task and uses test PRSM only.
 
 To stop processes while preserving local chain state and receipts:
 

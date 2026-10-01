@@ -74,10 +74,14 @@ python deploy/init_devnet.py
 docker compose -f deploy/compose.yaml up --build -d
 python deploy/smoke.py
 python deploy/chain_smoke.py
+python deploy/compute_smoke.py --scenario honest
+python deploy/compute_smoke.py --scenario fraud
 ```
 
 The first smoke test verifies blocks and a signed but unfunded mock delivery.
-The second verifies a real signed bank transfer and exact balance changes. See
+The second verifies a real signed bank transfer and exact balance changes.
+The compute checks submit honest and fraudulent VM results to the live local
+chain, then verify settlement or challenge/refund and reject duplicate payout. See
 [the local runbook](deploy/README.md) for setup, test-token funding and volume
 handling. The mock model is not Qwen; no GPU hosts are currently available.
 
@@ -86,7 +90,7 @@ handling. The mock model is not Qwen; no GPU hosts are currently available.
 | Area | Current evidence | Open gate |
 | --- | --- | --- |
 | Bounded VM | Local execution, trace proofs, independent replay and dispute tests pass | Broader adversarial review and audit |
-| Chain | One local validator, signed bank transfer and a verifiable task settled with 20% burn and duplicate-payment rejection | Independent validators, public genesis and governance rehearsal |
+| Chain | One local validator, signed bank transfer, scripted honest settlement and one-step fraud challenge/refund with amount checks | Independent validators, public genesis and governance rehearsal |
 | Compute network | Signed discovery, measured routing, lease fencing and provisional mock receipts pass locally | Multi-host Qwen serving, shared leases, checkpoint recovery and funded-task integration |
 | Lightweight payment | Escrow can be refunded; automatic finalization is disabled | Verified gateway and worker receipts, pinned token metering and tariff rules |
 | Unified API | Local mock inference and receipt endpoints; caller supplies a task envelope, but development mode does not verify chain acceptance or funding | Quoting, streaming multi-host Qwen, asynchronous jobs, finality status, billing and external-client acceptance |
