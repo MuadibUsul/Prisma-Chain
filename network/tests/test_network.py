@@ -343,12 +343,13 @@ def test_worker_rejects_stale_fence_before_model_call():
     assert calls == []
 
 
-def test_worker_rejects_backend_token_overcount():
+@pytest.mark.parametrize("reported", [0, 9])
+def test_worker_rejects_unbillable_backend_token_count(reported):
     gateway, worker = Identity.generate(), Identity.generate()
     body = task_body()
 
     async def model_call(_request):
-        return "answer", 9
+        return "answer", reported
 
     async def valid_lease(_task_id):
         return {"group_id": "g1", "owner_id": gateway.node_id, "epoch": 1,
@@ -386,6 +387,43 @@ def test_worker_rejects_wrong_execution_spec():
     signed = SignedExecution(request=request,
                              signature=gateway.sign("prisma:execution:v1", request.model_dump()))
     assert TestClient(app).post("/v1/execute", json=signed.model_dump()).status_code == 400
+
+
+def test_worker_submits_only_a_doubly_signed_receipt():
+    gateway, worker = Identity.generate(), Identity.generate()
+    accepted = []
+
+    async def unused_model(_request):
+        pytest.fail("receipt submission ran the model")
+
+    async def unused_lease(_task_id):
+        pytest.fail("receipt submission queried the lease")
+
+    async def submit(receipt):
+        accepted.append(receipt)
+
+    app = create_worker_app(worker, "g1", PIN,
+                            {gateway.node_id: gateway.public_key_b64},
+                            model_call=unused_model, lease_lookup=unused_lease,
+                            receipt_submission=submit)
+    client = TestClient(app)
+    att = WorkerAttestation(task_id="1", attempt_id="one", worker_node_id=worker.node_id,
+                            gateway_node_id=gateway.node_id, group_id="g1", lease_epoch=1,
+                            model_id=PIN.model_id, model_digest=PIN.model_digest,
+                            spec_version=PIN.spec_version, input_commitment="a" * 64,
+                            output_commitment="b" * 64, output_tokens=2,
+                            completed_at_ms=1)
+    payload = {**att.model_dump(), "mode": "lightweight",
+               "worker_attestation": att.model_dump(),
+               "worker_signature": worker.sign("prisma:worker-receipt:v1", att.model_dump())}
+    receipt = {**payload, "gateway_signature": gateway.sign("prisma:gateway-receipt:v1", payload)}
+    assert client.post("/v1/submit-receipt", json={"receipt": receipt}).status_code == 200
+    assert accepted == [receipt]
+    tampered = {**receipt, "output_tokens": 3}
+    assert client.post("/v1/submit-receipt", json={"receipt": tampered}).status_code == 400
+    tampered = {**receipt, "gateway_signature": worker.sign("prisma:gateway-receipt:v1", payload)}
+    assert client.post("/v1/submit-receipt", json={"receipt": tampered}).status_code == 400
+    assert accepted == [receipt]
 
 
 def test_startup_hashes_local_model_files(monkeypatch, tmp_path):

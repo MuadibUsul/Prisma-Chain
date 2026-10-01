@@ -1,5 +1,7 @@
 """Live-chain funded API lifecycle with a synthetic in-process model."""
 
+import asyncio
+import base64
 import hashlib
 import tempfile
 import time
@@ -97,8 +99,33 @@ def main() -> None:
     async def count(output):
         return len(gateway_tokenizer.encode(output, add_special_tokens=False).ids)
 
+    submissions = []
+
+    def submit_to_chain(receipt):
+        task = task_state(task_id)
+        if task["status"] in ("pending", "settled"):
+            if base64.b64decode(task["receipt_digest"]) != hashlib.sha256(canonical(receipt)).digest():
+                raise RuntimeError("chain contains a different receipt")
+            return
+        if task["status"] != "accepted":
+            raise RuntimeError("task is no longer available for result submission")
+        receipt_bytes = canonical(receipt)
+        receipt_file = put_bytes(receipt_bytes)
+        submit("compute", "submit-result", "--task-id", str(task_id),
+               "--output-digest", receipt["output_commitment"],
+               "--output-tokens", str(receipt["output_tokens"]),
+               "--receipt-digest", hashlib.sha256(receipt_bytes).hexdigest(),
+               "--receipt-json", receipt_file, signer=names["worker"])
+
+    async def receipt_submission(receipt):
+        submissions.append(receipt["attempt_id"])
+        if len(submissions) == 1:
+            raise OSError("injected chain submission failure")
+        await asyncio.to_thread(submit_to_chain, receipt)
+
     worker_app = create_worker_app(worker_key, "synthetic-api", pin, trusted,
-                                   model_call=model_call, lease_lookup=lease_lookup)
+                                   model_call=model_call, lease_lookup=lease_lookup,
+                                   receipt_submission=receipt_submission)
 
     async def worker_call(_url, signed):
         async with httpx.AsyncClient(transport=httpx.ASGITransport(app=worker_app),
@@ -107,10 +134,17 @@ def main() -> None:
             response.raise_for_status()
             return WorkerResponse.model_validate(response.json())
 
+    async def receipt_submitter(_url, receipt):
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(app=worker_app),
+                                     base_url="http://worker.local") as client:
+            response = await client.post("/v1/submit-receipt", json={"receipt": receipt})
+            response.raise_for_status()
+
     gateway_app = create_gateway_app(plane, gateway_key, "synthetic-test-key",
                                      task_authorizer=ChainTaskAuthorizer(queries),
                                      chain_task_query=queries.task, chain_height_query=queries.height,
-                                     token_counter=count, billing_pin=pin, worker_call=worker_call)
+                                     token_counter=count, billing_pin=pin, worker_call=worker_call,
+                                     receipt_submitter=receipt_submitter)
     client = TestClient(gateway_app)
     headers = {"Authorization": "Bearer synthetic-test-key"}
     envelope = TaskEnvelope(task_id=str(task_id), mode="lightweight", model_id=pin.model_id,
@@ -126,19 +160,18 @@ def main() -> None:
         raise RuntimeError(f"funded API inference failed: {second.text}")
     delivered = second.json()
     if (delivered["output"] != "hello world" or delivered["receipt"]["output_tokens"] != 2
-            or len(set(attempts)) != 2):
+            or len(set(attempts)) != 2 or delivered["chain_submission"] != "retry_required"):
         raise RuntimeError("funded retry did not produce an independently counted signed receipt")
     status = client.get(f"/v1/tasks/{task_id}", headers=headers)
     if (status.status_code != 200 or status.json()["chain_status"] != "accepted"
             or status.json()["billing"]["escrowed_uprsm"] != "10000"):
         raise RuntimeError(f"funded API accepted status mismatch: {status.text}")
 
-    receipt_bytes = canonical(delivered["receipt"])
-    receipt_file = put_bytes(receipt_bytes)
-    submit("compute", "submit-result", "--task-id", str(task_id),
-           "--output-digest", delivered["receipt"]["output_commitment"],
-           "--output-tokens", "2", "--receipt-digest", hashlib.sha256(receipt_bytes).hexdigest(),
-           "--receipt-json", receipt_file, signer=names["worker"])
+    replay = client.post("/v1/inference", json=body, headers=headers)
+    if (replay.status_code != 200 or not replay.json()["already_completed"]
+            or replay.json()["chain_submission"] != "submitted"
+            or len(attempts) != 2 or len(submissions) != 2):
+        raise RuntimeError("saved receipt was not submitted without repeating inference")
     pending = client.get(f"/v1/tasks/{task_id}", headers=headers)
     if (pending.status_code != 200 or pending.json()["chain_status"] != "pending"
             or pending.json()["billing"]["proposed_charge_uprsm"] != "2000"):
@@ -155,10 +188,13 @@ def main() -> None:
             or settled.json()["billing"]["refunded_uprsm"] != "8000"):
         raise RuntimeError(f"funded API final status or charge mismatch: {settled.text}")
     replay = client.post("/v1/inference", json=body, headers=headers)
-    if replay.status_code != 200 or not replay.json()["already_completed"] or len(attempts) != 2:
+    if (replay.status_code != 200 or not replay.json()["already_completed"]
+            or replay.json()["chain_submission"] != "confirmed"
+            or len(attempts) != 2 or len(submissions) != 2):
         raise RuntimeError("funded API replay executed the model again")
-    print(f"PASS: synthetic funded API task {task_id}; worker failure retried under one task ID, "
-          "signed delivery checked against real chain, 2 text tokens charged, accepted/pending/settled observed")
+    print(f"PASS: synthetic funded API task {task_id}; worker and submission failures retried "
+          "under one task ID, signed delivery submitted by worker to real chain, "
+          "2 text tokens charged, accepted/pending/settled observed")
     client.close()
     plane.db.close()
     temp.cleanup()

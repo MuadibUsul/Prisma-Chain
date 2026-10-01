@@ -111,10 +111,22 @@ response disclose the Tier 0 boundary.
    token count; the gateway verifies that signature and signs a delivery
    receipt. Retries use a new attempt under the same task ID. A newer lease
    epoch fences old coordinators and invalidates unfinished attempts.
-5. The chain module must verify its own escrow, bond, model version, receipt
-   signatures, timeout and acceptance rules before any settlement. This
-   package never changes chain state. A repeated completed request returns
-   the same receipt without answer text, because private outputs are not kept.
+5. With a worker-owned chain submission callback configured, the gateway sends
+   the double-signed receipt to `/v1/submit-receipt` after saving it durably.
+   Set `PRISMA_RECEIPT_AUTOSUBMIT=1` on the gateway to enable this handoff.
+   The worker verifies both signatures before its own account broadcasts a
+   `SubmitResult` transaction. A failed broadcast leaves the signed receipt
+   available for retry under the same task ID without rerunning inference.
+   The local integration test injects a devnet CLI signer; the packaged worker
+   factory does not yet configure a production signer. The chain module
+   verifies escrow, bond, model version, signatures, timeout and acceptance
+   rules before settlement. A repeated completed request returns the same
+   receipt without answer text, because private outputs are not kept.
+   Inference responses expose `chain_submission` as `unconfigured`,
+   `retry_required`, `submitted`, `confirmed`, `conflict`, or `closed`.
+   `submitted` only means the worker submission callback returned successfully;
+   clients must still read `/v1/tasks/{task_id}` for chain confirmation and
+   final settlement.
 
 Signatures use Ed25519 over `domain + "\n" + sorted compact UTF-8 JSON`.
 Domains are `prisma:capability:v1`, `prisma:execution:v1`,

@@ -99,6 +99,13 @@ async def _default_worker_call(url: str, request: SignedExecution) -> WorkerResp
     return WorkerResponse.model_validate(response.json())
 
 
+async def _default_receipt_submit(url: str, receipt: dict) -> None:
+    endpoint = url.rsplit("/", 1)[0] + "/submit-receipt"
+    async with httpx.AsyncClient(timeout=30) as client:
+        response = await client.post(endpoint, json={"receipt": receipt})
+    response.raise_for_status()
+
+
 async def _default_model_call(vllm_base_url: str, model_id: str, request: ExecutionRequest,
                               api_key: str | None) -> tuple[str, int]:
     headers = {"Authorization": f"Bearer {api_key}"} if api_key else {}
@@ -135,8 +142,32 @@ def create_gateway_app(
     billing_pin: ModelPin | None = None,
     allow_unfunded_dev_tasks: bool = False,
     worker_call: Callable[[str, SignedExecution], Awaitable[WorkerResponse]] = _default_worker_call,
+    receipt_submitter: Callable[[str, dict], Awaitable[None]] | None = None,
     gossip_peers: tuple[str, ...] = (),
 ) -> FastAPI:
+    async def submit_saved_receipt(receipt: dict, worker_url: str | None = None) -> str:
+        if allow_unfunded_dev_tasks or receipt_submitter is None:
+            return "unconfigured"
+        try:
+            if chain_task_query is not None:
+                task = await chain_task_query(int(receipt["task_id"]))
+                if task["status"] in {"pending", "challenged", "settled"}:
+                    observed = base64.b64decode(task["receipt_digest"], validate=True)
+                    return "confirmed" if observed.hex() == digest(receipt) else "conflict"
+                if task["status"] != "accepted":
+                    return "closed"
+            if worker_url is None:
+                worker_url = next((signed.capability.api_url for signed in plane.announcements()
+                                   if signed.capability.node_id == receipt.get("worker_node_id")
+                                   and signed.capability.api_url), None)
+            if not worker_url:
+                return "retry_required"
+            await receipt_submitter(worker_url, receipt)
+            return "submitted"
+        except Exception:
+            logging.exception("receipt submission failed for task %s", receipt.get("task_id"))
+            return "retry_required"
+
     async def refresh() -> None:
         async with httpx.AsyncClient(timeout=5) as client:
             while True:
@@ -316,8 +347,10 @@ def create_gateway_app(
             for field in ("mode", "model_id", "model_digest", "spec_version", "input_commitment"):
                 if previous.get(field) != getattr(body.task, field):
                     raise HTTPException(409, "retry envelope conflicts with existing delivery receipt")
+            submission = await submit_saved_receipt(previous)
             return {"status": "provisional_delivery", "already_completed": True,
-                    "output": None, "receipt": previous, "privacy_notice": PRIVACY_NOTICE}
+                    "output": None, "receipt": previous, "chain_submission": submission,
+                    "privacy_notice": PRIVACY_NOTICE}
         try:
             route = plane.route(body.task.model_id, body.task.model_digest, body.task.spec_version)
             if not allow_unfunded_dev_tasks and not await task_authorizer(body.task, route):
@@ -361,8 +394,8 @@ def create_gateway_app(
                         "output_commitment": digest(worker.output)}
             if any(getattr(att, key) != value for key, value in expected.items()):
                 raise ValueError("worker attestation does not match delivery")
-            if att.output_tokens > body.max_tokens:
-                raise ValueError("worker token count exceeds requested maximum")
+            if att.output_tokens > body.max_tokens or not allow_unfunded_dev_tasks and att.output_tokens == 0:
+                raise ValueError("worker token count is not billable")
             worker_key = plane.trusted_keys[route.worker_node_id]
             if not verify(worker_key, "prisma:worker-receipt:v1", att.model_dump(), worker.signature):
                 raise ValueError("invalid worker receipt signature")
@@ -384,8 +417,10 @@ def create_gateway_app(
             receipt = {**payload, "gateway_signature": identity.sign("prisma:gateway-receipt:v1", payload)}
             plane.commit_receipt(body.task.task_id, attempt_id, route.group_id, identity.node_id,
                                  lease["epoch"], receipt)
+            submission = await submit_saved_receipt(receipt, route.api_url)
             return {"status": "provisional_delivery", "already_completed": False,
-                    "output": worker.output, "receipt": receipt, "privacy_notice": PRIVACY_NOTICE}
+                    "output": worker.output, "receipt": receipt, "chain_submission": submission,
+                    "privacy_notice": PRIVACY_NOTICE}
         except Exception as exc:
             plane.finish_attempt(attempt_id, False)
             raise _http_error(exc) from exc
@@ -404,6 +439,7 @@ def create_worker_app(
     *,
     model_call: Callable[[ExecutionRequest], Awaitable[tuple[str, int]]],
     lease_lookup: Callable[[str], Awaitable[dict]],
+    receipt_submission: Callable[[dict], Awaitable[None]] | None = None,
     readiness: Callable[[], Awaitable[bool]] | None = None,
     lifespan=None,
 ) -> FastAPI:
@@ -448,8 +484,8 @@ def create_worker_app(
                 output, tokens = await model_call(request)
             finally:
                 active -= 1
-            if not isinstance(tokens, int) or not 0 <= tokens <= request.max_tokens:
-                raise ValueError("model token count exceeds requested maximum")
+            if not isinstance(tokens, int) or not 1 <= tokens <= request.max_tokens:
+                raise ValueError("model token count is not billable")
             if not await fenced():
                 raise Conflict("lease expired before worker attestation")
             att = WorkerAttestation(task_id=request.task.task_id, attempt_id=request.attempt_id,
@@ -464,6 +500,35 @@ def create_worker_app(
                                   signature=identity.sign("prisma:worker-receipt:v1", att.model_dump()))
         except Exception as exc:
             raise _http_error(exc) from exc
+
+    @app.post("/v1/submit-receipt")
+    async def submit_receipt(body: dict) -> dict:
+        if receipt_submission is None:
+            raise HTTPException(503, "chain receipt signer is not configured")
+        receipt = body.get("receipt")
+        if not isinstance(receipt, dict) or len(json.dumps(receipt, ensure_ascii=False).encode()) > 8192:
+            raise HTTPException(400, "invalid signed receipt")
+        try:
+            att = WorkerAttestation.model_validate(receipt["worker_attestation"])
+            payload = {key: value for key, value in receipt.items() if key != "gateway_signature"}
+            gateway_key = gateway_keys.get(att.gateway_node_id)
+            if (att.worker_node_id != identity.node_id or att.model_id != pin.model_id
+                    or att.model_digest != pin.model_digest or att.spec_version != pin.spec_version
+                    or receipt.get("mode") != "lightweight" or not gateway_key
+                    or any(receipt.get(key) != value for key, value in att.model_dump().items())
+                    or not verify(identity.public_key_b64, "prisma:worker-receipt:v1",
+                                  att.model_dump(), receipt["worker_signature"])
+                    or not verify(gateway_key, "prisma:gateway-receipt:v1",
+                                  payload, receipt["gateway_signature"])):
+                raise ValueError("signed receipt does not match this worker and pinned model")
+            await receipt_submission(receipt)
+        except HTTPException:
+            raise
+        except (KeyError, TypeError, ValueError) as exc:
+            raise HTTPException(400, "invalid signed receipt") from exc
+        except Exception as exc:
+            raise HTTPException(503, "chain receipt submission failed") from exc
+        return {"task_id": att.task_id, "submitted": True}
 
     return app
 
@@ -568,6 +633,8 @@ def gateway_app_from_env() -> FastAPI:
                               chain_task_query=queries.task if queries else None,
                               chain_height_query=queries.height if queries else None,
                               token_counter=counter, billing_pin=billing_pin,
+                              receipt_submitter=(_default_receipt_submit
+                                                 if os.environ.get("PRISMA_RECEIPT_AUTOSUBMIT") == "1" else None),
                               allow_unfunded_dev_tasks=unfunded,
                               gossip_peers=tuple(filter(None, os.environ.get("PRISMA_GOSSIP_PEERS", "").split(","))))
 

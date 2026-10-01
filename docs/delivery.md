@@ -64,10 +64,11 @@ key. A separate funded API smoke test connects the gateway and worker to the
 local chain: it verifies an accepted escrowed task, independently counts
 delivered text with a hash-pinned tokenizer, checks a signed receipt, retries a
 worker failure under the same task ID and observes pending and settled billing.
-The test uses a synthetic model and manually broadcasts the receipt and
-settlement transactions through the CLI. The gateway still does not stream real
-Qwen output or automatically sign and broadcast chain transactions for its own
-inference requests. The unified API product gate remains open.
+The test uses a synthetic model. After one injected receipt submission failure,
+the gateway retries the saved receipt through the worker's injected devnet CLI
+signer; the script still submits monitor and settlement transactions manually.
+The packaged worker has no production chain signer, and the gateway does not
+yet stream real Qwen output. The unified API product gate remains open.
 
 ## Open participation and source release gate
 

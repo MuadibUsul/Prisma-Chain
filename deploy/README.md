@@ -126,12 +126,16 @@ python deploy/funded_api_smoke.py
 
 It creates a fresh local chain task and bonded identities, uses the actual
 chain gRPC authorization query, sends a signed request through the gateway and
-worker FastAPI applications, injects one worker failure, retries under the
-same task ID, then submits the gateway receipt through the local CLI. It
-checks the API's accepted, pending and settled views, including proposed
+worker FastAPI applications, injects one worker failure and one receipt
+submission failure, then retries under the same task ID. The gateway hands its
+double-signed receipt back to the worker, whose injected local devnet signer
+submits it through the CLI. The script checks that neither retry recomputes the
+delivered answer. It checks the API's accepted, pending and settled views, including proposed
 charge and final refund. Its model output and tokenizer are synthetic and
 in-process; this is not a Qwen or multi-host benchmark. Each run uses new
-test PRSM accounts and a new escrow task.
+test PRSM accounts and a new escrow task. The Compose worker has no chain
+signer configured, so this automatic submission path is exercised by the
+integration script rather than the running mock stack.
 
 To stop processes while preserving local chain state and receipts:
 
