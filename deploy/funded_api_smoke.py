@@ -6,6 +6,7 @@ import hashlib
 import tempfile
 import time
 import uuid
+from contextlib import ExitStack
 from pathlib import Path
 
 import httpx
@@ -146,8 +147,10 @@ def main() -> None:
                                      task_authorizer=ChainTaskAuthorizer(queries),
                                      chain_task_query=queries.task, chain_height_query=queries.height,
                                      token_counter=count, billing_pin=pin, worker_call=worker_call,
-                                     receipt_submitter=receipt_submitter)
-    client = TestClient(gateway_app)
+                                     receipt_submitter=receipt_submitter,
+                                     receipt_retry_seconds=1.0)
+    lifecycle = ExitStack()
+    client = lifecycle.enter_context(TestClient(gateway_app))
     headers = {"Authorization": "Bearer synthetic-test-key"}
     envelope = TaskEnvelope(task_id=str(task_id), mode="lightweight", model_id=pin.model_id,
                             model_digest=pin.model_digest, spec_version=pin.spec_version,
@@ -157,6 +160,10 @@ def main() -> None:
     first = client.post("/v1/inference", json=body, headers=headers)
     if first.status_code != 502 or task_state(task_id)["status"] != "accepted":
         raise RuntimeError(f"synthetic worker failure did not leave escrow accepted: {first.text}")
+    status = client.get(f"/v1/tasks/{task_id}", headers=headers)
+    if (status.status_code != 200 or status.json()["chain_status"] != "accepted"
+            or status.json()["billing"]["escrowed_uprsm"] != "10000"):
+        raise RuntimeError(f"funded API accepted status mismatch: {status.text}")
     second = client.post("/v1/inference", json=body, headers=headers)
     if second.status_code != 200:
         raise RuntimeError(f"funded API inference failed: {second.text}")
@@ -164,19 +171,14 @@ def main() -> None:
     if (delivered["output"] != "hello world" or delivered["receipt"]["output_tokens"] != 2
             or len(set(attempts)) != 2 or delivered["chain_submission"] != "retry_required"):
         raise RuntimeError("funded retry did not produce an independently counted signed receipt")
-    status = client.get(f"/v1/tasks/{task_id}", headers=headers)
-    if (status.status_code != 200 or status.json()["chain_status"] != "accepted"
-            or status.json()["billing"]["escrowed_uprsm"] != "10000"):
-        raise RuntimeError(f"funded API accepted status mismatch: {status.text}")
-
-    replay = client.post("/v1/inference", json=body, headers=headers)
-    if (replay.status_code != 200 or not replay.json()["already_completed"]
-            or replay.json()["chain_submission"] != "submitted"
-            or len(attempts) != 2 or len(submissions) != 2):
-        raise RuntimeError("saved receipt was not submitted without repeating inference")
+    wait_for(lambda: task_state(task_id)["status"] == "pending",
+             "automatic funded API receipt retry", seconds=60)
+    if len(attempts) != 2 or len(submissions) != 2:
+        raise RuntimeError("background submission reran inference or submitted an unexpected receipt")
     pending = client.get(f"/v1/tasks/{task_id}", headers=headers)
     if (pending.status_code != 200 or pending.json()["chain_status"] != "pending"
-            or pending.json()["billing"]["proposed_charge_uprsm"] != "2000"):
+            or pending.json()["billing"]["proposed_charge_uprsm"] != "2000"
+            or pending.json()["chain_submission"] != "confirmed"):
         raise RuntimeError(f"funded API pending status mismatch: {pending.text}")
     for role in ("monitor-a", "monitor-b"):
         submit("compute", "attest-result", "--task-id", str(task_id), signer=names[role])
@@ -185,7 +187,9 @@ def main() -> None:
     submit("compute", "finalize-task", "--task-id", str(task_id), signer="validator")
     settled = client.get(f"/v1/tasks/{task_id}", headers=headers)
     if (settled.status_code != 200 or settled.json()["chain_status"] != "settled"
-            or not settled.json()["settlement_final"] or task_state(task_id)["charged_fee"] != 2000
+            or not settled.json()["settlement_final"]
+            or settled.json()["delivery_status"] != "final_delivery"
+            or task_state(task_id)["charged_fee"] != 2000
             or settled.json()["billing"]["charged_uprsm"] != "2000"
             or settled.json()["billing"]["refunded_uprsm"] != "8000"):
         raise RuntimeError(f"funded API final status or charge mismatch: {settled.text}")
@@ -195,9 +199,9 @@ def main() -> None:
             or len(attempts) != 2 or len(submissions) != 2):
         raise RuntimeError("funded API replay executed the model again")
     print(f"PASS: synthetic funded API task {task_id}; worker and submission failures retried "
-          "under one task ID, signed delivery submitted by worker to real chain, "
+          "under one task ID, saved signed delivery retried in the background by the worker, "
           "2 text tokens charged, accepted/pending/settled observed")
-    client.close()
+    lifecycle.close()
     plane.db.close()
     temp.cleanup()
 

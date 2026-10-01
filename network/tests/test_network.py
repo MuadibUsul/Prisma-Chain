@@ -146,6 +146,45 @@ def test_expiry_takeover_fences_old_attempt_and_receipt_is_once(tmp_path):
         plane.start_attempt("42", "g2", standby.node_id, second["epoch"], "another")
 
 
+def test_gateway_retries_a_saved_receipt_after_restart_without_client_replay(tmp_path):
+    now = [int(time.time() * 1000)]
+    gateway, worker = Identity.generate(), Identity.generate()
+    plane = plane_for(tmp_path, (gateway, worker), now)
+    plane.announce(capability(worker, 0, 1, now[0]))
+    lease = plane.acquire("42", "g1", gateway.node_id)
+    plane.start_attempt("42", "g1", gateway.node_id, lease["epoch"], "attempt")
+    receipt = {"task_id": "42", "worker_node_id": worker.node_id,
+               "attempt_id": "attempt", "output_commitment": "c" * 64}
+    plane.commit_receipt("42", "attempt", "g1", gateway.node_id, lease["epoch"], receipt)
+    dev_lease = plane.acquire("dev-old", "g1", gateway.node_id)
+    plane.start_attempt("dev-old", "g1", gateway.node_id, dev_lease["epoch"], "dev-attempt")
+    plane.commit_receipt("dev-old", "dev-attempt", "g1", gateway.node_id,
+                         dev_lease["epoch"], {"task_id": "dev-old", "worker_node_id": worker.node_id})
+    assert plane.receipt_submission_status("42") == "retry_required"
+    plane.db.close()
+
+    restarted = plane_for(tmp_path, (gateway, worker), now)
+    calls = []
+
+    async def submit(url, saved):
+        assert url.endswith("/v1/execute")
+        assert saved == receipt
+        calls.append(saved)
+        if len(calls) == 1:
+            raise OSError("temporary chain submission failure")
+
+    app = create_gateway_app(restarted, gateway, "secret", receipt_submitter=submit,
+                             receipt_retry_seconds=0.02)
+    with TestClient(app):
+        deadline = time.monotonic() + 2
+        while restarted.receipt_submission_status("42") != "submitted" and time.monotonic() < deadline:
+            time.sleep(0.01)
+    assert len(calls) == 2
+    assert restarted.receipts_requiring_submission() == []
+    assert restarted.receipt_submission_status("dev-old") == "unconfigured"
+    restarted.db.close()
+
+
 def test_gateway_requires_chain_authorization_by_default(tmp_path):
     now = [int(time.time() * 1000)]
     gateway = Identity.generate()
@@ -218,6 +257,7 @@ def test_gateway_worker_signatures_and_provisional_once(tmp_path):
     data = response.json()
     assert data["status"] == "provisional_delivery"
     assert data["output"] == "answer"
+    assert plane.receipt_submission_status("1") == "unconfigured"
     receipt = data["receipt"]
     assert receipt["output_tokens"] == 3
     gateway_sig = receipt.pop("gateway_signature")
@@ -289,6 +329,7 @@ def test_task_status_separates_chain_settlement_from_delivery(tmp_path):
     assert status.json() == {"task_id": "7", "delivery_status": "provisional_delivery",
                              "chain_status": "pending", "settlement_final": False,
                              "observed_height": 25, "challenge_end": 30,
+                             "chain_submission": "confirmed",
                              "billing": {"escrowed_uprsm": "1000", "proposed_charge_uprsm": "1000",
                                          "charged_uprsm": None, "refunded_uprsm": None}}
     chain_task["output_digest"] = base64.b64encode(bytes.fromhex("cd" * 32)).decode()
@@ -303,9 +344,12 @@ def test_task_status_separates_chain_settlement_from_delivery(tmp_path):
     chain_task["status"] = "settled"
     settled = client.get("/v1/tasks/7", headers=headers).json()
     assert settled["settlement_final"] is True
+    assert settled["delivery_status"] == "final_delivery"
     assert settled["billing"]["charged_uprsm"] == "1000"
     chain_task["status"] = "refunded"
-    assert client.get("/v1/tasks/7", headers=headers).json()["chain_status"] == "refunded"
+    refunded = client.get("/v1/tasks/7", headers=headers).json()
+    assert refunded["chain_status"] == "refunded"
+    assert refunded["delivery_status"] == "rejected_delivery"
     chain_task["worker"] = "other-worker"
     assert client.get("/v1/tasks/7", headers=headers).status_code == 409
     chain_task["worker"] = "prsmworker"

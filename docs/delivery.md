@@ -65,8 +65,9 @@ local chain: it verifies an accepted escrowed task, independently counts
 delivered text with a hash-pinned tokenizer, checks a signed receipt, retries a
 worker failure under the same task ID and observes pending and settled billing.
 The test uses a synthetic model. After one injected receipt submission failure,
-the gateway retries the saved receipt through the worker's injected devnet CLI
-signer; the script still submits monitor and settlement transactions manually.
+the gateway retries the saved receipt in the background through the worker's
+injected devnet CLI signer, without a second client request; the script still
+submits monitor and settlement transactions manually.
 The packaged worker can now use an isolated development `prismad` test keyring;
 a separate live-container smoke check proves its account-bound submission,
 duplicate handling, monitor attestations, settlement and gateway status. That

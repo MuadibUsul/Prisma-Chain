@@ -119,7 +119,9 @@ response disclose the Tier 0 boundary.
    Set `PRISMA_RECEIPT_AUTOSUBMIT=1` on the gateway to enable this handoff.
    The worker verifies both signatures before its own account broadcasts a
    `SubmitResult` transaction. A failed broadcast leaves the signed receipt
-   available for retry under the same task ID without rerunning inference.
+   available for background retry under the same task ID without rerunning
+   inference. The gateway persists the retry state in SQLite and resumes it
+   after restart; a client replay can also request an immediate retry.
    The local integration test injects a devnet CLI signer. The packaged worker
    factory can also enable `PRISMA_DEV_CHAIN_SIGNER_NAME` for its own isolated
    `prismad` test keyring when `PRISMA_DEV_HTTP=1`, with `PRISMA_CHAIN_ID`,
@@ -132,8 +134,10 @@ response disclose the Tier 0 boundary.
    Inference responses expose `chain_submission` as `unconfigured`,
    `retry_required`, `submitted`, `confirmed`, `conflict`, or `closed`.
    `submitted` only means the worker submission callback returned successfully;
-   clients must still read `/v1/tasks/{task_id}` for chain confirmation and
-   final settlement.
+   authenticated `/v1/tasks/{task_id}` includes the persisted submission state
+   and the live chain status, which clients should read for final settlement.
+   Its delivery status advances from `provisional_delivery` to
+   `final_delivery` on settlement, or `rejected_delivery` on refund.
 
 Signatures use Ed25519 over `domain + "\n" + sorted compact UTF-8 JSON`.
 Domains are `prisma:capability:v1`, `prisma:execution:v1`,

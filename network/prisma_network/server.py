@@ -143,18 +143,32 @@ def create_gateway_app(
     allow_unfunded_dev_tasks: bool = False,
     worker_call: Callable[[str, SignedExecution], Awaitable[WorkerResponse]] = _default_worker_call,
     receipt_submitter: Callable[[str, dict], Awaitable[None]] | None = None,
+    receipt_retry_seconds: float = 5.0,
     gossip_peers: tuple[str, ...] = (),
 ) -> FastAPI:
+    if receipt_retry_seconds <= 0:
+        raise ValueError("receipt retry interval must be positive")
+
     async def submit_saved_receipt(receipt: dict, worker_url: str | None = None) -> str:
         if allow_unfunded_dev_tasks or receipt_submitter is None:
             return "unconfigured"
+        task_id = receipt.get("task_id")
+        if (not isinstance(task_id, str) or len(task_id) > 20 or not task_id.isascii()
+                or not task_id.isdecimal() or str(int(task_id)) != task_id
+                or not 0 < int(task_id) < 2**64):
+            if isinstance(task_id, str):
+                plane.mark_receipt_submission(task_id, "unconfigured")
+            return "unconfigured"
         try:
             if chain_task_query is not None:
-                task = await chain_task_query(int(receipt["task_id"]))
+                task = await chain_task_query(int(task_id))
                 if task["status"] in {"pending", "challenged", "settled"}:
                     observed = base64.b64decode(task["receipt_digest"], validate=True)
-                    return "confirmed" if observed.hex() == digest(receipt) else "conflict"
+                    outcome = "confirmed" if observed.hex() == digest(receipt) else "conflict"
+                    plane.mark_receipt_submission(receipt["task_id"], outcome)
+                    return outcome
                 if task["status"] != "accepted":
+                    plane.mark_receipt_submission(receipt["task_id"], "closed")
                     return "closed"
             if worker_url is None:
                 worker_url = next((signed.capability.api_url for signed in plane.announcements()
@@ -163,10 +177,20 @@ def create_gateway_app(
             if not worker_url:
                 return "retry_required"
             await receipt_submitter(worker_url, receipt)
+            plane.mark_receipt_submission(receipt["task_id"], "submitted")
             return "submitted"
         except Exception:
             logging.exception("receipt submission failed for task %s", receipt.get("task_id"))
             return "retry_required"
+
+    async def retry_saved_receipts() -> None:
+        while True:
+            await asyncio.sleep(receipt_retry_seconds)
+            try:
+                for receipt in plane.receipts_requiring_submission():
+                    await submit_saved_receipt(receipt)
+            except Exception:
+                logging.exception("receipt retry scan failed")
 
     async def refresh() -> None:
         async with httpx.AsyncClient(timeout=5) as client:
@@ -203,14 +227,23 @@ def create_gateway_app(
     @asynccontextmanager
     async def lifespan(_app: FastAPI):
         background = asyncio.create_task(refresh())
+        retry = (asyncio.create_task(retry_saved_receipts())
+                 if receipt_submitter is not None and not allow_unfunded_dev_tasks else None)
         try:
             yield
         finally:
             background.cancel()
+            if retry is not None:
+                retry.cancel()
             try:
                 await background
             except asyncio.CancelledError:
                 pass
+            if retry is not None:
+                try:
+                    await retry
+                except asyncio.CancelledError:
+                    pass
 
     app = FastAPI(title="Prisma compute gateway", lifespan=lifespan)
 
@@ -266,7 +299,8 @@ def create_gateway_app(
                 raise HTTPException(404, "unknown local development task")
             return {"task_id": task_id, "delivery_status": "provisional_delivery" if delivered else "none",
                     "chain_status": "unfunded_dev", "settlement_final": False,
-                    "observed_height": None, "challenge_end": None, "billing": None}
+                    "observed_height": None, "challenge_end": None, "billing": None,
+                    "chain_submission": "unconfigured"}
         if not numeric:
             raise HTTPException(400, "chain task ID must be a canonical positive uint64")
         if chain_task_query is None or chain_height_query is None:
@@ -310,6 +344,8 @@ def create_gateway_app(
                         raise ValueError("invalid chain receipt digest")
                     if digest(delivered) != receipt_digest.hex():
                         raise HTTPException(409, "delivery receipt conflicts with chain result")
+                    if task["status"] in {"pending", "challenged", "settled"}:
+                        plane.mark_receipt_submission(task_id, "confirmed")
             challenge_end = (int(task.get("challenge_end", 0)) or None) if task["status"] == "pending" else None
             final_charge = proposed if task["status"] == "settled" else 0 if task["status"] == "refunded" else None
             billing = {"escrowed_uprsm": str(escrow),
@@ -320,9 +356,13 @@ def create_gateway_app(
             raise
         except Exception as exc:
             raise HTTPException(503, "chain task status query failed") from exc
-        return {"task_id": task_id, "delivery_status": "provisional_delivery" if delivered else "none",
+        delivery_status = ("final_delivery" if task["status"] == "settled" else
+                           "rejected_delivery" if task["status"] == "refunded" else
+                           "provisional_delivery") if delivered else "none"
+        return {"task_id": task_id, "delivery_status": delivery_status,
                 "chain_status": task["status"], "settlement_final": task["status"] in {"settled", "refunded"},
-                "observed_height": observed_height, "challenge_end": challenge_end, "billing": billing}
+                "observed_height": observed_height, "challenge_end": challenge_end, "billing": billing,
+                "chain_submission": plane.receipt_submission_status(task_id)}
 
     @app.post("/v1/inference")
     async def inference(body: InferenceRequest, authorization: str | None = Header(default=None)) -> dict:
@@ -417,6 +457,8 @@ def create_gateway_app(
             receipt = {**payload, "gateway_signature": identity.sign("prisma:gateway-receipt:v1", payload)}
             plane.commit_receipt(body.task.task_id, attempt_id, route.group_id, identity.node_id,
                                  lease["epoch"], receipt)
+            if allow_unfunded_dev_tasks:
+                plane.mark_receipt_submission(body.task.task_id, "unconfigured")
             submission = await submit_saved_receipt(receipt, route.api_url)
             return {"status": "provisional_delivery", "already_completed": False,
                     "output": worker.output, "receipt": receipt, "chain_submission": submission,

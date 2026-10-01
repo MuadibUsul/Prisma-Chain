@@ -188,6 +188,10 @@ class ControlPlane:
               status TEXT NOT NULL, created_at_ms INTEGER NOT NULL);
             CREATE TABLE IF NOT EXISTS receipts (
               task_id TEXT PRIMARY KEY, attempt_id TEXT NOT NULL, data TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS receipt_submissions (
+              task_id TEXT PRIMARY KEY, status TEXT NOT NULL);
+            INSERT OR IGNORE INTO receipt_submissions(task_id, status)
+              SELECT task_id, 'retry_required' FROM receipts;
         """)
 
     def _check_url(self, value: str) -> None:
@@ -387,6 +391,8 @@ class ControlPlane:
                         or attempt["status"] != "running"):
                     raise Conflict("stale fence or attempt")
                 self.db.execute("INSERT INTO receipts VALUES (?,?,?)", (task_id, attempt_id, encoded))
+                self.db.execute("INSERT INTO receipt_submissions VALUES (?,?)",
+                                (task_id, "retry_required"))
                 self.db.execute("UPDATE attempts SET status='delivered' WHERE attempt_id=?", (attempt_id,))
                 self.db.execute("COMMIT")
             except Exception:
@@ -398,3 +404,26 @@ class ControlPlane:
         with self.lock:
             row = self.db.execute("SELECT data FROM receipts WHERE task_id=?", (task_id,)).fetchone()
         return json.loads(row["data"]) if row else None
+
+    def receipts_requiring_submission(self, limit: int = 32) -> list[dict]:
+        if not 1 <= limit <= 256:
+            raise ValueError("invalid receipt retry batch size")
+        with self.lock:
+            rows = self.db.execute("""SELECT r.data FROM receipts r
+                JOIN receipt_submissions s USING(task_id)
+                WHERE s.status='retry_required' ORDER BY r.rowid LIMIT ?""", (limit,)).fetchall()
+        return [json.loads(row["data"]) for row in rows]
+
+    def receipt_submission_status(self, task_id: str) -> str | None:
+        with self.lock:
+            row = self.db.execute("SELECT status FROM receipt_submissions WHERE task_id=?",
+                                  (task_id,)).fetchone()
+        return row["status"] if row else None
+
+    def mark_receipt_submission(self, task_id: str, status: str) -> None:
+        if status not in {"submitted", "confirmed", "closed", "conflict", "unconfigured"}:
+            raise ValueError("invalid terminal receipt submission status")
+        with self.lock:
+            self.db.execute("""UPDATE receipt_submissions SET status=?
+                WHERE task_id=? AND status IN ('retry_required', 'submitted')""",
+                            (status, task_id))
