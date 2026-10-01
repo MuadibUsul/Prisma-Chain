@@ -60,7 +60,9 @@ unilateral authority over on-chain escrow, disputes or settlement.
 The current local gateway exposes test-only inference and receipt endpoints
 using a CPU mock model, plus a read-only chain task status endpoint. The caller
 supplies a task envelope. Unfunded development mode uses one development API
-key. A separate funded API smoke test connects the gateway and worker to the
+key. A small Python client now wraps this existing API and status polling; it
+still requires the caller to obtain an accepted chain task envelope. A separate
+funded API smoke test connects the gateway and worker to the
 local chain: it verifies an accepted escrowed task, independently counts
 delivered text with a hash-pinned tokenizer, checks a signed receipt, retries a
 worker failure under the same task ID and observes pending and settled billing.

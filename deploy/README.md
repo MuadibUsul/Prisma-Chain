@@ -15,6 +15,7 @@ python -m pip install -e ./network
 python deploy/init_devnet.py
 docker compose -f deploy/compose.yaml up --build -d
 python deploy/smoke.py
+python deploy/sdk_smoke.py
 ```
 
 For a compute-only check while the chain image is being built:

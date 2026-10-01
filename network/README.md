@@ -6,6 +6,31 @@ leases with fencing epochs, worker and gateway delivery signatures, and one
 durable delivery receipt per chain task ID. The receipt is **provisional
 delivery evidence**, not payment or proof that an LLM answer is correct.
 
+## Python API client
+
+`PrismaClient` wraps the versioned gateway endpoints, calculates the canonical
+input commitment, sends the bearer key only over HTTPS (or explicit loopback
+HTTP for development), and polls final chain status. It never writes prompts,
+answers or API keys to disk. The caller still supplies a `TaskEnvelope` for an
+already funded and accepted chain task; posting escrow from a user wallet is
+not yet part of this SDK.
+
+```python
+from prisma_network import PrismaClient
+
+# task is a TaskEnvelope matching the accepted on-chain task.
+async def run(task, api_key):
+    messages = [{"role": "user", "content": "Hello"}]
+    assert task.input_commitment == PrismaClient.input_commitment(messages, 32, 0.0)
+    async with PrismaClient("https://gateway.example", api_key) as client:
+        provisional = await client.infer(task, messages, max_tokens=32)
+        final = await client.wait_for_settlement(task.task_id)
+    return provisional, final
+```
+
+Against the unfunded local Compose stack, run `python deploy/sdk_smoke.py`
+from the repository root to check the real HTTP client path without a GPU.
+
 ## Run locally
 
 Python 3.10+ is required. From this directory:
