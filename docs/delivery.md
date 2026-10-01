@@ -24,6 +24,75 @@ audited security guarantee exists. The following are release gates.
 7. PRSM burn, escrow, reserve release, new issuance and slashing satisfy
    accounting invariants under adversarial transaction sequences.
 
+## Unified API product gate
+
+The final developer-facing deliverable is one versioned Prisma API and SDK,
+implemented by interchangeable gateways. A client can submit inference,
+verifiable-compute and public fine-tuning tasks without operating an internal
+router or invoking chain commands manually. The gateway does not acquire
+unilateral authority over on-chain escrow, disputes or settlement.
+
+- Before execution, the API gives a price quote and fee cap. A documented
+  inference call streams real pinned Qwen output from the required multi-host
+  GPU group. It returns the task ID, model and spec version, usage,
+  provisional-delivery status, and independently verifiable worker and gateway
+  signatures. Production usage metering is checked against the pinned tokenizer.
+- An asynchronous task interface accepts bounded public compute and public
+  fine-tuning jobs. Clients can query delivery, challenge, settlement and refund
+  states, with clear separation between a delivered result and final payment.
+- Client retry uses an idempotency key and stable task ID. After a disconnected
+  stream, the client can query status and signed receipts; replaying output
+  requires encrypted, time-limited retention or a client-held checkpoint with
+  documented deletion rules. Coordinator or worker failure cannot create a
+  second charge or silently discard an escrowed task.
+- Documented managed-billing and self-custody paths disclose who holds funds,
+  who signs chain transactions and how a client verifies the final chain state.
+  Both paths enforce per-tenant authentication, quotas and the disclosed privacy
+  boundary.
+- An external client passes an end-to-end test against independently operated
+  gateways and workers, including a real Qwen request, a successful verifiable
+  task, a valid challenge, timeout/refund and a worker-failure retry. The test
+  records latency, completion, cost and settlement time. The API specification
+  and SDK are public before this gate is marked complete.
+
+The current local gateway exposes test-only inference and receipt endpoints
+using a CPU mock model. The caller supplies a task envelope, but the unfunded
+development mode does not verify chain acceptance or funding and uses one
+development API key. It does not stream real Qwen
+output, sign or broadcast chain transactions, independently meter funded tokens,
+or finalize lightweight payment. The unified API product gate remains open.
+
+## Open participation and source release gate
+
+The mission is to aggregate **eligible, independently owned idle compute** and
+give developers a portable alternative to a small set of proprietary AI
+platforms. Progress is measured by completed work, usable capacity, cost,
+reliability, privacy and operator concentration, rather than registered nodes.
+
+- Publish explicit reuse licenses for the chain, VM, gateway, worker and SDK;
+  publish protocol specifications and reproducible build instructions. Identify
+  the separate licenses governing model weights, training data and dependencies.
+  The model catalog includes at least one pinned model whose weights can be
+  obtained and served independently under its published license.
+- An independent operator can install the released worker software, bind its
+  signing key to a bonded chain account, pass measured hardware and network
+  admission, and serve a compatible workload under published rules. No
+  project-specific source change or hidden operator allowlist is required.
+- An independent operator can deploy a compatible gateway with the same public
+  API and independently verify receipts and chain finality. The product remains
+  usable when the founding gateway or its discovery/control service is
+  unavailable.
+- Report completed jobs and effective capacity by hardware class, non-genesis
+  worker share, operator concentration, completion and retry rates, P50/P95
+  latency, cost per delivered unit against matched centralized hardware, and
+  privacy incidents or audit findings. Explain the measurement method and its
+  trust limits.
+
+The repository is publicly readable but currently has no `LICENSE` file.
+Worker keys, allowed hosts and chain-account bindings are pre-provisioned; VRAM
+is advertised but not used for admission. Open participation and formal source
+release remain future gates.
+
 ## Operational gates
 
 - At least seven validators across independently operated nodes run the

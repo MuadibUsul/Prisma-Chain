@@ -1,11 +1,19 @@
 # Prisma Chain testnet
 
+Prisma's long-term goal is to turn independently owned idle compute into an
+open AI service that developers can access through one API, reducing dependence
+on a small number of large proprietary platforms. Worker admission, model
+eligibility, service quality and privacy must be measured rather than assumed.
+
 This repository implements the Prisma Chain whitepaper as an **application
 chain plus off-chain compute network**. PoS/BFT orders transactions; useful AI
 work is rewarded by the task protocol and does not choose blocks. The source
 concept paper is [Prisma Chain v0.1](https://www.annulus.us/notes/prisma-chain-whitepaper).
 The [Chinese whitepaper v0.2](docs/whitepaper-v0.2.zh-CN.md) states the revised
 protocol, current evidence and testnet delivery gates.
+The final developer-facing deliverable is a unified Prisma API and SDK for
+inference and asynchronous tasks; its measurable release gate is in
+[docs/delivery.md](docs/delivery.md).
 
 This is development software. A passing local test is not an audited chain,
 an economically secured network, or evidence of multi-machine GPU inference.
@@ -81,6 +89,8 @@ handling. The mock model is not Qwen; no GPU hosts are currently available.
 | Chain | One local validator, signed bank transfer and a verifiable task settled with 20% burn and duplicate-payment rejection | Independent validators, public genesis and governance rehearsal |
 | Compute network | Signed discovery, measured routing, lease fencing and provisional mock receipts pass locally | Multi-host Qwen serving, shared leases, checkpoint recovery and funded-task integration |
 | Lightweight payment | Escrow can be refunded; automatic finalization is disabled | Verified gateway and worker receipts, pinned token metering and tariff rules |
+| Unified API | Local mock inference and receipt endpoints; caller supplies a task envelope, but development mode does not verify chain acceptance or funding | Quoting, streaming multi-host Qwen, asynchronous jobs, finality status, billing and external-client acceptance |
+| Open participation and source | Publicly readable repository; workers require pre-provisioned trust bindings; no `LICENSE` file yet | Explicit software license, independent gateway deployment, published worker admission and measured useful capacity |
 | Economics and operations | Scenario simulator and deployment configuration exist | Issuance ledger, training pool, concentration controls, benchmarks and independent audit |
 
 These gates correspond to the [delivery criteria](docs/delivery.md). The
