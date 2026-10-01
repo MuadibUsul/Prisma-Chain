@@ -136,6 +136,7 @@ def create_gateway_app(
     api_key: str,
     *,
     task_authorizer: Callable[[TaskEnvelope, Route], Awaitable[bool]] | None = None,
+    announcement_authorizer: Callable[[SignedCapability], Awaitable[bool]] | None = None,
     chain_task_query: Callable[[int], Awaitable[dict]] | None = None,
     chain_height_query: Callable[[], Awaitable[int]] | None = None,
     token_counter: Callable[[str], Awaitable[int]] | None = None,
@@ -148,6 +149,14 @@ def create_gateway_app(
 ) -> FastAPI:
     if receipt_retry_seconds <= 0:
         raise ValueError("receipt retry interval must be positive")
+
+    async def admit_announcement(signed: SignedCapability) -> None:
+        bonded_account = None
+        if announcement_authorizer is not None:
+            if not await announcement_authorizer(signed):
+                raise PermissionError("announced node key has no matching bonded chain account")
+            bonded_account = signed.capability.chain_worker
+        plane.announce(signed, bonded_account=bonded_account)
 
     async def submit_saved_receipt(receipt: dict, worker_url: str | None = None) -> str:
         if allow_unfunded_dev_tasks or receipt_submitter is None:
@@ -215,10 +224,13 @@ def create_gateway_app(
                     try:
                         response = await client.get(peer.rstrip("/") + "/v1/announcements")
                         response.raise_for_status()
-                        for item in response.json():
+                        items = response.json()
+                        if not isinstance(items, list):
+                            raise ValueError("invalid gossip announcement list")
+                        for item in items[:256]:
                             try:
-                                plane.announce(SignedCapability.model_validate(item))
-                            except (ValueError, Conflict):
+                                await admit_announcement(SignedCapability.model_validate(item))
+                            except (ValueError, Conflict, PermissionError, Unavailable):
                                 pass
                     except (httpx.HTTPError, ValueError):
                         pass
@@ -252,9 +264,11 @@ def create_gateway_app(
         return {"tier": "tier0_relative", "notice": PRIVACY_NOTICE}
 
     @app.post("/v1/announcements", status_code=202)
-    def announce(body: SignedCapability) -> dict:
+    async def announce(body: SignedCapability) -> dict:
         try:
-            plane.announce(body)
+            await admit_announcement(body)
+        except PermissionError as exc:
+            raise HTTPException(403, str(exc)) from exc
         except (ValueError, Conflict) as exc:
             raise _http_error(exc) from exc
         return {"accepted": True}
@@ -666,16 +680,21 @@ def gateway_app_from_env() -> FastAPI:
     authorizer = None
     queries = None
     if os.environ.get("PRISMA_CHAIN_GRPC_ADDR") and os.environ.get("PRISMA_CHAIN_RPC_URL"):
-        from .chain_auth import ChainTaskAuthorizer, GrpcChainQueries
+        from .chain_auth import ChainAnnouncementAuthorizer, ChainTaskAuthorizer, GrpcChainQueries
         queries = GrpcChainQueries(
             os.environ["PRISMA_CHAIN_GRPC_ADDR"], os.environ["PRISMA_CHAIN_RPC_URL"],
             insecure_dev=os.environ.get("PRISMA_DEV_HTTP") == "1")
         authorizer = ChainTaskAuthorizer(queries)
     unfunded = os.environ.get("PRISMA_DEV_UNFUNDED") == "1"
+    chain_admission = os.environ.get("PRISMA_CHAIN_ADMISSION") == "1"
+    if chain_admission and queries is None:
+        raise ValueError("chain worker admission requires chain query endpoints")
     billing_pin = None if unfunded else _pin_from_env()
     counter = None if billing_pin is None else _token_counter_from_env(billing_pin)
     return create_gateway_app(plane, identity, os.environ["PRISMA_CLIENT_API_KEY"],
                               task_authorizer=authorizer,
+                              announcement_authorizer=(ChainAnnouncementAuthorizer(queries)
+                                                       if chain_admission else None),
                               chain_task_query=queries.task if queries else None,
                               chain_height_query=queries.height if queries else None,
                               token_counter=counter, billing_pin=billing_pin,

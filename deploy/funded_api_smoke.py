@@ -19,7 +19,7 @@ from light_smoke import put_bytes
 
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "network"))
-from prisma_network.chain_auth import ChainTaskAuthorizer, GrpcChainQueries
+from prisma_network.chain_auth import ChainAnnouncementAuthorizer, ChainTaskAuthorizer, GrpcChainQueries
 from prisma_network.core import Capability, ControlPlane, Identity, ModelPin, SignedCapability, TaskEnvelope, canonical, digest
 from prisma_network.server import (InferenceRequest, WorkerResponse, create_gateway_app,
                                    create_worker_app)
@@ -69,8 +69,8 @@ def main() -> None:
     submit("compute", "accept-task", "--task-id", str(task_id), signer=names["worker"])
 
     trusted = {node.node_id: node.public_key_b64 for node in (gateway_key, worker_key)}
-    plane = ControlPlane(str(Path(temp.name) / "control.db"), trusted, {"worker.local"},
-                         bound_worker_accounts={worker_key.node_id: addresses["worker"]},
+    plane = ControlPlane(str(Path(temp.name) / "control.db"),
+                         {gateway_key.node_id: gateway_key.public_key_b64}, {"worker.local"},
                          allow_http=True)
     now = int(time.time() * 1000)
     capability = Capability(node_id=worker_key.node_id, public_key=worker_key.public_key_b64,
@@ -81,9 +81,6 @@ def main() -> None:
                             tokenizer_digest=pin.tokenizer_digest, runtime_digest=pin.runtime_digest,
                             spec_version=pin.spec_version, probe_url="http://worker.local/v1/probe",
                             api_url="http://worker.local/v1/execute", gpu_count=0, vram_mb=0)
-    plane.announce(SignedCapability(capability=capability,
-                                     signature=worker_key.sign("prisma:capability:v1", capability.model_dump())))
-    plane.probe(worker_key.node_id, ok=True, latency_ms=1, bandwidth_mbps=100)
     queries = GrpcChainQueries("127.0.0.1:9090", "http://127.0.0.1:26657", insecure_dev=True)
     worker_tokenizer = Tokenizer.from_file(str(tokenizer_file))
     gateway_tokenizer = Tokenizer.from_file(str(tokenizer_file))
@@ -145,12 +142,20 @@ def main() -> None:
 
     gateway_app = create_gateway_app(plane, gateway_key, "synthetic-test-key",
                                      task_authorizer=ChainTaskAuthorizer(queries),
+                                     announcement_authorizer=ChainAnnouncementAuthorizer(queries),
                                      chain_task_query=queries.task, chain_height_query=queries.height,
                                      token_counter=count, billing_pin=pin, worker_call=worker_call,
                                      receipt_submitter=receipt_submitter,
                                      receipt_retry_seconds=1.0)
     lifecycle = ExitStack()
     client = lifecycle.enter_context(TestClient(gateway_app))
+    signed_capability = SignedCapability(
+        capability=capability,
+        signature=worker_key.sign("prisma:capability:v1", capability.model_dump()))
+    admitted = client.post("/v1/announcements", json=signed_capability.model_dump())
+    if admitted.status_code != 202 or plane.bound_worker_accounts.get(worker_key.node_id) != addresses["worker"]:
+        raise RuntimeError(f"bonded unknown worker was not admitted from live chain: {admitted.text}")
+    plane.probe(worker_key.node_id, ok=True, latency_ms=1, bandwidth_mbps=100)
     headers = {"Authorization": "Bearer synthetic-test-key"}
     envelope = TaskEnvelope(task_id=str(task_id), mode="lightweight", model_id=pin.model_id,
                             model_digest=pin.model_digest, spec_version=pin.spec_version,
@@ -164,6 +169,7 @@ def main() -> None:
     if (status.status_code != 200 or status.json()["chain_status"] != "accepted"
             or status.json()["billing"]["escrowed_uprsm"] != "10000"):
         raise RuntimeError(f"funded API accepted status mismatch: {status.text}")
+    plane.probe(worker_key.node_id, ok=True, latency_ms=1, bandwidth_mbps=100)
     second = client.post("/v1/inference", json=body, headers=headers)
     if second.status_code != 200:
         raise RuntimeError(f"funded API inference failed: {second.text}")
@@ -198,7 +204,7 @@ def main() -> None:
             or replay.json()["chain_submission"] != "confirmed"
             or len(attempts) != 2 or len(submissions) != 2):
         raise RuntimeError("funded API replay executed the model again")
-    print(f"PASS: synthetic funded API task {task_id}; worker and submission failures retried "
+    print(f"PASS: chain-bonded unknown worker admitted for synthetic funded API task {task_id}; worker and submission failures retried "
           "under one task ID, saved signed delivery retried in the background by the worker, "
           "2 text tokens charged, accepted/pending/settled observed")
     lifecycle.close()

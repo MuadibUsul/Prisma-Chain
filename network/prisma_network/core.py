@@ -190,6 +190,8 @@ class ControlPlane:
               task_id TEXT PRIMARY KEY, attempt_id TEXT NOT NULL, data TEXT NOT NULL);
             CREATE TABLE IF NOT EXISTS receipt_submissions (
               task_id TEXT PRIMARY KEY, status TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS bonded_nodes (
+              node_id TEXT PRIMARY KEY, account TEXT NOT NULL, public_key TEXT NOT NULL);
             INSERT OR IGNORE INTO receipt_submissions(task_id, status)
               SELECT task_id, 'retry_required' FROM receipts;
         """)
@@ -201,16 +203,21 @@ class ControlPlane:
         if not url.hostname or url.hostname not in self.allowed_hosts or url.username or url.password or url.fragment:
             raise ValueError("node URL host is not allowed")
 
-    def announce(self, signed: SignedCapability) -> None:
+    def announce(self, signed: SignedCapability, *, bonded_account: str | None = None) -> None:
         c = signed.capability
         try:
             pub = _unb64(c.public_key)
         except ValueError as exc:
             raise ValueError("invalid public key") from exc
-        if len(pub) != 32 or node_id(pub) != c.node_id or self.trusted_keys.get(c.node_id) != c.public_key:
-            raise ValueError("unregistered node key")
-        if self.bound_worker_accounts and self.bound_worker_accounts.get(c.node_id) != c.chain_worker:
-            raise ValueError("node key is not bound to the announced chain worker")
+        if len(pub) != 32 or node_id(pub) != c.node_id:
+            raise ValueError("invalid node key")
+        if bonded_account is not None and bonded_account != c.chain_worker:
+            raise ValueError("bonded account does not match announcement")
+        if bonded_account is None:
+            if self.trusted_keys.get(c.node_id) != c.public_key:
+                raise ValueError("unregistered node key")
+            if self.bound_worker_accounts and self.bound_worker_accounts.get(c.node_id) != c.chain_worker:
+                raise ValueError("node key is not bound to the announced chain worker")
         if not verify(c.public_key, "prisma:capability:v1", c.model_dump(), signed.signature):
             raise ValueError("invalid capability signature")
         now = self.clock_ms()
@@ -230,10 +237,26 @@ class ControlPlane:
         with self.lock:
             self.db.execute("BEGIN IMMEDIATE")
             try:
+                if bonded_account is not None:
+                    known_key = self.trusted_keys.get(c.node_id)
+                    known_account = self.bound_worker_accounts.get(c.node_id)
+                    if known_key not in (None, c.public_key) or known_account not in (None, c.chain_worker):
+                        raise Conflict("node key is already bound to a different account")
+                    old_binding = self.db.execute(
+                        "SELECT account, public_key FROM bonded_nodes WHERE node_id=?",
+                        (c.node_id,)).fetchone()
+                    if old_binding and (old_binding["account"] != c.chain_worker or
+                                        old_binding["public_key"] != c.public_key):
+                        raise Conflict("node key is already bound to a different account")
+                    self.db.execute("INSERT OR IGNORE INTO bonded_nodes VALUES (?,?,?)",
+                                    (c.node_id, c.chain_worker, c.public_key))
                 old = self.db.execute("SELECT sequence, data FROM capabilities WHERE node_id=?", (c.node_id,)).fetchone()
                 if old and c.sequence <= old["sequence"]:
                     if c.sequence == old["sequence"] and json.loads(old["data"]) == json.loads(data):
                         self.db.execute("COMMIT")
+                        if bonded_account is not None:
+                            self.trusted_keys[c.node_id] = c.public_key
+                            self.bound_worker_accounts[c.node_id] = c.chain_worker
                         return
                     raise Conflict("stale or equivocated capability sequence")
                 if old:
@@ -246,6 +269,9 @@ class ControlPlane:
                         self.db.execute("DELETE FROM probes WHERE node_id=?", (c.node_id,))
                 self.db.execute("INSERT OR REPLACE INTO capabilities VALUES (?,?,?)", (c.node_id, c.sequence, data))
                 self.db.execute("COMMIT")
+                if bonded_account is not None:
+                    self.trusted_keys[c.node_id] = c.public_key
+                    self.bound_worker_accounts[c.node_id] = c.chain_worker
             except Exception:
                 self.db.execute("ROLLBACK")
                 raise
@@ -284,7 +310,10 @@ class ControlPlane:
         groups: dict[str, list[tuple[Capability, sqlite3.Row]]] = {}
         for row in rows:
             c = SignedCapability.model_validate_json(row["data"]).capability
-            if (c.model_id == model_id and c.model_digest == model_digest and c.spec_version == spec_version
+            if (self.trusted_keys.get(c.node_id) == c.public_key
+                    and (not self.bound_worker_accounts or
+                         self.bound_worker_accounts.get(c.node_id) == c.chain_worker)
+                    and c.model_id == model_id and c.model_digest == model_digest and c.spec_version == spec_version
                     and c.expires_at_ms > now
                     and row["ok"] == 1 and row["checked_at_ms"] is not None
                     and now - row["checked_at_ms"] <= 15_000 and row["bandwidth_mbps"] > 0):

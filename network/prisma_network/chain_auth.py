@@ -9,7 +9,7 @@ from typing import Protocol
 
 import httpx
 
-from .core import ModelPin, Route, TaskEnvelope, Unavailable
+from .core import ModelPin, Route, SignedCapability, TaskEnvelope, Unavailable, verify
 
 
 def _varint(number: int) -> bytes:
@@ -123,6 +123,30 @@ class GrpcChainQueries:
             response = await client.get(self.rpc_url + "/status")
         response.raise_for_status()
         return int(response.json()["result"]["sync_info"]["latest_block_height"])
+
+
+class ChainAnnouncementAuthorizer:
+    """Admit a signed node only while its chain account owns a live bond and key."""
+
+    MIN_BOND_UPRSM = 1_000_000
+
+    def __init__(self, queries: ChainQueries):
+        self.queries = queries
+
+    async def __call__(self, signed: SignedCapability) -> bool:
+        cap = signed.capability
+        try:
+            public_key = base64.b64decode(cap.public_key, validate=True)
+        except ValueError as exc:
+            raise ValueError("invalid announcement public key") from exc
+        if (len(public_key) != 32 or hashlib.sha256(public_key).hexdigest() != cap.node_id
+                or not verify(cap.public_key, "prisma:capability:v1", cap.model_dump(), signed.signature)):
+            raise ValueError("invalid signed node announcement")
+        try:
+            bonded, chain_key = await self.queries.worker(cap.chain_worker)
+        except Exception as exc:
+            raise Unavailable("chain worker admission query failed") from exc
+        return bonded >= self.MIN_BOND_UPRSM and chain_key == public_key
 
 
 def _digest_hex(value: object) -> str:

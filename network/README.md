@@ -31,6 +31,13 @@ chain worker address. The adapter checks accepted task state, the full task
 envelope, pinned chain model hashes, latest chain height, each stage's bond,
 and the on-chain Ed25519 key behind each announced node ID.
 It uses the chain's gRPC Query API and does not sign or broadcast transactions.
+An optional `PRISMA_CHAIN_ADMISSION=1` instead verifies each signed node
+announcement against the chain's worker bond and registered Ed25519 key, then
+admits that key and account without adding them to the trusted-key or binding
+files. The first accepted key/account pairing is kept in SQLite across gateway
+restarts; a gateway restart requires a fresh chain-verified announcement before
+the worker becomes routable again. URL hosts still require an explicit
+`PRISMA_ALLOWED_NODE_HOSTS` entry, and this is not yet open Internet admission.
 In funded mode the gateway also needs `PRISMA_MODEL_ID`, `PRISMA_MODEL_DIGEST`,
 `PRISMA_WEIGHTS_DIGEST`, `PRISMA_TOKENIZER_DIGEST`, `PRISMA_RUNTIME_DIGEST`,
 `PRISMA_SPEC_VERSION`, `PRISMA_MODEL_DIR`, and `PRISMA_MODEL_FILES_FILE`.
@@ -91,8 +98,10 @@ response disclose the Tier 0 boundary.
    `{model_id, weights_digest, tokenizer_digest, runtime_digest, spec_version}`.
    Weight/tokenizer digests are SHA-256 of their sorted file-hash maps. The
    gateway binds routes and requests to this digest and exact spec version.
-   Trust keys must be provisioned from bonded chain workers by the operator;
-   a signature alone does not prove a worker has a bond or GPU. A worker binding
+   Without chain admission, trust keys must be provisioned from bonded chain
+   workers by the operator. With chain admission, the gateway queries the
+   worker's current bond and registered key on every new announcement; a
+   signature alone does not prove a worker has a bond or GPU. A worker binding
    a new Ed25519 network key supplies the v1 chain/account/key possession proof
    as `--network-key-proof` in its `bond-worker` transaction; see
    [the protocol](../docs/protocol.md).

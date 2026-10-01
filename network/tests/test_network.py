@@ -8,6 +8,7 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 
+from prisma_network.chain_auth import ChainAnnouncementAuthorizer
 from prisma_network.core import (Capability, Conflict, ControlPlane, Identity, ModelPin,
                                  SignedCapability, TaskEnvelope, Unavailable, digest, verify)
 from prisma_network.server import (ExecutionRequest, InferenceRequest, SignedExecution,
@@ -120,6 +121,57 @@ def _announce_result(plane, signed):
         return "accepted"
     except Conflict:
         return "stale"
+
+
+def test_chain_bond_admits_unknown_node_and_rechecks_after_gateway_restart(tmp_path):
+    now = [int(time.time() * 1000)]
+    gateway, worker = Identity.generate(), Identity.generate()
+    keys = {gateway.node_id: gateway.public_key_b64}
+    plane = ControlPlane(str(tmp_path / "control.db"), keys.copy(), {"worker0.local"},
+                         allow_http=True, clock_ms=lambda: now[0])
+
+    class Queries:
+        bond = 0
+        calls = 0
+
+        async def worker(self, account):
+            self.calls += 1
+            assert account in {"dev-worker-0", "second-account"}
+            return self.bond, worker.public_key
+
+    queries = Queries()
+    client = TestClient(create_gateway_app(plane, gateway, "secret",
+                                           announcement_authorizer=ChainAnnouncementAuthorizer(queries)))
+    signed = capability(worker, 0, 1, now[0])
+    tampered = signed.model_copy(deep=True)
+    tampered.capability.gpu_count += 1
+    assert client.post("/v1/announcements", json=tampered.model_dump()).status_code == 400
+    assert queries.calls == 0
+    assert client.post("/v1/announcements", json=signed.model_dump()).status_code == 403
+    assert worker.node_id not in plane.trusted_keys
+    queries.bond = 1_000_000
+    assert client.post("/v1/announcements", json=signed.model_dump()).status_code == 202
+    assert plane.bound_worker_accounts[worker.node_id] == "dev-worker-0"
+    plane.probe(worker.node_id, ok=True, latency_ms=1, bandwidth_mbps=100)
+    assert plane.route(MODEL, MODEL_HASH, PIN.spec_version).worker_node_id == worker.node_id
+
+    relink = signed.model_copy(deep=True)
+    relink.capability.sequence += 1
+    relink.capability.chain_worker = "second-account"
+    relink.signature = worker.sign("prisma:capability:v1", relink.capability.model_dump())
+    assert client.post("/v1/announcements", json=relink.model_dump()).status_code == 409
+    plane.db.close()
+
+    restarted = ControlPlane(str(tmp_path / "control.db"), keys.copy(), {"worker0.local"},
+                             allow_http=True, clock_ms=lambda: now[0])
+    with pytest.raises(Unavailable):
+        restarted.route(MODEL, MODEL_HASH, PIN.spec_version)
+    again = TestClient(create_gateway_app(restarted, gateway, "secret",
+                                          announcement_authorizer=ChainAnnouncementAuthorizer(queries)))
+    assert again.post("/v1/announcements", json=relink.model_dump()).status_code == 409
+    assert again.post("/v1/announcements", json=signed.model_dump()).status_code == 202
+    assert restarted.route(MODEL, MODEL_HASH, PIN.spec_version).worker_node_id == worker.node_id
+    restarted.db.close()
 
 
 def test_expiry_takeover_fences_old_attempt_and_receipt_is_once(tmp_path):

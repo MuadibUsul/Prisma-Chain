@@ -102,9 +102,11 @@ reliability, privacy and operator concentration, rather than registered nodes.
   trust limits.
 
 The repository is publicly readable but currently has no `LICENSE` file.
-Worker keys, allowed hosts and chain-account bindings are pre-provisioned; VRAM
-is advertised but not used for admission. Open participation and formal source
-release remain future gates.
+An optional chain query now admits signed announcements from bonded worker keys
+without a pre-provisioned key or account binding; the first pairing remains
+fixed across gateway restarts. The deployed mock stack still uses pre-provisioned
+keys, URL hosts still require an allowlist, and VRAM is advertised but not used
+for admission. Open participation and formal source release remain future gates.
 
 ## Operational gates
 
