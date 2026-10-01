@@ -1,0 +1,81 @@
+name: prisma-devnet
+
+services:
+  chain:
+    build:
+      context: ..
+      dockerfile: chain/Dockerfile
+    ports:
+      - "127.0.0.1:26657:26657"
+      - "127.0.0.1:9090:9090"
+    volumes:
+      - chain-data:/data
+
+  gateway:
+    image: prisma-devnet-network:local
+    build:
+      context: ..
+      dockerfile: deploy/network.Dockerfile
+    command: ["python", "-m", "uvicorn", "prisma_network.server:gateway_app_from_env", "--factory", "--host", "0.0.0.0", "--port", "8080"]
+    environment:
+      PRISMA_NODE_SEED_B64: ${PRISMA_NODE_SEED_GATEWAY_B64:?Run python deploy/init_devnet.py}
+      PRISMA_CLIENT_API_KEY: ${PRISMA_CLIENT_API_KEY:?Run python deploy/init_devnet.py}
+      PRISMA_TRUSTED_KEYS_FILE: /run/prisma/trusted-keys.json
+      PRISMA_ALLOWED_NODE_HOSTS: worker
+      PRISMA_DB: /data/network.sqlite3
+      PRISMA_DEV_HTTP: "1"
+      PRISMA_DEV_UNFUNDED: "1"
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - ./data/trusted-keys.json:/run/prisma/trusted-keys.json:ro
+      - gateway-data:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/v1/privacy', timeout=2)"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  mock-model:
+    image: prisma-devnet-network:local
+    pull_policy: never
+    command: ["python", "-m", "uvicorn", "prisma_network.mock_model:app", "--host", "0.0.0.0", "--port", "8000"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2)"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  worker:
+    image: prisma-devnet-network:local
+    pull_policy: never
+    command: ["python", "-m", "uvicorn", "prisma_network.server:worker_app_from_env", "--factory", "--host", "0.0.0.0", "--port", "8081"]
+    depends_on:
+      gateway:
+        condition: service_healthy
+      mock-model:
+        condition: service_healthy
+    environment:
+      PRISMA_NODE_SEED_B64: ${PRISMA_NODE_SEED_WORKER_B64:?Run python deploy/init_devnet.py}
+      PRISMA_TRUSTED_KEYS_FILE: /run/prisma/trusted-keys.json
+      PRISMA_CONTROL_URL: http://gateway:8080
+      PRISMA_PUBLIC_URL: http://worker:8081
+      PRISMA_GROUP_ID: mock-one-stage
+      PRISMA_STAGE_INDEX: "0"
+      PRISMA_STAGE_COUNT: "1"
+      PRISMA_MODEL_ID: ${PRISMA_MODEL_ID:?Run python deploy/init_devnet.py}
+      PRISMA_MODEL_DIGEST: ${PRISMA_MODEL_DIGEST:?Run python deploy/init_devnet.py}
+      PRISMA_WEIGHTS_DIGEST: ${PRISMA_WEIGHTS_DIGEST:?Run python deploy/init_devnet.py}
+      PRISMA_TOKENIZER_DIGEST: ${PRISMA_TOKENIZER_DIGEST:?Run python deploy/init_devnet.py}
+      PRISMA_RUNTIME_DIGEST: ${PRISMA_RUNTIME_DIGEST:?Run python deploy/init_devnet.py}
+      PRISMA_SPEC_VERSION: ${PRISMA_SPEC_VERSION:?Run python deploy/init_devnet.py}
+      PRISMA_GPU_COUNT: "0"
+      PRISMA_VRAM_MB: "0"
+      PRISMA_VLLM_URL: http://mock-model:8000
+      PRISMA_DEV_SKIP_FILE_HASH: "1"
+    volumes:
+      - ./data/trusted-keys.json:/run/prisma/trusted-keys.json:ro
+
+volumes:
+  chain-data:
+  gateway-data:

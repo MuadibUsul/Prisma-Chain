@@ -1,0 +1,20 @@
+syntax = "proto3";
+package prisma.compute.v1;
+option go_package = "prismachain/chain/x/compute/types";
+
+service Query {
+  rpc Task(QueryTaskRequest) returns (QueryTaskResponse);
+  rpc Model(QueryModelRequest) returns (QueryModelResponse);
+  rpc Worker(QueryWorkerRequest) returns (QueryWorkerResponse);
+}
+
+message QueryTaskRequest { uint64 task_id = 1; }
+message QueryTaskResponse { bytes task_json = 1; }
+message QueryModelRequest { string model_id = 1; string spec_version = 2; }
+message QueryModelResponse { bytes model_json = 1; }
+message QueryWorkerRequest { string worker = 1; }
+message QueryWorkerResponse {
+  uint64 bonded_uprsm = 1;
+  bytes network_public_key = 2;
+  uint64 reserved_uprsm = 3;
+}

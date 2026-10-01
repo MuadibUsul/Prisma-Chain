@@ -1,0 +1,7 @@
+{
+  "months": [
+    {"external_fees": 0, "tasks": 100, "audit_fraction_bps": 1000, "replay_cost": 100000, "reserve_release": 500000},
+    {"external_fees": 10000000, "tasks": 100, "audit_fraction_bps": 1000, "replay_cost": 100000, "reserve_release": 500000},
+    {"external_fees": 100000000, "tasks": 100, "audit_fraction_bps": 1000, "replay_cost": 100000, "reserve_release": 500000}
+  ]
+}

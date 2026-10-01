@@ -1,0 +1,10 @@
+{
+  "input": [3],
+  "program": [
+    {"op": "input", "dst": 1, "imm": 0},
+    {"op": "set", "dst": 2, "imm": 2},
+    {"op": "mul", "dst": 0, "a": 1, "b": 2},
+    {"op": "set", "dst": 3, "imm": 5},
+    {"op": "gt", "dst": 0, "a": 0, "b": 3}
+  ]
+}

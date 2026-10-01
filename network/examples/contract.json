@@ -1,0 +1,63 @@
+{
+  "announcement": {
+    "capability": {
+      "api_url": "https://worker1.example/v1/execute",
+      "chain_worker": "dev-worker-0",
+      "expires_at_ms": 1700000045000,
+      "gpu_count": 1,
+      "group_id": "example-14b-2stage",
+      "issued_at_ms": 1700000000000,
+      "model_digest": "0d6c4650c172677f0563ba48cb5a55b6aea323fca475a492eb41961f1db022ac",
+      "model_id": "Qwen/Qwen3-14B",
+      "node_id": "6a3803d5f059902a1c6dafbc9ba4729212f7caac08634cc3ae76b27529f03827",
+      "probe_url": "https://worker1.example/v1/probe",
+      "public_key": "gTl3Dqh9F19Wo1Rmw0x+zMuNipG07jeiXfYPW4/Js5Q=",
+      "runtime_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "sequence": 1700000000000,
+      "spec_version": "light-v1",
+      "stage_count": 2,
+      "stage_index": 0,
+      "tokenizer_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "vram_mb": 48000,
+      "weights_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "signature": "vnedfH5jOmlO6sosxih7CYTzH907nKLGfRfHERpk4KweOod/Lpf3asEyvrv3xRML5YcNJpHos9qCAbJpUUNXDg=="
+  },
+  "delivery_receipt": {
+    "attempt_id": "attempt-1",
+    "completed_at_ms": 1700000000000,
+    "gateway_node_id": "34750f98bd59fcfc946da45aaabe933be154a4b5094e1c4abf42866505f3c97e",
+    "gateway_signature": "IQYwXTRwoiuthHk0+//apjXmHdHNxh29ol0WnIFdNAfol/isPhzFZ55j1rC5uG+5/zimvY0jlkVTpC4JNdXRDw==",
+    "group_id": "example-14b-2stage",
+    "input_commitment": "54c615409c5608dabfd3fd26f4cb28221c6ea8ee39599d86f2ea8017bb21eac6",
+    "lease_epoch": 1,
+    "mode": "lightweight",
+    "model_digest": "0d6c4650c172677f0563ba48cb5a55b6aea323fca475a492eb41961f1db022ac",
+    "model_id": "Qwen/Qwen3-14B",
+    "output_commitment": "b2437a6aa53010b70011f253d0ef2e75d5a15350811531d9b82c27e77a706081",
+    "output_tokens": 3,
+    "spec_version": "light-v1",
+    "status": "delivered",
+    "task_id": "1",
+    "worker_attestation": {
+      "attempt_id": "attempt-1",
+      "completed_at_ms": 1700000000000,
+      "gateway_node_id": "34750f98bd59fcfc946da45aaabe933be154a4b5094e1c4abf42866505f3c97e",
+      "group_id": "example-14b-2stage",
+      "input_commitment": "54c615409c5608dabfd3fd26f4cb28221c6ea8ee39599d86f2ea8017bb21eac6",
+      "lease_epoch": 1,
+      "model_digest": "0d6c4650c172677f0563ba48cb5a55b6aea323fca475a492eb41961f1db022ac",
+      "model_id": "Qwen/Qwen3-14B",
+      "output_commitment": "b2437a6aa53010b70011f253d0ef2e75d5a15350811531d9b82c27e77a706081",
+      "output_tokens": 3,
+      "spec_version": "light-v1",
+      "status": "delivered",
+      "task_id": "1",
+      "worker_node_id": "6a3803d5f059902a1c6dafbc9ba4729212f7caac08634cc3ae76b27529f03827"
+    },
+    "worker_node_id": "6a3803d5f059902a1c6dafbc9ba4729212f7caac08634cc3ae76b27529f03827",
+    "worker_signature": "xJFUVLyuPqkGqfldRtOr3hWVVWWNIX2Acexm6Qon63VVJqqqNPvddo3tn0VK5qza9z/ZZhy4EqSiwa/MsQhiCQ=="
+  },
+  "gateway_public_key": "iojj3XQJ8ZX9UtstPLpdcspnCb8dlBIb83SIAbQPb1w=",
+  "warning": "Test-only keys and example evidence; no chain settlement or real GPU run"
+}

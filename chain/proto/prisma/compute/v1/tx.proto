@@ -1,0 +1,120 @@
+syntax = "proto3";
+package prisma.compute.v1;
+option go_package = "prismachain/chain/x/compute/types";
+
+import "cosmos/msg/v1/msg.proto";
+
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+  rpc RegisterModel(MsgRegisterModel) returns (MsgRegisterModelResponse);
+  rpc BondWorker(MsgBondWorker) returns (MsgBondWorkerResponse);
+  rpc PostTask(MsgPostTask) returns (MsgPostTaskResponse);
+  rpc AcceptTask(MsgAcceptTask) returns (MsgAcceptTaskResponse);
+  rpc SubmitResult(MsgSubmitResult) returns (MsgSubmitResultResponse);
+  rpc AttestResult(MsgAttestResult) returns (MsgAttestResultResponse);
+  rpc StartChallenge(MsgStartChallenge) returns (MsgStartChallengeResponse);
+  rpc ChallengeMidpoint(MsgChallengeMidpoint) returns (MsgChallengeMidpointResponse);
+  rpc TimeoutChallenge(MsgTimeoutChallenge) returns (MsgTimeoutChallengeResponse);
+  rpc FinalizeTask(MsgFinalizeTask) returns (MsgFinalizeTaskResponse);
+  rpc RefundTask(MsgRefundTask) returns (MsgRefundTaskResponse);
+}
+
+message MsgRegisterModel {
+  option (cosmos.msg.v1.signer) = "owner";
+  string owner = 1;
+  string model_id = 2;
+  string spec_version = 3;
+  string mode = 4;
+  bytes image_digest = 5;
+  bytes tokenizer_digest = 6;
+  bytes weights_digest = 7;
+  bytes program = 8;
+}
+message MsgRegisterModelResponse {}
+
+message MsgBondWorker {
+  option (cosmos.msg.v1.signer) = "worker";
+  string worker = 1;
+  uint64 amount = 2;
+  bytes network_public_key = 3;
+}
+message MsgBondWorkerResponse {}
+
+message MsgPostTask {
+  option (cosmos.msg.v1.signer) = "requester";
+  string requester = 1;
+  string mode = 2;
+  string model_id = 3;
+  string spec_version = 4;
+  bytes input_commitment = 5;
+  string data_ref = 6;
+  uint64 max_fee = 7;
+  uint64 deadline = 8;
+  string privacy_tier = 9;
+  repeated sint64 public_input = 10;
+}
+message MsgPostTaskResponse { uint64 task_id = 1; }
+
+message MsgAcceptTask {
+  option (cosmos.msg.v1.signer) = "worker";
+  string worker = 1;
+  uint64 task_id = 2;
+}
+message MsgAcceptTaskResponse {}
+
+message MsgSubmitResult {
+  option (cosmos.msg.v1.signer) = "worker";
+  string worker = 1;
+  uint64 task_id = 2;
+  bytes output_digest = 3;
+  bytes trace_root = 4;
+  bytes receipt_digest = 5;
+  uint64 output_tokens = 6;
+  bytes trace_claim_json = 7;
+}
+message MsgSubmitResultResponse {}
+
+message MsgAttestResult {
+  option (cosmos.msg.v1.signer) = "monitor";
+  string monitor = 1;
+  uint64 task_id = 2;
+}
+message MsgAttestResultResponse {}
+
+message MsgStartChallenge {
+  option (cosmos.msg.v1.signer) = "challenger";
+  string challenger = 1;
+  uint64 task_id = 2;
+  bytes trace_claim_json = 3;
+}
+message MsgStartChallengeResponse {}
+
+message MsgChallengeMidpoint {
+  option (cosmos.msg.v1.signer) = "actor";
+  string actor = 1;
+  uint64 task_id = 2;
+  bytes state_json = 3;
+  bytes proof_json = 4;
+}
+message MsgChallengeMidpointResponse {}
+
+message MsgTimeoutChallenge {
+  option (cosmos.msg.v1.signer) = "actor";
+  string actor = 1;
+  uint64 task_id = 2;
+}
+message MsgTimeoutChallengeResponse {}
+
+message MsgFinalizeTask {
+  option (cosmos.msg.v1.signer) = "actor";
+  string actor = 1;
+  uint64 task_id = 2;
+}
+message MsgFinalizeTaskResponse {}
+
+message MsgRefundTask {
+  option (cosmos.msg.v1.signer) = "actor";
+  string actor = 1;
+  uint64 task_id = 2;
+}
+message MsgRefundTaskResponse {}
