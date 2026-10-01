@@ -71,6 +71,7 @@ message MsgSubmitResult {
   bytes receipt_digest = 5;
   uint64 output_tokens = 6;
   bytes trace_claim_json = 7;
+  bytes receipt_json = 8;
 }
 message MsgSubmitResultResponse {}
 

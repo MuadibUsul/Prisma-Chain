@@ -44,12 +44,16 @@ the fee, pays 5% to each monitor, and pays the residual to the worker. A
 worker's bond is reserved while its task is active; late or unconfirmed tasks
 can refund. Challenge timeouts follow the deterministic VM dispute outcome.
 
-Lightweight result submission records only commitments, token count and a
-receipt digest. **The module currently rejects lightweight finalization.**
-The escrow remains refundable after the timeout, including when two monitors
-attested. Signed gateway/worker receipt verification and usage-based tariff
-accounting must be integrated before this payment path can open. A receipt
-digest or monitor attestation alone does not authorize payment.
+Lightweight result submission includes a canonical signed receipt. The module
+checks the worker and gateway Ed25519 signatures against distinct bonded
+network keys, binds the receipt to the task, pinned model, output and token
+count, and stores its bytes for audit. After two other bonded monitors attest
+and the confirmation window closes, the testnet charges 1,000 `uprsm` per
+output token up to `max_fee`, refunds unused escrow, burns 20% of the charge,
+and splits the rest 70% to the worker and 5% to each monitor. A receipt digest
+alone cannot authorize payment. Missing attestations or a legacy hash-only
+pending result keep a refund path open after timeout. This fixed testnet tariff
+does not yet cover input tokens, GPU time, quality or a governed price table.
 
 ## Signed local acceptance (2026-10-01)
 

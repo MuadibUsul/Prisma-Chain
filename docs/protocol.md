@@ -70,6 +70,13 @@ For a lightweight result, `receipt_digest` is SHA-256 of the complete signed
 receipt in the v1 canonical JSON format, and `output_digest` matches its
 `output_commitment`. The gateway's task-status view rejects a local receipt
 whose output, token count or receipt digest conflicts with the chain result.
+The chain validates both signatures against distinct bonded network keys and
+stores the public receipt. Two other bonded monitors attest to delivery; once
+the confirmation window closes, testnet settlement charges 1,000 `uprsm` per
+output token up to the escrow cap and refunds the remainder. The charge uses
+the usual 20% burn, 10% combined monitor share and residual worker share.
+This testnet tariff and dual signatures cannot prove subjective answer quality
+or rule out collusion between operators.
 Independent re-execution, canary tasks and user feedback update reputation.
 Subjective answer quality is not an objective slashing condition. The client
 must see the mode before payment and must not receive a fraud-proof claim for

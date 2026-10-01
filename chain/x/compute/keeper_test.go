@@ -177,6 +177,10 @@ func TestLightweightRefundDoesNotLockEscrow(t *testing.T) {
 	if payable(task, 121) {
 		t.Fatal("lightweight task paid without verified receipt and usage tariff")
 	}
+	task.ReceiptJSON, task.Gateway, task.ChargedFee, task.MaxFee = []byte("signed"), "bonded-gateway", 3, 10
+	if !payable(task, 121) || refundable(task, 121) {
+		t.Fatal("attested signed lightweight task must settle rather than refund")
+	}
 	task.Status = "refunded"
 	if refundable(task, 122) || payable(task, 122) {
 		t.Fatal("refunded task could pay or refund twice")

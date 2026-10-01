@@ -104,6 +104,19 @@ With `--check-gateway`, the script also checks the authenticated API's
 `refunded` chain views. Start the
 full Compose stack before using that flag.
 
+Run the separate lightweight settlement check against the live local chain:
+
+```sh
+python deploy/light_smoke.py
+```
+
+It creates distinct bonded worker, gateway, and monitor accounts, posts a
+funded synthetic task, rejects a hash-only result, submits a canonical
+worker/gateway signed receipt, then verifies metered charge, unused escrow
+refund, burn, payout, final API status, and duplicate-settlement rejection.
+This tests chain accounting and signatures; it does not run a GPU model or
+prove that the two signers belong to independent operators.
+
 To stop processes while preserving local chain state and receipts:
 
 ```sh
@@ -125,3 +138,15 @@ shared durable lease store. The network package's
 [`examples/launch_vllm_ray.sh`](../network/examples/launch_vllm_ray.sh)
 describes the serving experiment. Do not point a public client at the local
 HTTP/dev-unfunded gateway or interpret this stack as a multi-host benchmark.
+
+The 2026-10-01 RunPod preflight reached two live GPUs and completed CUDA
+matrix operations on each: one RTX A4500 with 20 GiB in Europe and one RTX
+A5000 with 24 GiB in Canada. A TCP connection from the first Pod to the
+second Pod's exposed SSH port succeeded; ICMP ping received no replies.
+Each Pod had a 30 GiB ephemeral container disk, no cached model weights,
+and no Ray/vLLM executable. This establishes hardware and basic TCP access
+only. The Qwen3-14B two-stage inference acceptance remains pending. Before
+that run, provision adequate persistent model/cache storage, a pinned
+Ray/vLLM environment, authenticated worker access, and the actual Ray data
+ports or private networking. Measure the cross-region latency against a
+same-region pair before using it as a performance baseline.

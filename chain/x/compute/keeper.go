@@ -23,6 +23,7 @@ const (
 	ChallengeBlocks      uint64 = 20
 	ChallengeRoundBlocks uint64 = 5
 	MaxQueuedChallenges         = 8
+	LightTokenPriceUprsm uint64 = 1_000
 )
 
 type QueuedChallenge struct {
@@ -61,7 +62,10 @@ type Task struct {
 	OutputDigest     []byte            `json:"output_digest,omitempty"`
 	TraceRoot        []byte            `json:"trace_root,omitempty"`
 	ReceiptDigest    []byte            `json:"receipt_digest,omitempty"`
+	ReceiptJSON      []byte            `json:"receipt_json,omitempty"`
 	OutputTokens     uint64            `json:"output_tokens,omitempty"`
+	ChargedFee       uint64            `json:"charged_fee,omitempty"`
+	Gateway          string            `json:"gateway,omitempty"`
 	TraceClaimJSON   []byte            `json:"trace_claim_json,omitempty"`
 	ChallengeEnd     uint64            `json:"challenge_end,omitempty"`
 	Attesters        []string          `json:"attesters,omitempty"`
@@ -409,7 +413,8 @@ func (s msgServer) SubmitResult(ctx context.Context, msg *types.MsgSubmitResult)
 		return nil, errors.New("result rejected")
 	}
 	if task.Mode == "verifiable" {
-		if len(msg.TraceClaimJson) == 0 || len(msg.TraceClaimJson) > 8192 || len(msg.ReceiptDigest) != 0 {
+		if len(msg.TraceClaimJson) == 0 || len(msg.TraceClaimJson) > 8192 ||
+			len(msg.ReceiptDigest) != 0 || len(msg.ReceiptJson) != 0 {
 			return nil, errors.New("invalid verifiable result evidence")
 		}
 		model, err := s.GetModel(ctx, task.ModelID, task.SpecVersion)
@@ -435,8 +440,20 @@ func (s msgServer) SubmitResult(ctx context.Context, msg *types.MsgSubmitResult)
 		if string(out[:]) != string(msg.OutputDigest) {
 			return nil, errors.New("output does not match trace endpoint")
 		}
-	} else if !digest32(msg.ReceiptDigest) || msg.OutputTokens == 0 || len(msg.TraceClaimJson) != 0 || len(msg.TraceRoot) != 0 {
-		return nil, errors.New("lightweight result requires receipt digest and billed output tokens")
+	} else {
+		if !digest32(msg.ReceiptDigest) || msg.OutputTokens == 0 || len(msg.TraceClaimJson) != 0 || len(msg.TraceRoot) != 0 {
+			return nil, errors.New("lightweight result requires signed receipt and billed output tokens")
+		}
+		gateway, err := s.verifyLightReceipt(ctx, task, msg.ReceiptJson, msg.OutputDigest,
+			msg.ReceiptDigest, msg.OutputTokens)
+		if err != nil {
+			return nil, err
+		}
+		task.Gateway, task.ReceiptJSON = gateway, append([]byte(nil), msg.ReceiptJson...)
+		task.ChargedFee = task.MaxFee
+		if msg.OutputTokens <= task.MaxFee/LightTokenPriceUprsm {
+			task.ChargedFee = msg.OutputTokens * LightTokenPriceUprsm
+		}
 	}
 	task.OutputDigest, task.TraceRoot, task.ReceiptDigest = msg.OutputDigest, msg.TraceRoot, msg.ReceiptDigest
 	task.OutputTokens, task.TraceClaimJSON = msg.OutputTokens, msg.TraceClaimJson
@@ -453,7 +470,8 @@ func (s msgServer) AttestResult(ctx context.Context, msg *types.MsgAttestResult)
 	if err != nil {
 		return nil, err
 	}
-	if task.Status != "pending" || msg.Monitor == task.Worker || msg.Monitor == task.Requester || s.GetBond(ctx, msg.Monitor) < MinBond {
+	if task.Status != "pending" || msg.Monitor == task.Worker || msg.Monitor == task.Gateway ||
+		msg.Monitor == task.Requester || s.GetBond(ctx, msg.Monitor) < MinBond {
 		return nil, errors.New("monitor is not independent and bonded")
 	}
 	for _, a := range task.Attesters {
@@ -736,7 +754,17 @@ func (s msgServer) FinalizeTask(ctx context.Context, msg *types.MsgFinalizeTask)
 	if !payable(task, uint64(sdk.UnwrapSDKContext(ctx).BlockHeight())) {
 		return nil, errors.New("task not finalizable")
 	}
-	burn, monitorShare, workerShare := feeSplit(task.MaxFee)
+	charged := task.MaxFee
+	if task.Mode == "lightweight" {
+		charged = task.ChargedFee
+	}
+	burn, monitorShare, workerShare := feeSplit(charged)
+	if charged < task.MaxFee {
+		requester, _ := addr(task.Requester)
+		if err := s.bank.SendCoinsFromModuleToAccount(ctx, ModuleName, requester, amount(task.MaxFee-charged)); err != nil {
+			return nil, err
+		}
+	}
 	if burn > 0 {
 		if err := s.bank.BurnCoins(ctx, ModuleName, amount(burn)); err != nil {
 			return nil, err
@@ -788,10 +816,12 @@ func finalizable(task Task, height uint64) bool {
 	return task.Status == "pending" && height > task.ChallengeEnd && len(task.Attesters) == 2
 }
 
-// Lightweight settlement stays closed until signed receipts and usage pricing
-// are verified by the module. A receipt hash alone never authorizes payment.
 func payable(task Task, height uint64) bool {
-	return task.Mode == "verifiable" && finalizable(task, height)
+	if !finalizable(task, height) {
+		return false
+	}
+	return task.Mode == "verifiable" || task.Mode == "lightweight" &&
+		len(task.ReceiptJSON) > 0 && task.Gateway != "" && task.ChargedFee > 0 && task.ChargedFee <= task.MaxFee
 }
 
 func refundable(task Task, height uint64) bool {
@@ -799,7 +829,7 @@ func refundable(task Task, height uint64) bool {
 		return true
 	}
 	return task.Status == "pending" && height > task.ChallengeEnd+ChallengeBlocks &&
-		(task.Mode == "lightweight" || len(task.Attesters) < 2)
+		(len(task.Attesters) < 2 || task.Mode == "lightweight" && len(task.ReceiptJSON) == 0)
 }
 
 func feeSplit(fee uint64) (burn, eachMonitor, worker uint64) {
