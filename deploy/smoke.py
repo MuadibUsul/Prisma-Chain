@@ -82,9 +82,30 @@ def main() -> None:
     assert task_status["chain_status"] == "unfunded_dev"
     assert task_status["delivery_status"] == "provisional_delivery"
     assert task_status["settlement_final"] is False
-    print("PASS: chain RPC, Tier 0 notice, measured route, signed mock delivery, unfunded status, idempotent replay"
+    retry_input = {**committed, "messages": [{"role": "user", "content":
+                    "prisma-dev-fail-once:" + uuid.uuid4().hex}]}
+    retry_id = "dev-retry-" + uuid.uuid4().hex
+    retry_payload = {**payload, "task": {**payload["task"], "task_id": retry_id,
+                      "input_commitment": digest(retry_input)}, **retry_input}
+    try:
+        request(gateway + "/v1/inference", body=retry_payload, api_key=env["PRISMA_CLIENT_API_KEY"])
+    except urllib.error.HTTPError as exc:
+        assert exc.code == 502, f"first failed attempt returned {exc.code}"
+    else:
+        raise AssertionError("injected worker failure unexpectedly delivered")
+    assert request(gateway + "/v1/tasks/" + retry_id,
+                   api_key=env["PRISMA_CLIENT_API_KEY"])["delivery_status"] == "none"
+    recovered = request(gateway + "/v1/inference", body=retry_payload,
+                        api_key=env["PRISMA_CLIENT_API_KEY"])
+    assert recovered["receipt"]["task_id"] == retry_id and recovered["output"] == "MOCK"
+    assert not recovered["already_completed"]
+    assert request(gateway + "/v1/inference", body=retry_payload,
+                   api_key=env["PRISMA_CLIENT_API_KEY"])["receipt"] == recovered["receipt"]
+    print("PASS: chain RPC, Tier 0 notice, measured route, signed mock delivery, "
+          "failure retry, unfunded status, idempotent replay"
           if not args.no_chain else
-          "PASS: Tier 0 notice, measured route, signed mock delivery, unfunded status, idempotent replay")
+          "PASS: Tier 0 notice, measured route, signed mock delivery, failure retry, "
+          "unfunded status, idempotent replay")
 
 
 if __name__ == "__main__":

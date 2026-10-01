@@ -2,7 +2,8 @@
 
 This Compose stack runs one local Cosmos validator, a signed compute gateway,
 one worker sidecar, and a deterministic mock model. It exercises discovery,
-probing, routing, lease fencing, signed delivery, and idempotent replay. It does
+probing, routing, lease fencing, signed delivery, worker failure retry, and
+idempotent replay. It does
 **not** run Qwen, span multiple GPU machines, authorize tasks against chain
 escrow, or pay workers. Mock requests are explicitly unfunded. The machine
 needs Docker Compose and Python 3.10+; no GPU is needed.
@@ -40,7 +41,9 @@ The local endpoints are chain RPC `http://127.0.0.1:26657`, chain gRPC
 `127.0.0.1:9090`, and gateway `http://127.0.0.1:8080`. The gateway's
 `GET /v1/privacy` discloses the Tier 0 limits. The smoke script posts a
 temporary task to `POST /v1/inference`, checks a signed provisional receipt,
-then repeats the same request to confirm one delivery record. Authenticated
+then repeats the same request to confirm one delivery record. It also injects
+one backend failure for a second mock task, retries the same task ID, and
+checks that only the recovered attempt produces a receipt. Authenticated
 `GET /v1/tasks/{task_id}` reads chain status for numeric task IDs and labels
 mock task IDs `unfunded_dev`. The chain and gateway run side by side; the mock
 inference request is not submitted to chain state.

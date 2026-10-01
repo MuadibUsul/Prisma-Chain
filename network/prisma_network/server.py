@@ -246,6 +246,8 @@ def create_gateway_app(
                     {"posted", "accepted", "pending", "challenged", "settled", "refunded"}
                     or not isinstance(observed_height, int) or observed_height < 1):
                 raise ValueError("inconsistent chain task status")
+            if task["status"] in {"pending", "challenged", "settled"} and not task.get("output_digest"):
+                raise ValueError("chain result has no output digest")
             if delivered:
                 if delivered.get("task_id") != task_id:
                     raise HTTPException(409, "delivery receipt task ID conflicts with chain task")
@@ -258,6 +260,19 @@ def create_gateway_app(
                         or delivered["input_commitment"] != commitment
                         or plane.bound_worker_accounts.get(delivered["worker_node_id"]) != task["worker"]):
                     raise HTTPException(409, "delivery receipt conflicts with chain task")
+                if task.get("output_digest"):
+                    output_digest = base64.b64decode(task["output_digest"], validate=True)
+                    if len(output_digest) != 32:
+                        raise ValueError("invalid chain output digest")
+                    if (delivered.get("output_commitment") != output_digest.hex()
+                            or delivered.get("output_tokens") != task.get("output_tokens")):
+                        raise HTTPException(409, "delivery receipt conflicts with chain result")
+                if task.get("receipt_digest"):
+                    receipt_digest = base64.b64decode(task["receipt_digest"], validate=True)
+                    if len(receipt_digest) != 32:
+                        raise ValueError("invalid chain receipt digest")
+                    if digest(delivered) != receipt_digest.hex():
+                        raise HTTPException(409, "delivery receipt conflicts with chain result")
             challenge_end = (int(task.get("challenge_end", 0)) or None) if task["status"] == "pending" else None
         except HTTPException:
             raise

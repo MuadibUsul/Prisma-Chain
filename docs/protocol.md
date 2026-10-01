@@ -66,6 +66,10 @@ remain permissionless-release gates.
 
 The worker and gateway sign a delivery receipt, including the pinned model
 version, attempt ID, output commitment, delivered token count and timestamp.
+For a lightweight result, `receipt_digest` is SHA-256 of the complete signed
+receipt in the v1 canonical JSON format, and `output_digest` matches its
+`output_commitment`. The gateway's task-status view rejects a local receipt
+whose output, token count or receipt digest conflicts with the chain result.
 Independent re-execution, canary tasks and user feedback update reputation.
 Subjective answer quality is not an objective slashing condition. The client
 must see the mode before payment and must not receive a fraud-proof claim for

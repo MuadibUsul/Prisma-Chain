@@ -172,6 +172,8 @@ def test_gateway_worker_signatures_and_provisional_once(tmp_path):
         assert verify(gateway.public_key_b64, "prisma:execution:v1",
                       signed.request.model_dump(), signed.signature)
         request = signed.request
+        if request.task.task_id == "3" and sum(call.request.task.task_id == "3" for call in calls) == 1:
+            raise OSError("worker dropped the first attempt")
         count = 9 if request.task.task_id == "2" else 3
         att = WorkerAttestation(task_id=request.task.task_id, attempt_id=request.attempt_id,
                                 worker_node_id=worker.node_id, gateway_node_id=gateway.node_id,
@@ -209,6 +211,14 @@ def test_gateway_worker_signatures_and_provisional_once(tmp_path):
     overcount = client.post("/v1/inference", json=task_body("2").model_dump(), headers=headers)
     assert overcount.status_code == 400
     assert plane.receipt("2") is None
+    failed = client.post("/v1/inference", json=task_body("3").model_dump(), headers=headers)
+    assert failed.status_code == 502
+    assert plane.receipt("3") is None
+    retried = client.post("/v1/inference", json=task_body("3").model_dump(), headers=headers)
+    assert retried.status_code == 200
+    assert retried.json()["receipt"]["task_id"] == "3"
+    assert len({call.request.attempt_id for call in calls if call.request.task.task_id == "3"}) == 2
+    assert client.post("/v1/inference", json=task_body("3").model_dump(), headers=headers).json()["already_completed"]
     status = client.get("/v1/tasks/1", headers=headers)
     assert status.status_code == 200
     assert status.json()["chain_status"] == "unfunded_dev"
@@ -224,15 +234,19 @@ def test_task_status_separates_chain_settlement_from_delivery(tmp_path):
     body = task_body("7").task
     lease = plane.acquire("7", "group", gateway.node_id)
     plane.start_attempt("7", "group", gateway.node_id, lease["epoch"], "attempt")
-    plane.commit_receipt("7", "attempt", "group", gateway.node_id, lease["epoch"],
-                         {"task_id": "7", "worker_node_id": gateway.node_id,
-                          "mode": body.mode, "model_id": body.model_id,
-                          "spec_version": body.spec_version,
-                          "input_commitment": body.input_commitment})
+    receipt = {"task_id": "7", "worker_node_id": gateway.node_id,
+               "mode": body.mode, "model_id": body.model_id,
+               "spec_version": body.spec_version,
+               "input_commitment": body.input_commitment,
+               "output_commitment": "ab" * 32, "output_tokens": 3}
+    plane.commit_receipt("7", "attempt", "group", gateway.node_id, lease["epoch"], receipt)
     chain_task = {"id": 7, "status": "pending", "mode": body.mode,
                   "worker": "prsmworker",
                   "model_id": body.model_id, "spec_version": body.spec_version,
                   "input_commitment": base64.b64encode(bytes.fromhex(body.input_commitment)).decode(),
+                  "output_digest": base64.b64encode(bytes.fromhex("ab" * 32)).decode(),
+                  "output_tokens": 3,
+                  "receipt_digest": base64.b64encode(bytes.fromhex(digest(receipt))).decode(),
                   "challenge_end": 30}
 
     async def query(task_id):
@@ -252,6 +266,15 @@ def test_task_status_separates_chain_settlement_from_delivery(tmp_path):
     assert status.json() == {"task_id": "7", "delivery_status": "provisional_delivery",
                              "chain_status": "pending", "settlement_final": False,
                              "observed_height": 25, "challenge_end": 30}
+    chain_task["output_digest"] = base64.b64encode(bytes.fromhex("cd" * 32)).decode()
+    assert client.get("/v1/tasks/7", headers=headers).status_code == 409
+    chain_task["output_digest"] = base64.b64encode(bytes.fromhex("ab" * 32)).decode()
+    chain_task["output_tokens"] = 4
+    assert client.get("/v1/tasks/7", headers=headers).status_code == 409
+    chain_task["output_tokens"] = 3
+    chain_task["receipt_digest"] = base64.b64encode(bytes.fromhex("cd" * 32)).decode()
+    assert client.get("/v1/tasks/7", headers=headers).status_code == 409
+    chain_task["receipt_digest"] = base64.b64encode(bytes.fromhex(digest(receipt))).decode()
     chain_task["status"] = "settled"
     assert client.get("/v1/tasks/7", headers=headers).json()["settlement_final"] is True
     chain_task["status"] = "refunded"
