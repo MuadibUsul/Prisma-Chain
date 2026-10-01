@@ -93,7 +93,7 @@ handling. The mock model is not Qwen; no GPU hosts are currently available.
 | Chain | One local validator, signed bank transfer, scripted honest settlement and one-step fraud challenge/refund with amount checks | Independent validators, public genesis and governance rehearsal |
 | Compute network | Signed discovery, measured routing, lease fencing and provisional mock receipts pass locally | Multi-host Qwen serving, shared leases, checkpoint recovery and funded-task integration |
 | Lightweight payment | Escrow can be refunded; automatic finalization is disabled | Verified gateway and worker receipts, pinned token metering and tariff rules |
-| Unified API | Local mock inference and receipt endpoints; caller supplies a task envelope, but development mode does not verify chain acceptance or funding | Quoting, streaming multi-host Qwen, asynchronous jobs, finality status, billing and external-client acceptance |
+| Unified API | Local mock inference and receipts plus authenticated read-only chain task status; development inference remains unfunded | Quoting, chain transaction path, streaming multi-host Qwen, asynchronous jobs, billing and external-client acceptance |
 | Open participation and source | Publicly readable repository; workers require pre-provisioned trust bindings; no `LICENSE` file yet | Explicit software license, independent gateway deployment, published worker admission and measured useful capacity |
 | Economics and operations | Scenario simulator and deployment configuration exist | Issuance ledger, training pool, concentration controls, benchmarks and independent audit |
 

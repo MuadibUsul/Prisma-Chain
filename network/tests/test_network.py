@@ -1,3 +1,4 @@
+import base64
 import json
 import hashlib
 import time
@@ -155,6 +156,7 @@ def test_gateway_requires_chain_authorization_by_default(tmp_path):
     response = client.post("/v1/inference", json=body, headers={"Authorization": "Bearer secret"})
     assert response.status_code == 503
     assert "chain task authorizer" in response.json()["detail"]
+    assert client.get("/v1/tasks/1", headers={"Authorization": "Bearer secret"}).status_code == 503
 
 
 def test_gateway_worker_signatures_and_provisional_once(tmp_path):
@@ -207,6 +209,63 @@ def test_gateway_worker_signatures_and_provisional_once(tmp_path):
     overcount = client.post("/v1/inference", json=task_body("2").model_dump(), headers=headers)
     assert overcount.status_code == 400
     assert plane.receipt("2") is None
+    status = client.get("/v1/tasks/1", headers=headers)
+    assert status.status_code == 200
+    assert status.json()["chain_status"] == "unfunded_dev"
+    assert status.json()["delivery_status"] == "provisional_delivery"
+    assert status.json()["settlement_final"] is False
+
+
+def test_task_status_separates_chain_settlement_from_delivery(tmp_path):
+    now = [int(time.time() * 1000)]
+    gateway = Identity.generate()
+    plane = plane_for(tmp_path, (gateway,), now)
+    plane.bound_worker_accounts[gateway.node_id] = "prsmworker"
+    body = task_body("7").task
+    lease = plane.acquire("7", "group", gateway.node_id)
+    plane.start_attempt("7", "group", gateway.node_id, lease["epoch"], "attempt")
+    plane.commit_receipt("7", "attempt", "group", gateway.node_id, lease["epoch"],
+                         {"task_id": "7", "worker_node_id": gateway.node_id,
+                          "mode": body.mode, "model_id": body.model_id,
+                          "spec_version": body.spec_version,
+                          "input_commitment": body.input_commitment})
+    chain_task = {"id": 7, "status": "pending", "mode": body.mode,
+                  "worker": "prsmworker",
+                  "model_id": body.model_id, "spec_version": body.spec_version,
+                  "input_commitment": base64.b64encode(bytes.fromhex(body.input_commitment)).decode(),
+                  "challenge_end": 30}
+
+    async def query(task_id):
+        assert task_id == 7
+        return chain_task
+
+    async def height():
+        return 25
+
+    client = TestClient(create_gateway_app(plane, gateway, "secret", chain_task_query=query,
+                                           chain_height_query=height))
+    headers = {"Authorization": "Bearer secret"}
+    assert client.get("/v1/tasks/7").status_code == 401
+    assert client.get("/v1/tasks/07", headers=headers).status_code == 400
+    status = client.get("/v1/tasks/7", headers=headers)
+    assert status.status_code == 200
+    assert status.json() == {"task_id": "7", "delivery_status": "provisional_delivery",
+                             "chain_status": "pending", "settlement_final": False,
+                             "observed_height": 25, "challenge_end": 30}
+    chain_task["status"] = "settled"
+    assert client.get("/v1/tasks/7", headers=headers).json()["settlement_final"] is True
+    chain_task["status"] = "refunded"
+    assert client.get("/v1/tasks/7", headers=headers).json()["chain_status"] == "refunded"
+    chain_task["worker"] = "other-worker"
+    assert client.get("/v1/tasks/7", headers=headers).status_code == 409
+    chain_task["worker"] = "prsmworker"
+    chain_task["model_id"] = "different-model"
+    assert client.get("/v1/tasks/7", headers=headers).status_code == 409
+    chain_task["input_commitment"] = "invalid"
+    assert client.get("/v1/tasks/7", headers=headers).status_code == 503
+    dev_client = TestClient(create_gateway_app(plane, gateway, "secret", chain_task_query=query,
+                                               chain_height_query=height, allow_unfunded_dev_tasks=True))
+    assert dev_client.get("/v1/tasks/7", headers=headers).json()["chain_status"] == "unfunded_dev"
 
 
 def test_worker_rejects_stale_fence_before_model_call():

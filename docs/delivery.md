@@ -58,7 +58,8 @@ unilateral authority over on-chain escrow, disputes or settlement.
   and SDK are public before this gate is marked complete.
 
 The current local gateway exposes test-only inference and receipt endpoints
-using a CPU mock model. The caller supplies a task envelope, but the unfunded
+using a CPU mock model, plus a read-only chain task status endpoint. The caller
+supplies a task envelope, but the unfunded
 development mode does not verify chain acceptance or funding and uses one
 development API key. It does not stream real Qwen
 output, sign or broadcast chain transactions, independently meter funded tokens,

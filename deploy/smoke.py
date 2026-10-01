@@ -78,9 +78,13 @@ def main() -> None:
                   receipt["worker_attestation"], receipt["worker_signature"])
     replay = request(gateway + "/v1/inference", body=payload, api_key=env["PRISMA_CLIENT_API_KEY"])
     assert replay["already_completed"] and replay["receipt"] == first["receipt"]
-    print("PASS: chain RPC, Tier 0 notice, measured route, signed mock delivery, idempotent replay"
+    task_status = request(gateway + "/v1/tasks/" + task_id, api_key=env["PRISMA_CLIENT_API_KEY"])
+    assert task_status["chain_status"] == "unfunded_dev"
+    assert task_status["delivery_status"] == "provisional_delivery"
+    assert task_status["settlement_final"] is False
+    print("PASS: chain RPC, Tier 0 notice, measured route, signed mock delivery, unfunded status, idempotent replay"
           if not args.no_chain else
-          "PASS: Tier 0 notice, measured route, signed mock delivery, idempotent replay")
+          "PASS: Tier 0 notice, measured route, signed mock delivery, unfunded status, idempotent replay")
 
 
 if __name__ == "__main__":

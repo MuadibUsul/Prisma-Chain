@@ -25,6 +25,8 @@ services:
       PRISMA_DB: /data/network.sqlite3
       PRISMA_DEV_HTTP: "1"
       PRISMA_DEV_UNFUNDED: "1"
+      PRISMA_CHAIN_GRPC_ADDR: chain:9090
+      PRISMA_CHAIN_RPC_URL: http://chain:26657
     ports:
       - "127.0.0.1:8080:8080"
     volumes:

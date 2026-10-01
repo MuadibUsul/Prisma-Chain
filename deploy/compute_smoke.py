@@ -5,7 +5,9 @@ import base64
 import hashlib
 import json
 import subprocess
+import urllib.request
 import uuid
+from pathlib import Path
 
 from chain_smoke import CHAIN_ID, COMPOSE, FLAGS, balance, cli, height, rpc, wait_for
 
@@ -117,6 +119,20 @@ def task_state(task_id: int) -> dict:
     return json.loads(base64.b64decode(response["task_json"]))
 
 
+def check_gateway_status(task_id: int, expected: str) -> None:
+    env_file = Path(__file__).resolve().parent / ".env"
+    env = dict(line.split("=", 1) for line in env_file.read_text(encoding="utf-8").splitlines()
+               if line and not line.startswith("#"))
+    request = urllib.request.Request("http://127.0.0.1:8080/v1/tasks/" + str(task_id),
+                                     headers={"Authorization": "Bearer " + env["PRISMA_CLIENT_API_KEY"]})
+    with urllib.request.urlopen(request, timeout=10) as response:
+        state = json.load(response)
+    if (state["task_id"] != str(task_id) or state["chain_status"] != expected
+            or state["settlement_final"] != (expected in {"settled", "refunded"})
+            or not isinstance(state["observed_height"], int)):
+        raise RuntimeError(f"gateway status does not match chain task: {state}")
+
+
 def assert_reserved_released(task_id: int, worker: str, prior: int) -> None:
     task = task_state(task_id)
     if int(query_worker(worker).get("reserved_uprsm", 0)) != prior or int(task.get("reserved_bond", 0)) != 0:
@@ -206,7 +222,10 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--scenario", choices=("accepted", "honest", "fraud"),
                         default="accepted")
-    scenario = parser.parse_args().scenario
+    parser.add_argument("--check-gateway", action="store_true",
+                        help="also verify the local gateway's read-only chain task status")
+    args = parser.parse_args()
+    scenario = args.scenario
     wait_for(lambda: height() >= 1, "first block")
     requester = cli("keys", "show", "validator", "-a", *FLAGS)
     worker = account("compute-smoke-worker")
@@ -247,6 +266,8 @@ def main() -> None:
             or int(worker_final.get("reserved_uprsm", 0)) != int(worker_after_bond.get("reserved_uprsm", 0)) + BOND
             or balance(module) != module_before + BOND + FEE):
         raise RuntimeError("accepted task, bond reservation, or escrow did not match")
+    if args.check_gateway:
+        check_gateway_status(task_id, "accepted")
     print(f"PASS: registered {model_id}, bonded distinct worker {worker}, "
           f"posted task {task_id}, accepted with {BOND}uprsm reserved and {FEE}uprsm fee escrowed")
     if scenario == "accepted":
@@ -269,6 +290,8 @@ def main() -> None:
            signer="compute-smoke-worker")
     if task_state(task_id)["status"] != "pending":
         raise RuntimeError("worker result did not enter the challenge window")
+    if args.check_gateway:
+        check_gateway_status(task_id, "pending")
     prior_reserved = int(worker_after_bond.get("reserved_uprsm", 0))
     if scenario == "honest":
         complete_honest(task_id, worker, requester, module, prior_reserved,
@@ -276,6 +299,8 @@ def main() -> None:
     else:
         complete_fraud(task_id, worker, requester, module, prior_reserved,
                        honest_path, job_path, claim)
+    if args.check_gateway:
+        check_gateway_status(task_id, "settled" if scenario == "honest" else "refunded")
 
 
 if __name__ == "__main__":

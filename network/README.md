@@ -31,6 +31,14 @@ chain worker address. The adapter checks accepted task state, the full task
 envelope, pinned chain model hashes, latest chain height, each stage's bond,
 and the on-chain Ed25519 key behind each announced node ID.
 It uses the chain's gRPC Query API and does not sign or broadcast transactions.
+With those chain endpoints configured, authenticated `GET /v1/tasks/{task_id}`
+returns the node-observed chain status, observation height, challenge deadline,
+whether settlement/refund is final, and whether this gateway holds a provisional
+delivery receipt. A read failure returns 503; a receipt that conflicts with the
+chain task returns 409. The endpoint reports the configured node's query result,
+not an independently verified light-client proof; the height is sampled in a
+separate RPC call. In unfunded local development,
+nonnumeric mock task IDs are explicitly labeled `unfunded_dev` and never final.
 Configure optional
 `PRISMA_GOSSIP_PEERS` as comma-separated gateway base URLs.
 

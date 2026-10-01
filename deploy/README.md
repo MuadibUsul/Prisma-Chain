@@ -40,8 +40,10 @@ The local endpoints are chain RPC `http://127.0.0.1:26657`, chain gRPC
 `127.0.0.1:9090`, and gateway `http://127.0.0.1:8080`. The gateway's
 `GET /v1/privacy` discloses the Tier 0 limits. The smoke script posts a
 temporary task to `POST /v1/inference`, checks a signed provisional receipt,
-then repeats the same request to confirm one delivery record. The chain and
-gateway run side by side; this demo does not submit that task to chain state.
+then repeats the same request to confirm one delivery record. Authenticated
+`GET /v1/tasks/{task_id}` reads chain status for numeric task IDs and labels
+mock task IDs `unfunded_dev`. The chain and gateway run side by side; the mock
+inference request is not submitted to chain state.
 
 Run the separate chain acceptance check after startup:
 
@@ -71,6 +73,8 @@ Run the chain compute protocol acceptance check:
 python deploy/compute_smoke.py
 python deploy/compute_smoke.py --scenario honest
 python deploy/compute_smoke.py --scenario fraud
+python deploy/compute_smoke.py --scenario honest --check-gateway
+python deploy/compute_smoke.py --scenario fraud --check-gateway
 ```
 
 The default scenario registers a bounded public VM model, bonds a separate
@@ -86,6 +90,10 @@ slash, challenger bond return, and duplicate-payment rejection. These are
 scripted local checks using the same VM implementation, not a continuously
 running independent monitor or a proof against common-mode VM bugs. Each run
 creates a new task and uses test PRSM only.
+
+With `--check-gateway`, the script also checks the authenticated API's
+`accepted`, `pending`, and final `settled` or `refunded` chain views. Start the
+full Compose stack before using that flag.
 
 To stop processes while preserving local chain state and receipts:
 

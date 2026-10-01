@@ -1,11 +1,9 @@
-"""HTTP sidecars for a Prisma gateway and pipeline-stage workers.
-
-The gateway creates delivery evidence only. It never reports on-chain settlement.
-"""
+"""HTTP sidecars for a Prisma gateway and pipeline-stage workers."""
 
 from __future__ import annotations
 
 import asyncio
+import base64
 import hashlib
 import json
 import logging
@@ -131,6 +129,8 @@ def create_gateway_app(
     api_key: str,
     *,
     task_authorizer: Callable[[TaskEnvelope, Route], Awaitable[bool]] | None = None,
+    chain_task_query: Callable[[int], Awaitable[dict]] | None = None,
+    chain_height_query: Callable[[], Awaitable[int]] | None = None,
     token_counter: Callable[[str], Awaitable[int]] | None = None,
     allow_unfunded_dev_tasks: bool = False,
     worker_call: Callable[[str, SignedExecution], Awaitable[WorkerResponse]] = _default_worker_call,
@@ -219,6 +219,53 @@ def create_gateway_app(
         if not result:
             raise HTTPException(404, "no delivery receipt")
         return result
+
+    @app.get("/v1/tasks/{task_id}")
+    async def task_status(task_id: str, authorization: str | None = Header(default=None)) -> dict:
+        _require_api_key(api_key, authorization)
+        if len(task_id) > 128:
+            raise HTTPException(400, "task ID is too long")
+        delivered = plane.receipt(task_id)
+        local_lease = plane.lease(task_id)
+        numeric = (len(task_id) <= 20 and task_id.isascii() and task_id.isdecimal()
+                   and 0 < int(task_id) < 2**64 and str(int(task_id)) == task_id)
+        if allow_unfunded_dev_tasks and (delivered or local_lease or not numeric or chain_task_query is None):
+            if not delivered and not local_lease:
+                raise HTTPException(404, "unknown local development task")
+            return {"task_id": task_id, "delivery_status": "provisional_delivery" if delivered else "none",
+                    "chain_status": "unfunded_dev", "settlement_final": False,
+                    "observed_height": None, "challenge_end": None}
+        if not numeric:
+            raise HTTPException(400, "chain task ID must be a canonical positive uint64")
+        if chain_task_query is None or chain_height_query is None:
+            raise HTTPException(503, "chain task status query is not configured")
+        try:
+            task = await chain_task_query(int(task_id))
+            observed_height = await chain_height_query()
+            if (task["id"] != int(task_id) or task["status"] not in
+                    {"posted", "accepted", "pending", "challenged", "settled", "refunded"}
+                    or not isinstance(observed_height, int) or observed_height < 1):
+                raise ValueError("inconsistent chain task status")
+            if delivered:
+                if delivered.get("task_id") != task_id:
+                    raise HTTPException(409, "delivery receipt task ID conflicts with chain task")
+                raw_commitment = base64.b64decode(task["input_commitment"], validate=True)
+                if len(raw_commitment) != 32:
+                    raise ValueError("invalid chain input commitment")
+                commitment = raw_commitment.hex()
+                if (delivered["mode"] != task["mode"] or delivered["model_id"] != task["model_id"]
+                        or delivered["spec_version"] != task["spec_version"]
+                        or delivered["input_commitment"] != commitment
+                        or plane.bound_worker_accounts.get(delivered["worker_node_id"]) != task["worker"]):
+                    raise HTTPException(409, "delivery receipt conflicts with chain task")
+            challenge_end = (int(task.get("challenge_end", 0)) or None) if task["status"] == "pending" else None
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise HTTPException(503, "chain task status query failed") from exc
+        return {"task_id": task_id, "delivery_status": "provisional_delivery" if delivered else "none",
+                "chain_status": task["status"], "settlement_final": task["status"] in {"settled", "refunded"},
+                "observed_height": observed_height, "challenge_end": challenge_end}
 
     @app.post("/v1/inference")
     async def inference(body: InferenceRequest, authorization: str | None = Header(default=None)) -> dict:
@@ -444,13 +491,17 @@ def gateway_app_from_env() -> FastAPI:
                          bound_worker_accounts=_bindings_from_env(),
                          allow_http=os.environ.get("PRISMA_DEV_HTTP") == "1")
     authorizer = None
+    queries = None
     if os.environ.get("PRISMA_CHAIN_GRPC_ADDR") and os.environ.get("PRISMA_CHAIN_RPC_URL"):
         from .chain_auth import ChainTaskAuthorizer, GrpcChainQueries
-        authorizer = ChainTaskAuthorizer(GrpcChainQueries(
+        queries = GrpcChainQueries(
             os.environ["PRISMA_CHAIN_GRPC_ADDR"], os.environ["PRISMA_CHAIN_RPC_URL"],
-            insecure_dev=os.environ.get("PRISMA_DEV_HTTP") == "1"))
+            insecure_dev=os.environ.get("PRISMA_DEV_HTTP") == "1")
+        authorizer = ChainTaskAuthorizer(queries)
     return create_gateway_app(plane, identity, os.environ["PRISMA_CLIENT_API_KEY"],
                               task_authorizer=authorizer,
+                              chain_task_query=queries.task if queries else None,
+                              chain_height_query=queries.height if queries else None,
                               allow_unfunded_dev_tasks=os.environ.get("PRISMA_DEV_UNFUNDED") == "1",
                               gossip_peers=tuple(filter(None, os.environ.get("PRISMA_GOSSIP_PEERS", "").split(","))))
 
