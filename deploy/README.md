@@ -143,6 +143,27 @@ test PRSM accounts and a new escrow task. The Compose worker has no chain
 signer configured, so this automatic submission path is exercised by the
 integration script rather than the running mock stack.
 
+To exercise a **deployed worker** with a separate local chain keyring, enable
+the development signer and run its acceptance script (PowerShell):
+
+```powershell
+$env:PRISMA_DEV_CHAIN_SIGNER_NAME = "dev-worker"
+docker compose -f deploy/compose.yaml up -d --build gateway worker
+python deploy/worker_signer_smoke.py
+```
+
+The script creates the signer account inside the worker-only `worker-signer`
+volume, bonds it to the worker's Ed25519 network key, and sends a synthetic
+double-signed receipt to the running worker's loopback HTTP endpoint. The
+worker signs and broadcasts `SubmitResult` with its own `prismad` test
+keyring. The script checks chain inclusion, duplicate submission, two monitor
+attestations, final charge/refund, and the gateway's read-only final status.
+This is a signer and settlement fixture: its synthetic receipt is assembled by
+the script, and the Compose gateway still serves unfunded mock inference.
+The test keyring has no password and must only hold valueless local test PRSM.
+It is never mounted in the gateway container. A production signer, real model
+delivery and independent monitors remain separate release gates.
+
 To stop processes while preserving local chain state and receipts:
 
 ```sh

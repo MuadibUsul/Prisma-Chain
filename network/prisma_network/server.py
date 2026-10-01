@@ -524,6 +524,10 @@ def create_worker_app(
             await receipt_submission(receipt)
         except HTTPException:
             raise
+        except Conflict as exc:
+            raise HTTPException(409, str(exc)) from exc
+        except Unavailable as exc:
+            raise HTTPException(503, str(exc)) from exc
         except (KeyError, TypeError, ValueError) as exc:
             raise HTTPException(400, "invalid signed receipt") from exc
         except Exception as exc:
@@ -650,6 +654,19 @@ def worker_app_from_env() -> FastAPI:
     trusted = _keys_from_env()
     vllm_url = os.environ["PRISMA_VLLM_URL"]
     control_url = os.environ["PRISMA_CONTROL_URL"]
+    receipt_submission = None
+    signer_name = os.environ.get("PRISMA_DEV_CHAIN_SIGNER_NAME")
+    if signer_name:
+        if os.environ.get("PRISMA_DEV_HTTP") != "1":
+            raise ValueError("test keyring signer is only available on an explicit local devnet")
+        from .chain_auth import GrpcChainQueries
+        from .chain_tx import DevnetCliReceiptSubmitter
+        rpc_url = os.environ["PRISMA_CHAIN_RPC_URL"]
+        queries = GrpcChainQueries(os.environ["PRISMA_CHAIN_GRPC_ADDR"], rpc_url, insecure_dev=True)
+        receipt_submission = DevnetCliReceiptSubmitter(
+            queries, chain_id=os.environ["PRISMA_CHAIN_ID"], rpc_url=rpc_url,
+            signer_name=signer_name, signer_home=os.environ["PRISMA_CHAIN_SIGNER_HOME"],
+            network_public_key=identity.public_key)
 
     async def call(request: ExecutionRequest) -> tuple[str, int]:
         output, reported_tokens = await _default_model_call(
@@ -669,6 +686,7 @@ def worker_app_from_env() -> FastAPI:
 
     app = create_worker_app(identity, os.environ["PRISMA_GROUP_ID"], pin, trusted,
                             model_call=call, lease_lookup=lookup, readiness=ready,
+                            receipt_submission=receipt_submission,
                             lifespan=_announcer_lifespan(identity, pin))
     return app
 

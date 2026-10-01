@@ -67,8 +67,12 @@ worker failure under the same task ID and observes pending and settled billing.
 The test uses a synthetic model. After one injected receipt submission failure,
 the gateway retries the saved receipt through the worker's injected devnet CLI
 signer; the script still submits monitor and settlement transactions manually.
-The packaged worker has no production chain signer, and the gateway does not
-yet stream real Qwen output. The unified API product gate remains open.
+The packaged worker can now use an isolated development `prismad` test keyring;
+a separate live-container smoke check proves its account-bound submission,
+duplicate handling, monitor attestations, settlement and gateway status. That
+check assembles a synthetic signed receipt instead of delivering an answer via
+the Compose gateway. Production key management and real Qwen streaming remain
+open. The unified API product gate remains open.
 
 ## Open participation and source release gate
 

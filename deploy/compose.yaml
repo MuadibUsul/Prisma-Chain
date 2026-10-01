@@ -75,9 +75,19 @@ services:
       PRISMA_VRAM_MB: "0"
       PRISMA_VLLM_URL: http://mock-model:8000
       PRISMA_DEV_SKIP_FILE_HASH: "1"
+      PRISMA_DEV_HTTP: "1"
+      PRISMA_DEV_CHAIN_SIGNER_NAME: ${PRISMA_DEV_CHAIN_SIGNER_NAME:-}
+      PRISMA_CHAIN_ID: prisma-local-1
+      PRISMA_CHAIN_RPC_URL: http://chain:26657
+      PRISMA_CHAIN_GRPC_ADDR: chain:9090
+      PRISMA_CHAIN_SIGNER_HOME: /signer
+    ports:
+      - "127.0.0.1:8081:8081"
     volumes:
       - ./data/trusted-keys.json:/run/prisma/trusted-keys.json:ro
+      - worker-signer:/signer
 
 volumes:
   chain-data:
   gateway-data:
+  worker-signer:

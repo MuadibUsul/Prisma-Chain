@@ -120,8 +120,12 @@ response disclose the Tier 0 boundary.
    The worker verifies both signatures before its own account broadcasts a
    `SubmitResult` transaction. A failed broadcast leaves the signed receipt
    available for retry under the same task ID without rerunning inference.
-   The local integration test injects a devnet CLI signer; the packaged worker
-   factory does not yet configure a production signer. The chain module
+   The local integration test injects a devnet CLI signer. The packaged worker
+   factory can also enable `PRISMA_DEV_CHAIN_SIGNER_NAME` for its own isolated
+   `prismad` test keyring when `PRISMA_DEV_HTTP=1`, with `PRISMA_CHAIN_ID`,
+   `PRISMA_CHAIN_RPC_URL`, `PRISMA_CHAIN_GRPC_ADDR` and
+   `PRISMA_CHAIN_SIGNER_HOME` configured. This backend is only for valueless
+   local test PRSM; it is not a production key manager. The chain module
    verifies escrow, bond, model version, signatures, timeout and acceptance
    rules before settlement. A repeated completed request returns the same
    receipt without answer text, because private outputs are not kept.
