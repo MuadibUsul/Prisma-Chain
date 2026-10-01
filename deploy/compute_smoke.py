@@ -18,6 +18,8 @@ HONEST_JOB = {"input": [], "program": [{"op": "set", "dst": 1, "imm": 42},
                                         {"op": "add", "dst": 0, "a": 1, "b": 2}]}
 FRAUD_JOB = {"input": [], "program": [{"op": "set", "dst": 1, "imm": 42},
                                        {"op": "set", "dst": 0, "imm": 43}]}
+FALSE_CHALLENGE_JOB = {"input": [], "program": [{"op": "set", "dst": 1, "imm": 99},
+                                                 {"op": "set", "dst": 0, "imm": 43}]}
 EMPTY_INPUT_DIGEST = "c40db7b6e1d6624ba2d732d90d9bb2d5443c6b39283cb090a638b69117881f9c"
 BOND = 1_000_000
 FEE = 1_000_000
@@ -139,6 +141,17 @@ def assert_reserved_released(task_id: int, worker: str, prior: int) -> None:
         raise RuntimeError("task bond reservation was not released")
 
 
+def submit_midpoint(task_id: int, signer: str, job_path: str) -> None:
+    proof = vm_run(job_path, "-proof", "1")["proof"]
+    if not proof["valid"]:
+        raise RuntimeError("VM midpoint proof invalid")
+    proof_path = put_json({"Siblings": [list(bytes.fromhex(item))
+                                        for item in proof["siblings"]]})
+    state_path = put_json(proof["state"])
+    submit("compute", "challenge-midpoint", "--task-id", str(task_id),
+           "--state-json", state_path, "--proof-json", proof_path, signer=signer)
+
+
 def complete_honest(task_id: int, worker: str, requester: str, module: str,
                     worker_reserved: int, job_path: str, claim: dict) -> None:
     monitor_names = ("compute-smoke-monitor-a", "compute-smoke-monitor-b")
@@ -174,7 +187,7 @@ def complete_honest(task_id: int, worker: str, requester: str, module: str,
 
 def complete_fraud(task_id: int, worker: str, requester: str, module: str,
                    worker_reserved: int, honest_path: str, fraud_path: str,
-                   fraudulent_claim: dict, check_gateway: bool) -> None:
+                   fraudulent_claim: dict, check_gateway: bool, front_run: bool = False) -> None:
     challenger_name = "compute-smoke-challenger"
     challenger = account(challenger_name)
     if balance(challenger) < BOND:
@@ -184,23 +197,34 @@ def complete_fraud(task_id: int, worker: str, requester: str, module: str,
     if review.get("review_action") != "challenge":
         raise RuntimeError("honest replay did not detect the fraudulent trace")
     challenger_claim_path = put_json(review["challenger_claim"])
-    before = {address: balance(address) for address in (worker, requester, module, challenger)}
+    front_name = "compute-smoke-false-challenger"
+    front = account(front_name) if front_run else None
+    if front and balance(front) < BOND:
+        submit("bank", "send", "validator", front, "2000000uprsm", signer="validator")
+    before = {address: balance(address) for address in (worker, requester, module, challenger, front)
+              if address is not None}
     before_supply, before_bond = supply(), int(query_worker(worker)["bonded_uprsm"])
+    if front:
+        false_path = put_json(FALSE_CHALLENGE_JOB)
+        false_claim = vm_run(false_path, "-claim")["trace_claim"]
+        submit("compute", "start-challenge", "--task-id", str(task_id),
+               "--trace-claim-json", put_json(false_claim), signer=front_name)
     submit("compute", "start-challenge", "--task-id", str(task_id),
            "--trace-claim-json", challenger_claim_path, signer=challenger_name)
-    if task_state(task_id)["status"] != "challenged":
+    active = task_state(task_id)
+    if active["status"] != "challenged" or (front and len(active.get("queued_challenges", [])) != 1):
         raise RuntimeError("fraud dispute did not open")
     if check_gateway:
         check_gateway_status(task_id, "challenged")
-    for name, path in (("compute-smoke-worker", fraud_path), (challenger_name, honest_path)):
-        proof = vm_run(path, "-proof", "1")["proof"]
-        if not proof["valid"]:
-            raise RuntimeError("VM midpoint proof invalid")
-        proof_path = put_json({"Siblings": [list(bytes.fromhex(item))
-                                            for item in proof["siblings"]]})
-        state_path = put_json(proof["state"])
-        submit("compute", "challenge-midpoint", "--task-id", str(task_id),
-               "--state-json", state_path, "--proof-json", proof_path, signer=name)
+    if front:
+        submit_midpoint(task_id, "compute-smoke-worker", fraud_path)
+        submit_midpoint(task_id, front_name, false_path)
+        promoted = task_state(task_id)
+        if (promoted["status"] != "challenged" or promoted["challenger"] != challenger
+                or promoted.get("queued_challenges")):
+            raise RuntimeError("honest queued challenger was not promoted")
+    submit_midpoint(task_id, "compute-smoke-worker", fraud_path)
+    submit_midpoint(task_id, challenger_name, honest_path)
     after = {address: balance(address) for address in before}
     slash = min(before_bond // 10, BOND)
     challenge_bond = max(1, FEE // 100)
@@ -208,21 +232,23 @@ def complete_fraud(task_id: int, worker: str, requester: str, module: str,
             or after[challenger] - before[challenger] != slash
             or before[module] - after[module] != FEE + slash
             or int(query_worker(worker)["bonded_uprsm"]) != before_bond - slash
-            or after[worker] != before[worker] or supply() != before_supply):
+            or after[worker] != before[worker]
+            or (front and after[front] - before[front] != -challenge_bond)
+            or supply() != before_supply - (challenge_bond if front else 0)):
         raise RuntimeError("fraud refund, challenger bond, slash, or supply did not match")
     assert_reserved_released(task_id, worker, worker_reserved)
     submit("compute", "finalize-task", "--task-id", str(task_id), signer="validator",
            expected_code=1)
-    if balance(module) != after[module] or supply() != before_supply:
+    if balance(module) != after[module] or supply() != before_supply - (challenge_bond if front else 0):
         raise RuntimeError("fraudulent task was paid after refund")
     print(f"PASS: task {task_id} fraud proven at one VM step; fee refunded, "
           f"worker slashed {slash}uprsm, challenger bond {challenge_bond} returned, "
-          "duplicate payout rejected")
+          f"duplicate payout rejected{' after false front-run' if front else ''}")
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--scenario", choices=("accepted", "honest", "fraud"),
+    parser.add_argument("--scenario", choices=("accepted", "honest", "fraud", "fraud-race"),
                         default="accepted")
     parser.add_argument("--check-gateway", action="store_true",
                         help="also verify the local gateway's read-only chain task status")
@@ -300,7 +326,8 @@ def main() -> None:
                         honest_path, claim)
     else:
         complete_fraud(task_id, worker, requester, module, prior_reserved,
-                       honest_path, job_path, claim, args.check_gateway)
+                       honest_path, job_path, claim, args.check_gateway,
+                       front_run=scenario == "fraud-race")
     if args.check_gateway:
         check_gateway_status(task_id, "settled" if scenario == "honest" else "refunded")
 

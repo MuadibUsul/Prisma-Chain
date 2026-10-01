@@ -73,6 +73,7 @@ Run the chain compute protocol acceptance check:
 python deploy/compute_smoke.py
 python deploy/compute_smoke.py --scenario honest
 python deploy/compute_smoke.py --scenario fraud
+python deploy/compute_smoke.py --scenario fraud-race --check-gateway
 python deploy/compute_smoke.py --scenario honest --check-gateway
 python deploy/compute_smoke.py --scenario fraud --check-gateway
 ```
@@ -86,7 +87,11 @@ waits out the challenge window, and verifies settlement, fee split, 20% burn,
 bond release, and duplicate-payment rejection. The `fraud` scenario submits
 an incorrect two-step trace, independently recomputes the canonical trace,
 plays the midpoint dispute on-chain, and verifies requester refund, worker
-slash, challenger bond return, and duplicate-payment rejection. These are
+slash, challenger bond return, and duplicate-payment rejection. The
+`fraud-race` scenario places a false challenge first and a valid challenge
+in the bounded queue. It verifies that the false challenger loses its bond,
+the valid challenger is promoted automatically, and the fraudulent result is
+refunded rather than paid. These are
 scripted local checks using the same VM implementation, not a continuously
 running independent monitor or a proof against common-mode VM bugs. Each run
 creates a new task and uses test PRSM only.

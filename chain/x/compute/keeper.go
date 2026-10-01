@@ -22,7 +22,14 @@ const (
 	MinBond              uint64 = 1_000_000
 	ChallengeBlocks      uint64 = 20
 	ChallengeRoundBlocks uint64 = 5
+	MaxQueuedChallenges         = 8
 )
+
+type QueuedChallenge struct {
+	Challenger     string `json:"challenger"`
+	Bond           uint64 `json:"bond"`
+	TraceClaimJSON []byte `json:"trace_claim_json"`
+}
 
 type Model struct {
 	ID              string  `json:"id"`
@@ -37,30 +44,31 @@ type Model struct {
 }
 
 type Task struct {
-	ID              uint64   `json:"id"`
-	Mode            string   `json:"mode"`
-	ModelID         string   `json:"model_id"`
-	SpecVersion     string   `json:"spec_version"`
-	Requester       string   `json:"requester"`
-	Worker          string   `json:"worker,omitempty"`
-	ReservedBond    uint64   `json:"reserved_bond,omitempty"`
-	InputCommitment []byte   `json:"input_commitment"`
-	DataRef         string   `json:"data_ref"`
-	MaxFee          uint64   `json:"max_fee"`
-	Deadline        uint64   `json:"deadline"`
-	PrivacyTier     string   `json:"privacy_tier"`
-	PublicInput     []int64  `json:"public_input,omitempty"`
-	Status          string   `json:"status"`
-	OutputDigest    []byte   `json:"output_digest,omitempty"`
-	TraceRoot       []byte   `json:"trace_root,omitempty"`
-	ReceiptDigest   []byte   `json:"receipt_digest,omitempty"`
-	OutputTokens    uint64   `json:"output_tokens,omitempty"`
-	TraceClaimJSON  []byte   `json:"trace_claim_json,omitempty"`
-	ChallengeEnd    uint64   `json:"challenge_end,omitempty"`
-	Attesters       []string `json:"attesters,omitempty"`
-	Challenger      string   `json:"challenger,omitempty"`
-	ChallengeBond   uint64   `json:"challenge_bond,omitempty"`
-	DisputeSnapshot []byte   `json:"dispute_snapshot,omitempty"`
+	ID               uint64            `json:"id"`
+	Mode             string            `json:"mode"`
+	ModelID          string            `json:"model_id"`
+	SpecVersion      string            `json:"spec_version"`
+	Requester        string            `json:"requester"`
+	Worker           string            `json:"worker,omitempty"`
+	ReservedBond     uint64            `json:"reserved_bond,omitempty"`
+	InputCommitment  []byte            `json:"input_commitment"`
+	DataRef          string            `json:"data_ref"`
+	MaxFee           uint64            `json:"max_fee"`
+	Deadline         uint64            `json:"deadline"`
+	PrivacyTier      string            `json:"privacy_tier"`
+	PublicInput      []int64           `json:"public_input,omitempty"`
+	Status           string            `json:"status"`
+	OutputDigest     []byte            `json:"output_digest,omitempty"`
+	TraceRoot        []byte            `json:"trace_root,omitempty"`
+	ReceiptDigest    []byte            `json:"receipt_digest,omitempty"`
+	OutputTokens     uint64            `json:"output_tokens,omitempty"`
+	TraceClaimJSON   []byte            `json:"trace_claim_json,omitempty"`
+	ChallengeEnd     uint64            `json:"challenge_end,omitempty"`
+	Attesters        []string          `json:"attesters,omitempty"`
+	Challenger       string            `json:"challenger,omitempty"`
+	ChallengeBond    uint64            `json:"challenge_bond,omitempty"`
+	DisputeSnapshot  []byte            `json:"dispute_snapshot,omitempty"`
+	QueuedChallenges []QueuedChallenge `json:"queued_challenges,omitempty"`
 }
 
 type Keeper struct {
@@ -470,8 +478,19 @@ func (s msgServer) StartChallenge(ctx context.Context, msg *types.MsgStartChalle
 		return nil, err
 	}
 	height := uint64(sdk.UnwrapSDKContext(ctx).BlockHeight())
-	if task.Mode != "verifiable" || task.Status != "pending" || height > task.ChallengeEnd || msg.Challenger == task.Worker {
+	if task.Mode != "verifiable" || (task.Status != "pending" && task.Status != "challenged") ||
+		(task.Status == "pending" && height > task.ChallengeEnd) || msg.Challenger == task.Worker {
 		return nil, errors.New("challenge unavailable")
+	}
+	if task.Status == "challenged" {
+		if msg.Challenger == task.Challenger || len(task.QueuedChallenges) >= MaxQueuedChallenges {
+			return nil, errors.New("challenger already active or queue full")
+		}
+		for _, queued := range task.QueuedChallenges {
+			if queued.Challenger == msg.Challenger {
+				return nil, errors.New("challenger already queued")
+			}
+		}
 	}
 	if len(msg.TraceClaimJson) == 0 || len(msg.TraceClaimJson) > 8192 {
 		return nil, errors.New("invalid challenger trace claim size")
@@ -502,12 +521,21 @@ func (s msgServer) StartChallenge(ctx context.Context, msg *types.MsgStartChalle
 	if err := s.bank.SendCoinsFromAccountToModule(ctx, challenger, ModuleName, amount(bond)); err != nil {
 		return nil, err
 	}
+	if task.Status == "challenged" {
+		task.QueuedChallenges = append(task.QueuedChallenges, QueuedChallenge{
+			Challenger: msg.Challenger, Bond: bond, TraceClaimJSON: append([]byte(nil), msg.TraceClaimJson...),
+		})
+		return &types.MsgStartChallengeResponse{}, s.setTask(ctx, task)
+	}
 	snapshot, err := dispute.Snapshot()
 	if err != nil {
 		return nil, err
 	}
 	task.Challenger, task.ChallengeBond = msg.Challenger, bond
 	task.DisputeSnapshot, task.Status = snapshot, "challenged"
+	if task.ChallengeEnd < height+ChallengeBlocks {
+		task.ChallengeEnd = height + ChallengeBlocks
+	}
 	if err := s.resolveChallenge(ctx, &task, dispute.Status().Outcome); err != nil {
 		return nil, err
 	}
@@ -618,7 +646,49 @@ func (s msgServer) resolveChallenge(ctx context.Context, task *Task, outcome vm.
 		}
 		task.Status = "pending"
 		task.ChallengeEnd = uint64(sdk.UnwrapSDKContext(ctx).BlockHeight()) + ChallengeBlocks
+		task.DisputeSnapshot = nil
+		task.Challenger, task.ChallengeBond = "", 0
+		if len(task.QueuedChallenges) > 0 {
+			next := task.QueuedChallenges[0]
+			task.QueuedChallenges = task.QueuedChallenges[1:]
+			model, err := s.GetModel(ctx, task.ModelID, task.SpecVersion)
+			if err != nil {
+				return err
+			}
+			program, err := decodeProgram(model)
+			if err != nil {
+				return err
+			}
+			var worker, claimant vm.TraceClaim
+			if err := json.Unmarshal(task.TraceClaimJSON, &worker); err != nil {
+				return err
+			}
+			if err := json.Unmarshal(next.TraceClaimJSON, &claimant); err != nil {
+				return err
+			}
+			dispute, err := vm.NewDispute(program, task.PublicInput, worker, claimant,
+				uint64(sdk.UnwrapSDKContext(ctx).BlockHeight()), ChallengeRoundBlocks)
+			if err != nil {
+				return err
+			}
+			task.DisputeSnapshot, err = dispute.Snapshot()
+			if err != nil {
+				return err
+			}
+			task.Challenger, task.ChallengeBond, task.Status = next.Challenger, next.Bond, "challenged"
+			return s.resolveChallenge(ctx, task, dispute.Status().Outcome)
+		}
 	} else {
+		for _, queued := range task.QueuedChallenges {
+			account, err := addr(queued.Challenger)
+			if err != nil {
+				return err
+			}
+			if err := s.bank.SendCoinsFromModuleToAccount(ctx, ModuleName, account, amount(queued.Bond)); err != nil {
+				return err
+			}
+		}
+		task.QueuedChallenges = nil
 		requester, _ := addr(task.Requester)
 		if err := s.bank.SendCoinsFromModuleToAccount(ctx, ModuleName, requester, amount(task.MaxFee)); err != nil {
 			return err

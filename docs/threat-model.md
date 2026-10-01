@@ -36,10 +36,13 @@ release gates.
 
 A losing challenger's bond is burned and the full challenge window restarts,
 so a worker cannot use a controlled challenger to recover the bond or shorten
-the next review period. The current task still admits only one active dispute
-at a time. A worker-controlled challenger can race an honest one; multi-
-challenger admission and censorship tests remain required before permissionless
-paid work.
+the next review period. One dispute runs at a time, with up to eight bonded
+challengers queued in arrival order. An honest challenger admitted during a
+false active challenge proceeds automatically when the false challenge loses.
+The finite queue can still be saturated by well-funded attackers, and validator
+censorship can exclude a challenge transaction. Test both before permissionless
+paid work; a rejected challenger must still have the restarted review window
+after losing challenges.
 
 ## Verification boundary
 

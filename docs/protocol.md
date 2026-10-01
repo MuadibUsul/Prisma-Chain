@@ -51,11 +51,16 @@ unanswered dispute cannot be finalized as an unchallenged correct result.
 The logarithmic number of dispute rounds reduces on-chain work. It does not
 remove the watcher's full replay cost. Any account may challenge; randomly
 assigned watchers are a monitoring service, not the sole challenge gate.
-The current chain admits one active dispute per task. A losing challenger's
-bond is burned and a full challenge window restarts before the task can be
-paid. This removes the zero-cost worker-controlled false-challenge loop, but
-it does not solve concurrent challenger admission or transaction censorship;
-those remain permissionless-release gates.
+The current chain runs one dispute at a time, but accepts up to eight bonded
+challengers into a FIFO queue throughout that active dispute. The first
+challenge extends the original admission window by at least 20 blocks. After
+a losing challenge, its bond is burned and the next queued challenge starts
+automatically with a fresh round
+deadline. If a challenge proves fraud or both parties fail, the requester is
+refunded and unused queued bonds are returned. After all losing challenges,
+another full review window must close before payment. Queue saturation and
+validator transaction censorship can still delay honest challengers; those
+remain permissionless-release gates.
 
 ## Lightweight mode
 
