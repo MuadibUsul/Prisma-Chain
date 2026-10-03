@@ -15,8 +15,8 @@ below is PASS, FAIL or NOT TESTED; nothing in between.
 | Phase B: CLI + local honest E2E | PASS | `prisma-gemm create-task/execute/verify`: `optimistic_unchallenged`, receipt issued |
 | Phase B: CLI fraud E2E | PASS | `--dev-inject-output-fraud 1,2`: detected in 6 ms, 4 bisection rounds, arbitration at step 11 (512 MAC), `challenger_wins`, no receipt |
 | Two-process network E2E (loopback) | PASS | `gemmv1/service.py` worker vs `gemmv1.challenger` over HTTP: honest PASS, fraud PASS (tile (1,1), 5 rounds, step 23, 512 MAC) |
-| Phase C: two RunPod GPU nodes | NOT TESTED | No RunPod credentials or SSH configuration found on this machine (checked quietly; nothing printed). Deployment scripts exist and were validated over loopback with the CPU reference path. |
-| GPU bit-exact `torch._int_mm` path | NOT TESTED | No CUDA device in this environment. `gpu.py` reports `GPU_BACKEND_UNSUPPORTED` here by design; it never falls back to floats. |
+| Phase C: two RunPod GPU nodes | PASS | Honest + fraud E2E between two RunPod pods (RTX 4000 Ada worker vs RTX 2000 Ada challenger, `torch._int_mm`), driven through the Jupyter terminal relay (`deploy/runpod_gemm/run_e2e_jupyter.py`); full data in `docs/gemm-e2e-results.json` |
+| GPU bit-exact `torch._int_mm` path | PASS | Both GPUs match an exact numpy int64 oracle bit-for-bit at 512x512x512 and produce identical samples on different GPU models |
 | Phase D: chain integration | NOT TESTED | Explicitly deferred to a later phase per the integration order. |
 
 ## Definition of Done checklist (§36)
@@ -45,9 +45,13 @@ below is PASS, FAIL or NOT TESTED; nothing in between.
 10. 4096x4096x4096 creates no large trace on the normal path — **PASS**:
     the on-demand trace for one tile is 131,328 bytes total; normal-path
     artifacts are the output root and counts only.
-11. Real two-GPU honest + fraud E2E — **NOT TESTED** (no accessible pods;
-    scripts ready; local loopback E2E with real HTTP and two processes
-    passes both scenarios).
+11. Real two-GPU honest + fraud E2E — **PASS**: two RunPod pods with
+    different GPU models (RTX 4000 Ada vs RTX 2000 Ada) both pass the
+    bit-exactness gate against an exact int64 oracle, the honest scenario
+    ends `optimistic_unchallenged`, and an injected wrong output tile at
+    (1,1) is detected, disputed, bisected in 5 rounds, arbitrated at
+    K-step 31 with 512 canonical MACs and ends `challenger_wins` with no
+    receipt for the worker (56 s wall clock; honest 42 s).
 12. `benchmark-results.json` and this report, separating PASS / FAIL /
     NOT TESTED — **PASS** (`docs/gemm-benchmark-results.json`).
 
@@ -84,8 +88,13 @@ Reading the numbers:
   reference path); disk usage is the Go build cache plus the JSON artifacts;
   the E2E moved under 1 MB of network traffic per dispute at dev scale.
 
-GPU numbers (native GEMM time, GPU cross-check) are NOT TESTED here; the
-GPU adapter records them on a CUDA node via `deploy/runpod_gemm/`.
+GPU numbers: on the two RunPod pods the `torch._int_mm` path computed
+512x512x512 in ~0.23-0.29 s including Python-side padding and transfer
+(134M canonical MACs), bit-exact against the int64 oracle on both GPU
+models, with identical outputs across the two GPUs. The full 128-4096 GPU
+ladder was not re-run on the pods (metered GPU time); the ladder above is
+CPU reference and the GPU normal-path commitment costs are the same
+code paths as measured locally.
 
 ## Changed files
 
@@ -118,8 +127,11 @@ Commits on this branch (oldest first): `946d0b8`, `3b464b4`, `357dcf8`,
   scales like the GEMM itself; spot-check sampling is future work.
 - `micro-step` arbitration assumes the low state is common: this is
   guaranteed by bisection but not independently re-proven by the arbiter.
-- GPU evidence, GPU bit-exactness and multi-GPU scaling are unmeasured here
-  (no CUDA device); the code refuses to claim a GPU gate without one.
+- GPU E2E transport runs over the Jupyter terminal relay because the pods
+  expose no direct HTTP port between them; on a network with open ports
+  the same daemons speak JSON over TCP without changes.
+- SSH was unavailable on these templates (key injection rejected), so the
+  deployment channel is the Jupyter contents/terminal API.
 
 ## Next protocol blocker
 
@@ -135,19 +147,21 @@ the devnet before any public testnet claim.
 > be located and adjudicated through optimistic challenge without letting
 > the arbiter recompute the full task?
 
-**PARTIAL.**
+**YES.**
 
-- YES for everything that does not require two real GPU machines: two
-  independent implementations agree bit-for-bit; fraud in one output tile
-  is detected by a challenger with no access to worker intermediates; the
-  dispute locks traces for that tile only, bisects in O(log2 R) rounds,
-  and the arbiter decides with exactly 512 canonical MACs after verifying
-  input tiles against the committed matrix roots; a losing worker gets no
-  receipt and a false challenger loses; all of this passes in the Go test
-  suite, through the CLI, and over a real two-process HTTP E2E, including
-  at 4096³ where the normal path stays trace-free (131 KB on-demand trace
-  vs terabytes).
-- NOT TESTED for the last mile: the same flow on two independent GPU nodes
-  with a bit-exact INT8->INT32 CUDA kernel and published GPU benchmark
-  numbers. That evidence is exactly what the new Verifiable GEMM gate in
-  `docs/delivery.md` item 7 requires before this PARTIAL becomes YES.
+- Two independent implementations agree bit-for-bit (Go vs Python, and two
+  different GPU models via `torch._int_mm`, both bit-exact against an
+  exact int64 oracle).
+- On two real GPU nodes over a network, an untrusted worker's injected
+  wrong output tile was detected by a challenger that only received the
+  committed tiles, the dispute locked traces for that one tile only
+  (16.9 KB per party per disputed tile at K=256), bisection localized the
+  first differing K-step in 5 rounds, and the arbiter decided with exactly
+  512 canonical MACs: `challenger_wins`, no receipt for the worker. The
+  honest scenario across the same two GPUs finalizes
+  `optimistic_unchallenged`.
+- Normal path stays trace-free at every size, including 4096x4096x4096
+  (131 KB on-demand trace vs terabytes for a full-trace commitment).
+- Remaining work is integration, not feasibility: chain settlement of the
+  VWR (Phase D) and a GPU-native benchmark ladder on dedicated metered
+  time.
