@@ -132,9 +132,8 @@ func (s msgServer) OpenGEMMChallenge(ctx context.Context, msg *types.MsgOpenGEMM
 	if !gemmv1.VerifyChallengeOpenSignature(co) {
 		return nil, errors.New("gemm ChallengeOpen signature is invalid")
 	}
-	if err := s.bank.SendCoinsFromAccountToModule(ctx, mustAddr(msg.Challenger), ModuleName, amount(bond)); err != nil {
-		return nil, err
-	}
+	// Decide the admission path BEFORE moving any funds, so a rejected
+	// duplicate or saturated queue never locks a second bond.
 	transcript, err := transcriptStep(task.DisputeTranscriptDigest, gemmv1.TranscriptTagChallengeOpened,
 		gemmv1.TranscriptChallengeOpened{
 			TaskID: task.ProtocolTaskID, AssignmentID: task.AssignmentID,
@@ -157,6 +156,9 @@ func (s msgServer) OpenGEMMChallenge(ctx context.Context, msg *types.MsgOpenGEMM
 				return nil, errors.New("challenger already queued")
 			}
 		}
+		if err := s.bank.SendCoinsFromAccountToModule(ctx, mustAddr(msg.Challenger), ModuleName, amount(bond)); err != nil {
+			return nil, err
+		}
 		task.QueuedGEMMChallenges = append(task.QueuedGEMMChallenges, GEMMQueuedChallenge{
 			Challenger: msg.Challenger, ChallengerPubKey: append([]byte(nil), networkKey...),
 			Bond: bond, TileI: co.DisputedTileI, TileJ: co.DisputedTileJ,
@@ -173,6 +175,9 @@ func (s msgServer) OpenGEMMChallenge(ctx context.Context, msg *types.MsgOpenGEMM
 		WorkerTile: co.WorkerOutputTile, ChallengerTile: co.ChallengerOutputTile,
 		TranscriptDigest: transcript, Status: GEMMDisputeOpen,
 		TraceDeadline: height + ChallengeRoundBlocks,
+	}
+	if err := s.bank.SendCoinsFromAccountToModule(ctx, mustAddr(msg.Challenger), ModuleName, amount(bond)); err != nil {
+		return nil, err
 	}
 	task.ActiveTileI, task.ActiveTileJ = co.DisputedTileI, co.DisputedTileJ
 	task.Status = GEMMStatusChallenged

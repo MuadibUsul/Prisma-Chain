@@ -61,6 +61,10 @@ type gemmHarness struct {
 	reqKeys    *gemmKeys
 	workKeys   *gemmKeys
 	chalKeys   *gemmKeys
+
+	// optional override of the active challenger identity for queue tests
+	activeChallenger     string
+	activeChallengerKeys *gemmKeys
 }
 
 func newGemmHarness(t *testing.T, height int64) *gemmHarness {
@@ -81,6 +85,20 @@ func newGemmHarness(t *testing.T, height int64) *gemmHarness {
 		h.bank.accounts[a] = fund
 	}
 	return h
+}
+
+func (h *gemmHarness) challengerActor() string {
+	if h.activeChallenger != "" {
+		return h.activeChallenger
+	}
+	return h.challenger
+}
+
+func (h *gemmHarness) challengerKeysOf() *gemmKeys {
+	if h.activeChallengerKeys != nil {
+		return h.activeChallengerKeys
+	}
+	return h.chalKeys
 }
 
 // bondWorker registers a bonded account with its network Ed25519 key and
@@ -256,7 +274,7 @@ func (h *gemmHarness) lockTraces(taskID uint64, a, b []int8, m, n, k uint64, wor
 		party gemmv1.Party
 	}{
 		{h.worker, h.workKeys, workerArt, gemmv1.Worker},
-		{h.challenger, h.chalKeys, challengerArt, gemmv1.Challenger},
+		{h.challengerActor(), h.challengerKeysOf(), challengerArt, gemmv1.Challenger},
 	} {
 		tc := &gemmv1.TraceCommit{
 			ProtocolVersion: gemmv1.ProtocolVersion, TaskID: task.ProtocolTaskID,
@@ -347,7 +365,7 @@ func (h *gemmHarness) runBisection(taskID uint64, a, b []int8, m, n, k uint64, t
 		}
 		h.advanceHeight(1)
 		if _, err := h.msg.SubmitGEMMMidState(h.ctx, &types.MsgSubmitGEMMMidState{
-			Actor: h.challenger, GemmTaskId: taskID,
+			Actor: h.challengerActor(), GemmTaskId: taskID,
 			State:         challengerArt.States[mid].CanonicalBytes(),
 			ProofSiblings: cp.Siblings, ProofIndex: cp.Index, ProofCount: cp.Count,
 		}); err != nil {
