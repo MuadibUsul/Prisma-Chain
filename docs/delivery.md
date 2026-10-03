@@ -167,6 +167,31 @@ chain integration (GEMM task spec, dispute state and VWR settlement in the
 compute module) remain open; the gate is not fully met until Phase D lands
 and the measured GPU ladder is published.
 
+## On-chain GEMM settlement gate
+
+Phase D (docs/gemm-phase-d-report.md) connects the verified GEMM path to
+chain state and settlement. The gate is met only when the following hold
+against the real implementation:
+
+1. A GEMM task posts with escrow and a bonded worker accepts it.
+2. The canonical ResultCommit signature verifies on chain under the
+   bonded network key, with a chain-derived canonical MAC count.
+3. No challenge settles exactly once and mints exactly one canonical VWR.
+4. A challenged task locks traces for the disputed tile only, persists
+   bisection across restarts and adjudicates with one 512-MAC micro-step.
+5. A false challenger cannot defeat a correct worker; the worker still
+   settles (challenged_worker_won).
+6. Replay, queue griefing, oversized proofs and duplicate settlement are
+   rejected; escrow/bond/burn invariants hold.
+7. The bounded-VM and lightweight suites remain green.
+
+Status: items 1-7 pass in the keeper integration suite and in the local
+devnet E2E (`deploy/gemm_chain_smoke.py`, honest / fraud /
+false-challenge; evidence in docs/gemm-phase-d-report.md). Multi-validator
+economic drills, permissionless data availability and receipt light-proofs
+remain open; the gate is met only for the single-validator devnet scope it
+was tested at and must not be described beyond it.
+
 ## Cheap verification gate
 
 v0.1.2 (docs/gemm-verification-v0.1.2.md) adds Freivalds detection so the
