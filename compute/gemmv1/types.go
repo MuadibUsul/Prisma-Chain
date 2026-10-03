@@ -229,7 +229,12 @@ type VerifiedWorkReceipt struct {
 // sum in any loop order bit-exact. The MAC and output-size caps are generous
 // DoS guards for task admission, not consensus limits.
 const (
-	MaxSafeK = math.MaxInt32 / (127 * 127) // 133162: 16129 * MaxSafeK <= 2^31-1
+	// MaxSafeK bounds K so that the worst-case accumulator of K products
+	// cannot overflow a signed int32. The largest |int8*int8| product is
+	// (-128)*(-128) = 16384, so the bound is (2^31-1)/16384 = 131071. The
+	// earlier 127*127 divisor was wrong: a task with K in (131071, 133162]
+	// and adversarial -128 x -128 inputs could wrap the accumulator.
+	MaxSafeK = math.MaxInt32 / (128 * 128) // 131071: 16384 * MaxSafeK <= 2^31-1
 	// MaxOutputBytes caps the int32 output buffer admitted per task (4 GiB).
 	MaxOutputBytes = uint64(1) << 32
 	// MaxMACCount caps canonical_mac_count per task.

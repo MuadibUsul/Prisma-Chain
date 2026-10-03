@@ -102,3 +102,45 @@ func TestResultCommitReplayBinding(t *testing.T) {
 		t.Fatal("wrong canonical_mac_count accepted")
 	}
 }
+
+// J: the int32-safe K bound must use the true worst-case product
+// (-128)*(-128) = 16384, not 127*127. K = 131071 with an adversarial
+// all-(-128) accumulator must be admitted and must not wrap; K = 131072
+// must be rejected at admission.
+func TestMaxSafeKAdversarialBoundary(t *testing.T) {
+	build := func(k uint64) *TaskDescriptor {
+		requester := make([]byte, 32)
+		f := &TaskDescriptor{
+			ProtocolVersion: ProtocolVersion, Operator: Operator,
+			RequesterPubKey: requester, RequesterNonce: []byte{1},
+			IssuedEpoch: 1, M: 1, N: 1, K: k,
+			MatrixARoot: make([]byte, 32), MatrixBRoot: make([]byte, 32),
+			ArithmeticSpec: ArithmeticSpec, TileSize: TileSize,
+			ChallengeWindow: 1, MaxPricePerCWU: 1, SettlementAsset: SettlementAssetUPRSM,
+		}
+		return f
+	}
+	if got := MaxSafeK; got != 131071 {
+		t.Fatalf("MaxSafeK = %d, want 131071", got)
+	}
+	if !errors.Is(build(131071).Validate(), nil) {
+		t.Fatal("K=131071 must be admitted")
+	}
+	if !errors.Is(build(131072).Validate(), errKUnsafe) {
+		t.Fatal("K=131072 must be rejected")
+	}
+	// Worst-case positive accumulation at K=131071 must stay inside int32.
+	a := make([]int8, 131071)
+	b := make([]int8, 131071)
+	for i := range a {
+		a[i] = -128
+		b[i] = -128
+	}
+	c := ReferenceGEMM(a, b, 1, 1, 131071)
+	if c[0] != 131071*16384 {
+		t.Fatalf("worst-case accumulation = %d, want %d", c[0], 131071*16384)
+	}
+	if c[0] < 0 {
+		t.Fatal("accumulator wrapped negative at the admitted boundary")
+	}
+}
