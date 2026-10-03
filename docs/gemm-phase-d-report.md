@@ -8,10 +8,14 @@ network/ WIP and LICENSE were untouched by construction).
 ## Commits (oldest first)
 
 - `c425e69` GEMM dispute snapshot, transcript chain, signature helpers
+- `f32034f` Fix fabricated trace levels in the snapshot test
 - `b583587` GEMM task storage, admission, ResultCommit verification, challenges
 - `5458c1f` settlement tests: honest, fraud, false challenge
 - `0ab74c7` adversarial tests; challenge bond moved after admission
 - `f33ed77` devnet E2E (honest, fraud, false-challenge) plus interop fixes
+- `22a48c0` Phase D docs and delivery gate
+
+Total: 7 commits (`git rev-list --count 64742af..HEAD`).
 
 ## Files changed
 
@@ -78,7 +82,7 @@ Devnet evidence (real chain, prismad transactions):
   SubmitResult 55,545; OpenChallenge 114,890; CommitTrace 119,486 /
   248,494 (worker / challenger at K=64); one bisection round about 1.9M
   including store writes; **ArbitrateGEMM 145,797 gas units for the
-  512-MAC micro-step with proof depth 4 and 320 witness bytes**;
+  512-MAC micro-step with proof depth 4 and 384 witness bytes**;
   Finalize 87,035. Gas is consensus accounting; wall time is separate.
 
 ## Interop defects found by running the real chain (all fixed)

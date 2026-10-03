@@ -162,10 +162,10 @@ Phases A and B (library, CLI, local two-process E2E) and the two-GPU
 RunPod E2E of item 7 have passed: two pods with different GPU models
 (RTX 4000 Ada, RTX 2000 Ada) both pass the `torch._int_mm` bit-exactness
 gate, and the honest and fraud scenarios complete across them
-(`docs/gemm-e2e-results.json`). The GPU benchmark ladder and the Phase D
-chain integration (GEMM task spec, dispute state and VWR settlement in the
-compute module) remain open; the gate is not fully met until Phase D lands
-and the measured GPU ladder is published.
+(`docs/gemm-e2e-results.json`). The chain integration (GEMM task spec,
+dispute state and VWR settlement) has since landed and is covered by the
+on-chain settlement gate below; the GPU benchmark ladder on a dedicated
+metered run remains the only open item of this gate.
 
 ## On-chain GEMM settlement gate
 
