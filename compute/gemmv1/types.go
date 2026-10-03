@@ -6,7 +6,10 @@ package gemmv1
 // (the vm/ package). It shares no state, trace or proof formats with the VM;
 // only general Merkle and hashing discipline is conceptually common.
 
-import "math"
+import (
+	"crypto/ed25519"
+	"math"
+)
 
 const (
 	// ProtocolVersion is the version string embedded in every GEMM v1 object.
@@ -247,3 +250,25 @@ const (
 	MatrixIDA byte = 0x01
 	MatrixIDB byte = 0x02
 )
+
+// SignChallengeOpen fills the challenger signature of a ChallengeOpen.
+func SignChallengeOpen(c *ChallengeOpen, key ed25519.PrivateKey) error {
+	return signProtocolObject(c, &c.ChallengerSignature, key)
+}
+
+// VerifyChallengeOpenSignature verifies the challenger signature against
+// the challenger protocol key carried in the object.
+func VerifyChallengeOpenSignature(c *ChallengeOpen) bool {
+	return verifyProtocolObject(c, c.ChallengerPubKey, c.ChallengerSignature)
+}
+
+// SignTraceCommit fills the party signature of a TraceCommit.
+func SignTraceCommit(tc *TraceCommit, key ed25519.PrivateKey) error {
+	return signProtocolObject(tc, &tc.Signature, key)
+}
+
+// VerifyTraceCommitSignature verifies a TraceCommit signature against the
+// given protocol public key (the caller binds it to the party identity).
+func VerifyTraceCommitSignature(tc *TraceCommit, pub []byte) bool {
+	return verifyProtocolObject(tc, pub, tc.Signature)
+}
