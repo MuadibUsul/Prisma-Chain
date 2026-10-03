@@ -209,6 +209,7 @@ func (s msgServer) SubmitGEMMResult(ctx context.Context, msg *types.MsgSubmitGEM
 	task.OutputDataRef = msg.OutputDataRef
 	task.OutputBytes = task.M * task.N * 4
 	task.ResultSubmittedHeight = height
+	task.ResultCompletedEpoch = msg.CompletedEpoch
 	task.Status = GEMMStatusResultSubmitted
 	task.ChallengeEnd = height + task.ChallengeWindow
 	if err := s.setGEMMTask(ctx, task); err != nil {

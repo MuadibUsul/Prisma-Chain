@@ -31,5 +31,20 @@ if [ ! -f "$home_dir/.prisma-genesis-ready" ]; then
   touch "$home_dir/.prisma-genesis-ready"
 fi
 
+# The local devnet keeps every key in the test keyring. Autocli-generated
+# commands read the keyring backend from client.toml and do not re-read the
+# --keyring-backend flag, so pin the backend here or --from fails to find
+# local keys.
+if [ -f "$home_dir/config/client.toml" ]; then
+  sed -i 's/^keyring-backend = .*/keyring-backend = "test"/' "$home_dir/config/client.toml"
+fi
+
+# Autocli commands resolve the keyring against the default node home
+# (/root/.prisma) unless --home is explicitly re-read; point the default
+# home at the volume so every command finds the test keyring.
+if [ ! -e /root/.prisma ]; then
+  ln -s "$home_dir" /root/.prisma
+fi
+
 exec prismad start --home "$home_dir" --minimum-gas-prices 0uprsm --pruning default \
   --rpc.laddr tcp://0.0.0.0:26657 --grpc.address 0.0.0.0:9090

@@ -104,9 +104,14 @@ func (s msgServer) OpenGEMMChallenge(ctx context.Context, msg *types.MsgOpenGEMM
 		WorkerOutputTile:     append([]byte(nil), msg.WorkerOutputTile...),
 		ChallengerOutputTile: append([]byte(nil), msg.ChallengerOutputTile...),
 		ChallengeBond:        bond,
-		OpenedEpoch:          height,
+		OpenedEpoch:          msg.OpenedEpoch,
 	}
 	co.ChallengerSignature = append([]byte(nil), msg.ChallengerSignature...)
+	// The signed epoch must be a plausible, already-past epoch: not from
+	// the future and not before the result it disputes.
+	if msg.OpenedEpoch > height || msg.OpenedEpoch < task.ResultSubmittedHeight {
+		return nil, errors.New("gemm challenge opened epoch is out of range")
+	}
 	if err := gemmv1.ValidateChallengeOpen(task.mustDescriptor(), co); err != nil {
 		return nil, err
 	}

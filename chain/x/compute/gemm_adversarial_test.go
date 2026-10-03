@@ -336,7 +336,7 @@ func openChallengeMsg(h *gemmHarness, taskID uint64, task *GEMMTask, tiles []gem
 		WorkerOutputTile: co.WorkerOutputTile, WorkerProofSiblings: proof.Siblings,
 		WorkerProofIndex: proof.Index, WorkerProofCount: proof.Count,
 		ChallengerOutputTile: co.ChallengerOutputTile, ChallengeBond: co.ChallengeBond,
-		ChallengerSignature: co.ChallengerSignature,
+		ChallengerSignature: co.ChallengerSignature, OpenedEpoch: co.OpenedEpoch,
 	}
 }
 

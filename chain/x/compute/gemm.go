@@ -79,6 +79,7 @@ type GEMMTask struct {
 	OutputDataRef           string                `json:"output_data_ref,omitempty"`
 	OutputBytes             uint64                `json:"output_bytes,omitempty"`
 	ResultSubmittedHeight   uint64                `json:"result_submitted_height,omitempty"`
+	ResultCompletedEpoch    uint64                `json:"result_completed_epoch,omitempty"`
 	ChallengeEnd            uint64                `json:"challenge_end,omitempty"`
 	Status                  string                `json:"status"`
 	QueuedGEMMChallenges    []GEMMQueuedChallenge `json:"queued_gemm_challenges,omitempty"`

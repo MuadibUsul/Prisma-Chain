@@ -73,7 +73,9 @@ func (s msgServer) FinalizeGEMM(ctx context.Context, msg *types.MsgFinalizeGEMM)
 	// Rebuild the canonical ResultCommit from chain state; the worker
 	// signature was verified at submission and is re-verified here so the
 	// receipt is built over exactly the committed object.
-	rc := task.gemmResultCommit(task.OutputRoot, task.ResultSubmittedHeight)
+	// The rebuilt commit must use the worker's declared completed epoch,
+	// or the signature (which covers it) will not verify.
+	rc := task.gemmResultCommit(task.OutputRoot, task.ResultCompletedEpoch)
 	rc.WorkerSignature = append([]byte(nil), task.ResultCommitSignature...)
 	if !gemmv1.VerifyResultCommitSignature(rc) {
 		return nil, errors.New("gemm ResultCommit signature no longer verifies")

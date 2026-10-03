@@ -226,7 +226,7 @@ func (h *gemmHarness) openChallenge(taskID uint64, task *GEMMTask, tiles []gemmv
 		WorkerOutputTile: co.WorkerOutputTile, WorkerProofSiblings: proof.Siblings,
 		WorkerProofIndex: proof.Index, WorkerProofCount: proof.Count,
 		ChallengerOutputTile: co.ChallengerOutputTile, ChallengeBond: co.ChallengeBond,
-		ChallengerSignature: co.ChallengerSignature,
+		ChallengerSignature: co.ChallengerSignature, OpenedEpoch: co.OpenedEpoch,
 	}); err != nil {
 		h.t.Fatal(err)
 	}

@@ -203,6 +203,9 @@ message MsgOpenGEMMChallenge {
   bytes challenger_output_tile = 9;
   uint64 challenge_bond = 10;
   bytes challenger_signature = 11;
+  // The challenger signs a fully deterministic object; the epoch it signs
+  // must be supplied (the chain cannot guess it from the execution height).
+  uint64 opened_epoch = 12;
 }
 message MsgOpenGEMMChallengeResponse { uint64 challenge_end = 1; }
 
