@@ -46,7 +46,9 @@ class TestCanonicalCBOR(unittest.TestCase):
         self.assertEqual(got, want)
 
     def test_rejections(self):
-        for bad in (True, 3.14, None, {"a": 1}, [None], {1: b""}):
+        # Note: dicts are the canonical object form in Python (mirroring Go
+        # structs), so plain string-keyed dicts are valid here.
+        for bad in (True, 3.14, None, [None], {1: b""}):
             with self.assertRaises(CanonicalCBORSError):
                 encode_canonical(bad)
 
