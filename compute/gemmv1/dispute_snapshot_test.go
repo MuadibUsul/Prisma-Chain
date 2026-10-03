@@ -41,6 +41,7 @@ func disputeForSnapshot(t *testing.T, k uint64) (*GEMMDispute, *TaskDescriptor, 
 	if err != nil {
 		t.Fatal(err)
 	}
+	fraud.Levels = fLevels
 	fraud.Root = fLevels[len(fLevels)-1][0]
 	cfg := DisputeConfig{
 		Task: task, Assignment: assignment, TaskID: taskID, TileI: 0, TileJ: 0,
@@ -87,19 +88,20 @@ func TestGEMMDisputeSnapshotRoundTrip(t *testing.T) {
 		restored.deadline != d.deadline {
 		t.Fatalf("snapshot round trip changed dispute state: %+v vs %+v", restored.Status(), d.Status())
 	}
-	// The restored dispute must accept the remaining round and reach the
-	// same arbitration-ready state as the in-memory dispute.
+	// The restored dispute must accept the remaining round and produce a
+	// byte-identical snapshot to the in-memory dispute driven through the
+	// same steps.
 	if _, err := SubmitMidFromTrace(restored, Challenger, challArt, 1013); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := SubmitMidFromTrace(d, Challenger, challArt, 1013); err != nil {
 		t.Fatal(err)
 	}
 	restoredBlob, err := restored.SnapshotV1()
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !bytes.Equal(restoredBlob, mustSnap(t, d)) && d.Status().ArbitrationReady != restored.Status().ArbitrationReady {
-		t.Fatal("restored dispute diverged from the in-memory dispute")
-	}
-	if restored.Status().ArbitrationReady != d.Status().ArbitrationReady {
+	if !bytes.Equal(restoredBlob, mustSnap(t, d)) {
 		t.Fatal("restored dispute diverged from the in-memory dispute")
 	}
 	// Tampered or foreign snapshots must be rejected.
