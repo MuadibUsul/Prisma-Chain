@@ -84,6 +84,11 @@ func hashNode(left, right Hash) Hash {
 	return hashBytes(left[:], right[:])
 }
 
+// BuildLevels exposes the tree levels for proof construction.
+func BuildLevels(leaves []Hash) ([][]Hash, error) {
+	return buildLevels(leaves)
+}
+
 // MerkleRoot returns the root of the tree over leaves.
 func MerkleRoot(leaves []Hash) (Hash, error) {
 	levels, err := buildLevels(leaves)
