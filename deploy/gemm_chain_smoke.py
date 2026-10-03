@@ -46,6 +46,11 @@ from gemmv1.trace import build_tile_trace  # noqa: E402
 CHAIN_ID = os.environ.get("PRISMA_SMOKE_CHAIN_ID", "prisma-local-1")
 COMPOSE = Path(os.environ.get("PRISMA_SMOKE_COMPOSE", str(REPO / "deploy" / "compose.yaml")))
 SERVICE = os.environ.get("PRISMA_SMOKE_SERVICE", "chain")
+# Legacy CLI commands (keys, bank) do not read client.toml, so they need
+# explicit keyring flags; autocli tx/query commands resolve through the
+# client.toml + default-home symlink set up by the container entrypoints.
+HOME = os.environ.get("PRISMA_SMOKE_HOME", "/data")
+KEYRING_FLAGS = ["--keyring-backend", "test", "--keyring-dir", HOME, "--home", HOME]
 M, N, K = 16, 16, 16
 SEED = 4242
 CHALLENGE_WINDOW = 30
@@ -150,16 +155,20 @@ def wait_task(task_id: int, status: str, seconds: int = 60) -> dict:
 
 def ensure_account(name: str) -> str:
     try:
-        return cli("keys", "show", name, "-a", "--home", "/data")
+        return cli("keys", "show", name, "-a", *KEYRING_FLAGS)
     except RuntimeError:
-        cli("keys", "add", name, "--home", "/data", "--no-backup")
-        return cli("keys", "show", name, "-a", "--home", "/data")
+        cli("keys", "add", name, *KEYRING_FLAGS, "--no-backup")
+        return cli("keys", "show", name, "-a", *KEYRING_FLAGS)
+
+
+def key_address(name: str) -> str:
+    return cli("keys", "show", name, "-a", *KEYRING_FLAGS)
 
 
 def fund(address: str, amount: int) -> None:
     send = ["tx", "bank", "send", "validator", address, f"{amount}uprsm",
             "--from", "validator", "-b", "sync", "-y", "-o", "json",
-            "--chain-id", CHAIN_ID, "--fees", "0uprsm", "--gas", GAS, "--home", "/data"]
+            "--chain-id", CHAIN_ID, "--fees", "0uprsm", "--gas", GAS, *KEYRING_FLAGS]
     out = cli(*send)
     payload = json.loads(out[out.index("{"):])
     if int(payload.get("code", 1)) != 0:
@@ -248,7 +257,7 @@ def run_honest(tag: str) -> dict:
     # The chain binds the proof to the bech32 address the CLI fills into
     # the signer field, so the payload must use the address, not the
     # keyring name.
-    requester = cli("keys", "show", "validator", "-a", "--home", "/data")
+    requester = key_address("validator")
     worker = ensure_account(f"gemm-w-{tag}")
     monitor_a = ensure_account(f"gemm-ma-{tag}")
     monitor_b = ensure_account(f"gemm-mb-{tag}")
@@ -402,7 +411,7 @@ def parse_snapshot_low_high(snapshot_b64: str):
 
 def run_fraud(tag: str) -> dict:
     report = {"scenario": "fraud"}
-    requester = cli("keys", "show", "validator", "-a", "--home", "/data")
+    requester = key_address("validator")
     worker = ensure_account(f"gemm-fw-{tag}")
     challenger = ensure_account(f"gemm-fc-{tag}")
     for account in (worker, challenger):
@@ -591,7 +600,7 @@ def run_false_challenge(tag: str) -> dict:
     """Honest worker, malicious challenger: the deterministic dispute must
     end WorkerWins and the worker finalizes with challenged_worker_won."""
     report = {"scenario": "false-challenge"}
-    requester = cli("keys", "show", "validator", "-a", "--home", "/data")
+    requester = key_address("validator")
     worker = ensure_account(f"gemm-xw-{tag}")
     challenger = ensure_account(f"gemm-xc-{tag}")
     for account in (worker, challenger):

@@ -1,0 +1,64 @@
+{
+  "scenario": "e1-censorship-inclusion",
+  "attempts": [
+    {
+      "attempt": 1,
+      "task_id": 1,
+      "challenge_txhash": "728C2B698AE6FBE2388AC63B1DD5D13A940210D86EDB752545E9B12D7B0D2F07",
+      "inclusion": {
+        "broadcast_height": 25,
+        "blocks": [
+          {
+            "height": 25,
+            "proposer": "validator-c",
+            "included": false
+          },
+          {
+            "height": 26,
+            "proposer": "validator-a",
+            "included": false
+          },
+          {
+            "height": 27,
+            "proposer": "validator-b",
+            "included": true
+          }
+        ],
+        "censored_by": [
+          26
+        ],
+        "included_height": 27,
+        "included_by": "validator-b",
+        "inclusion_delay_blocks": 2
+      },
+      "final_status": "fraud",
+      "worker_receipt": null,
+      "bisection_rounds": 1,
+      "arbitration_step": 1
+    }
+  ],
+  "validator_addresses": {
+    "1955DAF0F336F70A320512A1B004E49CBD7D252F": "validator-a",
+    "D39BCF23EB9C0130B3D915DEB51AB66F84889B2E": "validator-b",
+    "10E09ADFD7C8FD1BAC87B6ED79D35E00621F9A62": "validator-c",
+    "FB2C2AA4A517BB9D69E20222905ED23E9A8902FB": "validator-d"
+  },
+  "chain_task_id": 1,
+  "timing_windows": [
+    {
+      "height": 25,
+      "last_proposer": "validator-c",
+      "next_expected": "validator-a",
+      "order": {
+        "validator-c": "validator-a",
+        "validator-a": "validator-b",
+        "validator-b": "validator-d",
+        "validator-d": "validator-c"
+      }
+    }
+  ],
+  "challenge_txhash": "728C2B698AE6FBE2388AC63B1DD5D13A940210D86EDB752545E9B12D7B0D2F07",
+  "mempool_pending_at_broadcast": 0,
+  "bisection_rounds": 1,
+  "censoring_window_observed": true
+}
