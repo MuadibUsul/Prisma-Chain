@@ -266,7 +266,11 @@ func (s msgServer) SubmitDAAttestation(ctx context.Context, msg *types.MsgSubmit
 		return nil, err
 	}
 	if err := gemmv1.ValidateDAAttestation(&attestation); err != nil {
-		return nil, err
+		preview := msg.AttestationJson
+		if len(preview) > 80 {
+			preview = preview[:80]
+		}
+		return nil, fmt.Errorf("%w [raw_bytes=%d preview=%q]", err, len(msg.AttestationJson), string(preview))
 	}
 	if !equalBytesMsg(attestation.TaskID, task.ProtocolTaskID) ||
 		!equalBytesMsg(attestation.AssignmentID, task.AssignmentID) ||

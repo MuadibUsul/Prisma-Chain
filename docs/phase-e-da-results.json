@@ -1,0 +1,110 @@
+{
+  "scenario": "phase-e-combined",
+  "censor": "validator-a omits GEMM challenge/trace/mid/arbitrate from its proposals",
+  "worker": "prsm1r2ffplpdsy903tpr7hn6lmz4nyy2l4eg7z0uhx",
+  "watcher": {
+    "task_id": 22,
+    "providers": [
+      "http://127.0.0.1:8401",
+      "http://127.0.0.1:8402",
+      "http://127.0.0.1:8403"
+    ],
+    "bulk_download_seconds": 2.047,
+    "output_bytes": 1024,
+    "root_verification_seconds": 0.0,
+    "root_verified": true,
+    "freivalds_seconds": 0.0,
+    "freivalds_passed": false,
+    "bad_row": 0,
+    "bad_tile": [
+      0,
+      0
+    ],
+    "challenge_txhash": "49A50528038189D36169C8E5B7B0AFFEA12A90B00AC288B03085864B01EB7AA9",
+    "outcome": "challenge_opened"
+  },
+  "chain_task_id": 22,
+  "da_providers": {
+    "da-a": {
+      "account": "prsm16wq83t24zjnx3zgq3fs9clw6a5jfc2ek4qhu7m",
+      "port": 8401
+    },
+    "da-b": {
+      "account": "prsm1nmm9te4hc2avf08r5k2agetczlmqzvkjm46tez",
+      "port": 8402
+    },
+    "da-c": {
+      "account": "prsm1arc6zkx60sh3up2x55re6ltk5get6w686zfa3p",
+      "port": 8403
+    }
+  },
+  "replicated_bytes": 1024,
+  "wrong_blob_refused": true,
+  "da_status": {
+    "valid_replicas": 3,
+    "required": 2,
+    "status": "challenge_window_ready"
+  },
+  "one_provider_offline": true,
+  "challenge_timing": {
+    "height": 749,
+    "next_expected": "10E09ADFD7C8FD1BAC87B6ED79D35E00621F9A62",
+    "target": "validator-a"
+  },
+  "mempool_after_broadcast": {
+    "validator-a": "0",
+    "validator-b": "0",
+    "validator-c": "0"
+  },
+  "mempool_after_3s": {
+    "validator-a": "0",
+    "validator-b": "0"
+  },
+  "challenge_inclusion": {
+    "broadcast_height": 750,
+    "blocks": [
+      {
+        "height": 750,
+        "proposer": "validator-a",
+        "included": false
+      },
+      {
+        "height": 751,
+        "proposer": "validator-b",
+        "included": true
+      }
+    ],
+    "censored_by": [
+      750
+    ],
+    "included_height": 751,
+    "included_by": "validator-b",
+    "inclusion_delay_blocks": 1
+  },
+  "bisection_rounds": 1,
+  "final_status": "fraud",
+  "worker_receipt": null,
+  "arbitration_step": 1,
+  "requester_balance": 99235000000,
+  "worker_balance": 5000000,
+  "validator_final_state": {
+    "validator-a": {
+      "height": 760,
+      "app_hash": "C9EAA6CEBB36F54D9C3C5297C21ADF9D0E861A333983B81F0E0E47D3C9C449F0"
+    },
+    "validator-b": {
+      "height": 760,
+      "app_hash": "C9EAA6CEBB36F54D9C3C5297C21ADF9D0E861A333983B81F0E0E47D3C9C449F0"
+    },
+    "validator-c": {
+      "height": 760,
+      "app_hash": "C9EAA6CEBB36F54D9C3C5297C21ADF9D0E861A333983B81F0E0E47D3C9C449F0"
+    },
+    "validator-d": {
+      "height": 760,
+      "app_hash": "C9EAA6CEBB36F54D9C3C5297C21ADF9D0E861A333983B81F0E0E47D3C9C449F0"
+    }
+  },
+  "validators_converged": true,
+  "da_timeout_scenario": "da-c forgot its blob after attesting"
+}

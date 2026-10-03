@@ -101,3 +101,26 @@ def build_matrix_roots(a, b, m: int, n: int, k: int):
 
 def receipt_id(receipt: dict) -> bytes:
     return task_hash(DomainVWR, receipt)
+
+
+# DA_REPLICA_V1 constants (mirror compute/gemmv1/da.go).
+DAProtocolVersion = "DA_REPLICA_V1"
+DomainDAChallengeV1 = b"PRISMA_GEMM_DA_CHALLENGE_V1\x00"
+
+
+def da_challenge_tile(task_id: bytes, provider_account: bytes, challenger_account: bytes,
+                      nonce: bytes, opened_height: int, rows_c: int, cols_c: int):
+    """Deterministic sampling-tile derivation mirroring DAChallengeTile."""
+    import hashlib
+
+    h = hashlib.sha256()
+    h.update(DomainDAChallengeV1)
+    h.update(task_id)
+    h.update(provider_account)
+    h.update(challenger_account)
+    h.update(nonce)
+    h.update(opened_height.to_bytes(8, "big"))
+    digest = h.digest()
+    total = rows_c * cols_c
+    index = int.from_bytes(digest[:8], "big") % total
+    return index // cols_c, index % cols_c

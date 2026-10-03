@@ -20,6 +20,7 @@ import (
 	"crypto/sha256"
 	"encoding/binary"
 	"errors"
+	"fmt"
 	"math"
 )
 
@@ -60,7 +61,7 @@ type DAAttestation struct {
 // signature or state checks.
 func ValidateDAAttestation(a *DAAttestation) error {
 	if a.ProtocolVersion != DAProtocolVersion {
-		return errors.New("gemmv1: da attestation protocol_version mismatch")
+		return fmt.Errorf("gemmv1: da attestation protocol_version mismatch: got %q want %q", a.ProtocolVersion, DAProtocolVersion)
 	}
 	for field, b := range map[string][]byte{
 		"task_id": a.TaskID, "assignment_id": a.AssignmentID, "output_root": a.OutputRoot,
