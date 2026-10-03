@@ -171,8 +171,19 @@ func benchVerifySize(size int, roundList []int) (*verifyBenchSize, error) {
 	if err != nil || !found {
 		return nil, fmt.Errorf("localization failed during benchmark: found=%v err=%v", found, err)
 	}
+	// The challenger tile for ChallengeOpen is built from 8 exact row
+	// recomputations (the E2E fast path does the same); include them in the
+	// localization cost so the fraud-path ratio covers the whole detection
+	// -> tile-evidence sequence.
+	tileI8 := loc.TileI * 8
+	for r8 := uint64(0); r8 < 8; r8++ {
+		if tileI8+r8 < m {
+			if _, err := verify.ReferenceRowGEMM(a, tileI8+r8, b, m, n, k); err != nil {
+				return nil, err
+			}
+		}
+	}
 	out.RowLocalizationMs = ms(locStart)
-	_ = loc
 
 	for _, q := range roundList {
 		prof := verify.VerificationProfile{Algorithm: verify.AlgorithmFreivaldsBinaryV1, Rounds: uint16(q)}

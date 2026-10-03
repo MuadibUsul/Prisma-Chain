@@ -166,3 +166,32 @@ gate, and the honest and fraud scenarios complete across them
 chain integration (GEMM task spec, dispute state and VWR settlement in the
 compute module) remain open; the gate is not fully met until Phase D lands
 and the measured GPU ladder is published.
+
+## Cheap verification gate
+
+v0.1.2 (docs/gemm-verification-v0.1.2.md) adds Freivalds detection so the
+challenger no longer needs a full recomputation to find fraud. The gate is
+met only when all of the following hold against the real implementation:
+
+1. An honest C passes every detection round.
+2. A fraudulent C is detected without full recomputation.
+3. The fast path never calls the full reference GEMM (asserted by
+   instrumentation in the E2E).
+4. The bad output row is localized and confirmed by an exact O(KN) row
+   recomputation.
+5. The bad 8x8 tile is derived from exact row recomputations, never from
+   worker data.
+6. The existing v0.1.1 dispute proves the fraud end to end and ends
+   ChallengerWins with no receipt for the worker.
+7. The final arbiter remains exactly 512 canonical MACs.
+8. The 4096^3 benchmark is published with DetectionRatio and
+   TotalFraudPathRatio measured on one machine, separating probabilistic
+   detection cost from deterministic arbitration cost.
+9. A false-accept simulation is published next to the 2^-rounds
+   theoretical bound, with PASS / FAIL / NOT TESTED kept distinct.
+
+Status: items 1-7 and 9 pass on the CPU path (`docs/gemm-v0.1.2-report.md`);
+the 4096^3 CPU ladder is published (`docs/gemm-v0.1.2-benchmark-results.json`,
+detection ratio 0.0080 at 8 rounds, total fraud-path ratio 0.0692 at 40
+rounds including the exact 8-row tile build). The GPU fast-verification benchmark remains NOT TESTED until two
+pods are available again. Phase D chain integration is still open.
