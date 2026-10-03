@@ -1,8 +1,12 @@
 """Canonical CBOR self-checks mirroring encoding_test.go in Go."""
 
+import sys
 import unittest
+from pathlib import Path
 
-from gemmv1.canonical_cbor import CanonicalCBORSError, encode_canonical
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from gemmv1.canonical_cbor import CanonicalCBORSError, encode_canonical  # noqa: E402
 
 
 class TestCanonicalCBOR(unittest.TestCase):
