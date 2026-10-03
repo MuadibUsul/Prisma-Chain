@@ -14,6 +14,7 @@ Transactions are signed by the container's test keyring via prismad.
 import argparse
 import base64
 import json
+import os
 import subprocess
 import sys
 import time
@@ -40,8 +41,11 @@ from gemmv1.tensors import (  # noqa: E402
 from gemmv1.testgen import gen_test_matrix  # noqa: E402
 from gemmv1.trace import build_tile_trace  # noqa: E402
 
-CHAIN_ID = "prisma-local-1"
-COMPOSE = REPO / "deploy" / "compose.yaml"
+# Single-node devnet defaults; the multivalidator harness overrides these
+# module constants to target a specific validator container and chain.
+CHAIN_ID = os.environ.get("PRISMA_SMOKE_CHAIN_ID", "prisma-local-1")
+COMPOSE = Path(os.environ.get("PRISMA_SMOKE_COMPOSE", str(REPO / "deploy" / "compose.yaml")))
+SERVICE = os.environ.get("PRISMA_SMOKE_SERVICE", "chain")
 M, N, K = 16, 16, 16
 SEED = 4242
 CHALLENGE_WINDOW = 30
@@ -51,7 +55,7 @@ GAS = "2000000"
 
 
 def cli(*args: str, check: bool = True) -> str:
-    cmd = ["docker", "compose", "-f", str(COMPOSE), "exec", "-T", "chain", "prismad", *args]
+    cmd = ["docker", "compose", "-f", str(COMPOSE), "exec", "-T", SERVICE, "prismad", *args]
     proc = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
     out = proc.stdout.strip()
     if check and proc.returncode != 0:

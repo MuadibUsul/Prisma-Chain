@@ -43,5 +43,8 @@ func New(logger log.Logger, db dbm.DB, trace io.Writer, loadLatest bool, opts se
 	if err := app.Load(loadLatest); err != nil {
 		return nil, err
 	}
+	// Development-only proposer censorship harness; no-op unless the
+	// PRISMA_DEV_CENSOR_GEMM_CHALLENGES environment variable is set.
+	maybeEnableDevCensorship(app)
 	return app, nil
 }

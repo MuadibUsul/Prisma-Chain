@@ -1,0 +1,56 @@
+{
+  "scenario": "e1-liveness",
+  "stage_1_all_up": {
+    "heights": {
+      "validator-a": 14,
+      "validator-b": 14,
+      "validator-c": 14,
+      "validator-d": 14
+    },
+    "app_hashes": [
+      "57A4F8705C481BD9AEEC8854A11F40E854E70610C128527F7624FB7BB1741131"
+    ]
+  },
+  "stage_2_one_offline": {
+    "stopped": "validator-d",
+    "height_at_stop": 14,
+    "heights_after": {
+      "validator-a": 19,
+      "validator-b": 19,
+      "validator-c": 19
+    },
+    "finalized_through_outage": true
+  },
+  "stage_3_catch_up": {
+    "catch_up_seconds": 6.2,
+    "heights": {
+      "validator-a": 20,
+      "validator-b": 20,
+      "validator-c": 20,
+      "validator-d": 20
+    },
+    "app_hashes": [
+      "A9B52E7332745238D5FEBB9411108C6EEB1573F8E932F5D0431B49E26AA025B6"
+    ]
+  },
+  "stage_4_two_offline": {
+    "stopped": [
+      "validator-c",
+      "validator-d"
+    ],
+    "height_at_stop": 20,
+    "chain_halted": true,
+    "expected": "halt at 50% voting power"
+  },
+  "stage_5_resumed": {
+    "heights": {
+      "validator-a": 23,
+      "validator-b": 23,
+      "validator-c": 23,
+      "validator-d": 23
+    },
+    "app_hashes": [
+      "509EB2596AE4CF9A2AACA0F689C403832D45F82BC5835905170194F7F88C7D65"
+    ]
+  }
+}
