@@ -104,11 +104,14 @@ reliability, privacy and operator concentration, rather than registered nodes.
   trust limits.
 
 The repository is publicly readable but currently has no `LICENSE` file.
-An optional chain query now admits signed announcements from bonded worker keys
+An optional chain query admits signed announcements from bonded worker keys
 without a pre-provisioned key or account binding; the first pairing remains
-fixed across gateway restarts. The deployed mock stack still uses pre-provisioned
-keys, URL hosts still require an allowlist, and VRAM is advertised but not used
-for admission. Open participation and formal source release remain future gates.
+fixed across gateway restarts. An additional opt-in public-node transport accepts
+bonded workers without a URL host allowlist and pins each outbound HTTPS request
+to a freshly checked public DNS answer. The deployed mock stack still uses
+pre-provisioned keys, VRAM is advertised but not independently measured, and
+the open operator test has not been completed. Open participation and formal
+source release remain future gates.
 
 ## Operational gates
 
@@ -124,3 +127,38 @@ for admission. Open participation and formal source release remain future gates.
 
 The repository README tracks which gates are actually met. Unmet gates remain
 open work; they are never described as shipped behavior.
+
+## Verifiable GEMM gate
+
+GEMM_INT8_V1 (docs/gemm-protocol-v0.1.1.md) is a second verifiable operator
+next to the bounded-integer VM. The gate is complete only when the
+following hold against the real implementation, not a plan:
+
+1. The Go reference and an independent implementation produce the identical
+   task ID, matrix roots, output root and receipt ID for fixed vectors
+   (cross-language determinism).
+2. A normal worker reaches FINALIZED and holds a Verified Work Receipt with
+   `verification_mode = optimistic_unchallenged`.
+3. A single corrupted output tile is detected by a challenger that never
+   received the worker's intermediates.
+4. The resulting dispute creates an execution trace for the disputed tile
+   only; no full-task trace is ever committed or generated on the normal
+   path, including at 4096x4096x4096.
+5. Interactive bisection localizes the first differing K-step, and the
+   arbiter resolves the dispute by recomputing exactly one 8x8x8 micro-step
+   (512 canonical MACs) after checking both input tiles against the
+   committed matrix roots.
+6. A worker that submitted a wrong tile receives no receipt; a challenger
+   that submitted a wrong tile cannot defeat a correct worker; replays of
+   ResultCommits, assignments and tile proofs across tasks or workers are
+   rejected; response timeouts resolve by the existing refund rules.
+7. Two independent GPU nodes complete the honest and fraud E2E scenarios
+   over the network with a bit-exact INT8 x INT8 -> INT32 backend, and the
+   measured benchmark ladder (128 through 4096) is published with the
+   normal-path overhead and the challenge overhead against full
+   recomputation.
+
+The library, CLI and local two-process E2E of phases A and B are on the
+`protocol/gemm-v0.1.1` branch. The two-GPU RunPod E2E (item 7) and the
+Phase D chain integration remain open; until they pass, this gate is not
+met and must not be described as met.
