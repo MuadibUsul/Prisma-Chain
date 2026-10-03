@@ -56,7 +56,7 @@ func CanonicalToInt32s(b []byte) ([]int32, error) {
 type State [intTileCount]int32
 
 // CanonicalBytes encodes the state in canonical form (64 big-endian int32).
-func (s *State) CanonicalBytes() []byte {
+func (s State) CanonicalBytes() []byte {
 	return Int32sToCanonical(s[:])
 }
 
@@ -75,7 +75,7 @@ func StateFromCanonical(b []byte) (*State, error) {
 }
 
 // IsZero reports whether the state is the all-zero matrix (S0).
-func (s *State) IsZero() bool {
+func (s State) IsZero() bool {
 	for _, v := range s {
 		if v != 0 {
 			return false

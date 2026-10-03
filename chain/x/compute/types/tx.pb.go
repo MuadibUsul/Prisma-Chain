@@ -1206,6 +1206,1466 @@ func (m *MsgRefundTaskResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgRefundTaskResponse proto.InternalMessageInfo
 
+type MsgPostGEMMTask struct {
+	Requester string `protobuf:"bytes,1,opt,name=requester,proto3" json:"requester,omitempty"`
+	// 32-byte Ed25519 protocol key bound to the chain account by key proof.
+	RequesterProtocolPubkey []byte `protobuf:"bytes,2,opt,name=requester_protocol_pubkey,json=requesterProtocolPubkey,proto3" json:"requester_protocol_pubkey,omitempty"`
+	// Ed25519 signature over the v1 requester key binding.
+	RequesterKeyProof []byte `protobuf:"bytes,3,opt,name=requester_key_proof,json=requesterKeyProof,proto3" json:"requester_key_proof,omitempty"`
+	RequesterNonce    []byte `protobuf:"bytes,4,opt,name=requester_nonce,json=requesterNonce,proto3" json:"requester_nonce,omitempty"`
+	M                 uint64 `protobuf:"varint,5,opt,name=m,proto3" json:"m,omitempty"`
+	N                 uint64 `protobuf:"varint,6,opt,name=n,proto3" json:"n,omitempty"`
+	K                 uint64 `protobuf:"varint,7,opt,name=k,proto3" json:"k,omitempty"`
+	MatrixARoot       []byte `protobuf:"bytes,8,opt,name=matrix_a_root,json=matrixARoot,proto3" json:"matrix_a_root,omitempty"`
+	MatrixBRoot       []byte `protobuf:"bytes,9,opt,name=matrix_b_root,json=matrixBRoot,proto3" json:"matrix_b_root,omitempty"`
+	ChallengeWindow   uint64 `protobuf:"varint,10,opt,name=challenge_window,json=challengeWindow,proto3" json:"challenge_window,omitempty"`
+	MaxPricePerCwu    uint64 `protobuf:"varint,11,opt,name=max_price_per_cwu,json=maxPricePerCwu,proto3" json:"max_price_per_cwu,omitempty"`
+	MaxFee            uint64 `protobuf:"varint,12,opt,name=max_fee,json=maxFee,proto3" json:"max_fee,omitempty"`
+	InputDataRef      string `protobuf:"bytes,13,opt,name=input_data_ref,json=inputDataRef,proto3" json:"input_data_ref,omitempty"`
+}
+
+func (m *MsgPostGEMMTask) Reset()         { *m = MsgPostGEMMTask{} }
+func (m *MsgPostGEMMTask) String() string { return proto.CompactTextString(m) }
+func (*MsgPostGEMMTask) ProtoMessage()    {}
+func (*MsgPostGEMMTask) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{22}
+}
+func (m *MsgPostGEMMTask) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgPostGEMMTask) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgPostGEMMTask.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgPostGEMMTask) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgPostGEMMTask.Merge(m, src)
+}
+func (m *MsgPostGEMMTask) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgPostGEMMTask) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgPostGEMMTask.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgPostGEMMTask proto.InternalMessageInfo
+
+func (m *MsgPostGEMMTask) GetRequester() string {
+	if m != nil {
+		return m.Requester
+	}
+	return ""
+}
+
+func (m *MsgPostGEMMTask) GetRequesterProtocolPubkey() []byte {
+	if m != nil {
+		return m.RequesterProtocolPubkey
+	}
+	return nil
+}
+
+func (m *MsgPostGEMMTask) GetRequesterKeyProof() []byte {
+	if m != nil {
+		return m.RequesterKeyProof
+	}
+	return nil
+}
+
+func (m *MsgPostGEMMTask) GetRequesterNonce() []byte {
+	if m != nil {
+		return m.RequesterNonce
+	}
+	return nil
+}
+
+func (m *MsgPostGEMMTask) GetM() uint64 {
+	if m != nil {
+		return m.M
+	}
+	return 0
+}
+
+func (m *MsgPostGEMMTask) GetN() uint64 {
+	if m != nil {
+		return m.N
+	}
+	return 0
+}
+
+func (m *MsgPostGEMMTask) GetK() uint64 {
+	if m != nil {
+		return m.K
+	}
+	return 0
+}
+
+func (m *MsgPostGEMMTask) GetMatrixARoot() []byte {
+	if m != nil {
+		return m.MatrixARoot
+	}
+	return nil
+}
+
+func (m *MsgPostGEMMTask) GetMatrixBRoot() []byte {
+	if m != nil {
+		return m.MatrixBRoot
+	}
+	return nil
+}
+
+func (m *MsgPostGEMMTask) GetChallengeWindow() uint64 {
+	if m != nil {
+		return m.ChallengeWindow
+	}
+	return 0
+}
+
+func (m *MsgPostGEMMTask) GetMaxPricePerCwu() uint64 {
+	if m != nil {
+		return m.MaxPricePerCwu
+	}
+	return 0
+}
+
+func (m *MsgPostGEMMTask) GetMaxFee() uint64 {
+	if m != nil {
+		return m.MaxFee
+	}
+	return 0
+}
+
+func (m *MsgPostGEMMTask) GetInputDataRef() string {
+	if m != nil {
+		return m.InputDataRef
+	}
+	return ""
+}
+
+type MsgPostGEMMTaskResponse struct {
+	GemmTaskId     uint64 `protobuf:"varint,1,opt,name=gemm_task_id,json=gemmTaskId,proto3" json:"gemm_task_id,omitempty"`
+	ProtocolTaskId []byte `protobuf:"bytes,2,opt,name=protocol_task_id,json=protocolTaskId,proto3" json:"protocol_task_id,omitempty"`
+}
+
+func (m *MsgPostGEMMTaskResponse) Reset()         { *m = MsgPostGEMMTaskResponse{} }
+func (m *MsgPostGEMMTaskResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgPostGEMMTaskResponse) ProtoMessage()    {}
+func (*MsgPostGEMMTaskResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{23}
+}
+func (m *MsgPostGEMMTaskResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgPostGEMMTaskResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgPostGEMMTaskResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgPostGEMMTaskResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgPostGEMMTaskResponse.Merge(m, src)
+}
+func (m *MsgPostGEMMTaskResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgPostGEMMTaskResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgPostGEMMTaskResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgPostGEMMTaskResponse proto.InternalMessageInfo
+
+func (m *MsgPostGEMMTaskResponse) GetGemmTaskId() uint64 {
+	if m != nil {
+		return m.GemmTaskId
+	}
+	return 0
+}
+
+func (m *MsgPostGEMMTaskResponse) GetProtocolTaskId() []byte {
+	if m != nil {
+		return m.ProtocolTaskId
+	}
+	return nil
+}
+
+type MsgAcceptGEMMTask struct {
+	Worker          string `protobuf:"bytes,1,opt,name=worker,proto3" json:"worker,omitempty"`
+	GemmTaskId      uint64 `protobuf:"varint,2,opt,name=gemm_task_id,json=gemmTaskId,proto3" json:"gemm_task_id,omitempty"`
+	AssignmentNonce []byte `protobuf:"bytes,3,opt,name=assignment_nonce,json=assignmentNonce,proto3" json:"assignment_nonce,omitempty"`
+}
+
+func (m *MsgAcceptGEMMTask) Reset()         { *m = MsgAcceptGEMMTask{} }
+func (m *MsgAcceptGEMMTask) String() string { return proto.CompactTextString(m) }
+func (*MsgAcceptGEMMTask) ProtoMessage()    {}
+func (*MsgAcceptGEMMTask) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{24}
+}
+func (m *MsgAcceptGEMMTask) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgAcceptGEMMTask) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgAcceptGEMMTask.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgAcceptGEMMTask) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgAcceptGEMMTask.Merge(m, src)
+}
+func (m *MsgAcceptGEMMTask) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgAcceptGEMMTask) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgAcceptGEMMTask.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgAcceptGEMMTask proto.InternalMessageInfo
+
+func (m *MsgAcceptGEMMTask) GetWorker() string {
+	if m != nil {
+		return m.Worker
+	}
+	return ""
+}
+
+func (m *MsgAcceptGEMMTask) GetGemmTaskId() uint64 {
+	if m != nil {
+		return m.GemmTaskId
+	}
+	return 0
+}
+
+func (m *MsgAcceptGEMMTask) GetAssignmentNonce() []byte {
+	if m != nil {
+		return m.AssignmentNonce
+	}
+	return nil
+}
+
+type MsgAcceptGEMMTaskResponse struct {
+	AssignmentId []byte `protobuf:"bytes,1,opt,name=assignment_id,json=assignmentId,proto3" json:"assignment_id,omitempty"`
+}
+
+func (m *MsgAcceptGEMMTaskResponse) Reset()         { *m = MsgAcceptGEMMTaskResponse{} }
+func (m *MsgAcceptGEMMTaskResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgAcceptGEMMTaskResponse) ProtoMessage()    {}
+func (*MsgAcceptGEMMTaskResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{25}
+}
+func (m *MsgAcceptGEMMTaskResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgAcceptGEMMTaskResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgAcceptGEMMTaskResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgAcceptGEMMTaskResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgAcceptGEMMTaskResponse.Merge(m, src)
+}
+func (m *MsgAcceptGEMMTaskResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgAcceptGEMMTaskResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgAcceptGEMMTaskResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgAcceptGEMMTaskResponse proto.InternalMessageInfo
+
+func (m *MsgAcceptGEMMTaskResponse) GetAssignmentId() []byte {
+	if m != nil {
+		return m.AssignmentId
+	}
+	return nil
+}
+
+type MsgSubmitGEMMResult struct {
+	Worker         string `protobuf:"bytes,1,opt,name=worker,proto3" json:"worker,omitempty"`
+	GemmTaskId     uint64 `protobuf:"varint,2,opt,name=gemm_task_id,json=gemmTaskId,proto3" json:"gemm_task_id,omitempty"`
+	OutputRoot     []byte `protobuf:"bytes,3,opt,name=output_root,json=outputRoot,proto3" json:"output_root,omitempty"`
+	OutputDataRef  string `protobuf:"bytes,4,opt,name=output_data_ref,json=outputDataRef,proto3" json:"output_data_ref,omitempty"`
+	OutputBytes    uint64 `protobuf:"varint,5,opt,name=output_bytes,json=outputBytes,proto3" json:"output_bytes,omitempty"`
+	CompletedEpoch uint64 `protobuf:"varint,6,opt,name=completed_epoch,json=completedEpoch,proto3" json:"completed_epoch,omitempty"`
+	// Ed25519 signature by the bonded worker network key over the canonical
+	// gemmv1.ResultCommit rebuilt from these fields and chain state.
+	WorkerSignature []byte `protobuf:"bytes,7,opt,name=worker_signature,json=workerSignature,proto3" json:"worker_signature,omitempty"`
+}
+
+func (m *MsgSubmitGEMMResult) Reset()         { *m = MsgSubmitGEMMResult{} }
+func (m *MsgSubmitGEMMResult) String() string { return proto.CompactTextString(m) }
+func (*MsgSubmitGEMMResult) ProtoMessage()    {}
+func (*MsgSubmitGEMMResult) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{26}
+}
+func (m *MsgSubmitGEMMResult) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSubmitGEMMResult) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSubmitGEMMResult.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSubmitGEMMResult) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSubmitGEMMResult.Merge(m, src)
+}
+func (m *MsgSubmitGEMMResult) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSubmitGEMMResult) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSubmitGEMMResult.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSubmitGEMMResult proto.InternalMessageInfo
+
+func (m *MsgSubmitGEMMResult) GetWorker() string {
+	if m != nil {
+		return m.Worker
+	}
+	return ""
+}
+
+func (m *MsgSubmitGEMMResult) GetGemmTaskId() uint64 {
+	if m != nil {
+		return m.GemmTaskId
+	}
+	return 0
+}
+
+func (m *MsgSubmitGEMMResult) GetOutputRoot() []byte {
+	if m != nil {
+		return m.OutputRoot
+	}
+	return nil
+}
+
+func (m *MsgSubmitGEMMResult) GetOutputDataRef() string {
+	if m != nil {
+		return m.OutputDataRef
+	}
+	return ""
+}
+
+func (m *MsgSubmitGEMMResult) GetOutputBytes() uint64 {
+	if m != nil {
+		return m.OutputBytes
+	}
+	return 0
+}
+
+func (m *MsgSubmitGEMMResult) GetCompletedEpoch() uint64 {
+	if m != nil {
+		return m.CompletedEpoch
+	}
+	return 0
+}
+
+func (m *MsgSubmitGEMMResult) GetWorkerSignature() []byte {
+	if m != nil {
+		return m.WorkerSignature
+	}
+	return nil
+}
+
+type MsgSubmitGEMMResultResponse struct {
+	ChallengeEnd uint64 `protobuf:"varint,1,opt,name=challenge_end,json=challengeEnd,proto3" json:"challenge_end,omitempty"`
+}
+
+func (m *MsgSubmitGEMMResultResponse) Reset()         { *m = MsgSubmitGEMMResultResponse{} }
+func (m *MsgSubmitGEMMResultResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgSubmitGEMMResultResponse) ProtoMessage()    {}
+func (*MsgSubmitGEMMResultResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{27}
+}
+func (m *MsgSubmitGEMMResultResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSubmitGEMMResultResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSubmitGEMMResultResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSubmitGEMMResultResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSubmitGEMMResultResponse.Merge(m, src)
+}
+func (m *MsgSubmitGEMMResultResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSubmitGEMMResultResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSubmitGEMMResultResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSubmitGEMMResultResponse proto.InternalMessageInfo
+
+func (m *MsgSubmitGEMMResultResponse) GetChallengeEnd() uint64 {
+	if m != nil {
+		return m.ChallengeEnd
+	}
+	return 0
+}
+
+type MsgAttestGEMMTask struct {
+	Monitor    string `protobuf:"bytes,1,opt,name=monitor,proto3" json:"monitor,omitempty"`
+	GemmTaskId uint64 `protobuf:"varint,2,opt,name=gemm_task_id,json=gemmTaskId,proto3" json:"gemm_task_id,omitempty"`
+}
+
+func (m *MsgAttestGEMMTask) Reset()         { *m = MsgAttestGEMMTask{} }
+func (m *MsgAttestGEMMTask) String() string { return proto.CompactTextString(m) }
+func (*MsgAttestGEMMTask) ProtoMessage()    {}
+func (*MsgAttestGEMMTask) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{28}
+}
+func (m *MsgAttestGEMMTask) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgAttestGEMMTask) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgAttestGEMMTask.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgAttestGEMMTask) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgAttestGEMMTask.Merge(m, src)
+}
+func (m *MsgAttestGEMMTask) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgAttestGEMMTask) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgAttestGEMMTask.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgAttestGEMMTask proto.InternalMessageInfo
+
+func (m *MsgAttestGEMMTask) GetMonitor() string {
+	if m != nil {
+		return m.Monitor
+	}
+	return ""
+}
+
+func (m *MsgAttestGEMMTask) GetGemmTaskId() uint64 {
+	if m != nil {
+		return m.GemmTaskId
+	}
+	return 0
+}
+
+type MsgAttestGEMMTaskResponse struct {
+}
+
+func (m *MsgAttestGEMMTaskResponse) Reset()         { *m = MsgAttestGEMMTaskResponse{} }
+func (m *MsgAttestGEMMTaskResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgAttestGEMMTaskResponse) ProtoMessage()    {}
+func (*MsgAttestGEMMTaskResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{29}
+}
+func (m *MsgAttestGEMMTaskResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgAttestGEMMTaskResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgAttestGEMMTaskResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgAttestGEMMTaskResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgAttestGEMMTaskResponse.Merge(m, src)
+}
+func (m *MsgAttestGEMMTaskResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgAttestGEMMTaskResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgAttestGEMMTaskResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgAttestGEMMTaskResponse proto.InternalMessageInfo
+
+type MsgOpenGEMMChallenge struct {
+	Challenger           string   `protobuf:"bytes,1,opt,name=challenger,proto3" json:"challenger,omitempty"`
+	GemmTaskId           uint64   `protobuf:"varint,2,opt,name=gemm_task_id,json=gemmTaskId,proto3" json:"gemm_task_id,omitempty"`
+	DisputedTileI        uint64   `protobuf:"varint,3,opt,name=disputed_tile_i,json=disputedTileI,proto3" json:"disputed_tile_i,omitempty"`
+	DisputedTileJ        uint64   `protobuf:"varint,4,opt,name=disputed_tile_j,json=disputedTileJ,proto3" json:"disputed_tile_j,omitempty"`
+	WorkerOutputTile     []byte   `protobuf:"bytes,5,opt,name=worker_output_tile,json=workerOutputTile,proto3" json:"worker_output_tile,omitempty"`
+	WorkerProofSiblings  [][]byte `protobuf:"bytes,6,rep,name=worker_proof_siblings,json=workerProofSiblings,proto3" json:"worker_proof_siblings,omitempty"`
+	WorkerProofIndex     uint32   `protobuf:"varint,7,opt,name=worker_proof_index,json=workerProofIndex,proto3" json:"worker_proof_index,omitempty"`
+	WorkerProofCount     uint32   `protobuf:"varint,8,opt,name=worker_proof_count,json=workerProofCount,proto3" json:"worker_proof_count,omitempty"`
+	ChallengerOutputTile []byte   `protobuf:"bytes,9,opt,name=challenger_output_tile,json=challengerOutputTile,proto3" json:"challenger_output_tile,omitempty"`
+	ChallengeBond        uint64   `protobuf:"varint,10,opt,name=challenge_bond,json=challengeBond,proto3" json:"challenge_bond,omitempty"`
+	ChallengerSignature  []byte   `protobuf:"bytes,11,opt,name=challenger_signature,json=challengerSignature,proto3" json:"challenger_signature,omitempty"`
+}
+
+func (m *MsgOpenGEMMChallenge) Reset()         { *m = MsgOpenGEMMChallenge{} }
+func (m *MsgOpenGEMMChallenge) String() string { return proto.CompactTextString(m) }
+func (*MsgOpenGEMMChallenge) ProtoMessage()    {}
+func (*MsgOpenGEMMChallenge) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{30}
+}
+func (m *MsgOpenGEMMChallenge) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgOpenGEMMChallenge) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgOpenGEMMChallenge.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgOpenGEMMChallenge) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgOpenGEMMChallenge.Merge(m, src)
+}
+func (m *MsgOpenGEMMChallenge) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgOpenGEMMChallenge) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgOpenGEMMChallenge.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgOpenGEMMChallenge proto.InternalMessageInfo
+
+func (m *MsgOpenGEMMChallenge) GetChallenger() string {
+	if m != nil {
+		return m.Challenger
+	}
+	return ""
+}
+
+func (m *MsgOpenGEMMChallenge) GetGemmTaskId() uint64 {
+	if m != nil {
+		return m.GemmTaskId
+	}
+	return 0
+}
+
+func (m *MsgOpenGEMMChallenge) GetDisputedTileI() uint64 {
+	if m != nil {
+		return m.DisputedTileI
+	}
+	return 0
+}
+
+func (m *MsgOpenGEMMChallenge) GetDisputedTileJ() uint64 {
+	if m != nil {
+		return m.DisputedTileJ
+	}
+	return 0
+}
+
+func (m *MsgOpenGEMMChallenge) GetWorkerOutputTile() []byte {
+	if m != nil {
+		return m.WorkerOutputTile
+	}
+	return nil
+}
+
+func (m *MsgOpenGEMMChallenge) GetWorkerProofSiblings() [][]byte {
+	if m != nil {
+		return m.WorkerProofSiblings
+	}
+	return nil
+}
+
+func (m *MsgOpenGEMMChallenge) GetWorkerProofIndex() uint32 {
+	if m != nil {
+		return m.WorkerProofIndex
+	}
+	return 0
+}
+
+func (m *MsgOpenGEMMChallenge) GetWorkerProofCount() uint32 {
+	if m != nil {
+		return m.WorkerProofCount
+	}
+	return 0
+}
+
+func (m *MsgOpenGEMMChallenge) GetChallengerOutputTile() []byte {
+	if m != nil {
+		return m.ChallengerOutputTile
+	}
+	return nil
+}
+
+func (m *MsgOpenGEMMChallenge) GetChallengeBond() uint64 {
+	if m != nil {
+		return m.ChallengeBond
+	}
+	return 0
+}
+
+func (m *MsgOpenGEMMChallenge) GetChallengerSignature() []byte {
+	if m != nil {
+		return m.ChallengerSignature
+	}
+	return nil
+}
+
+type MsgOpenGEMMChallengeResponse struct {
+	ChallengeEnd uint64 `protobuf:"varint,1,opt,name=challenge_end,json=challengeEnd,proto3" json:"challenge_end,omitempty"`
+}
+
+func (m *MsgOpenGEMMChallengeResponse) Reset()         { *m = MsgOpenGEMMChallengeResponse{} }
+func (m *MsgOpenGEMMChallengeResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgOpenGEMMChallengeResponse) ProtoMessage()    {}
+func (*MsgOpenGEMMChallengeResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{31}
+}
+func (m *MsgOpenGEMMChallengeResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgOpenGEMMChallengeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgOpenGEMMChallengeResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgOpenGEMMChallengeResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgOpenGEMMChallengeResponse.Merge(m, src)
+}
+func (m *MsgOpenGEMMChallengeResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgOpenGEMMChallengeResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgOpenGEMMChallengeResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgOpenGEMMChallengeResponse proto.InternalMessageInfo
+
+func (m *MsgOpenGEMMChallengeResponse) GetChallengeEnd() uint64 {
+	if m != nil {
+		return m.ChallengeEnd
+	}
+	return 0
+}
+
+type MsgCommitGEMMTrace struct {
+	Actor                string   `protobuf:"bytes,1,opt,name=actor,proto3" json:"actor,omitempty"`
+	GemmTaskId           uint64   `protobuf:"varint,2,opt,name=gemm_task_id,json=gemmTaskId,proto3" json:"gemm_task_id,omitempty"`
+	TraceRoot            []byte   `protobuf:"bytes,3,opt,name=trace_root,json=traceRoot,proto3" json:"trace_root,omitempty"`
+	InitialState         []byte   `protobuf:"bytes,4,opt,name=initial_state,json=initialState,proto3" json:"initial_state,omitempty"`
+	InitialProofSiblings [][]byte `protobuf:"bytes,5,rep,name=initial_proof_siblings,json=initialProofSiblings,proto3" json:"initial_proof_siblings,omitempty"`
+	InitialProofIndex    uint32   `protobuf:"varint,6,opt,name=initial_proof_index,json=initialProofIndex,proto3" json:"initial_proof_index,omitempty"`
+	InitialProofCount    uint32   `protobuf:"varint,7,opt,name=initial_proof_count,json=initialProofCount,proto3" json:"initial_proof_count,omitempty"`
+	FinalState           []byte   `protobuf:"bytes,8,opt,name=final_state,json=finalState,proto3" json:"final_state,omitempty"`
+	FinalProofSiblings   [][]byte `protobuf:"bytes,9,rep,name=final_proof_siblings,json=finalProofSiblings,proto3" json:"final_proof_siblings,omitempty"`
+	FinalProofIndex      uint32   `protobuf:"varint,10,opt,name=final_proof_index,json=finalProofIndex,proto3" json:"final_proof_index,omitempty"`
+	FinalProofCount      uint32   `protobuf:"varint,11,opt,name=final_proof_count,json=finalProofCount,proto3" json:"final_proof_count,omitempty"`
+	LockedEpoch          uint64   `protobuf:"varint,12,opt,name=locked_epoch,json=lockedEpoch,proto3" json:"locked_epoch,omitempty"`
+	Signature            []byte   `protobuf:"bytes,13,opt,name=signature,proto3" json:"signature,omitempty"`
+}
+
+func (m *MsgCommitGEMMTrace) Reset()         { *m = MsgCommitGEMMTrace{} }
+func (m *MsgCommitGEMMTrace) String() string { return proto.CompactTextString(m) }
+func (*MsgCommitGEMMTrace) ProtoMessage()    {}
+func (*MsgCommitGEMMTrace) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{32}
+}
+func (m *MsgCommitGEMMTrace) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgCommitGEMMTrace) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgCommitGEMMTrace.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgCommitGEMMTrace) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCommitGEMMTrace.Merge(m, src)
+}
+func (m *MsgCommitGEMMTrace) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgCommitGEMMTrace) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCommitGEMMTrace.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgCommitGEMMTrace proto.InternalMessageInfo
+
+func (m *MsgCommitGEMMTrace) GetActor() string {
+	if m != nil {
+		return m.Actor
+	}
+	return ""
+}
+
+func (m *MsgCommitGEMMTrace) GetGemmTaskId() uint64 {
+	if m != nil {
+		return m.GemmTaskId
+	}
+	return 0
+}
+
+func (m *MsgCommitGEMMTrace) GetTraceRoot() []byte {
+	if m != nil {
+		return m.TraceRoot
+	}
+	return nil
+}
+
+func (m *MsgCommitGEMMTrace) GetInitialState() []byte {
+	if m != nil {
+		return m.InitialState
+	}
+	return nil
+}
+
+func (m *MsgCommitGEMMTrace) GetInitialProofSiblings() [][]byte {
+	if m != nil {
+		return m.InitialProofSiblings
+	}
+	return nil
+}
+
+func (m *MsgCommitGEMMTrace) GetInitialProofIndex() uint32 {
+	if m != nil {
+		return m.InitialProofIndex
+	}
+	return 0
+}
+
+func (m *MsgCommitGEMMTrace) GetInitialProofCount() uint32 {
+	if m != nil {
+		return m.InitialProofCount
+	}
+	return 0
+}
+
+func (m *MsgCommitGEMMTrace) GetFinalState() []byte {
+	if m != nil {
+		return m.FinalState
+	}
+	return nil
+}
+
+func (m *MsgCommitGEMMTrace) GetFinalProofSiblings() [][]byte {
+	if m != nil {
+		return m.FinalProofSiblings
+	}
+	return nil
+}
+
+func (m *MsgCommitGEMMTrace) GetFinalProofIndex() uint32 {
+	if m != nil {
+		return m.FinalProofIndex
+	}
+	return 0
+}
+
+func (m *MsgCommitGEMMTrace) GetFinalProofCount() uint32 {
+	if m != nil {
+		return m.FinalProofCount
+	}
+	return 0
+}
+
+func (m *MsgCommitGEMMTrace) GetLockedEpoch() uint64 {
+	if m != nil {
+		return m.LockedEpoch
+	}
+	return 0
+}
+
+func (m *MsgCommitGEMMTrace) GetSignature() []byte {
+	if m != nil {
+		return m.Signature
+	}
+	return nil
+}
+
+type MsgCommitGEMMTraceResponse struct {
+}
+
+func (m *MsgCommitGEMMTraceResponse) Reset()         { *m = MsgCommitGEMMTraceResponse{} }
+func (m *MsgCommitGEMMTraceResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgCommitGEMMTraceResponse) ProtoMessage()    {}
+func (*MsgCommitGEMMTraceResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{33}
+}
+func (m *MsgCommitGEMMTraceResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgCommitGEMMTraceResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgCommitGEMMTraceResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgCommitGEMMTraceResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCommitGEMMTraceResponse.Merge(m, src)
+}
+func (m *MsgCommitGEMMTraceResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgCommitGEMMTraceResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCommitGEMMTraceResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgCommitGEMMTraceResponse proto.InternalMessageInfo
+
+type MsgSubmitGEMMMidState struct {
+	Actor         string   `protobuf:"bytes,1,opt,name=actor,proto3" json:"actor,omitempty"`
+	GemmTaskId    uint64   `protobuf:"varint,2,opt,name=gemm_task_id,json=gemmTaskId,proto3" json:"gemm_task_id,omitempty"`
+	State         []byte   `protobuf:"bytes,3,opt,name=state,proto3" json:"state,omitempty"`
+	ProofSiblings [][]byte `protobuf:"bytes,4,rep,name=proof_siblings,json=proofSiblings,proto3" json:"proof_siblings,omitempty"`
+	ProofIndex    uint32   `protobuf:"varint,5,opt,name=proof_index,json=proofIndex,proto3" json:"proof_index,omitempty"`
+	ProofCount    uint32   `protobuf:"varint,6,opt,name=proof_count,json=proofCount,proto3" json:"proof_count,omitempty"`
+}
+
+func (m *MsgSubmitGEMMMidState) Reset()         { *m = MsgSubmitGEMMMidState{} }
+func (m *MsgSubmitGEMMMidState) String() string { return proto.CompactTextString(m) }
+func (*MsgSubmitGEMMMidState) ProtoMessage()    {}
+func (*MsgSubmitGEMMMidState) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{34}
+}
+func (m *MsgSubmitGEMMMidState) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSubmitGEMMMidState) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSubmitGEMMMidState.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSubmitGEMMMidState) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSubmitGEMMMidState.Merge(m, src)
+}
+func (m *MsgSubmitGEMMMidState) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSubmitGEMMMidState) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSubmitGEMMMidState.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSubmitGEMMMidState proto.InternalMessageInfo
+
+func (m *MsgSubmitGEMMMidState) GetActor() string {
+	if m != nil {
+		return m.Actor
+	}
+	return ""
+}
+
+func (m *MsgSubmitGEMMMidState) GetGemmTaskId() uint64 {
+	if m != nil {
+		return m.GemmTaskId
+	}
+	return 0
+}
+
+func (m *MsgSubmitGEMMMidState) GetState() []byte {
+	if m != nil {
+		return m.State
+	}
+	return nil
+}
+
+func (m *MsgSubmitGEMMMidState) GetProofSiblings() [][]byte {
+	if m != nil {
+		return m.ProofSiblings
+	}
+	return nil
+}
+
+func (m *MsgSubmitGEMMMidState) GetProofIndex() uint32 {
+	if m != nil {
+		return m.ProofIndex
+	}
+	return 0
+}
+
+func (m *MsgSubmitGEMMMidState) GetProofCount() uint32 {
+	if m != nil {
+		return m.ProofCount
+	}
+	return 0
+}
+
+type MsgSubmitGEMMMidStateResponse struct {
+}
+
+func (m *MsgSubmitGEMMMidStateResponse) Reset()         { *m = MsgSubmitGEMMMidStateResponse{} }
+func (m *MsgSubmitGEMMMidStateResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgSubmitGEMMMidStateResponse) ProtoMessage()    {}
+func (*MsgSubmitGEMMMidStateResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{35}
+}
+func (m *MsgSubmitGEMMMidStateResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSubmitGEMMMidStateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSubmitGEMMMidStateResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSubmitGEMMMidStateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSubmitGEMMMidStateResponse.Merge(m, src)
+}
+func (m *MsgSubmitGEMMMidStateResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSubmitGEMMMidStateResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSubmitGEMMMidStateResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSubmitGEMMMidStateResponse proto.InternalMessageInfo
+
+type MsgArbitrateGEMM struct {
+	Actor          string   `protobuf:"bytes,1,opt,name=actor,proto3" json:"actor,omitempty"`
+	GemmTaskId     uint64   `protobuf:"varint,2,opt,name=gemm_task_id,json=gemmTaskId,proto3" json:"gemm_task_id,omitempty"`
+	ATile          []byte   `protobuf:"bytes,3,opt,name=a_tile,json=aTile,proto3" json:"a_tile,omitempty"`
+	BTile          []byte   `protobuf:"bytes,4,opt,name=b_tile,json=bTile,proto3" json:"b_tile,omitempty"`
+	AProofTileRow  uint32   `protobuf:"varint,5,opt,name=a_proof_tile_row,json=aProofTileRow,proto3" json:"a_proof_tile_row,omitempty"`
+	AProofTileCol  uint32   `protobuf:"varint,6,opt,name=a_proof_tile_col,json=aProofTileCol,proto3" json:"a_proof_tile_col,omitempty"`
+	AProofTileCols uint32   `protobuf:"varint,7,opt,name=a_proof_tile_cols,json=aProofTileCols,proto3" json:"a_proof_tile_cols,omitempty"`
+	AProofSiblings [][]byte `protobuf:"bytes,8,rep,name=a_proof_siblings,json=aProofSiblings,proto3" json:"a_proof_siblings,omitempty"`
+	AProofCount    uint32   `protobuf:"varint,9,opt,name=a_proof_count,json=aProofCount,proto3" json:"a_proof_count,omitempty"`
+	BProofTileRow  uint32   `protobuf:"varint,10,opt,name=b_proof_tile_row,json=bProofTileRow,proto3" json:"b_proof_tile_row,omitempty"`
+	BProofTileCol  uint32   `protobuf:"varint,11,opt,name=b_proof_tile_col,json=bProofTileCol,proto3" json:"b_proof_tile_col,omitempty"`
+	BProofTileCols uint32   `protobuf:"varint,12,opt,name=b_proof_tile_cols,json=bProofTileCols,proto3" json:"b_proof_tile_cols,omitempty"`
+	BProofSiblings [][]byte `protobuf:"bytes,13,rep,name=b_proof_siblings,json=bProofSiblings,proto3" json:"b_proof_siblings,omitempty"`
+	BProofCount    uint32   `protobuf:"varint,14,opt,name=b_proof_count,json=bProofCount,proto3" json:"b_proof_count,omitempty"`
+}
+
+func (m *MsgArbitrateGEMM) Reset()         { *m = MsgArbitrateGEMM{} }
+func (m *MsgArbitrateGEMM) String() string { return proto.CompactTextString(m) }
+func (*MsgArbitrateGEMM) ProtoMessage()    {}
+func (*MsgArbitrateGEMM) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{36}
+}
+func (m *MsgArbitrateGEMM) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgArbitrateGEMM) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgArbitrateGEMM.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgArbitrateGEMM) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgArbitrateGEMM.Merge(m, src)
+}
+func (m *MsgArbitrateGEMM) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgArbitrateGEMM) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgArbitrateGEMM.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgArbitrateGEMM proto.InternalMessageInfo
+
+func (m *MsgArbitrateGEMM) GetActor() string {
+	if m != nil {
+		return m.Actor
+	}
+	return ""
+}
+
+func (m *MsgArbitrateGEMM) GetGemmTaskId() uint64 {
+	if m != nil {
+		return m.GemmTaskId
+	}
+	return 0
+}
+
+func (m *MsgArbitrateGEMM) GetATile() []byte {
+	if m != nil {
+		return m.ATile
+	}
+	return nil
+}
+
+func (m *MsgArbitrateGEMM) GetBTile() []byte {
+	if m != nil {
+		return m.BTile
+	}
+	return nil
+}
+
+func (m *MsgArbitrateGEMM) GetAProofTileRow() uint32 {
+	if m != nil {
+		return m.AProofTileRow
+	}
+	return 0
+}
+
+func (m *MsgArbitrateGEMM) GetAProofTileCol() uint32 {
+	if m != nil {
+		return m.AProofTileCol
+	}
+	return 0
+}
+
+func (m *MsgArbitrateGEMM) GetAProofTileCols() uint32 {
+	if m != nil {
+		return m.AProofTileCols
+	}
+	return 0
+}
+
+func (m *MsgArbitrateGEMM) GetAProofSiblings() [][]byte {
+	if m != nil {
+		return m.AProofSiblings
+	}
+	return nil
+}
+
+func (m *MsgArbitrateGEMM) GetAProofCount() uint32 {
+	if m != nil {
+		return m.AProofCount
+	}
+	return 0
+}
+
+func (m *MsgArbitrateGEMM) GetBProofTileRow() uint32 {
+	if m != nil {
+		return m.BProofTileRow
+	}
+	return 0
+}
+
+func (m *MsgArbitrateGEMM) GetBProofTileCol() uint32 {
+	if m != nil {
+		return m.BProofTileCol
+	}
+	return 0
+}
+
+func (m *MsgArbitrateGEMM) GetBProofTileCols() uint32 {
+	if m != nil {
+		return m.BProofTileCols
+	}
+	return 0
+}
+
+func (m *MsgArbitrateGEMM) GetBProofSiblings() [][]byte {
+	if m != nil {
+		return m.BProofSiblings
+	}
+	return nil
+}
+
+func (m *MsgArbitrateGEMM) GetBProofCount() uint32 {
+	if m != nil {
+		return m.BProofCount
+	}
+	return 0
+}
+
+type MsgArbitrateGEMMResponse struct {
+	Outcome string `protobuf:"bytes,1,opt,name=outcome,proto3" json:"outcome,omitempty"`
+}
+
+func (m *MsgArbitrateGEMMResponse) Reset()         { *m = MsgArbitrateGEMMResponse{} }
+func (m *MsgArbitrateGEMMResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgArbitrateGEMMResponse) ProtoMessage()    {}
+func (*MsgArbitrateGEMMResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{37}
+}
+func (m *MsgArbitrateGEMMResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgArbitrateGEMMResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgArbitrateGEMMResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgArbitrateGEMMResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgArbitrateGEMMResponse.Merge(m, src)
+}
+func (m *MsgArbitrateGEMMResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgArbitrateGEMMResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgArbitrateGEMMResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgArbitrateGEMMResponse proto.InternalMessageInfo
+
+func (m *MsgArbitrateGEMMResponse) GetOutcome() string {
+	if m != nil {
+		return m.Outcome
+	}
+	return ""
+}
+
+type MsgTimeoutGEMM struct {
+	Actor      string `protobuf:"bytes,1,opt,name=actor,proto3" json:"actor,omitempty"`
+	GemmTaskId uint64 `protobuf:"varint,2,opt,name=gemm_task_id,json=gemmTaskId,proto3" json:"gemm_task_id,omitempty"`
+}
+
+func (m *MsgTimeoutGEMM) Reset()         { *m = MsgTimeoutGEMM{} }
+func (m *MsgTimeoutGEMM) String() string { return proto.CompactTextString(m) }
+func (*MsgTimeoutGEMM) ProtoMessage()    {}
+func (*MsgTimeoutGEMM) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{38}
+}
+func (m *MsgTimeoutGEMM) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgTimeoutGEMM) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgTimeoutGEMM.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgTimeoutGEMM) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgTimeoutGEMM.Merge(m, src)
+}
+func (m *MsgTimeoutGEMM) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgTimeoutGEMM) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgTimeoutGEMM.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgTimeoutGEMM proto.InternalMessageInfo
+
+func (m *MsgTimeoutGEMM) GetActor() string {
+	if m != nil {
+		return m.Actor
+	}
+	return ""
+}
+
+func (m *MsgTimeoutGEMM) GetGemmTaskId() uint64 {
+	if m != nil {
+		return m.GemmTaskId
+	}
+	return 0
+}
+
+type MsgTimeoutGEMMResponse struct {
+	Outcome string `protobuf:"bytes,1,opt,name=outcome,proto3" json:"outcome,omitempty"`
+}
+
+func (m *MsgTimeoutGEMMResponse) Reset()         { *m = MsgTimeoutGEMMResponse{} }
+func (m *MsgTimeoutGEMMResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgTimeoutGEMMResponse) ProtoMessage()    {}
+func (*MsgTimeoutGEMMResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{39}
+}
+func (m *MsgTimeoutGEMMResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgTimeoutGEMMResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgTimeoutGEMMResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgTimeoutGEMMResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgTimeoutGEMMResponse.Merge(m, src)
+}
+func (m *MsgTimeoutGEMMResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgTimeoutGEMMResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgTimeoutGEMMResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgTimeoutGEMMResponse proto.InternalMessageInfo
+
+func (m *MsgTimeoutGEMMResponse) GetOutcome() string {
+	if m != nil {
+		return m.Outcome
+	}
+	return ""
+}
+
+type MsgFinalizeGEMM struct {
+	Actor      string `protobuf:"bytes,1,opt,name=actor,proto3" json:"actor,omitempty"`
+	GemmTaskId uint64 `protobuf:"varint,2,opt,name=gemm_task_id,json=gemmTaskId,proto3" json:"gemm_task_id,omitempty"`
+}
+
+func (m *MsgFinalizeGEMM) Reset()         { *m = MsgFinalizeGEMM{} }
+func (m *MsgFinalizeGEMM) String() string { return proto.CompactTextString(m) }
+func (*MsgFinalizeGEMM) ProtoMessage()    {}
+func (*MsgFinalizeGEMM) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{40}
+}
+func (m *MsgFinalizeGEMM) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgFinalizeGEMM) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgFinalizeGEMM.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgFinalizeGEMM) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgFinalizeGEMM.Merge(m, src)
+}
+func (m *MsgFinalizeGEMM) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgFinalizeGEMM) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgFinalizeGEMM.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgFinalizeGEMM proto.InternalMessageInfo
+
+func (m *MsgFinalizeGEMM) GetActor() string {
+	if m != nil {
+		return m.Actor
+	}
+	return ""
+}
+
+func (m *MsgFinalizeGEMM) GetGemmTaskId() uint64 {
+	if m != nil {
+		return m.GemmTaskId
+	}
+	return 0
+}
+
+type MsgFinalizeGEMMResponse struct {
+	ReceiptId []byte `protobuf:"bytes,1,opt,name=receipt_id,json=receiptId,proto3" json:"receipt_id,omitempty"`
+}
+
+func (m *MsgFinalizeGEMMResponse) Reset()         { *m = MsgFinalizeGEMMResponse{} }
+func (m *MsgFinalizeGEMMResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgFinalizeGEMMResponse) ProtoMessage()    {}
+func (*MsgFinalizeGEMMResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{41}
+}
+func (m *MsgFinalizeGEMMResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgFinalizeGEMMResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgFinalizeGEMMResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgFinalizeGEMMResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgFinalizeGEMMResponse.Merge(m, src)
+}
+func (m *MsgFinalizeGEMMResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgFinalizeGEMMResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgFinalizeGEMMResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgFinalizeGEMMResponse proto.InternalMessageInfo
+
+func (m *MsgFinalizeGEMMResponse) GetReceiptId() []byte {
+	if m != nil {
+		return m.ReceiptId
+	}
+	return nil
+}
+
+type MsgAbortGEMMTask struct {
+	Actor      string `protobuf:"bytes,1,opt,name=actor,proto3" json:"actor,omitempty"`
+	GemmTaskId uint64 `protobuf:"varint,2,opt,name=gemm_task_id,json=gemmTaskId,proto3" json:"gemm_task_id,omitempty"`
+}
+
+func (m *MsgAbortGEMMTask) Reset()         { *m = MsgAbortGEMMTask{} }
+func (m *MsgAbortGEMMTask) String() string { return proto.CompactTextString(m) }
+func (*MsgAbortGEMMTask) ProtoMessage()    {}
+func (*MsgAbortGEMMTask) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{42}
+}
+func (m *MsgAbortGEMMTask) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgAbortGEMMTask) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgAbortGEMMTask.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgAbortGEMMTask) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgAbortGEMMTask.Merge(m, src)
+}
+func (m *MsgAbortGEMMTask) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgAbortGEMMTask) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgAbortGEMMTask.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgAbortGEMMTask proto.InternalMessageInfo
+
+func (m *MsgAbortGEMMTask) GetActor() string {
+	if m != nil {
+		return m.Actor
+	}
+	return ""
+}
+
+func (m *MsgAbortGEMMTask) GetGemmTaskId() uint64 {
+	if m != nil {
+		return m.GemmTaskId
+	}
+	return 0
+}
+
+type MsgAbortGEMMTaskResponse struct {
+}
+
+func (m *MsgAbortGEMMTaskResponse) Reset()         { *m = MsgAbortGEMMTaskResponse{} }
+func (m *MsgAbortGEMMTaskResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgAbortGEMMTaskResponse) ProtoMessage()    {}
+func (*MsgAbortGEMMTaskResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{43}
+}
+func (m *MsgAbortGEMMTaskResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgAbortGEMMTaskResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgAbortGEMMTaskResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgAbortGEMMTaskResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgAbortGEMMTaskResponse.Merge(m, src)
+}
+func (m *MsgAbortGEMMTaskResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgAbortGEMMTaskResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgAbortGEMMTaskResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgAbortGEMMTaskResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*MsgRegisterModel)(nil), "prisma.compute.v1.MsgRegisterModel")
 	proto.RegisterType((*MsgRegisterModelResponse)(nil), "prisma.compute.v1.MsgRegisterModelResponse")
@@ -1229,84 +2689,183 @@ func init() {
 	proto.RegisterType((*MsgFinalizeTaskResponse)(nil), "prisma.compute.v1.MsgFinalizeTaskResponse")
 	proto.RegisterType((*MsgRefundTask)(nil), "prisma.compute.v1.MsgRefundTask")
 	proto.RegisterType((*MsgRefundTaskResponse)(nil), "prisma.compute.v1.MsgRefundTaskResponse")
+	proto.RegisterType((*MsgPostGEMMTask)(nil), "prisma.compute.v1.MsgPostGEMMTask")
+	proto.RegisterType((*MsgPostGEMMTaskResponse)(nil), "prisma.compute.v1.MsgPostGEMMTaskResponse")
+	proto.RegisterType((*MsgAcceptGEMMTask)(nil), "prisma.compute.v1.MsgAcceptGEMMTask")
+	proto.RegisterType((*MsgAcceptGEMMTaskResponse)(nil), "prisma.compute.v1.MsgAcceptGEMMTaskResponse")
+	proto.RegisterType((*MsgSubmitGEMMResult)(nil), "prisma.compute.v1.MsgSubmitGEMMResult")
+	proto.RegisterType((*MsgSubmitGEMMResultResponse)(nil), "prisma.compute.v1.MsgSubmitGEMMResultResponse")
+	proto.RegisterType((*MsgAttestGEMMTask)(nil), "prisma.compute.v1.MsgAttestGEMMTask")
+	proto.RegisterType((*MsgAttestGEMMTaskResponse)(nil), "prisma.compute.v1.MsgAttestGEMMTaskResponse")
+	proto.RegisterType((*MsgOpenGEMMChallenge)(nil), "prisma.compute.v1.MsgOpenGEMMChallenge")
+	proto.RegisterType((*MsgOpenGEMMChallengeResponse)(nil), "prisma.compute.v1.MsgOpenGEMMChallengeResponse")
+	proto.RegisterType((*MsgCommitGEMMTrace)(nil), "prisma.compute.v1.MsgCommitGEMMTrace")
+	proto.RegisterType((*MsgCommitGEMMTraceResponse)(nil), "prisma.compute.v1.MsgCommitGEMMTraceResponse")
+	proto.RegisterType((*MsgSubmitGEMMMidState)(nil), "prisma.compute.v1.MsgSubmitGEMMMidState")
+	proto.RegisterType((*MsgSubmitGEMMMidStateResponse)(nil), "prisma.compute.v1.MsgSubmitGEMMMidStateResponse")
+	proto.RegisterType((*MsgArbitrateGEMM)(nil), "prisma.compute.v1.MsgArbitrateGEMM")
+	proto.RegisterType((*MsgArbitrateGEMMResponse)(nil), "prisma.compute.v1.MsgArbitrateGEMMResponse")
+	proto.RegisterType((*MsgTimeoutGEMM)(nil), "prisma.compute.v1.MsgTimeoutGEMM")
+	proto.RegisterType((*MsgTimeoutGEMMResponse)(nil), "prisma.compute.v1.MsgTimeoutGEMMResponse")
+	proto.RegisterType((*MsgFinalizeGEMM)(nil), "prisma.compute.v1.MsgFinalizeGEMM")
+	proto.RegisterType((*MsgFinalizeGEMMResponse)(nil), "prisma.compute.v1.MsgFinalizeGEMMResponse")
+	proto.RegisterType((*MsgAbortGEMMTask)(nil), "prisma.compute.v1.MsgAbortGEMMTask")
+	proto.RegisterType((*MsgAbortGEMMTaskResponse)(nil), "prisma.compute.v1.MsgAbortGEMMTaskResponse")
 }
 
 func init() { proto.RegisterFile("prisma/compute/v1/tx.proto", fileDescriptor_b18efc09f01bff14) }
 
 var fileDescriptor_b18efc09f01bff14 = []byte{
-	// 1149 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x57, 0xcd, 0x6e, 0xdb, 0x46,
-	0x10, 0x0e, 0x65, 0xd9, 0xb2, 0x46, 0xb2, 0x2d, 0xb3, 0x69, 0x4d, 0x33, 0xb1, 0xe0, 0x28, 0xfd,
-	0x71, 0xdc, 0x40, 0x42, 0xda, 0x9b, 0x7b, 0x4a, 0x5c, 0x04, 0x70, 0x52, 0x01, 0x06, 0x6b, 0xb4,
-	0x45, 0x0f, 0x25, 0x68, 0x72, 0x4c, 0x6f, 0x24, 0x72, 0x59, 0xee, 0xca, 0xb6, 0x72, 0x2a, 0x7a,
-	0xe9, 0xb1, 0xbd, 0xf4, 0x15, 0x7a, 0xea, 0x21, 0xe8, 0x53, 0xf4, 0x54, 0xe4, 0xd8, 0x63, 0x61,
-	0x1f, 0xf2, 0x1a, 0xc5, 0x2e, 0x97, 0x14, 0x25, 0x91, 0x89, 0x83, 0x5c, 0x04, 0xcd, 0x37, 0x1f,
-	0x67, 0x66, 0xbf, 0x99, 0x1d, 0x4a, 0x60, 0x46, 0x31, 0x61, 0x81, 0xd3, 0x73, 0x69, 0x10, 0x8d,
-	0x38, 0xf6, 0xce, 0x1e, 0xf4, 0xf8, 0x45, 0x37, 0x8a, 0x29, 0xa7, 0xfa, 0x7a, 0xe2, 0xeb, 0x2a,
-	0x5f, 0xf7, 0xec, 0x81, 0xb9, 0xe1, 0x52, 0x16, 0x50, 0xd6, 0x0b, 0x98, 0x2f, 0xa8, 0x01, 0xf3,
-	0x13, 0x6e, 0xe7, 0xf7, 0x0a, 0xb4, 0xfa, 0xcc, 0xb7, 0xd0, 0x27, 0x8c, 0x63, 0xdc, 0xa7, 0x1e,
-	0x0e, 0xf5, 0x9b, 0xb0, 0x48, 0xcf, 0x43, 0x8c, 0x0d, 0x6d, 0x5b, 0xdb, 0xa9, 0x5b, 0x89, 0xa1,
-	0x6f, 0xc2, 0x72, 0x20, 0xdc, 0x36, 0xf1, 0x8c, 0x8a, 0x74, 0xd4, 0xa4, 0x7d, 0xe0, 0xe9, 0x77,
-	0xa0, 0xc9, 0x22, 0x74, 0xed, 0x33, 0x8c, 0x19, 0xa1, 0xa1, 0xb1, 0x20, 0xdd, 0x0d, 0x81, 0x7d,
-	0x93, 0x40, 0xba, 0x0e, 0x55, 0xc1, 0x36, 0xaa, 0xd2, 0x25, 0xbf, 0x8b, 0xc7, 0x48, 0xe0, 0xf8,
-	0x68, 0x7b, 0xc4, 0x47, 0xc6, 0x8d, 0xc5, 0x6d, 0x6d, 0xa7, 0x69, 0x35, 0x24, 0xf6, 0xa5, 0x84,
-	0xf4, 0x7b, 0xd0, 0xe2, 0x74, 0x80, 0x21, 0x79, 0x8e, 0x71, 0x4a, 0x5b, 0x92, 0xb4, 0xb5, 0x0c,
-	0x57, 0xd4, 0x8f, 0x60, 0xf5, 0x1c, 0x89, 0x7f, 0xca, 0x59, 0x4a, 0xac, 0x49, 0xe2, 0x8a, 0x42,
-	0x15, 0xcd, 0x80, 0x5a, 0x14, 0x53, 0x3f, 0x76, 0x02, 0x63, 0x59, 0xfa, 0x53, 0x73, 0x0f, 0x7e,
-	0x7e, 0xf5, 0x62, 0x37, 0x39, 0x6c, 0xc7, 0x04, 0x63, 0x56, 0x16, 0x0b, 0x59, 0x44, 0x43, 0x86,
-	0x9d, 0x3f, 0x34, 0x58, 0xe9, 0x33, 0xff, 0x11, 0x0d, 0xbd, 0x6f, 0x69, 0x3c, 0xc0, 0x58, 0xff,
-	0x00, 0x96, 0xce, 0xe5, 0x37, 0xa5, 0x98, 0xb2, 0x04, 0xee, 0x04, 0x74, 0x14, 0x72, 0x29, 0x58,
-	0xd5, 0x52, 0x96, 0x7e, 0x1f, 0xf4, 0x10, 0xb9, 0x20, 0xd9, 0xd1, 0xe8, 0x78, 0x48, 0x5c, 0x7b,
-	0x80, 0x63, 0xa9, 0x5a, 0xd3, 0x6a, 0x29, 0xcf, 0xa1, 0x74, 0x3c, 0xc5, 0xb1, 0xbe, 0x0b, 0xeb,
-	0x29, 0x7b, 0x80, 0x63, 0x3b, 0x8a, 0x29, 0x3d, 0x91, 0x3a, 0x36, 0xad, 0x35, 0xe5, 0x78, 0x8a,
-	0xe3, 0x43, 0x01, 0xef, 0x35, 0xc4, 0x19, 0x54, 0xfa, 0xce, 0x06, 0xbc, 0x3f, 0x55, 0x67, 0x76,
-	0x82, 0x7f, 0x2a, 0xd0, 0xe8, 0x33, 0xff, 0x90, 0x32, 0x7e, 0xe4, 0xb0, 0x81, 0x7e, 0x1b, 0xea,
-	0x31, 0xfe, 0x38, 0x42, 0x71, 0x56, 0x75, 0x84, 0x09, 0x90, 0xb5, 0xae, 0x92, 0x6b, 0x5d, 0x7e,
-	0x18, 0x16, 0x5e, 0x3f, 0x0c, 0xd5, 0xf9, 0x61, 0xb8, 0x07, 0x2d, 0x12, 0x46, 0x23, 0x6e, 0xbb,
-	0x34, 0x08, 0x08, 0x0f, 0x30, 0x4c, 0x9b, 0xbf, 0x26, 0xf1, 0xfd, 0x0c, 0x16, 0x89, 0x3c, 0x87,
-	0x3b, 0x76, 0x8c, 0x27, 0xb2, 0xf1, 0x75, 0xab, 0x26, 0x6c, 0x0b, 0x4f, 0xf4, 0x0d, 0xa8, 0x05,
-	0xce, 0x85, 0x7d, 0x82, 0x28, 0x3b, 0x5d, 0xb5, 0x96, 0x02, 0xe7, 0xe2, 0x31, 0xa2, 0x6e, 0xc2,
-	0xb2, 0x87, 0x8e, 0x37, 0x24, 0x21, 0xca, 0x1e, 0x57, 0xad, 0xcc, 0x16, 0xd5, 0x45, 0x31, 0x39,
-	0x73, 0xdc, 0xb1, 0xcd, 0x09, 0xc6, 0x46, 0x3d, 0xa9, 0x4e, 0x61, 0x47, 0x04, 0x63, 0x49, 0x49,
-	0xba, 0x22, 0x8b, 0x31, 0x60, 0x7b, 0x61, 0x47, 0xb7, 0x1a, 0x09, 0x76, 0x20, 0xa0, 0xbd, 0x55,
-	0x21, 0xf3, 0x44, 0xa2, 0x4e, 0x17, 0xde, 0xcb, 0xe9, 0x99, 0xea, 0x2c, 0x2a, 0xe4, 0x0e, 0x1b,
-	0x08, 0x91, 0xb4, 0xa4, 0x42, 0x61, 0x1e, 0x78, 0x9d, 0xbe, 0x9c, 0xa0, 0x87, 0xae, 0x8b, 0x51,
-	0xd2, 0x81, 0xb2, 0x09, 0xca, 0x45, 0xa8, 0xe4, 0x23, 0x14, 0x35, 0x7a, 0x12, 0x2e, 0x6b, 0xf4,
-	0x9f, 0x15, 0x58, 0xeb, 0x33, 0xff, 0xeb, 0xd1, 0x71, 0x40, 0xb8, 0x85, 0x6c, 0x34, 0xe4, 0x6f,
-	0x9d, 0x4a, 0xbf, 0x0b, 0x2b, 0x74, 0xc4, 0x45, 0xbb, 0xd4, 0xbd, 0x4a, 0x06, 0xb5, 0x99, 0x80,
-	0xea, 0x5a, 0x6d, 0x01, 0xf0, 0xd8, 0x71, 0xd1, 0x8e, 0x29, 0xe5, 0x6a, 0x3a, 0xeb, 0x12, 0xb1,
-	0x28, 0x95, 0x97, 0x33, 0x46, 0x17, 0x49, 0xc4, 0xa7, 0x2f, 0xfb, 0x8a, 0x42, 0x55, 0x94, 0x49,
-	0x2a, 0x79, 0xbb, 0x99, 0x6c, 0x79, 0x35, 0x4d, 0x75, 0x24, 0x31, 0x7d, 0x07, 0x5a, 0x49, 0x2a,
-	0x77, 0xe8, 0x90, 0xc0, 0x7e, 0xc6, 0x68, 0xa8, 0xae, 0xfa, 0xaa, 0xc4, 0xf7, 0x05, 0xfc, 0x84,
-	0xd1, 0x50, 0x74, 0x32, 0xcd, 0x2a, 0x59, 0xc9, 0x85, 0x6f, 0x28, 0x4c, 0x50, 0xa6, 0x75, 0xdc,
-	0x84, 0x8d, 0x19, 0xb5, 0x32, 0x25, 0x2d, 0x29, 0xe4, 0x43, 0xce, 0x91, 0xa5, 0x42, 0x1a, 0x50,
-	0x0b, 0x68, 0x48, 0x38, 0x4d, 0x95, 0x4c, 0xcd, 0xf2, 0xae, 0x35, 0x45, 0xb6, 0x94, 0xa6, 0xd2,
-	0xe5, 0x63, 0x66, 0xe9, 0x7e, 0xd1, 0x60, 0x5d, 0x94, 0xc2, 0x9d, 0x98, 0xef, 0x9f, 0x3a, 0xc3,
-	0x21, 0x86, 0x3e, 0xea, 0x6d, 0x00, 0x37, 0x35, 0xd2, 0xa4, 0x39, 0xa4, 0xbc, 0x85, 0x45, 0x92,
-	0x2d, 0x14, 0x49, 0xb6, 0xb7, 0x26, 0x2a, 0xcc, 0xc5, 0xec, 0xdc, 0x82, 0xcd, 0xb9, 0x42, 0xb2,
-	0x32, 0x7f, 0xd5, 0xe0, 0x66, 0x9f, 0xf9, 0x99, 0xa3, 0x4f, 0xbc, 0x88, 0x92, 0x90, 0x8b, 0x57,
-	0x88, 0xe3, 0x4e, 0x94, 0x49, 0x8c, 0xf2, 0xfa, 0xb6, 0x00, 0x18, 0x77, 0x38, 0xe6, 0x2b, 0xab,
-	0x4b, 0x44, 0xf6, 0x71, 0x0b, 0x40, 0x6e, 0xbd, 0xc4, 0xad, 0x86, 0x4b, 0x22, 0xb2, 0xe6, 0x64,
-	0x71, 0xcb, 0x14, 0x9d, 0x36, 0xdc, 0x2e, 0x2a, 0x28, 0xab, 0xf8, 0x50, 0xde, 0xd4, 0x23, 0x12,
-	0x20, 0x1d, 0xe5, 0x94, 0x7d, 0xbb, 0x7a, 0xa7, 0x32, 0x6e, 0xc1, 0xad, 0x82, 0x88, 0x59, 0xc2,
-	0xaf, 0xe4, 0xe0, 0x3c, 0x26, 0xa1, 0x33, 0x24, 0xcf, 0x51, 0x5e, 0xf6, 0x77, 0x48, 0x96, 0x8c,
-	0x4c, 0x3e, 0x5a, 0x96, 0xe8, 0x89, 0xdc, 0x29, 0x16, 0x9e, 0x8c, 0x42, 0xef, 0x5d, 0xd3, 0x24,
-	0x0b, 0x65, 0x12, 0x2b, 0x4d, 0xf2, 0xd9, 0x5f, 0xcb, 0xb0, 0xd0, 0x67, 0xbe, 0xee, 0xc0, 0xca,
-	0xf4, 0x6f, 0x86, 0xbb, 0xdd, 0xb9, 0x5f, 0x1d, 0xdd, 0xd9, 0x37, 0xa8, 0xf9, 0xe9, 0x35, 0x48,
-	0xd9, 0xf2, 0xfc, 0x0e, 0x20, 0xf7, 0x8a, 0xdd, 0x2e, 0x7e, 0x74, 0xc2, 0x30, 0x77, 0xde, 0xc4,
-	0xc8, 0x22, 0x5b, 0xb0, 0x9c, 0xbd, 0xfa, 0xda, 0xc5, 0x4f, 0xa5, 0x7e, 0xf3, 0xe3, 0xd7, 0xfb,
-	0xf3, 0xd5, 0xe6, 0xd6, 0x79, 0x49, 0xb5, 0x13, 0x46, 0x59, 0xb5, 0xf3, 0x3b, 0x5c, 0xff, 0x01,
-	0x9a, 0x53, 0xfb, 0xbb, 0x53, 0xfc, 0x64, 0x9e, 0x63, 0xee, 0xbe, 0x99, 0x93, 0x8f, 0x3f, 0xb5,
-	0xd6, 0x4a, 0xe2, 0xe7, 0x39, 0x65, 0xf1, 0x8b, 0x56, 0x99, 0xee, 0xc1, 0xea, 0xcc, 0x1a, 0xfb,
-	0xb0, 0xa4, 0xba, 0x29, 0x96, 0x79, 0xff, 0x3a, 0xac, 0x2c, 0x4b, 0x00, 0xeb, 0xf3, 0x5b, 0xe8,
-	0x93, 0xe2, 0x10, 0x73, 0x44, 0xb3, 0x77, 0x4d, 0x62, 0x96, 0xee, 0x19, 0xb4, 0xe6, 0x76, 0x48,
-	0xc9, 0xa8, 0xcc, 0xf2, 0xcc, 0xee, 0xf5, 0x78, 0xf9, 0x06, 0x4d, 0xad, 0x8f, 0x92, 0x06, 0xe5,
-	0x39, 0x65, 0x0d, 0x2a, 0x5a, 0x1c, 0x62, 0x74, 0x73, 0x5b, 0x63, 0xbb, 0xec, 0x8e, 0xa6, 0x8c,
-	0xb2, 0xd1, 0x9d, 0xdf, 0x16, 0xe6, 0xe2, 0x4f, 0xaf, 0x5e, 0xec, 0x6a, 0x8f, 0xbe, 0xf8, 0xfb,
-	0xb2, 0xad, 0xbd, 0xbc, 0x6c, 0x6b, 0xff, 0x5d, 0xb6, 0xb5, 0xdf, 0xae, 0xda, 0x37, 0x5e, 0x5e,
-	0xb5, 0x6f, 0xfc, 0x7b, 0xd5, 0xbe, 0xf1, 0xfd, 0x9d, 0x24, 0x92, 0x7b, 0xea, 0x90, 0xb0, 0x97,
-	0x7c, 0x5e, 0x64, 0xff, 0x69, 0xf8, 0x38, 0x42, 0x76, 0xbc, 0x24, 0xff, 0xa8, 0x7c, 0xfe, 0x7f,
-	0x00, 0x00, 0x00, 0xff, 0xff, 0x6a, 0x22, 0x23, 0x0d, 0xf2, 0x0c, 0x00, 0x00,
+	// 2379 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x59, 0xcb, 0x6f, 0x1c, 0x49,
+	0x19, 0xdf, 0xb1, 0xc7, 0x8f, 0xf9, 0xe6, 0x65, 0x77, 0x9c, 0x64, 0x32, 0x1b, 0x3b, 0xce, 0xe4,
+	0x65, 0x9b, 0x60, 0x6f, 0xc2, 0x1e, 0x50, 0xb8, 0x90, 0x78, 0xb3, 0xc8, 0x59, 0x86, 0xb5, 0x3a,
+	0x66, 0x17, 0x81, 0xa0, 0xd5, 0xd3, 0x5d, 0x9e, 0x54, 0x3c, 0xdd, 0xd5, 0x74, 0xf7, 0xc4, 0xf6,
+	0x9e, 0x10, 0x12, 0xe2, 0x08, 0x17, 0x84, 0x84, 0x10, 0x47, 0x4e, 0x1c, 0xf6, 0xcf, 0xe0, 0x84,
+	0xf6, 0x88, 0xe0, 0x82, 0x92, 0xc3, 0xfe, 0x1b, 0xa8, 0xbe, 0xaa, 0xae, 0xae, 0xee, 0x9e, 0xf6,
+	0x4c, 0x36, 0x7b, 0xb1, 0xa6, 0xbe, 0xfa, 0x75, 0x7d, 0xef, 0x47, 0x95, 0xa1, 0x1b, 0x84, 0x34,
+	0xf2, 0xec, 0x3d, 0x87, 0x79, 0xc1, 0x38, 0x26, 0x7b, 0xaf, 0x1e, 0xec, 0xc5, 0x67, 0xbb, 0x41,
+	0xc8, 0x62, 0x66, 0xac, 0x8a, 0xbd, 0x5d, 0xb9, 0xb7, 0xfb, 0xea, 0x41, 0xf7, 0xaa, 0xc3, 0x22,
+	0x8f, 0x45, 0x7b, 0x5e, 0x34, 0xe4, 0x50, 0x2f, 0x1a, 0x0a, 0x6c, 0xef, 0x4f, 0x73, 0xb0, 0xd2,
+	0x8f, 0x86, 0x26, 0x19, 0xd2, 0x28, 0x26, 0x61, 0x9f, 0xb9, 0x64, 0x64, 0xac, 0xc1, 0x02, 0x3b,
+	0xf5, 0x49, 0xd8, 0xa9, 0x6c, 0x56, 0xb6, 0x6a, 0xa6, 0x58, 0x18, 0xd7, 0x60, 0xd9, 0xe3, 0xdb,
+	0x16, 0x75, 0x3b, 0x73, 0xb8, 0xb1, 0x84, 0xeb, 0x03, 0xd7, 0xb8, 0x09, 0x8d, 0x28, 0x20, 0x8e,
+	0xf5, 0x8a, 0x84, 0x11, 0x65, 0x7e, 0x67, 0x1e, 0xb7, 0xeb, 0x9c, 0xf6, 0x99, 0x20, 0x19, 0x06,
+	0x54, 0x39, 0xba, 0x53, 0xc5, 0x2d, 0xfc, 0xcd, 0x3f, 0xa3, 0x9e, 0x3d, 0x24, 0x96, 0x4b, 0x87,
+	0x24, 0x8a, 0x3b, 0x0b, 0x9b, 0x95, 0xad, 0x86, 0x59, 0x47, 0xda, 0x47, 0x48, 0x32, 0xb6, 0x61,
+	0x25, 0x66, 0x27, 0xc4, 0xa7, 0x5f, 0x90, 0x30, 0x81, 0x2d, 0x22, 0xac, 0xad, 0xe8, 0x12, 0x7a,
+	0x07, 0x5a, 0xa7, 0x84, 0x0e, 0x5f, 0xc4, 0x51, 0x02, 0x5c, 0x42, 0x60, 0x53, 0x52, 0x25, 0xac,
+	0x03, 0x4b, 0x41, 0xc8, 0x86, 0xa1, 0xed, 0x75, 0x96, 0x71, 0x3f, 0x59, 0x3e, 0x82, 0xdf, 0x7e,
+	0xfd, 0xe5, 0x8e, 0x50, 0xb6, 0xd7, 0x85, 0x4e, 0xde, 0x2c, 0x26, 0x89, 0x02, 0xe6, 0x47, 0xa4,
+	0xf7, 0xf7, 0x0a, 0x34, 0xfb, 0xd1, 0xf0, 0x09, 0xf3, 0xdd, 0xcf, 0x59, 0x78, 0x42, 0x42, 0xe3,
+	0x0a, 0x2c, 0x9e, 0xe2, 0x2f, 0x69, 0x31, 0xb9, 0xe2, 0x74, 0xdb, 0x63, 0x63, 0x3f, 0x46, 0x83,
+	0x55, 0x4d, 0xb9, 0x32, 0xee, 0x83, 0xe1, 0x93, 0x98, 0x83, 0xac, 0x60, 0x3c, 0x18, 0x51, 0xc7,
+	0x3a, 0x21, 0xe7, 0x68, 0xb5, 0x86, 0xb9, 0x22, 0x77, 0x0e, 0x71, 0xe3, 0x13, 0x72, 0x6e, 0xec,
+	0xc0, 0x6a, 0x82, 0x3e, 0x21, 0xe7, 0x56, 0x10, 0x32, 0x76, 0x8c, 0x76, 0x6c, 0x98, 0x6d, 0xb9,
+	0xf1, 0x09, 0x39, 0x3f, 0xe4, 0xe4, 0x47, 0x75, 0xae, 0x83, 0x64, 0xdf, 0xbb, 0x0a, 0x97, 0x33,
+	0x72, 0x2a, 0x0d, 0xfe, 0x35, 0x07, 0xf5, 0x7e, 0x34, 0x3c, 0x64, 0x51, 0x7c, 0x64, 0x47, 0x27,
+	0xc6, 0x75, 0xa8, 0x85, 0xe4, 0xd7, 0x63, 0xc2, 0x75, 0x95, 0x2a, 0xa4, 0x04, 0xe5, 0xba, 0x39,
+	0xcd, 0x75, 0x7a, 0x30, 0xcc, 0x5f, 0x1c, 0x0c, 0xd5, 0x62, 0x30, 0x6c, 0xc3, 0x0a, 0xf5, 0x83,
+	0x71, 0x6c, 0x39, 0xcc, 0xf3, 0x68, 0xec, 0x11, 0x3f, 0x71, 0x7e, 0x1b, 0xe9, 0xfb, 0x8a, 0xcc,
+	0x19, 0xb9, 0x76, 0x6c, 0x5b, 0x21, 0x39, 0x46, 0xc7, 0xd7, 0xcc, 0x25, 0xbe, 0x36, 0xc9, 0xb1,
+	0x71, 0x15, 0x96, 0x3c, 0xfb, 0xcc, 0x3a, 0x26, 0x04, 0x3d, 0x5d, 0x35, 0x17, 0x3d, 0xfb, 0xec,
+	0x63, 0x42, 0x8c, 0x2e, 0x2c, 0xbb, 0xc4, 0x76, 0x47, 0xd4, 0x27, 0xe8, 0xe3, 0xaa, 0xa9, 0xd6,
+	0x5c, 0xba, 0x20, 0xa4, 0xaf, 0x6c, 0xe7, 0xdc, 0x8a, 0x29, 0x09, 0x3b, 0x35, 0x21, 0x9d, 0xa4,
+	0x1d, 0x51, 0x12, 0x22, 0x44, 0x78, 0x05, 0x85, 0xe9, 0xc0, 0xe6, 0xfc, 0x96, 0x61, 0xd6, 0x05,
+	0xed, 0x80, 0x93, 0x1e, 0xb5, 0xb8, 0x99, 0x53, 0x13, 0xf5, 0x76, 0xe1, 0x92, 0x66, 0xcf, 0xc4,
+	0xce, 0x5c, 0xc2, 0xd8, 0x8e, 0x4e, 0xb8, 0x91, 0x2a, 0x42, 0x42, 0xbe, 0x3c, 0x70, 0x7b, 0x7d,
+	0x8c, 0xa0, 0xc7, 0x8e, 0x43, 0x02, 0xe1, 0x81, 0xb2, 0x08, 0xd2, 0x4e, 0x98, 0xd3, 0x4f, 0x98,
+	0xe4, 0xe8, 0xf4, 0x38, 0xe5, 0xe8, 0x7f, 0xcc, 0x41, 0xbb, 0x1f, 0x0d, 0x9f, 0x8f, 0x07, 0x1e,
+	0x8d, 0x4d, 0x12, 0x8d, 0x47, 0xf1, 0x5b, 0xb3, 0x32, 0x6e, 0x41, 0x93, 0x8d, 0x63, 0xee, 0x2e,
+	0x99, 0x57, 0x22, 0x50, 0x1b, 0x82, 0x28, 0xd3, 0x6a, 0x1d, 0x20, 0x0e, 0x6d, 0x87, 0x58, 0x21,
+	0x63, 0xb1, 0x8c, 0xce, 0x1a, 0x52, 0x4c, 0xc6, 0x30, 0x39, 0x43, 0xe2, 0x10, 0x1a, 0xc4, 0xd9,
+	0x64, 0x6f, 0x4a, 0xaa, 0x3c, 0x25, 0x65, 0x85, 0xd9, 0x1d, 0xa1, 0xcb, 0xab, 0x09, 0xab, 0x23,
+	0xa4, 0x19, 0x5b, 0xb0, 0x22, 0x58, 0x39, 0x23, 0x9b, 0x7a, 0xd6, 0xcb, 0x88, 0xf9, 0x32, 0xd5,
+	0x5b, 0x48, 0xdf, 0xe7, 0xe4, 0x67, 0x11, 0xf3, 0xb9, 0x27, 0x13, 0xae, 0x88, 0x12, 0x09, 0x5f,
+	0x97, 0x34, 0x0e, 0xc9, 0xda, 0xf1, 0x1a, 0x5c, 0xcd, 0x59, 0x4b, 0x59, 0xd2, 0x44, 0x43, 0x3e,
+	0x8e, 0x63, 0x12, 0x25, 0x86, 0xec, 0xc0, 0x92, 0xc7, 0x7c, 0x1a, 0xb3, 0xc4, 0x92, 0xc9, 0xb2,
+	0xdc, 0x6b, 0x0d, 0xce, 0x2d, 0x81, 0x49, 0x76, 0xfa, 0x99, 0x8a, 0xdd, 0xef, 0x2b, 0xb0, 0xca,
+	0x45, 0x89, 0xed, 0x30, 0xde, 0x7f, 0x61, 0x8f, 0x46, 0xc4, 0x1f, 0x12, 0x63, 0x03, 0xc0, 0x49,
+	0x16, 0x09, 0x53, 0x8d, 0x52, 0xee, 0xc2, 0x49, 0x26, 0x9b, 0x9f, 0x64, 0xb2, 0x47, 0x6d, 0x2e,
+	0xa1, 0x76, 0x66, 0xef, 0x7d, 0xb8, 0x56, 0x10, 0x44, 0x89, 0xf9, 0x87, 0x0a, 0xac, 0xf5, 0xa3,
+	0xa1, 0xda, 0xe8, 0x53, 0x37, 0x60, 0xd4, 0x8f, 0x79, 0x0b, 0xb1, 0x9d, 0xd4, 0x32, 0x62, 0x51,
+	0x2e, 0xdf, 0x3a, 0x40, 0x14, 0xdb, 0x31, 0xd1, 0x25, 0xab, 0x21, 0x05, 0xfd, 0xb8, 0x0e, 0x80,
+	0x55, 0x4f, 0x6c, 0xcb, 0xe0, 0x42, 0x0a, 0xca, 0x2c, 0x0a, 0x37, 0xb2, 0xe8, 0x6d, 0xc0, 0xf5,
+	0x49, 0x02, 0x29, 0x89, 0x0f, 0x31, 0x53, 0x8f, 0xa8, 0x47, 0xd8, 0x58, 0xb3, 0xec, 0xdb, 0xc9,
+	0x9b, 0xe1, 0xb8, 0x0e, 0xef, 0x4f, 0x38, 0x51, 0x31, 0xfc, 0x31, 0x06, 0xce, 0xc7, 0xd4, 0xb7,
+	0x47, 0xf4, 0x0b, 0x82, 0xc9, 0xfe, 0x0e, 0xcc, 0x44, 0xc8, 0xe8, 0xa7, 0x29, 0x46, 0xcf, 0xb0,
+	0xa6, 0x98, 0xe4, 0x78, 0xec, 0xbb, 0xef, 0xca, 0x46, 0x14, 0x94, 0xf4, 0x2c, 0xc5, 0xe4, 0xbf,
+	0xf3, 0xa8, 0x0e, 0xaf, 0x74, 0x3f, 0x7a, 0xda, 0xef, 0xcf, 0xd0, 0x3d, 0x1e, 0xc1, 0x35, 0xb5,
+	0xb0, 0x70, 0xe8, 0x70, 0xd8, 0x88, 0xb7, 0x3d, 0xde, 0xf2, 0xe6, 0xd0, 0x95, 0x57, 0x15, 0xe0,
+	0x50, 0xee, 0x1f, 0xe2, 0xb6, 0xb1, 0x0b, 0x97, 0xd2, 0x6f, 0xd3, 0xde, 0x27, 0xe2, 0x63, 0x55,
+	0x6d, 0x25, 0xdd, 0xcf, 0xb8, 0x07, 0xed, 0x14, 0xef, 0x33, 0xdf, 0x21, 0x32, 0x58, 0x5a, 0x8a,
+	0xfc, 0x13, 0x4e, 0x35, 0x1a, 0x50, 0xf1, 0xb0, 0x02, 0x55, 0xcd, 0x8a, 0xc7, 0x57, 0xbe, 0xac,
+	0x34, 0x15, 0x9f, 0xaf, 0x4e, 0x64, 0x43, 0xa9, 0x9c, 0x18, 0x3d, 0x68, 0x7a, 0x76, 0x1c, 0xd2,
+	0x33, 0xcb, 0x16, 0xa5, 0x4d, 0xd6, 0x10, 0x41, 0x7c, 0x8c, 0xc5, 0x2d, 0xc5, 0x0c, 0x04, 0xa6,
+	0xa6, 0x63, 0x9e, 0x20, 0x66, 0x1b, 0x56, 0x54, 0x52, 0x59, 0xa7, 0xd4, 0x77, 0xd9, 0x69, 0x07,
+	0x90, 0x49, 0x5b, 0xd1, 0x3f, 0x47, 0xb2, 0xb1, 0x0d, 0xab, 0xbc, 0xaf, 0x05, 0x21, 0x75, 0x88,
+	0x15, 0x90, 0xd0, 0x72, 0x4e, 0xc7, 0x9d, 0x3a, 0x62, 0x5b, 0x9e, 0x7d, 0x76, 0xc8, 0xe9, 0x87,
+	0x24, 0xdc, 0x3f, 0x1d, 0xeb, 0x2d, 0xb0, 0x91, 0x69, 0x81, 0xb7, 0xa1, 0x25, 0x3a, 0xac, 0x6a,
+	0x9e, 0x4d, 0x74, 0x4c, 0x03, 0xa9, 0x1f, 0x89, 0x0e, 0x5a, 0x68, 0x63, 0x04, 0xa3, 0x4b, 0x77,
+	0xae, 0x6a, 0x65, 0x9b, 0xd0, 0x18, 0x12, 0xcf, 0xb3, 0xb2, 0xfd, 0x0c, 0x38, 0xed, 0x48, 0xd5,
+	0x18, 0xe5, 0x5e, 0x3d, 0xc2, 0x1a, 0x66, 0x2b, 0xa1, 0x0b, 0x64, 0xef, 0x77, 0xa2, 0xb8, 0x89,
+	0x7e, 0xa5, 0xc2, 0xa8, 0xac, 0x2f, 0xe5, 0x39, 0xcf, 0x15, 0x38, 0x6f, 0xc3, 0x8a, 0x1d, 0x45,
+	0x74, 0xe8, 0xf3, 0x89, 0x41, 0xfa, 0x5d, 0xc4, 0x48, 0x3b, 0xa5, 0xa3, 0xe3, 0xb3, 0xe5, 0xfe,
+	0x87, 0x58, 0xda, 0xb2, 0x62, 0x28, 0x85, 0x6f, 0x41, 0x53, 0x3b, 0x54, 0x6a, 0xdc, 0x30, 0x1b,
+	0x29, 0xf1, 0xc0, 0xed, 0xfd, 0x75, 0x0e, 0xcb, 0x89, 0xe8, 0x18, 0xfc, 0x88, 0x29, 0x3d, 0x76,
+	0xba, 0x2e, 0x37, 0xa0, 0x2e, 0x3b, 0x20, 0x46, 0x92, 0x50, 0x03, 0x04, 0x09, 0x03, 0xe9, 0x2e,
+	0xb4, 0x93, 0x6e, 0x9c, 0xb8, 0x56, 0x4c, 0x58, 0xb2, 0x73, 0x4a, 0xdf, 0xf2, 0xde, 0x27, 0x71,
+	0x83, 0xf3, 0x98, 0x44, 0x32, 0xda, 0xe5, 0xe1, 0x4f, 0x38, 0x89, 0xa7, 0x0b, 0xbf, 0x23, 0x8c,
+	0x48, 0x4c, 0x5c, 0x8b, 0x04, 0xcc, 0x79, 0x21, 0xb3, 0xa0, 0xa5, 0xc8, 0x4f, 0x39, 0x95, 0x1b,
+	0x58, 0x28, 0x60, 0x71, 0xdd, 0xed, 0x78, 0x1c, 0x12, 0xd9, 0x71, 0xdb, 0x82, 0xfe, 0x3c, 0x21,
+	0x67, 0x0d, 0xfc, 0x04, 0x4b, 0x63, 0xde, 0x3a, 0xba, 0x89, 0xd3, 0x9c, 0x20, 0x7e, 0x12, 0x54,
+	0x0d, 0x45, 0x7c, 0xea, 0xbb, 0xbd, 0x5f, 0x8a, 0x58, 0xc1, 0x26, 0xa9, 0x62, 0xa5, 0xbc, 0xf5,
+	0x4e, 0xb5, 0x70, 0xae, 0x07, 0x8b, 0xf6, 0x96, 0x3d, 0x3e, 0xed, 0xc2, 0x55, 0x6c, 0x6f, 0x9f,
+	0x06, 0xc4, 0xe7, 0x7b, 0xb3, 0x37, 0xe2, 0xe9, 0x7e, 0xbe, 0x0b, 0x6d, 0x97, 0x46, 0xfc, 0x7e,
+	0xe6, 0x5a, 0x31, 0x1d, 0x11, 0x8b, 0xa2, 0xaf, 0xab, 0x66, 0x33, 0x21, 0x1f, 0xd1, 0x11, 0x39,
+	0x28, 0xe2, 0x5e, 0xa2, 0xbb, 0x73, 0xb8, 0x67, 0xfc, 0x4a, 0x21, 0x5d, 0x94, 0x0c, 0x50, 0x74,
+	0x44, 0xe4, 0x90, 0x25, 0x9d, 0xf7, 0xa9, 0x18, 0xa2, 0xe8, 0x88, 0x18, 0x0f, 0xe1, 0xb2, 0x44,
+	0x8b, 0xbe, 0x1a, 0xd1, 0xc1, 0x88, 0xfa, 0x43, 0x3e, 0x6f, 0xcd, 0x6f, 0x35, 0xcc, 0x4b, 0x62,
+	0x13, 0x8b, 0xea, 0x73, 0xb9, 0xa5, 0x71, 0x10, 0xdf, 0x50, 0xdf, 0x25, 0x67, 0x18, 0x06, 0xcd,
+	0x84, 0x03, 0x7e, 0x70, 0xc0, 0xe9, 0x05, 0xb4, 0x83, 0xd7, 0xa0, 0xe5, 0x02, 0x7a, 0x1f, 0x2f,
+	0x44, 0x1f, 0xc2, 0x95, 0xd4, 0x7a, 0x19, 0x0d, 0x44, 0x29, 0x5d, 0x4b, 0x77, 0x35, 0x2d, 0xee,
+	0x40, 0x2b, 0x8d, 0x9f, 0x01, 0xf3, 0x5d, 0x59, 0x51, 0xd3, 0xa8, 0xe2, 0x77, 0x1f, 0xe3, 0x01,
+	0x68, 0x9f, 0x6b, 0x11, 0x5c, 0xc7, 0xa3, 0x2f, 0xa5, 0x7b, 0x69, 0x14, 0x17, 0xa6, 0xa0, 0x7d,
+	0x1c, 0x2b, 0x0a, 0x81, 0xf0, 0x76, 0xa1, 0xfc, 0xb7, 0x2a, 0x18, 0x7c, 0x38, 0xc1, 0xdb, 0x0d,
+	0x06, 0x1b, 0x9f, 0xbd, 0x4a, 0xfa, 0xf4, 0xf4, 0x10, 0xca, 0x8e, 0xdc, 0xf3, 0xf9, 0x91, 0xfb,
+	0x16, 0x34, 0xa9, 0x4f, 0x63, 0x6a, 0x8f, 0x2c, 0x9c, 0xa4, 0x64, 0x2b, 0x6c, 0x48, 0xe2, 0x73,
+	0x4e, 0xe3, 0x86, 0x4f, 0x40, 0xb9, 0x48, 0x58, 0xc0, 0x48, 0x58, 0x93, 0xbb, 0xd9, 0x50, 0xd8,
+	0x85, 0x4b, 0xd9, 0xaf, 0x44, 0x2c, 0x2c, 0xa2, 0x77, 0x57, 0xf5, 0x4f, 0x44, 0x30, 0x14, 0xf0,
+	0x22, 0x1a, 0x96, 0x8a, 0x78, 0x11, 0x0e, 0x37, 0xa0, 0x7e, 0xcc, 0x47, 0x1c, 0x29, 0xb8, 0x68,
+	0xb9, 0x80, 0x24, 0x21, 0xf6, 0x07, 0xb0, 0x26, 0x00, 0x39, 0xa1, 0x6b, 0x28, 0xb4, 0x81, 0x7b,
+	0x59, 0x91, 0x77, 0x60, 0x55, 0xff, 0x42, 0x08, 0x0c, 0x28, 0x40, 0x3b, 0x85, 0x0b, 0x71, 0x73,
+	0x58, 0x21, 0x6c, 0x3d, 0x8f, 0x15, 0xa2, 0xde, 0x84, 0xc6, 0x88, 0x39, 0x27, 0xaa, 0x80, 0x8a,
+	0x36, 0x5c, 0x17, 0x34, 0x51, 0x3d, 0xaf, 0x43, 0x2d, 0x0d, 0xba, 0xa6, 0x9c, 0x6d, 0x55, 0xa8,
+	0xe9, 0x63, 0xd7, 0x75, 0xe8, 0x16, 0xe3, 0x43, 0x55, 0xa3, 0xff, 0x54, 0x70, 0x2a, 0x4b, 0xcb,
+	0x69, 0x9f, 0xba, 0xc2, 0x1c, 0xdf, 0x34, 0x82, 0xd6, 0x60, 0x41, 0x58, 0x58, 0x04, 0x8f, 0x58,
+	0xf0, 0xb4, 0xca, 0x99, 0xb5, 0x8a, 0x66, 0x6d, 0x06, 0x19, 0x8b, 0xde, 0x80, 0xba, 0x6e, 0xcb,
+	0x05, 0xb4, 0x8f, 0x98, 0xd3, 0x85, 0x19, 0x15, 0x40, 0x18, 0x70, 0x51, 0x03, 0xa0, 0xed, 0x32,
+	0xaa, 0xdf, 0x80, 0xf5, 0x89, 0xba, 0x29, 0xed, 0xff, 0x52, 0xc5, 0x97, 0xaa, 0xc7, 0xe1, 0x80,
+	0xc6, 0xa1, 0x1d, 0x13, 0x0e, 0xfa, 0xc6, 0x8a, 0x5f, 0x86, 0x45, 0x5b, 0xd4, 0x17, 0xa9, 0xb9,
+	0x8d, 0x05, 0xe5, 0x32, 0x2c, 0x0e, 0x04, 0x59, 0xe4, 0xca, 0xc2, 0x00, 0xc9, 0xf7, 0x60, 0xc5,
+	0x96, 0xb1, 0x80, 0x25, 0x38, 0x64, 0xa7, 0x52, 0xdd, 0xa6, 0x8d, 0xa1, 0xc0, 0x51, 0x26, 0x3b,
+	0x2d, 0x00, 0x1d, 0x36, 0x92, 0x6a, 0x6b, 0xc0, 0x7d, 0x36, 0xe2, 0x23, 0x5e, 0x1e, 0x18, 0xc9,
+	0x74, 0x68, 0x65, 0x90, 0x78, 0xdb, 0xb5, 0xf3, 0x61, 0xbe, 0x8c, 0xfe, 0x90, 0x48, 0xe5, 0x90,
+	0x1e, 0x34, 0xed, 0x4c, 0xc8, 0xd6, 0xf0, 0xc0, 0xba, 0xad, 0x85, 0xeb, 0x3d, 0x58, 0x19, 0xe4,
+	0x55, 0x11, 0x59, 0xd0, 0x1c, 0xe4, 0x55, 0x19, 0xe4, 0x55, 0xa9, 0xe7, 0x81, 0x52, 0x95, 0x41,
+	0x41, 0x95, 0x86, 0x50, 0x65, 0x50, 0x50, 0x65, 0x90, 0x57, 0xa5, 0x29, 0x54, 0x19, 0x14, 0x54,
+	0x19, 0x64, 0x54, 0x69, 0x09, 0x55, 0x06, 0x87, 0x93, 0xa3, 0xe7, 0x43, 0x7c, 0xae, 0xcb, 0xc4,
+	0x86, 0x2a, 0xcd, 0x1d, 0x58, 0x62, 0xe3, 0xd8, 0x61, 0x1e, 0x49, 0x66, 0x05, 0xb9, 0xec, 0x1d,
+	0x41, 0x2b, 0xbd, 0xb9, 0xbd, 0x4b, 0x3c, 0x65, 0x64, 0x79, 0x08, 0x57, 0xb2, 0xa7, 0xce, 0x20,
+	0xc9, 0x4f, 0x33, 0x97, 0xc4, 0x6f, 0x4d, 0x94, 0xef, 0x67, 0x6e, 0x8b, 0x19, 0x59, 0xd6, 0x01,
+	0x92, 0xa7, 0x11, 0x35, 0xdb, 0xd6, 0x24, 0xe5, 0xc0, 0xed, 0x7d, 0x26, 0x92, 0x6d, 0xc0, 0xc2,
+	0x74, 0xe8, 0xfa, 0x36, 0x24, 0x12, 0xef, 0xaa, 0x99, 0x73, 0x13, 0x91, 0x1e, 0xfe, 0x79, 0x15,
+	0xe6, 0xfb, 0xd1, 0xd0, 0xb0, 0xa1, 0x99, 0x7d, 0x8f, 0xbe, 0xb5, 0x5b, 0x78, 0xd1, 0xde, 0xcd,
+	0xbf, 0xce, 0x76, 0xbf, 0x33, 0x03, 0x48, 0x69, 0xff, 0x33, 0x00, 0xed, 0xf9, 0x76, 0x73, 0xf2,
+	0xa7, 0x29, 0xa2, 0xbb, 0x35, 0x0d, 0xa1, 0x4e, 0x36, 0x61, 0x59, 0x3d, 0xab, 0x6e, 0x4c, 0xfe,
+	0x2a, 0xd9, 0xef, 0xde, 0xbd, 0x78, 0x5f, 0x97, 0x56, 0x7b, 0x2a, 0x2c, 0x91, 0x36, 0x45, 0x94,
+	0x49, 0x5b, 0x7c, 0x1f, 0x34, 0x7e, 0x05, 0x8d, 0xcc, 0xdb, 0x60, 0x6f, 0xf2, 0x97, 0x3a, 0xa6,
+	0xbb, 0x33, 0x1d, 0xa3, 0x9f, 0x9f, 0x79, 0x32, 0x2b, 0x39, 0x5f, 0xc7, 0x94, 0x9d, 0x3f, 0xe9,
+	0x99, 0xcc, 0x70, 0xa1, 0x95, 0x7b, 0x22, 0xbb, 0x5d, 0x22, 0x5d, 0x06, 0xd5, 0xbd, 0x3f, 0x0b,
+	0x4a, 0x71, 0xf1, 0x60, 0xb5, 0xf8, 0xc2, 0x75, 0x6f, 0xf2, 0x11, 0x05, 0x60, 0x77, 0x6f, 0x46,
+	0xa0, 0x62, 0xf7, 0x12, 0x56, 0x0a, 0xef, 0x53, 0x25, 0xa1, 0x92, 0xc7, 0x75, 0x77, 0x67, 0xc3,
+	0xe9, 0x0e, 0xca, 0x3c, 0x4d, 0x95, 0x38, 0x48, 0xc7, 0x94, 0x39, 0x68, 0xd2, 0xa3, 0x14, 0x0f,
+	0x5d, 0xed, 0x45, 0x6a, 0xb3, 0x2c, 0x47, 0x13, 0x44, 0x59, 0xe8, 0x16, 0x5f, 0xa2, 0xb8, 0xe4,
+	0x99, 0x57, 0xa8, 0x5e, 0x79, 0x32, 0x25, 0x98, 0x32, 0xc9, 0x27, 0x3e, 0x78, 0xb8, 0xd0, 0xca,
+	0x3d, 0x50, 0xdc, 0xbe, 0x28, 0xad, 0x14, 0x8f, 0xfb, 0xb3, 0xa0, 0x74, 0x5f, 0x17, 0x1e, 0x0f,
+	0xee, 0x5e, 0x94, 0x60, 0x29, 0xae, 0xcc, 0xd7, 0xa5, 0xd7, 0x6d, 0xae, 0x51, 0xf6, 0x1a, 0x7d,
+	0xfb, 0xa2, 0x54, 0x9b, 0xaa, 0xd1, 0xc4, 0x3b, 0x33, 0x4f, 0x96, 0xe2, 0x7d, 0xb9, 0x24, 0x59,
+	0x0a, 0xc0, 0xb2, 0x64, 0x29, 0xbf, 0x78, 0x0d, 0xa1, 0x9d, 0xbf, 0x4f, 0xdd, 0x29, 0x49, 0xb8,
+	0x2c, 0xac, 0xfb, 0xdd, 0x99, 0x60, 0x8a, 0x51, 0x00, 0xc6, 0x84, 0xc9, 0x7b, 0x6b, 0x9a, 0x0f,
+	0x12, 0x64, 0xf7, 0x83, 0x59, 0x91, 0x8a, 0xa3, 0x0d, 0xcd, 0xec, 0xb4, 0x5b, 0xd2, 0x07, 0x33,
+	0xa0, 0xb2, 0x3e, 0x38, 0x79, 0x36, 0xfa, 0x05, 0xd4, 0xf5, 0xf1, 0xe7, 0xe6, 0x85, 0xd5, 0x03,
+	0x8f, 0xdf, 0x9e, 0x0a, 0x99, 0x54, 0x5b, 0xf0, 0xf4, 0x29, 0xb5, 0x05, 0x8f, 0xdf, 0x99, 0x8e,
+	0xc9, 0xd8, 0x27, 0x33, 0xa0, 0x94, 0xd9, 0x47, 0x07, 0x95, 0xda, 0x67, 0xd2, 0x48, 0xd2, 0x5d,
+	0xf8, 0xcd, 0xd7, 0x5f, 0xee, 0x54, 0x9e, 0xfc, 0xe0, 0x9f, 0xaf, 0x37, 0x2a, 0x5f, 0xbd, 0xde,
+	0xa8, 0xfc, 0xef, 0xf5, 0x46, 0xe5, 0x8f, 0x6f, 0x36, 0xde, 0xfb, 0xea, 0xcd, 0xc6, 0x7b, 0xff,
+	0x7e, 0xb3, 0xf1, 0xde, 0xcf, 0x6f, 0x8a, 0xc3, 0x9c, 0x17, 0x36, 0xf5, 0xf7, 0xc4, 0xdf, 0x33,
+	0xf5, 0x4f, 0xf9, 0xf8, 0x3c, 0x20, 0xd1, 0x60, 0x11, 0x5f, 0x3f, 0xbf, 0xf7, 0xff, 0x00, 0x00,
+	0x00, 0xff, 0xff, 0x59, 0xa7, 0x33, 0x16, 0xb3, 0x1f, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1332,6 +2891,17 @@ type MsgClient interface {
 	TimeoutChallenge(ctx context.Context, in *MsgTimeoutChallenge, opts ...grpc.CallOption) (*MsgTimeoutChallengeResponse, error)
 	FinalizeTask(ctx context.Context, in *MsgFinalizeTask, opts ...grpc.CallOption) (*MsgFinalizeTaskResponse, error)
 	RefundTask(ctx context.Context, in *MsgRefundTask, opts ...grpc.CallOption) (*MsgRefundTaskResponse, error)
+	PostGEMMTask(ctx context.Context, in *MsgPostGEMMTask, opts ...grpc.CallOption) (*MsgPostGEMMTaskResponse, error)
+	AcceptGEMMTask(ctx context.Context, in *MsgAcceptGEMMTask, opts ...grpc.CallOption) (*MsgAcceptGEMMTaskResponse, error)
+	SubmitGEMMResult(ctx context.Context, in *MsgSubmitGEMMResult, opts ...grpc.CallOption) (*MsgSubmitGEMMResultResponse, error)
+	AttestGEMMTask(ctx context.Context, in *MsgAttestGEMMTask, opts ...grpc.CallOption) (*MsgAttestGEMMTaskResponse, error)
+	OpenGEMMChallenge(ctx context.Context, in *MsgOpenGEMMChallenge, opts ...grpc.CallOption) (*MsgOpenGEMMChallengeResponse, error)
+	CommitGEMMTrace(ctx context.Context, in *MsgCommitGEMMTrace, opts ...grpc.CallOption) (*MsgCommitGEMMTraceResponse, error)
+	SubmitGEMMMidState(ctx context.Context, in *MsgSubmitGEMMMidState, opts ...grpc.CallOption) (*MsgSubmitGEMMMidStateResponse, error)
+	ArbitrateGEMM(ctx context.Context, in *MsgArbitrateGEMM, opts ...grpc.CallOption) (*MsgArbitrateGEMMResponse, error)
+	TimeoutGEMM(ctx context.Context, in *MsgTimeoutGEMM, opts ...grpc.CallOption) (*MsgTimeoutGEMMResponse, error)
+	FinalizeGEMM(ctx context.Context, in *MsgFinalizeGEMM, opts ...grpc.CallOption) (*MsgFinalizeGEMMResponse, error)
+	AbortGEMMTask(ctx context.Context, in *MsgAbortGEMMTask, opts ...grpc.CallOption) (*MsgAbortGEMMTaskResponse, error)
 }
 
 type msgClient struct {
@@ -1441,6 +3011,105 @@ func (c *msgClient) RefundTask(ctx context.Context, in *MsgRefundTask, opts ...g
 	return out, nil
 }
 
+func (c *msgClient) PostGEMMTask(ctx context.Context, in *MsgPostGEMMTask, opts ...grpc.CallOption) (*MsgPostGEMMTaskResponse, error) {
+	out := new(MsgPostGEMMTaskResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Msg/PostGEMMTask", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) AcceptGEMMTask(ctx context.Context, in *MsgAcceptGEMMTask, opts ...grpc.CallOption) (*MsgAcceptGEMMTaskResponse, error) {
+	out := new(MsgAcceptGEMMTaskResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Msg/AcceptGEMMTask", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) SubmitGEMMResult(ctx context.Context, in *MsgSubmitGEMMResult, opts ...grpc.CallOption) (*MsgSubmitGEMMResultResponse, error) {
+	out := new(MsgSubmitGEMMResultResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Msg/SubmitGEMMResult", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) AttestGEMMTask(ctx context.Context, in *MsgAttestGEMMTask, opts ...grpc.CallOption) (*MsgAttestGEMMTaskResponse, error) {
+	out := new(MsgAttestGEMMTaskResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Msg/AttestGEMMTask", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) OpenGEMMChallenge(ctx context.Context, in *MsgOpenGEMMChallenge, opts ...grpc.CallOption) (*MsgOpenGEMMChallengeResponse, error) {
+	out := new(MsgOpenGEMMChallengeResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Msg/OpenGEMMChallenge", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) CommitGEMMTrace(ctx context.Context, in *MsgCommitGEMMTrace, opts ...grpc.CallOption) (*MsgCommitGEMMTraceResponse, error) {
+	out := new(MsgCommitGEMMTraceResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Msg/CommitGEMMTrace", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) SubmitGEMMMidState(ctx context.Context, in *MsgSubmitGEMMMidState, opts ...grpc.CallOption) (*MsgSubmitGEMMMidStateResponse, error) {
+	out := new(MsgSubmitGEMMMidStateResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Msg/SubmitGEMMMidState", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) ArbitrateGEMM(ctx context.Context, in *MsgArbitrateGEMM, opts ...grpc.CallOption) (*MsgArbitrateGEMMResponse, error) {
+	out := new(MsgArbitrateGEMMResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Msg/ArbitrateGEMM", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) TimeoutGEMM(ctx context.Context, in *MsgTimeoutGEMM, opts ...grpc.CallOption) (*MsgTimeoutGEMMResponse, error) {
+	out := new(MsgTimeoutGEMMResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Msg/TimeoutGEMM", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) FinalizeGEMM(ctx context.Context, in *MsgFinalizeGEMM, opts ...grpc.CallOption) (*MsgFinalizeGEMMResponse, error) {
+	out := new(MsgFinalizeGEMMResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Msg/FinalizeGEMM", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) AbortGEMMTask(ctx context.Context, in *MsgAbortGEMMTask, opts ...grpc.CallOption) (*MsgAbortGEMMTaskResponse, error) {
+	out := new(MsgAbortGEMMTaskResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Msg/AbortGEMMTask", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	RegisterModel(context.Context, *MsgRegisterModel) (*MsgRegisterModelResponse, error)
@@ -1454,6 +3123,17 @@ type MsgServer interface {
 	TimeoutChallenge(context.Context, *MsgTimeoutChallenge) (*MsgTimeoutChallengeResponse, error)
 	FinalizeTask(context.Context, *MsgFinalizeTask) (*MsgFinalizeTaskResponse, error)
 	RefundTask(context.Context, *MsgRefundTask) (*MsgRefundTaskResponse, error)
+	PostGEMMTask(context.Context, *MsgPostGEMMTask) (*MsgPostGEMMTaskResponse, error)
+	AcceptGEMMTask(context.Context, *MsgAcceptGEMMTask) (*MsgAcceptGEMMTaskResponse, error)
+	SubmitGEMMResult(context.Context, *MsgSubmitGEMMResult) (*MsgSubmitGEMMResultResponse, error)
+	AttestGEMMTask(context.Context, *MsgAttestGEMMTask) (*MsgAttestGEMMTaskResponse, error)
+	OpenGEMMChallenge(context.Context, *MsgOpenGEMMChallenge) (*MsgOpenGEMMChallengeResponse, error)
+	CommitGEMMTrace(context.Context, *MsgCommitGEMMTrace) (*MsgCommitGEMMTraceResponse, error)
+	SubmitGEMMMidState(context.Context, *MsgSubmitGEMMMidState) (*MsgSubmitGEMMMidStateResponse, error)
+	ArbitrateGEMM(context.Context, *MsgArbitrateGEMM) (*MsgArbitrateGEMMResponse, error)
+	TimeoutGEMM(context.Context, *MsgTimeoutGEMM) (*MsgTimeoutGEMMResponse, error)
+	FinalizeGEMM(context.Context, *MsgFinalizeGEMM) (*MsgFinalizeGEMMResponse, error)
+	AbortGEMMTask(context.Context, *MsgAbortGEMMTask) (*MsgAbortGEMMTaskResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -1492,6 +3172,39 @@ func (*UnimplementedMsgServer) FinalizeTask(ctx context.Context, req *MsgFinaliz
 }
 func (*UnimplementedMsgServer) RefundTask(ctx context.Context, req *MsgRefundTask) (*MsgRefundTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RefundTask not implemented")
+}
+func (*UnimplementedMsgServer) PostGEMMTask(ctx context.Context, req *MsgPostGEMMTask) (*MsgPostGEMMTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PostGEMMTask not implemented")
+}
+func (*UnimplementedMsgServer) AcceptGEMMTask(ctx context.Context, req *MsgAcceptGEMMTask) (*MsgAcceptGEMMTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AcceptGEMMTask not implemented")
+}
+func (*UnimplementedMsgServer) SubmitGEMMResult(ctx context.Context, req *MsgSubmitGEMMResult) (*MsgSubmitGEMMResultResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitGEMMResult not implemented")
+}
+func (*UnimplementedMsgServer) AttestGEMMTask(ctx context.Context, req *MsgAttestGEMMTask) (*MsgAttestGEMMTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AttestGEMMTask not implemented")
+}
+func (*UnimplementedMsgServer) OpenGEMMChallenge(ctx context.Context, req *MsgOpenGEMMChallenge) (*MsgOpenGEMMChallengeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OpenGEMMChallenge not implemented")
+}
+func (*UnimplementedMsgServer) CommitGEMMTrace(ctx context.Context, req *MsgCommitGEMMTrace) (*MsgCommitGEMMTraceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CommitGEMMTrace not implemented")
+}
+func (*UnimplementedMsgServer) SubmitGEMMMidState(ctx context.Context, req *MsgSubmitGEMMMidState) (*MsgSubmitGEMMMidStateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitGEMMMidState not implemented")
+}
+func (*UnimplementedMsgServer) ArbitrateGEMM(ctx context.Context, req *MsgArbitrateGEMM) (*MsgArbitrateGEMMResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ArbitrateGEMM not implemented")
+}
+func (*UnimplementedMsgServer) TimeoutGEMM(ctx context.Context, req *MsgTimeoutGEMM) (*MsgTimeoutGEMMResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TimeoutGEMM not implemented")
+}
+func (*UnimplementedMsgServer) FinalizeGEMM(ctx context.Context, req *MsgFinalizeGEMM) (*MsgFinalizeGEMMResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FinalizeGEMM not implemented")
+}
+func (*UnimplementedMsgServer) AbortGEMMTask(ctx context.Context, req *MsgAbortGEMMTask) (*MsgAbortGEMMTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AbortGEMMTask not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -1696,6 +3409,204 @@ func _Msg_RefundTask_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_PostGEMMTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgPostGEMMTask)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).PostGEMMTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Msg/PostGEMMTask",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).PostGEMMTask(ctx, req.(*MsgPostGEMMTask))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_AcceptGEMMTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgAcceptGEMMTask)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).AcceptGEMMTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Msg/AcceptGEMMTask",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).AcceptGEMMTask(ctx, req.(*MsgAcceptGEMMTask))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_SubmitGEMMResult_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSubmitGEMMResult)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SubmitGEMMResult(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Msg/SubmitGEMMResult",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SubmitGEMMResult(ctx, req.(*MsgSubmitGEMMResult))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_AttestGEMMTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgAttestGEMMTask)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).AttestGEMMTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Msg/AttestGEMMTask",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).AttestGEMMTask(ctx, req.(*MsgAttestGEMMTask))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_OpenGEMMChallenge_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgOpenGEMMChallenge)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).OpenGEMMChallenge(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Msg/OpenGEMMChallenge",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).OpenGEMMChallenge(ctx, req.(*MsgOpenGEMMChallenge))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_CommitGEMMTrace_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCommitGEMMTrace)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CommitGEMMTrace(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Msg/CommitGEMMTrace",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CommitGEMMTrace(ctx, req.(*MsgCommitGEMMTrace))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_SubmitGEMMMidState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSubmitGEMMMidState)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SubmitGEMMMidState(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Msg/SubmitGEMMMidState",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SubmitGEMMMidState(ctx, req.(*MsgSubmitGEMMMidState))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_ArbitrateGEMM_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgArbitrateGEMM)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ArbitrateGEMM(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Msg/ArbitrateGEMM",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ArbitrateGEMM(ctx, req.(*MsgArbitrateGEMM))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_TimeoutGEMM_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgTimeoutGEMM)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).TimeoutGEMM(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Msg/TimeoutGEMM",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).TimeoutGEMM(ctx, req.(*MsgTimeoutGEMM))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_FinalizeGEMM_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgFinalizeGEMM)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).FinalizeGEMM(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Msg/FinalizeGEMM",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).FinalizeGEMM(ctx, req.(*MsgFinalizeGEMM))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_AbortGEMMTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgAbortGEMMTask)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).AbortGEMMTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Msg/AbortGEMMTask",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).AbortGEMMTask(ctx, req.(*MsgAbortGEMMTask))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Msg_serviceDesc = _Msg_serviceDesc
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "prisma.compute.v1.Msg",
@@ -1744,6 +3655,50 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RefundTask",
 			Handler:    _Msg_RefundTask_Handler,
+		},
+		{
+			MethodName: "PostGEMMTask",
+			Handler:    _Msg_PostGEMMTask_Handler,
+		},
+		{
+			MethodName: "AcceptGEMMTask",
+			Handler:    _Msg_AcceptGEMMTask_Handler,
+		},
+		{
+			MethodName: "SubmitGEMMResult",
+			Handler:    _Msg_SubmitGEMMResult_Handler,
+		},
+		{
+			MethodName: "AttestGEMMTask",
+			Handler:    _Msg_AttestGEMMTask_Handler,
+		},
+		{
+			MethodName: "OpenGEMMChallenge",
+			Handler:    _Msg_OpenGEMMChallenge_Handler,
+		},
+		{
+			MethodName: "CommitGEMMTrace",
+			Handler:    _Msg_CommitGEMMTrace_Handler,
+		},
+		{
+			MethodName: "SubmitGEMMMidState",
+			Handler:    _Msg_SubmitGEMMMidState_Handler,
+		},
+		{
+			MethodName: "ArbitrateGEMM",
+			Handler:    _Msg_ArbitrateGEMM_Handler,
+		},
+		{
+			MethodName: "TimeoutGEMM",
+			Handler:    _Msg_TimeoutGEMM_Handler,
+		},
+		{
+			MethodName: "FinalizeGEMM",
+			Handler:    _Msg_FinalizeGEMM_Handler,
+		},
+		{
+			MethodName: "AbortGEMMTask",
+			Handler:    _Msg_AbortGEMMTask_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -2578,6 +4533,1023 @@ func (m *MsgRefundTaskResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgPostGEMMTask) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgPostGEMMTask) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgPostGEMMTask) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.InputDataRef) > 0 {
+		i -= len(m.InputDataRef)
+		copy(dAtA[i:], m.InputDataRef)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.InputDataRef)))
+		i--
+		dAtA[i] = 0x6a
+	}
+	if m.MaxFee != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.MaxFee))
+		i--
+		dAtA[i] = 0x60
+	}
+	if m.MaxPricePerCwu != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.MaxPricePerCwu))
+		i--
+		dAtA[i] = 0x58
+	}
+	if m.ChallengeWindow != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ChallengeWindow))
+		i--
+		dAtA[i] = 0x50
+	}
+	if len(m.MatrixBRoot) > 0 {
+		i -= len(m.MatrixBRoot)
+		copy(dAtA[i:], m.MatrixBRoot)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.MatrixBRoot)))
+		i--
+		dAtA[i] = 0x4a
+	}
+	if len(m.MatrixARoot) > 0 {
+		i -= len(m.MatrixARoot)
+		copy(dAtA[i:], m.MatrixARoot)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.MatrixARoot)))
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.K != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.K))
+		i--
+		dAtA[i] = 0x38
+	}
+	if m.N != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.N))
+		i--
+		dAtA[i] = 0x30
+	}
+	if m.M != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.M))
+		i--
+		dAtA[i] = 0x28
+	}
+	if len(m.RequesterNonce) > 0 {
+		i -= len(m.RequesterNonce)
+		copy(dAtA[i:], m.RequesterNonce)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.RequesterNonce)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.RequesterKeyProof) > 0 {
+		i -= len(m.RequesterKeyProof)
+		copy(dAtA[i:], m.RequesterKeyProof)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.RequesterKeyProof)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.RequesterProtocolPubkey) > 0 {
+		i -= len(m.RequesterProtocolPubkey)
+		copy(dAtA[i:], m.RequesterProtocolPubkey)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.RequesterProtocolPubkey)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Requester) > 0 {
+		i -= len(m.Requester)
+		copy(dAtA[i:], m.Requester)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Requester)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgPostGEMMTaskResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgPostGEMMTaskResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgPostGEMMTaskResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ProtocolTaskId) > 0 {
+		i -= len(m.ProtocolTaskId)
+		copy(dAtA[i:], m.ProtocolTaskId)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ProtocolTaskId)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.GemmTaskId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.GemmTaskId))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgAcceptGEMMTask) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgAcceptGEMMTask) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgAcceptGEMMTask) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.AssignmentNonce) > 0 {
+		i -= len(m.AssignmentNonce)
+		copy(dAtA[i:], m.AssignmentNonce)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.AssignmentNonce)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.GemmTaskId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.GemmTaskId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Worker) > 0 {
+		i -= len(m.Worker)
+		copy(dAtA[i:], m.Worker)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Worker)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgAcceptGEMMTaskResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgAcceptGEMMTaskResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgAcceptGEMMTaskResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.AssignmentId) > 0 {
+		i -= len(m.AssignmentId)
+		copy(dAtA[i:], m.AssignmentId)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.AssignmentId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSubmitGEMMResult) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSubmitGEMMResult) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSubmitGEMMResult) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.WorkerSignature) > 0 {
+		i -= len(m.WorkerSignature)
+		copy(dAtA[i:], m.WorkerSignature)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.WorkerSignature)))
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.CompletedEpoch != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.CompletedEpoch))
+		i--
+		dAtA[i] = 0x30
+	}
+	if m.OutputBytes != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.OutputBytes))
+		i--
+		dAtA[i] = 0x28
+	}
+	if len(m.OutputDataRef) > 0 {
+		i -= len(m.OutputDataRef)
+		copy(dAtA[i:], m.OutputDataRef)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.OutputDataRef)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.OutputRoot) > 0 {
+		i -= len(m.OutputRoot)
+		copy(dAtA[i:], m.OutputRoot)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.OutputRoot)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.GemmTaskId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.GemmTaskId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Worker) > 0 {
+		i -= len(m.Worker)
+		copy(dAtA[i:], m.Worker)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Worker)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSubmitGEMMResultResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSubmitGEMMResultResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSubmitGEMMResultResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ChallengeEnd != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ChallengeEnd))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgAttestGEMMTask) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgAttestGEMMTask) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgAttestGEMMTask) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.GemmTaskId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.GemmTaskId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Monitor) > 0 {
+		i -= len(m.Monitor)
+		copy(dAtA[i:], m.Monitor)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Monitor)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgAttestGEMMTaskResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgAttestGEMMTaskResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgAttestGEMMTaskResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgOpenGEMMChallenge) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgOpenGEMMChallenge) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgOpenGEMMChallenge) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ChallengerSignature) > 0 {
+		i -= len(m.ChallengerSignature)
+		copy(dAtA[i:], m.ChallengerSignature)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ChallengerSignature)))
+		i--
+		dAtA[i] = 0x5a
+	}
+	if m.ChallengeBond != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ChallengeBond))
+		i--
+		dAtA[i] = 0x50
+	}
+	if len(m.ChallengerOutputTile) > 0 {
+		i -= len(m.ChallengerOutputTile)
+		copy(dAtA[i:], m.ChallengerOutputTile)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ChallengerOutputTile)))
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.WorkerProofCount != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.WorkerProofCount))
+		i--
+		dAtA[i] = 0x40
+	}
+	if m.WorkerProofIndex != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.WorkerProofIndex))
+		i--
+		dAtA[i] = 0x38
+	}
+	if len(m.WorkerProofSiblings) > 0 {
+		for iNdEx := len(m.WorkerProofSiblings) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.WorkerProofSiblings[iNdEx])
+			copy(dAtA[i:], m.WorkerProofSiblings[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.WorkerProofSiblings[iNdEx])))
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	if len(m.WorkerOutputTile) > 0 {
+		i -= len(m.WorkerOutputTile)
+		copy(dAtA[i:], m.WorkerOutputTile)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.WorkerOutputTile)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.DisputedTileJ != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.DisputedTileJ))
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.DisputedTileI != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.DisputedTileI))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.GemmTaskId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.GemmTaskId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Challenger) > 0 {
+		i -= len(m.Challenger)
+		copy(dAtA[i:], m.Challenger)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Challenger)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgOpenGEMMChallengeResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgOpenGEMMChallengeResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgOpenGEMMChallengeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ChallengeEnd != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ChallengeEnd))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgCommitGEMMTrace) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgCommitGEMMTrace) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgCommitGEMMTrace) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Signature) > 0 {
+		i -= len(m.Signature)
+		copy(dAtA[i:], m.Signature)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Signature)))
+		i--
+		dAtA[i] = 0x6a
+	}
+	if m.LockedEpoch != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.LockedEpoch))
+		i--
+		dAtA[i] = 0x60
+	}
+	if m.FinalProofCount != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.FinalProofCount))
+		i--
+		dAtA[i] = 0x58
+	}
+	if m.FinalProofIndex != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.FinalProofIndex))
+		i--
+		dAtA[i] = 0x50
+	}
+	if len(m.FinalProofSiblings) > 0 {
+		for iNdEx := len(m.FinalProofSiblings) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.FinalProofSiblings[iNdEx])
+			copy(dAtA[i:], m.FinalProofSiblings[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.FinalProofSiblings[iNdEx])))
+			i--
+			dAtA[i] = 0x4a
+		}
+	}
+	if len(m.FinalState) > 0 {
+		i -= len(m.FinalState)
+		copy(dAtA[i:], m.FinalState)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.FinalState)))
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.InitialProofCount != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.InitialProofCount))
+		i--
+		dAtA[i] = 0x38
+	}
+	if m.InitialProofIndex != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.InitialProofIndex))
+		i--
+		dAtA[i] = 0x30
+	}
+	if len(m.InitialProofSiblings) > 0 {
+		for iNdEx := len(m.InitialProofSiblings) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.InitialProofSiblings[iNdEx])
+			copy(dAtA[i:], m.InitialProofSiblings[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.InitialProofSiblings[iNdEx])))
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.InitialState) > 0 {
+		i -= len(m.InitialState)
+		copy(dAtA[i:], m.InitialState)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.InitialState)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.TraceRoot) > 0 {
+		i -= len(m.TraceRoot)
+		copy(dAtA[i:], m.TraceRoot)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.TraceRoot)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.GemmTaskId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.GemmTaskId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Actor) > 0 {
+		i -= len(m.Actor)
+		copy(dAtA[i:], m.Actor)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Actor)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgCommitGEMMTraceResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgCommitGEMMTraceResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgCommitGEMMTraceResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSubmitGEMMMidState) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSubmitGEMMMidState) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSubmitGEMMMidState) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ProofCount != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ProofCount))
+		i--
+		dAtA[i] = 0x30
+	}
+	if m.ProofIndex != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ProofIndex))
+		i--
+		dAtA[i] = 0x28
+	}
+	if len(m.ProofSiblings) > 0 {
+		for iNdEx := len(m.ProofSiblings) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.ProofSiblings[iNdEx])
+			copy(dAtA[i:], m.ProofSiblings[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.ProofSiblings[iNdEx])))
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.State) > 0 {
+		i -= len(m.State)
+		copy(dAtA[i:], m.State)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.State)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.GemmTaskId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.GemmTaskId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Actor) > 0 {
+		i -= len(m.Actor)
+		copy(dAtA[i:], m.Actor)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Actor)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSubmitGEMMMidStateResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSubmitGEMMMidStateResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSubmitGEMMMidStateResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgArbitrateGEMM) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgArbitrateGEMM) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgArbitrateGEMM) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.BProofCount != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.BProofCount))
+		i--
+		dAtA[i] = 0x70
+	}
+	if len(m.BProofSiblings) > 0 {
+		for iNdEx := len(m.BProofSiblings) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.BProofSiblings[iNdEx])
+			copy(dAtA[i:], m.BProofSiblings[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.BProofSiblings[iNdEx])))
+			i--
+			dAtA[i] = 0x6a
+		}
+	}
+	if m.BProofTileCols != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.BProofTileCols))
+		i--
+		dAtA[i] = 0x60
+	}
+	if m.BProofTileCol != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.BProofTileCol))
+		i--
+		dAtA[i] = 0x58
+	}
+	if m.BProofTileRow != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.BProofTileRow))
+		i--
+		dAtA[i] = 0x50
+	}
+	if m.AProofCount != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.AProofCount))
+		i--
+		dAtA[i] = 0x48
+	}
+	if len(m.AProofSiblings) > 0 {
+		for iNdEx := len(m.AProofSiblings) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.AProofSiblings[iNdEx])
+			copy(dAtA[i:], m.AProofSiblings[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.AProofSiblings[iNdEx])))
+			i--
+			dAtA[i] = 0x42
+		}
+	}
+	if m.AProofTileCols != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.AProofTileCols))
+		i--
+		dAtA[i] = 0x38
+	}
+	if m.AProofTileCol != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.AProofTileCol))
+		i--
+		dAtA[i] = 0x30
+	}
+	if m.AProofTileRow != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.AProofTileRow))
+		i--
+		dAtA[i] = 0x28
+	}
+	if len(m.BTile) > 0 {
+		i -= len(m.BTile)
+		copy(dAtA[i:], m.BTile)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.BTile)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.ATile) > 0 {
+		i -= len(m.ATile)
+		copy(dAtA[i:], m.ATile)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ATile)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.GemmTaskId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.GemmTaskId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Actor) > 0 {
+		i -= len(m.Actor)
+		copy(dAtA[i:], m.Actor)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Actor)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgArbitrateGEMMResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgArbitrateGEMMResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgArbitrateGEMMResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Outcome) > 0 {
+		i -= len(m.Outcome)
+		copy(dAtA[i:], m.Outcome)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Outcome)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgTimeoutGEMM) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgTimeoutGEMM) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgTimeoutGEMM) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.GemmTaskId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.GemmTaskId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Actor) > 0 {
+		i -= len(m.Actor)
+		copy(dAtA[i:], m.Actor)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Actor)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgTimeoutGEMMResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgTimeoutGEMMResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgTimeoutGEMMResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Outcome) > 0 {
+		i -= len(m.Outcome)
+		copy(dAtA[i:], m.Outcome)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Outcome)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgFinalizeGEMM) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgFinalizeGEMM) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgFinalizeGEMM) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.GemmTaskId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.GemmTaskId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Actor) > 0 {
+		i -= len(m.Actor)
+		copy(dAtA[i:], m.Actor)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Actor)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgFinalizeGEMMResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgFinalizeGEMMResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgFinalizeGEMMResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ReceiptId) > 0 {
+		i -= len(m.ReceiptId)
+		copy(dAtA[i:], m.ReceiptId)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ReceiptId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgAbortGEMMTask) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgAbortGEMMTask) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgAbortGEMMTask) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.GemmTaskId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.GemmTaskId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Actor) > 0 {
+		i -= len(m.Actor)
+		copy(dAtA[i:], m.Actor)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Actor)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgAbortGEMMTaskResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgAbortGEMMTaskResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgAbortGEMMTaskResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -2961,6 +5933,507 @@ func (m *MsgRefundTask) Size() (n int) {
 }
 
 func (m *MsgRefundTaskResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgPostGEMMTask) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Requester)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.RequesterProtocolPubkey)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.RequesterKeyProof)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.RequesterNonce)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.M != 0 {
+		n += 1 + sovTx(uint64(m.M))
+	}
+	if m.N != 0 {
+		n += 1 + sovTx(uint64(m.N))
+	}
+	if m.K != 0 {
+		n += 1 + sovTx(uint64(m.K))
+	}
+	l = len(m.MatrixARoot)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.MatrixBRoot)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.ChallengeWindow != 0 {
+		n += 1 + sovTx(uint64(m.ChallengeWindow))
+	}
+	if m.MaxPricePerCwu != 0 {
+		n += 1 + sovTx(uint64(m.MaxPricePerCwu))
+	}
+	if m.MaxFee != 0 {
+		n += 1 + sovTx(uint64(m.MaxFee))
+	}
+	l = len(m.InputDataRef)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgPostGEMMTaskResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.GemmTaskId != 0 {
+		n += 1 + sovTx(uint64(m.GemmTaskId))
+	}
+	l = len(m.ProtocolTaskId)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgAcceptGEMMTask) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Worker)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.GemmTaskId != 0 {
+		n += 1 + sovTx(uint64(m.GemmTaskId))
+	}
+	l = len(m.AssignmentNonce)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgAcceptGEMMTaskResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.AssignmentId)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgSubmitGEMMResult) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Worker)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.GemmTaskId != 0 {
+		n += 1 + sovTx(uint64(m.GemmTaskId))
+	}
+	l = len(m.OutputRoot)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.OutputDataRef)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.OutputBytes != 0 {
+		n += 1 + sovTx(uint64(m.OutputBytes))
+	}
+	if m.CompletedEpoch != 0 {
+		n += 1 + sovTx(uint64(m.CompletedEpoch))
+	}
+	l = len(m.WorkerSignature)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgSubmitGEMMResultResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ChallengeEnd != 0 {
+		n += 1 + sovTx(uint64(m.ChallengeEnd))
+	}
+	return n
+}
+
+func (m *MsgAttestGEMMTask) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Monitor)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.GemmTaskId != 0 {
+		n += 1 + sovTx(uint64(m.GemmTaskId))
+	}
+	return n
+}
+
+func (m *MsgAttestGEMMTaskResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgOpenGEMMChallenge) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Challenger)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.GemmTaskId != 0 {
+		n += 1 + sovTx(uint64(m.GemmTaskId))
+	}
+	if m.DisputedTileI != 0 {
+		n += 1 + sovTx(uint64(m.DisputedTileI))
+	}
+	if m.DisputedTileJ != 0 {
+		n += 1 + sovTx(uint64(m.DisputedTileJ))
+	}
+	l = len(m.WorkerOutputTile)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if len(m.WorkerProofSiblings) > 0 {
+		for _, b := range m.WorkerProofSiblings {
+			l = len(b)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	if m.WorkerProofIndex != 0 {
+		n += 1 + sovTx(uint64(m.WorkerProofIndex))
+	}
+	if m.WorkerProofCount != 0 {
+		n += 1 + sovTx(uint64(m.WorkerProofCount))
+	}
+	l = len(m.ChallengerOutputTile)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.ChallengeBond != 0 {
+		n += 1 + sovTx(uint64(m.ChallengeBond))
+	}
+	l = len(m.ChallengerSignature)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgOpenGEMMChallengeResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ChallengeEnd != 0 {
+		n += 1 + sovTx(uint64(m.ChallengeEnd))
+	}
+	return n
+}
+
+func (m *MsgCommitGEMMTrace) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Actor)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.GemmTaskId != 0 {
+		n += 1 + sovTx(uint64(m.GemmTaskId))
+	}
+	l = len(m.TraceRoot)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.InitialState)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if len(m.InitialProofSiblings) > 0 {
+		for _, b := range m.InitialProofSiblings {
+			l = len(b)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	if m.InitialProofIndex != 0 {
+		n += 1 + sovTx(uint64(m.InitialProofIndex))
+	}
+	if m.InitialProofCount != 0 {
+		n += 1 + sovTx(uint64(m.InitialProofCount))
+	}
+	l = len(m.FinalState)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if len(m.FinalProofSiblings) > 0 {
+		for _, b := range m.FinalProofSiblings {
+			l = len(b)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	if m.FinalProofIndex != 0 {
+		n += 1 + sovTx(uint64(m.FinalProofIndex))
+	}
+	if m.FinalProofCount != 0 {
+		n += 1 + sovTx(uint64(m.FinalProofCount))
+	}
+	if m.LockedEpoch != 0 {
+		n += 1 + sovTx(uint64(m.LockedEpoch))
+	}
+	l = len(m.Signature)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgCommitGEMMTraceResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgSubmitGEMMMidState) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Actor)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.GemmTaskId != 0 {
+		n += 1 + sovTx(uint64(m.GemmTaskId))
+	}
+	l = len(m.State)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if len(m.ProofSiblings) > 0 {
+		for _, b := range m.ProofSiblings {
+			l = len(b)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	if m.ProofIndex != 0 {
+		n += 1 + sovTx(uint64(m.ProofIndex))
+	}
+	if m.ProofCount != 0 {
+		n += 1 + sovTx(uint64(m.ProofCount))
+	}
+	return n
+}
+
+func (m *MsgSubmitGEMMMidStateResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgArbitrateGEMM) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Actor)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.GemmTaskId != 0 {
+		n += 1 + sovTx(uint64(m.GemmTaskId))
+	}
+	l = len(m.ATile)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.BTile)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.AProofTileRow != 0 {
+		n += 1 + sovTx(uint64(m.AProofTileRow))
+	}
+	if m.AProofTileCol != 0 {
+		n += 1 + sovTx(uint64(m.AProofTileCol))
+	}
+	if m.AProofTileCols != 0 {
+		n += 1 + sovTx(uint64(m.AProofTileCols))
+	}
+	if len(m.AProofSiblings) > 0 {
+		for _, b := range m.AProofSiblings {
+			l = len(b)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	if m.AProofCount != 0 {
+		n += 1 + sovTx(uint64(m.AProofCount))
+	}
+	if m.BProofTileRow != 0 {
+		n += 1 + sovTx(uint64(m.BProofTileRow))
+	}
+	if m.BProofTileCol != 0 {
+		n += 1 + sovTx(uint64(m.BProofTileCol))
+	}
+	if m.BProofTileCols != 0 {
+		n += 1 + sovTx(uint64(m.BProofTileCols))
+	}
+	if len(m.BProofSiblings) > 0 {
+		for _, b := range m.BProofSiblings {
+			l = len(b)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	if m.BProofCount != 0 {
+		n += 1 + sovTx(uint64(m.BProofCount))
+	}
+	return n
+}
+
+func (m *MsgArbitrateGEMMResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Outcome)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgTimeoutGEMM) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Actor)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.GemmTaskId != 0 {
+		n += 1 + sovTx(uint64(m.GemmTaskId))
+	}
+	return n
+}
+
+func (m *MsgTimeoutGEMMResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Outcome)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgFinalizeGEMM) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Actor)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.GemmTaskId != 0 {
+		n += 1 + sovTx(uint64(m.GemmTaskId))
+	}
+	return n
+}
+
+func (m *MsgFinalizeGEMMResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ReceiptId)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgAbortGEMMTask) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Actor)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.GemmTaskId != 0 {
+		n += 1 + sovTx(uint64(m.GemmTaskId))
+	}
+	return n
+}
+
+func (m *MsgAbortGEMMTaskResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -5495,6 +8968,3271 @@ func (m *MsgRefundTaskResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgRefundTaskResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgPostGEMMTask) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgPostGEMMTask: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgPostGEMMTask: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Requester", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Requester = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequesterProtocolPubkey", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RequesterProtocolPubkey = append(m.RequesterProtocolPubkey[:0], dAtA[iNdEx:postIndex]...)
+			if m.RequesterProtocolPubkey == nil {
+				m.RequesterProtocolPubkey = []byte{}
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequesterKeyProof", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RequesterKeyProof = append(m.RequesterKeyProof[:0], dAtA[iNdEx:postIndex]...)
+			if m.RequesterKeyProof == nil {
+				m.RequesterKeyProof = []byte{}
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequesterNonce", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RequesterNonce = append(m.RequesterNonce[:0], dAtA[iNdEx:postIndex]...)
+			if m.RequesterNonce == nil {
+				m.RequesterNonce = []byte{}
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field M", wireType)
+			}
+			m.M = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.M |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field N", wireType)
+			}
+			m.N = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.N |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field K", wireType)
+			}
+			m.K = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.K |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MatrixARoot", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.MatrixARoot = append(m.MatrixARoot[:0], dAtA[iNdEx:postIndex]...)
+			if m.MatrixARoot == nil {
+				m.MatrixARoot = []byte{}
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MatrixBRoot", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.MatrixBRoot = append(m.MatrixBRoot[:0], dAtA[iNdEx:postIndex]...)
+			if m.MatrixBRoot == nil {
+				m.MatrixBRoot = []byte{}
+			}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChallengeWindow", wireType)
+			}
+			m.ChallengeWindow = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ChallengeWindow |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 11:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxPricePerCwu", wireType)
+			}
+			m.MaxPricePerCwu = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.MaxPricePerCwu |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 12:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxFee", wireType)
+			}
+			m.MaxFee = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.MaxFee |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InputDataRef", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.InputDataRef = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgPostGEMMTaskResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgPostGEMMTaskResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgPostGEMMTaskResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GemmTaskId", wireType)
+			}
+			m.GemmTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GemmTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProtocolTaskId", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ProtocolTaskId = append(m.ProtocolTaskId[:0], dAtA[iNdEx:postIndex]...)
+			if m.ProtocolTaskId == nil {
+				m.ProtocolTaskId = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgAcceptGEMMTask) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgAcceptGEMMTask: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgAcceptGEMMTask: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Worker", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Worker = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GemmTaskId", wireType)
+			}
+			m.GemmTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GemmTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AssignmentNonce", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AssignmentNonce = append(m.AssignmentNonce[:0], dAtA[iNdEx:postIndex]...)
+			if m.AssignmentNonce == nil {
+				m.AssignmentNonce = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgAcceptGEMMTaskResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgAcceptGEMMTaskResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgAcceptGEMMTaskResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AssignmentId", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AssignmentId = append(m.AssignmentId[:0], dAtA[iNdEx:postIndex]...)
+			if m.AssignmentId == nil {
+				m.AssignmentId = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSubmitGEMMResult) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSubmitGEMMResult: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSubmitGEMMResult: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Worker", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Worker = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GemmTaskId", wireType)
+			}
+			m.GemmTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GemmTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OutputRoot", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.OutputRoot = append(m.OutputRoot[:0], dAtA[iNdEx:postIndex]...)
+			if m.OutputRoot == nil {
+				m.OutputRoot = []byte{}
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OutputDataRef", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.OutputDataRef = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OutputBytes", wireType)
+			}
+			m.OutputBytes = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.OutputBytes |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CompletedEpoch", wireType)
+			}
+			m.CompletedEpoch = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.CompletedEpoch |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WorkerSignature", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.WorkerSignature = append(m.WorkerSignature[:0], dAtA[iNdEx:postIndex]...)
+			if m.WorkerSignature == nil {
+				m.WorkerSignature = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSubmitGEMMResultResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSubmitGEMMResultResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSubmitGEMMResultResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChallengeEnd", wireType)
+			}
+			m.ChallengeEnd = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ChallengeEnd |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgAttestGEMMTask) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgAttestGEMMTask: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgAttestGEMMTask: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Monitor", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Monitor = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GemmTaskId", wireType)
+			}
+			m.GemmTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GemmTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgAttestGEMMTaskResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgAttestGEMMTaskResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgAttestGEMMTaskResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgOpenGEMMChallenge) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgOpenGEMMChallenge: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgOpenGEMMChallenge: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Challenger", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Challenger = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GemmTaskId", wireType)
+			}
+			m.GemmTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GemmTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisputedTileI", wireType)
+			}
+			m.DisputedTileI = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.DisputedTileI |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisputedTileJ", wireType)
+			}
+			m.DisputedTileJ = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.DisputedTileJ |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WorkerOutputTile", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.WorkerOutputTile = append(m.WorkerOutputTile[:0], dAtA[iNdEx:postIndex]...)
+			if m.WorkerOutputTile == nil {
+				m.WorkerOutputTile = []byte{}
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WorkerProofSiblings", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.WorkerProofSiblings = append(m.WorkerProofSiblings, make([]byte, postIndex-iNdEx))
+			copy(m.WorkerProofSiblings[len(m.WorkerProofSiblings)-1], dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WorkerProofIndex", wireType)
+			}
+			m.WorkerProofIndex = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.WorkerProofIndex |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WorkerProofCount", wireType)
+			}
+			m.WorkerProofCount = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.WorkerProofCount |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChallengerOutputTile", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ChallengerOutputTile = append(m.ChallengerOutputTile[:0], dAtA[iNdEx:postIndex]...)
+			if m.ChallengerOutputTile == nil {
+				m.ChallengerOutputTile = []byte{}
+			}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChallengeBond", wireType)
+			}
+			m.ChallengeBond = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ChallengeBond |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChallengerSignature", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ChallengerSignature = append(m.ChallengerSignature[:0], dAtA[iNdEx:postIndex]...)
+			if m.ChallengerSignature == nil {
+				m.ChallengerSignature = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgOpenGEMMChallengeResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgOpenGEMMChallengeResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgOpenGEMMChallengeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChallengeEnd", wireType)
+			}
+			m.ChallengeEnd = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ChallengeEnd |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgCommitGEMMTrace) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgCommitGEMMTrace: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgCommitGEMMTrace: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Actor", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Actor = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GemmTaskId", wireType)
+			}
+			m.GemmTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GemmTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TraceRoot", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TraceRoot = append(m.TraceRoot[:0], dAtA[iNdEx:postIndex]...)
+			if m.TraceRoot == nil {
+				m.TraceRoot = []byte{}
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InitialState", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.InitialState = append(m.InitialState[:0], dAtA[iNdEx:postIndex]...)
+			if m.InitialState == nil {
+				m.InitialState = []byte{}
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InitialProofSiblings", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.InitialProofSiblings = append(m.InitialProofSiblings, make([]byte, postIndex-iNdEx))
+			copy(m.InitialProofSiblings[len(m.InitialProofSiblings)-1], dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InitialProofIndex", wireType)
+			}
+			m.InitialProofIndex = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.InitialProofIndex |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InitialProofCount", wireType)
+			}
+			m.InitialProofCount = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.InitialProofCount |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FinalState", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.FinalState = append(m.FinalState[:0], dAtA[iNdEx:postIndex]...)
+			if m.FinalState == nil {
+				m.FinalState = []byte{}
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FinalProofSiblings", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.FinalProofSiblings = append(m.FinalProofSiblings, make([]byte, postIndex-iNdEx))
+			copy(m.FinalProofSiblings[len(m.FinalProofSiblings)-1], dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 10:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FinalProofIndex", wireType)
+			}
+			m.FinalProofIndex = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.FinalProofIndex |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 11:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FinalProofCount", wireType)
+			}
+			m.FinalProofCount = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.FinalProofCount |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 12:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LockedEpoch", wireType)
+			}
+			m.LockedEpoch = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.LockedEpoch |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Signature", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Signature = append(m.Signature[:0], dAtA[iNdEx:postIndex]...)
+			if m.Signature == nil {
+				m.Signature = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgCommitGEMMTraceResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgCommitGEMMTraceResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgCommitGEMMTraceResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSubmitGEMMMidState) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSubmitGEMMMidState: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSubmitGEMMMidState: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Actor", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Actor = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GemmTaskId", wireType)
+			}
+			m.GemmTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GemmTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field State", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.State = append(m.State[:0], dAtA[iNdEx:postIndex]...)
+			if m.State == nil {
+				m.State = []byte{}
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProofSiblings", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ProofSiblings = append(m.ProofSiblings, make([]byte, postIndex-iNdEx))
+			copy(m.ProofSiblings[len(m.ProofSiblings)-1], dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProofIndex", wireType)
+			}
+			m.ProofIndex = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ProofIndex |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProofCount", wireType)
+			}
+			m.ProofCount = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ProofCount |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSubmitGEMMMidStateResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSubmitGEMMMidStateResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSubmitGEMMMidStateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgArbitrateGEMM) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgArbitrateGEMM: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgArbitrateGEMM: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Actor", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Actor = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GemmTaskId", wireType)
+			}
+			m.GemmTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GemmTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ATile", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ATile = append(m.ATile[:0], dAtA[iNdEx:postIndex]...)
+			if m.ATile == nil {
+				m.ATile = []byte{}
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BTile", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BTile = append(m.BTile[:0], dAtA[iNdEx:postIndex]...)
+			if m.BTile == nil {
+				m.BTile = []byte{}
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AProofTileRow", wireType)
+			}
+			m.AProofTileRow = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.AProofTileRow |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AProofTileCol", wireType)
+			}
+			m.AProofTileCol = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.AProofTileCol |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AProofTileCols", wireType)
+			}
+			m.AProofTileCols = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.AProofTileCols |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AProofSiblings", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AProofSiblings = append(m.AProofSiblings, make([]byte, postIndex-iNdEx))
+			copy(m.AProofSiblings[len(m.AProofSiblings)-1], dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 9:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AProofCount", wireType)
+			}
+			m.AProofCount = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.AProofCount |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 10:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BProofTileRow", wireType)
+			}
+			m.BProofTileRow = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.BProofTileRow |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 11:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BProofTileCol", wireType)
+			}
+			m.BProofTileCol = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.BProofTileCol |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 12:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BProofTileCols", wireType)
+			}
+			m.BProofTileCols = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.BProofTileCols |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BProofSiblings", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BProofSiblings = append(m.BProofSiblings, make([]byte, postIndex-iNdEx))
+			copy(m.BProofSiblings[len(m.BProofSiblings)-1], dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 14:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BProofCount", wireType)
+			}
+			m.BProofCount = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.BProofCount |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgArbitrateGEMMResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgArbitrateGEMMResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgArbitrateGEMMResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Outcome", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Outcome = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgTimeoutGEMM) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgTimeoutGEMM: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgTimeoutGEMM: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Actor", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Actor = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GemmTaskId", wireType)
+			}
+			m.GemmTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GemmTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgTimeoutGEMMResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgTimeoutGEMMResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgTimeoutGEMMResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Outcome", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Outcome = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgFinalizeGEMM) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgFinalizeGEMM: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgFinalizeGEMM: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Actor", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Actor = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GemmTaskId", wireType)
+			}
+			m.GemmTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GemmTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgFinalizeGEMMResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgFinalizeGEMMResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgFinalizeGEMMResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReceiptId", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ReceiptId = append(m.ReceiptId[:0], dAtA[iNdEx:postIndex]...)
+			if m.ReceiptId == nil {
+				m.ReceiptId = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgAbortGEMMTask) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgAbortGEMMTask: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgAbortGEMMTask: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Actor", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Actor = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GemmTaskId", wireType)
+			}
+			m.GemmTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GemmTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgAbortGEMMTaskResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgAbortGEMMTaskResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgAbortGEMMTaskResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

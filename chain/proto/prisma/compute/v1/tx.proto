@@ -17,6 +17,17 @@ service Msg {
   rpc TimeoutChallenge(MsgTimeoutChallenge) returns (MsgTimeoutChallengeResponse);
   rpc FinalizeTask(MsgFinalizeTask) returns (MsgFinalizeTaskResponse);
   rpc RefundTask(MsgRefundTask) returns (MsgRefundTaskResponse);
+  rpc PostGEMMTask(MsgPostGEMMTask) returns (MsgPostGEMMTaskResponse);
+  rpc AcceptGEMMTask(MsgAcceptGEMMTask) returns (MsgAcceptGEMMTaskResponse);
+  rpc SubmitGEMMResult(MsgSubmitGEMMResult) returns (MsgSubmitGEMMResultResponse);
+  rpc AttestGEMMTask(MsgAttestGEMMTask) returns (MsgAttestGEMMTaskResponse);
+  rpc OpenGEMMChallenge(MsgOpenGEMMChallenge) returns (MsgOpenGEMMChallengeResponse);
+  rpc CommitGEMMTrace(MsgCommitGEMMTrace) returns (MsgCommitGEMMTraceResponse);
+  rpc SubmitGEMMMidState(MsgSubmitGEMMMidState) returns (MsgSubmitGEMMMidStateResponse);
+  rpc ArbitrateGEMM(MsgArbitrateGEMM) returns (MsgArbitrateGEMMResponse);
+  rpc TimeoutGEMM(MsgTimeoutGEMM) returns (MsgTimeoutGEMMResponse);
+  rpc FinalizeGEMM(MsgFinalizeGEMM) returns (MsgFinalizeGEMMResponse);
+  rpc AbortGEMMTask(MsgAbortGEMMTask) returns (MsgAbortGEMMTaskResponse);
 }
 
 message MsgRegisterModel {
@@ -122,3 +133,144 @@ message MsgRefundTask {
   uint64 task_id = 2;
 }
 message MsgRefundTaskResponse {}
+
+// GEMM_INT8_V1 settlement path. The chain derives every canonical protocol
+// value (task id, assignment id, canonical MAC count) through the
+// prismachain/compute/gemmv1 library; clients never supply them.
+
+message MsgPostGEMMTask {
+  option (cosmos.msg.v1.signer) = "requester";
+  string requester = 1;
+  // 32-byte Ed25519 protocol key bound to the chain account by key proof.
+  bytes requester_protocol_pubkey = 2;
+  // Ed25519 signature over the v1 requester key binding.
+  bytes requester_key_proof = 3;
+  bytes requester_nonce = 4;
+  uint64 m = 5;
+  uint64 n = 6;
+  uint64 k = 7;
+  bytes matrix_a_root = 8;
+  bytes matrix_b_root = 9;
+  uint64 challenge_window = 10;
+  uint64 max_price_per_cwu = 11;
+  uint64 max_fee = 12;
+  string input_data_ref = 13;
+}
+message MsgPostGEMMTaskResponse {
+  uint64 gemm_task_id = 1;
+  bytes protocol_task_id = 2;
+}
+
+message MsgAcceptGEMMTask {
+  option (cosmos.msg.v1.signer) = "worker";
+  string worker = 1;
+  uint64 gemm_task_id = 2;
+  bytes assignment_nonce = 3;
+}
+message MsgAcceptGEMMTaskResponse { bytes assignment_id = 1; }
+
+message MsgSubmitGEMMResult {
+  option (cosmos.msg.v1.signer) = "worker";
+  string worker = 1;
+  uint64 gemm_task_id = 2;
+  bytes output_root = 3;
+  string output_data_ref = 4;
+  uint64 output_bytes = 5;
+  uint64 completed_epoch = 6;
+  // Ed25519 signature by the bonded worker network key over the canonical
+  // gemmv1.ResultCommit rebuilt from these fields and chain state.
+  bytes worker_signature = 7;
+}
+message MsgSubmitGEMMResultResponse { uint64 challenge_end = 1; }
+
+message MsgAttestGEMMTask {
+  option (cosmos.msg.v1.signer) = "monitor";
+  string monitor = 1;
+  uint64 gemm_task_id = 2;
+}
+message MsgAttestGEMMTaskResponse {}
+
+message MsgOpenGEMMChallenge {
+  option (cosmos.msg.v1.signer) = "challenger";
+  string challenger = 1;
+  uint64 gemm_task_id = 2;
+  uint64 disputed_tile_i = 3;
+  uint64 disputed_tile_j = 4;
+  bytes worker_output_tile = 5;
+  repeated bytes worker_proof_siblings = 6;
+  uint32 worker_proof_index = 7;
+  uint32 worker_proof_count = 8;
+  bytes challenger_output_tile = 9;
+  uint64 challenge_bond = 10;
+  bytes challenger_signature = 11;
+}
+message MsgOpenGEMMChallengeResponse { uint64 challenge_end = 1; }
+
+message MsgCommitGEMMTrace {
+  option (cosmos.msg.v1.signer) = "actor";
+  string actor = 1;
+  uint64 gemm_task_id = 2;
+  bytes trace_root = 3;
+  bytes initial_state = 4;
+  repeated bytes initial_proof_siblings = 5;
+  uint32 initial_proof_index = 6;
+  uint32 initial_proof_count = 7;
+  bytes final_state = 8;
+  repeated bytes final_proof_siblings = 9;
+  uint32 final_proof_index = 10;
+  uint32 final_proof_count = 11;
+  uint64 locked_epoch = 12;
+  bytes signature = 13;
+}
+message MsgCommitGEMMTraceResponse {}
+
+message MsgSubmitGEMMMidState {
+  option (cosmos.msg.v1.signer) = "actor";
+  string actor = 1;
+  uint64 gemm_task_id = 2;
+  bytes state = 3;
+  repeated bytes proof_siblings = 4;
+  uint32 proof_index = 5;
+  uint32 proof_count = 6;
+}
+message MsgSubmitGEMMMidStateResponse {}
+
+message MsgArbitrateGEMM {
+  option (cosmos.msg.v1.signer) = "actor";
+  string actor = 1;
+  uint64 gemm_task_id = 2;
+  bytes a_tile = 3;
+  bytes b_tile = 4;
+  uint32 a_proof_tile_row = 5;
+  uint32 a_proof_tile_col = 6;
+  uint32 a_proof_tile_cols = 7;
+  repeated bytes a_proof_siblings = 8;
+  uint32 a_proof_count = 9;
+  uint32 b_proof_tile_row = 10;
+  uint32 b_proof_tile_col = 11;
+  uint32 b_proof_tile_cols = 12;
+  repeated bytes b_proof_siblings = 13;
+  uint32 b_proof_count = 14;
+}
+message MsgArbitrateGEMMResponse { string outcome = 1; }
+
+message MsgTimeoutGEMM {
+  option (cosmos.msg.v1.signer) = "actor";
+  string actor = 1;
+  uint64 gemm_task_id = 2;
+}
+message MsgTimeoutGEMMResponse { string outcome = 1; }
+
+message MsgFinalizeGEMM {
+  option (cosmos.msg.v1.signer) = "actor";
+  string actor = 1;
+  uint64 gemm_task_id = 2;
+}
+message MsgFinalizeGEMMResponse { bytes receipt_id = 1; }
+
+message MsgAbortGEMMTask {
+  option (cosmos.msg.v1.signer) = "actor";
+  string actor = 1;
+  uint64 gemm_task_id = 2;
+}
+message MsgAbortGEMMTaskResponse {}

@@ -16,7 +16,7 @@ var (
 	errSnapshotBad  = errors.New("gemmv1: invalid dispute snapshot state")
 )
 
-const gemmSnapshotSize = 4 + 1 + 32 + 32 + 4 + 4 + 32 + 32 + 4 + 4 + 3*256 + 2*(1+256) + 24 + 1 + 1
+const gemmSnapshotSize = 4 + 1 + 32 + 32 + 4 + 4 + 32 + 32 + 4 + 4 + 3*256 + 2*(1+256) + 24 + 2
 
 // SnapshotV1 encodes the dispute for consensus storage.
 func (d *GEMMDispute) SnapshotV1() ([]byte, error) {
@@ -63,6 +63,10 @@ func (d *GEMMDispute) SnapshotV1() ([]byte, error) {
 		o += 8
 	}
 	if d.arbReady {
+		b[o] = 1
+	}
+	o++
+	if d.LastRoundKeptLow {
 		b[o] = 1
 	}
 	o++
@@ -153,6 +157,8 @@ func RestoreGEMMDispute(snapshot []byte, cfg DisputeConfig) (*GEMMDispute, error
 	o += 8
 	arbReady := snapshot[o] == 1
 	o++
+	keptLow := snapshot[o] == 1
+	o++
 	outcome := Outcome(snapshot[o])
 	if outcome > BothInvalid || period == 0 || deadline < lastEpoch ||
 		low >= high && !(arbReady || outcome != Pending) ||
@@ -164,18 +170,19 @@ func RestoreGEMMDispute(snapshot []byte, cfg DisputeConfig) (*GEMMDispute, error
 		return nil, errSnapshotBad
 	}
 	return &GEMMDispute{
-		cfg:          cfg,
-		assignmentID: assignmentID,
-		r:            r,
-		roots:        roots,
-		low:          low,
-		high:         high,
-		lowState:     *lowState,
-		highStates:   [2]State{*workerHigh, *challengerHigh},
-		medians:      medians,
-		deadline:     deadline,
-		lastEpoch:    lastEpoch,
-		outcome:      outcome,
-		arbReady:     arbReady,
+		cfg:              cfg,
+		assignmentID:     assignmentID,
+		r:                r,
+		roots:            roots,
+		low:              low,
+		high:             high,
+		lowState:         *lowState,
+		highStates:       [2]State{*workerHigh, *challengerHigh},
+		medians:          medians,
+		deadline:         deadline,
+		lastEpoch:        lastEpoch,
+		outcome:          outcome,
+		arbReady:         arbReady,
+		LastRoundKeptLow: keptLow,
 	}, nil
 }

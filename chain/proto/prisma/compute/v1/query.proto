@@ -6,6 +6,10 @@ service Query {
   rpc Task(QueryTaskRequest) returns (QueryTaskResponse);
   rpc Model(QueryModelRequest) returns (QueryModelResponse);
   rpc Worker(QueryWorkerRequest) returns (QueryWorkerResponse);
+  rpc GEMMTask(QueryGEMMTaskRequest) returns (QueryGEMMTaskResponse);
+  rpc GEMMDispute(QueryGEMMDisputeRequest) returns (QueryGEMMDisputeResponse);
+  rpc GEMMReceipt(QueryGEMMReceiptRequest) returns (QueryGEMMReceiptResponse);
+  rpc GEMMWorkerWork(QueryGEMMWorkerWorkRequest) returns (QueryGEMMWorkerWorkResponse);
 }
 
 message QueryTaskRequest { uint64 task_id = 1; }
@@ -18,3 +22,15 @@ message QueryWorkerResponse {
   bytes network_public_key = 2;
   uint64 reserved_uprsm = 3;
 }
+
+message QueryGEMMTaskRequest { uint64 gemm_task_id = 1; }
+message QueryGEMMTaskResponse { bytes task_json = 1; bytes dispute_json = 2; }
+
+message QueryGEMMDisputeRequest { uint64 gemm_task_id = 1; }
+message QueryGEMMDisputeResponse { bytes dispute_json = 1; }
+
+message QueryGEMMReceiptRequest { bytes receipt_id = 1; }
+message QueryGEMMReceiptResponse { bytes receipt_json = 1; }
+
+message QueryGEMMWorkerWorkRequest { string worker = 1; }
+message QueryGEMMWorkerWorkResponse { uint64 total_canonical_mac = 1; }
