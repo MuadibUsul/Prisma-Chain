@@ -69,6 +69,19 @@ def reference_gemm(a, b, m: int, n: int, k: int):
     return c
 
 
+def micro_step(low_state, a_tile, b_tile):
+    """S(r+1) = S(r) + A_tile x B_tile: exactly 512 canonical MACs. Task
+    admission bounds K so the signed int32 accumulator cannot overflow."""
+    nxt = [0] * INT_TILE_COUNT
+    for i in range(TILE_SIZE):
+        for j in range(TILE_SIZE):
+            acc = low_state[i * TILE_SIZE + j]
+            for r in range(TILE_SIZE):
+                acc += a_tile[i * TILE_SIZE + r] * b_tile[r * TILE_SIZE + j]
+            nxt[i * TILE_SIZE + j] = acc
+    return nxt
+
+
 def output_tiles(c, m: int, n: int):
     """Slice C into zero-padded row-major 8x8 int32 tiles (flat lists)."""
     rows_c = (m + TILE_SIZE - 1) // TILE_SIZE
