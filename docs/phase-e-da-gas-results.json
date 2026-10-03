@@ -1,0 +1,59 @@
+{
+  "challenge_win": 20,
+  "da_penalty": 100000,
+  "da_window": 30,
+  "note": "gas units are consensus resource accounting, not CPU time; wall_ms is reported separately. RespondGEMMDAChallenge carries a 256-byte tile plus a bounded Merkle proof.",
+  "records": [
+    {
+      "phase": "RegisterDAProvider",
+      "gas_units": 41318,
+      "wall_ms": 0
+    },
+    {
+      "phase": "SubmitDAAttestation",
+      "gas_units": 94510,
+      "wall_ms": 0
+    },
+    {
+      "phase": "RegisterDAProvider2",
+      "gas_units": 41318,
+      "wall_ms": 0.533
+    },
+    {
+      "phase": "SubmitDAAttestation2",
+      "gas_units": 115684,
+      "wall_ms": 0
+    },
+    {
+      "phase": "OpenGEMMDAChallenge",
+      "gas_units": 117940,
+      "wall_ms": 0
+    },
+    {
+      "phase": "RespondGEMMDAChallenge",
+      "gas_units": 123849,
+      "wall_ms": 0
+    },
+    {
+      "phase": "OpenGEMMDAChallenge2",
+      "gas_units": 117964,
+      "wall_ms": 0.538
+    },
+    {
+      "phase": "TimeoutGEMMDAChallenge",
+      "gas_units": 162122,
+      "wall_ms": 0
+    },
+    {
+      "phase": "FailGEMMAvailabilityGate",
+      "gas_units": 34167,
+      "wall_ms": 0
+    }
+  ],
+  "schedule": "GEMMGasV1",
+  "shape": {
+    "k": 64,
+    "m": 64,
+    "n": 64
+  }
+}

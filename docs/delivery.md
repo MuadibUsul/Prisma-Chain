@@ -167,6 +167,54 @@ dispute state and VWR settlement) has since landed and is covered by the
 on-chain settlement gate below; the GPU benchmark ladder on a dedicated
 metered run remains the only open item of this gate.
 
+## Multi-validator challenge inclusion gate
+
+Phase E (docs/phase-e-report.md) proves that one censoring proposer
+cannot permanently suppress a valid challenge. The gate is met only when:
+
+1. Four equal-power (25%) validators with independent keys run one chain.
+2. One offline validator keeps finalization alive; two offline halt it
+   (expected behavior); a restarted validator catches up from its own
+   data to an identical app hash.
+3. A single proposer can omit a challenge from its own proposal while
+   every validator still considers it valid.
+4. A later honest proposer includes the same challenge and the fraud
+   dispute completes with the wrong worker receiving no receipt.
+5. All validators converge to identical final state.
+
+Status: items 1-5 pass on the local four-validator devnet
+(docs/phase-e-validator-results.json, phase-e-censorship-results.json,
+phase-e-da-results.json). Single-proposer scope only: a validator cartel
+can still censor, and propagation plus challenge-window length remain
+assumptions. NOT proven: multi-operator economic drills, validator
+churn at scale, long-run liveness.
+
+## DA_REPLICA_V1 gate
+
+Replicated output availability with bonded providers and objective
+on-chain sampling challenges (docs/phase-e-permissionless-verification.md).
+The gate is met only when:
+
+1. Three independent bonded providers register permissionlessly.
+2. Each provider verifies output_root from the received blob BEFORE
+   storing or attesting; mismatched blobs are refused.
+3. A 2-of-3 quorum gates finalization; quorum loss blocks finalize;
+   replacement restores it; expiry routes to availability_failed with a
+   requester refund and no receipt.
+4. A watcher obtains C only through the DA layer and rebuilds
+   output_root before Freivalds.
+5. A provider can be challenged on chain for a specific derived tile and
+   answers with a 256-byte tile plus a proof against the committed root;
+   a missed deadline is an objective slashing fact.
+6. DoS bounds hold (one open challenge per provider, bounded proofs,
+   duplicate rejection) and the gas schedule is measured.
+
+Status: items 1-6 pass in keeper tests, DA gas measurement
+(docs/phase-e-da-gas-results.json) and the combined four-validator devnet
+run. This proves replicated availability with bonded attestations, NOT
+perfect data availability; erasure coding, DAS, KZG and dedicated DA
+networks remain future work.
+
 ## On-chain GEMM settlement gate
 
 Phase D (docs/gemm-phase-d-report.md) connects the verified GEMM path to

@@ -89,3 +89,23 @@ before choosing live-network reward rates.
   match the data it can actually observe.
 - Run zero-demand and high-demand supply scenarios; report watcher budget
   shortfalls rather than assuming a 20% burn funds security.
+
+
+## Phase E additions
+
+- **Challenge inclusion**: one proposer omits a valid challenge from its
+  proposal (devnet harness, omission only). Proven on four validators:
+  the next honest proposer includes it and the dispute completes. A
+  validator cartel and propagation failures remain assumptions; the
+  challenge window must cover proposer rotation.
+- **Validator downtime**: an absent validator is downtime-jailed and
+  slashed by the staking/slashing modules (observed on the devnet); one
+  offline of four keeps liveness at 75%, two halt the chain at 50%.
+- **DA provider honesty**: providers verify output_root before attesting;
+  a lying provider is challenged on chain for a derived tile and loses a
+  fixed penalty on timeout. HTTP failures are never evidence; only the
+  chain deadline is objective.
+- **Weaker assumptions than perfect DA**: DA_REPLICA_V1 depends on enough
+  independent providers remaining available plus includable challenges;
+  it is replicated full-output availability, not erasure coding, DAS,
+  KZG or a dedicated DA network.

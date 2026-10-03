@@ -115,3 +115,10 @@ request.
 The [task protocol](docs/protocol.md) and [threat model](docs/threat-model.md)
 describe the exact promises and failure handling. A testnet PRSM faucet token
 has no real monetary value.
+
+
+Phase E adds permissionless verification: a four-validator devnet proves
+that one censoring proposer cannot suppress a valid challenge
+(`docs/phase-e-report.md`), and DA_REPLICA_V1 gives the GEMM output
+bonded, independently verified availability with objective on-chain tile
+challenges. See `docs/phase-e-permissionless-verification.md`.
