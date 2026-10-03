@@ -16,7 +16,7 @@ var (
 	errSnapshotBad  = errors.New("gemmv1: invalid dispute snapshot state")
 )
 
-const gemmSnapshotSize = 4 + 1 + 32 + 32 + 4 + 4 + 32 + 32 + 4 + 4 + 3*256 + 2*(1+256) + 24 + 2
+const gemmSnapshotSize = 4 + 1 + 32 + 32 + 4 + 4 + 32 + 32 + 4 + 4 + 3*256 + 2*(1+256) + 24 + 3
 
 // SnapshotV1 encodes the dispute for consensus storage.
 func (d *GEMMDispute) SnapshotV1() ([]byte, error) {

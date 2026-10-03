@@ -64,19 +64,22 @@ func gemmInputProofFromMsg(matrixID byte, row, col, cols uint32, leafCount uint3
 	return proof, nil
 }
 
-// gemmDisputeConfig rebuilds the dispute context from chain state.
-func gemmDisputeConfig(task *GEMMTask) gemmv1.DisputeConfig {
+// gemmDisputeConfig rebuilds the dispute context from chain state,
+// including the active challenge's committed tiles.
+func gemmDisputeConfig(task *GEMMTask, record *GEMMDisputeRecord) gemmv1.DisputeConfig {
 	rootA := root32(task.MatrixARoot)
 	rootB := root32(task.MatrixBRoot)
 	return gemmv1.DisputeConfig{
-		Task:        task.mustDescriptor(),
-		Assignment:  task.gemmAssignment(),
-		TaskID:      task.ProtocolTaskID,
-		TileI:       uint32(task.ActiveTileI),
-		TileJ:       uint32(task.ActiveTileJ),
-		MatrixARoot: rootA,
-		MatrixBRoot: rootB,
-		RoundPeriod: ChallengeRoundBlocks,
+		Task:           task.mustDescriptor(),
+		Assignment:     task.gemmAssignment(),
+		TaskID:         task.ProtocolTaskID,
+		TileI:          uint32(task.ActiveTileI),
+		TileJ:          uint32(task.ActiveTileJ),
+		WorkerTile:     record.WorkerTile,
+		ChallengerTile: record.ChallengerTile,
+		MatrixARoot:    rootA,
+		MatrixBRoot:    rootB,
+		RoundPeriod:    ChallengeRoundBlocks,
 	}
 }
 

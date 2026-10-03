@@ -192,6 +192,7 @@ func (s msgServer) SubmitGEMMResult(ctx context.Context, msg *types.MsgSubmitGEM
 	// Identity double binding: the bonded network key must be the key the
 	// ResultCommit was signed with (§42).
 	rc := task.gemmResultCommit(msg.OutputRoot, msg.CompletedEpoch)
+	rc.WorkerSignature = append([]byte(nil), msg.WorkerSignature...)
 	if !equalBytesMsg(networkKey, rc.WorkerPubKey) {
 		return nil, errGEMMIdentity
 	}
@@ -199,9 +200,12 @@ func (s msgServer) SubmitGEMMResult(ctx context.Context, msg *types.MsgSubmitGEM
 		return nil, err
 	}
 	if !gemmv1.VerifyResultCommitSignature(rc) {
+		unsigned := *rc
+		unsigned.WorkerSignature = nil
 		return nil, errors.New("gemm ResultCommit signature is invalid")
 	}
 	task.OutputRoot = append([]byte(nil), msg.OutputRoot...)
+	task.ResultCommitSignature = append([]byte(nil), rc.WorkerSignature...)
 	task.OutputDataRef = msg.OutputDataRef
 	task.OutputBytes = task.M * task.N * 4
 	task.ResultSubmittedHeight = height

@@ -74,6 +74,7 @@ func (s msgServer) FinalizeGEMM(ctx context.Context, msg *types.MsgFinalizeGEMM)
 	// signature was verified at submission and is re-verified here so the
 	// receipt is built over exactly the committed object.
 	rc := task.gemmResultCommit(task.OutputRoot, task.ResultSubmittedHeight)
+	rc.WorkerSignature = append([]byte(nil), task.ResultCommitSignature...)
 	if !gemmv1.VerifyResultCommitSignature(rc) {
 		return nil, errors.New("gemm ResultCommit signature no longer verifies")
 	}

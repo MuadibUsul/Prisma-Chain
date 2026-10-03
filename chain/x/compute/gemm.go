@@ -75,6 +75,7 @@ type GEMMTask struct {
 	AcceptedHeight          uint64                `json:"accepted_height,omitempty"`
 	ReservedBond            uint64                `json:"reserved_bond,omitempty"`
 	OutputRoot              []byte                `json:"output_root,omitempty"`
+	ResultCommitSignature   []byte                `json:"result_commit_signature,omitempty"`
 	OutputDataRef           string                `json:"output_data_ref,omitempty"`
 	OutputBytes             uint64                `json:"output_bytes,omitempty"`
 	ResultSubmittedHeight   uint64                `json:"result_submitted_height,omitempty"`

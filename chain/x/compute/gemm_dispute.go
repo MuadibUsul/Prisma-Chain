@@ -9,6 +9,7 @@ package compute
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -105,6 +106,7 @@ func (s msgServer) OpenGEMMChallenge(ctx context.Context, msg *types.MsgOpenGEMM
 		ChallengeBond:        bond,
 		OpenedEpoch:          height,
 	}
+	co.ChallengerSignature = append([]byte(nil), msg.ChallengerSignature...)
 	if err := gemmv1.ValidateChallengeOpen(task.mustDescriptor(), co); err != nil {
 		return nil, err
 	}
@@ -119,6 +121,7 @@ func (s msgServer) OpenGEMMChallenge(ctx context.Context, msg *types.MsgOpenGEMM
 	if err != nil {
 		return nil, err
 	}
+	co.WorkerOutputProof = proof
 	s.gasForProofs(ctx, "output tile proof", 1, len(proof.Siblings))
 	s.gasForStates(ctx, "output tiles", 2*256)
 	leaf := gemmv1.LeafOutputTile(task.ProtocolTaskID, task.AssignmentID,
@@ -246,6 +249,7 @@ func (s msgServer) CommitGEMMTrace(ctx context.Context, msg *types.MsgCommitGEMM
 		FinalState:      append([]byte(nil), msg.FinalState...),
 		FinalProof:      outputProofOf(finalProof),
 		LockedEpoch:     msg.LockedEpoch,
+		Signature:       append([]byte(nil), msg.Signature...),
 	}
 	if !digest32(msg.TraceRoot) || len(msg.InitialState) != 256 || len(msg.FinalState) != 256 {
 		return nil, errors.New("gemm trace commit has invalid sizes")
@@ -267,7 +271,7 @@ func (s msgServer) CommitGEMMTrace(ctx context.Context, msg *types.MsgCommitGEMM
 	if msg.LockedEpoch < task.ResultSubmittedHeight {
 		return nil, errors.New("gemm trace locked before the result existed")
 	}
-	tcCBOR, err := gemmv1.EncodeCanonical(tc)
+	tcCBOR, err := json.Marshal(tc)
 	if err != nil {
 		return nil, err
 	}
@@ -290,7 +294,7 @@ func (s msgServer) CommitGEMMTrace(ctx context.Context, msg *types.MsgCommitGEMM
 	if err != nil {
 		return nil, err
 	}
-	dispute, err := gemmv1.NewGEMMDispute(gemmDisputeConfig(&task), workerClaim, challengerClaim, height)
+	dispute, err := gemmv1.NewGEMMDispute(gemmDisputeConfig(&task, &record), workerClaim, challengerClaim, height)
 	if err != nil {
 		return nil, err
 	}
@@ -325,7 +329,7 @@ func (s msgServer) SubmitGEMMMidState(ctx context.Context, msg *types.MsgSubmitG
 	if record.Status != GEMMDisputeBisection || len(record.Snapshot) == 0 {
 		return nil, errGEMMWrongPhase
 	}
-	dispute, err := gemmv1.RestoreGEMMDispute(record.Snapshot, gemmDisputeConfig(&task))
+	dispute, err := gemmv1.RestoreGEMMDispute(record.Snapshot, gemmDisputeConfig(&task, &record))
 	if err != nil {
 		return nil, err
 	}
@@ -414,7 +418,7 @@ func (s msgServer) TimeoutGEMM(ctx context.Context, msg *types.MsgTimeoutGEMM) (
 			outcome = gemmv1.BothInvalid
 		}
 	} else {
-		dispute, err := gemmv1.RestoreGEMMDispute(record.Snapshot, gemmDisputeConfig(&task))
+		dispute, err := gemmv1.RestoreGEMMDispute(record.Snapshot, gemmDisputeConfig(&task, &record))
 		if err != nil {
 			return nil, err
 		}
@@ -462,7 +466,7 @@ func (s msgServer) ArbitrateGEMM(ctx context.Context, msg *types.MsgArbitrateGEM
 	if record.Status != GEMMDisputeArbReady || len(record.Snapshot) == 0 {
 		return nil, errGEMMWrongPhase
 	}
-	dispute, err := gemmv1.RestoreGEMMDispute(record.Snapshot, gemmDisputeConfig(&task))
+	dispute, err := gemmv1.RestoreGEMMDispute(record.Snapshot, gemmDisputeConfig(&task, &record))
 	if err != nil {
 		return nil, err
 	}
