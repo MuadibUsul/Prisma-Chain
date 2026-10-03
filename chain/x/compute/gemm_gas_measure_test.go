@@ -37,11 +37,14 @@ func meteredHarness(t *testing.T, meter storetypes.GasMeter) (*gemmHarness, func
 		bank:      &memoryBank{accounts: map[string]uint64{}},
 		requester: account(1), worker: account(2), challenger: account(3),
 		monitorA: account(4), monitorB: account(5),
+		provA: account(6), provB: account(7), provC: account(8),
+		provAKeys: newGemmKeys(61), provBKeys: newGemmKeys(62), provCKeys: newGemmKeys(63),
 		reqKeys: newGemmKeys(10), workKeys: newGemmKeys(20), chalKeys: newGemmKeys(30),
 	}
 	h.keeper = NewKeeper(key, h.bank)
 	h.msg = h.keeper.MsgServer()
-	for _, a := range []string{h.requester, h.worker, h.challenger, h.monitorA, h.monitorB} {
+	for _, a := range []string{h.requester, h.worker, h.challenger, h.monitorA, h.monitorB,
+		h.provA, h.provB, h.provC} {
 		h.bank.accounts[a] = 10 * MinBond
 	}
 	used := func() uint64 { return meter.GasConsumed() }
@@ -131,6 +134,13 @@ func TestGEMMGasMeasurement(t *testing.T) {
 			}
 		}
 		task2 = mustTask(t, h2, taskID2)
+	})
+	phase2("DAProviderRegister+Attest", func() {
+		h2.registerDAProvider(h2.provA, h2.provAKeys)
+		h2.registerDAProvider(h2.provB, h2.provBKeys)
+		until := daAttestationUntil(mustTask(t, h2, taskID2))
+		h2.attestDA(taskID2, h2.provA, h2.provAKeys, until)
+		h2.attestDA(taskID2, h2.provB, h2.provBKeys, until)
 	})
 	phase2("FinalizeGEMM", func() {
 		h2.ctx = h2.ctx.WithBlockHeight(int64(task2.ChallengeEnd) + 1)

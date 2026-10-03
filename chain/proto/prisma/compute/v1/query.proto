@@ -10,6 +10,8 @@ service Query {
   rpc GEMMDispute(QueryGEMMDisputeRequest) returns (QueryGEMMDisputeResponse);
   rpc GEMMReceipt(QueryGEMMReceiptRequest) returns (QueryGEMMReceiptResponse);
   rpc GEMMWorkerWork(QueryGEMMWorkerWorkRequest) returns (QueryGEMMWorkerWorkResponse);
+  rpc GEMMDAStatus(QueryGEMMDAStatusRequest) returns (QueryGEMMDAStatusResponse);
+  rpc DAProvider(QueryDAProviderRequest) returns (QueryDAProviderResponse);
 }
 
 message QueryTaskRequest { uint64 task_id = 1; }
@@ -34,3 +36,15 @@ message QueryGEMMReceiptResponse { bytes receipt_json = 1; }
 
 message QueryGEMMWorkerWorkRequest { string worker = 1; }
 message QueryGEMMWorkerWorkResponse { uint64 total_canonical_mac = 1; }
+
+message QueryGEMMDAStatusRequest { uint64 gemm_task_id = 1; }
+message QueryGEMMDAStatusResponse {
+  uint32 required_replicas = 1;
+  uint32 valid_replicas = 2;
+  uint32 open_challenges = 3;
+  string availability_status = 4;
+  bytes attestations_json = 5;
+}
+
+message QueryDAProviderRequest { string provider = 1; }
+message QueryDAProviderResponse { bytes provider_json = 1; }

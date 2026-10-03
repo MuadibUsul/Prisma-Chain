@@ -8,6 +8,7 @@ import (
 	"errors"
 
 	"prismachain/chain/x/compute/types"
+	"prismachain/compute/gemmv1"
 )
 
 func (q queryServer) GEMMTask(ctx context.Context, req *types.QueryGEMMTaskRequest) (*types.QueryGEMMTaskResponse, error) {
@@ -57,4 +58,38 @@ func (q queryServer) GEMMWorkerWork(ctx context.Context, req *types.QueryGEMMWor
 		return nil, err
 	}
 	return &types.QueryGEMMWorkerWorkResponse{TotalCanonicalMac: q.GetGEMMVerifiedWork(ctx, req.Worker)}, nil
+}
+
+// GEMMDAStatus reports the availability accounting of one GEMM task.
+func (q queryServer) GEMMDAStatus(ctx context.Context, req *types.QueryGEMMDAStatusRequest) (*types.QueryGEMMDAStatusResponse, error) {
+	task, err := q.GetGEMMTask(ctx, req.GemmTaskId)
+	if err != nil {
+		return nil, err
+	}
+	server := msgServer{q.Keeper}
+	status, valid, open := server.gemmDAStatus(ctx, task)
+	var attestationsJSON []byte
+	if record, err := q.GetDARecord(ctx, req.GemmTaskId); err == nil {
+		attestationsJSON, err = json.Marshal(record.Attesters)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return &types.QueryGEMMDAStatusResponse{
+		RequiredReplicas: gemmv1.DARequiredReplicas, ValidReplicas: valid,
+		OpenChallenges: open, AvailabilityStatus: status, AttestationsJson: attestationsJSON,
+	}, nil
+}
+
+// DAProvider reports one registered availability provider.
+func (q queryServer) DAProvider(ctx context.Context, req *types.QueryDAProviderRequest) (*types.QueryDAProviderResponse, error) {
+	provider, err := q.GetDAProvider(ctx, req.Provider)
+	if err != nil {
+		return nil, err
+	}
+	data, err := json.Marshal(provider)
+	if err != nil {
+		return nil, err
+	}
+	return &types.QueryDAProviderResponse{ProviderJson: data}, nil
 }

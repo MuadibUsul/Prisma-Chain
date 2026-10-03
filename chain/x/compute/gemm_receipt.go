@@ -67,6 +67,11 @@ func (s msgServer) FinalizeGEMM(ctx context.Context, msg *types.MsgFinalizeGEMM)
 		len(task.Attesters) != 2 {
 		return nil, errors.New("gemm task not finalizable")
 	}
+	// DA_REPLICA_V1 gate: exactly the required quorum must be satisfied
+	// before any receipt can be minted.
+	if err := s.daFinalizeReady(ctx, task); err != nil {
+		return nil, err
+	}
 	if task.OutputRoot == nil || task.AssignmentID == nil {
 		return nil, errors.New("gemm task result state is incomplete")
 	}

@@ -61,10 +61,20 @@ type gemmHarness struct {
 	reqKeys    *gemmKeys
 	workKeys   *gemmKeys
 	chalKeys   *gemmKeys
+	provA      string
+	provB      string
+	provC      string
+	provAKeys  *gemmKeys
+	provBKeys  *gemmKeys
+	provCKeys  *gemmKeys
 
 	// optional override of the active challenger identity for queue tests
 	activeChallenger     string
 	activeChallengerKeys *gemmKeys
+
+	// lastTiles caches the most recently submitted output tiles so DA
+	// tests can build valid inclusion proofs.
+	lastTiles []gemmv1.State
 }
 
 func newGemmHarness(t *testing.T, height int64) *gemmHarness {
@@ -76,12 +86,15 @@ func newGemmHarness(t *testing.T, height int64) *gemmHarness {
 		bank:      &memoryBank{accounts: map[string]uint64{}},
 		requester: account(1), worker: account(2), challenger: account(3),
 		monitorA: account(4), monitorB: account(5),
+		provA: account(6), provB: account(7), provC: account(8),
+		provAKeys: newGemmKeys(61), provBKeys: newGemmKeys(62), provCKeys: newGemmKeys(63),
 		reqKeys: newGemmKeys(10), workKeys: newGemmKeys(20), chalKeys: newGemmKeys(30),
 	}
 	h.keeper = NewKeeper(key, h.bank)
 	h.msg = h.keeper.MsgServer()
 	fund := uint64(10 * MinBond)
-	for _, a := range []string{h.requester, h.worker, h.challenger, h.monitorA, h.monitorB} {
+	for _, a := range []string{h.requester, h.worker, h.challenger, h.monitorA, h.monitorB,
+		h.provA, h.provB, h.provC} {
 		h.bank.accounts[a] = fund
 	}
 	return h
@@ -187,6 +200,7 @@ func (h *gemmHarness) acceptAndSubmit(taskID uint64, a, b []int8, c []int32, m, 
 	}); err != nil {
 		h.t.Fatal(err)
 	}
+	h.lastTiles = tiles
 	return tiles
 }
 
@@ -493,6 +507,7 @@ func TestGEMMHonestFlowSettlesOnce(t *testing.T) {
 	if _, err := h.msg.FinalizeGEMM(h.ctx, &types.MsgFinalizeGEMM{Actor: h.requester, GemmTaskId: taskID}); err == nil {
 		t.Fatal("finalized before the challenge window closed")
 	}
+	h.satisfyDA(taskID)
 	workerBefore := h.bank.accounts[h.worker]
 	moduleBefore := h.bank.module
 	h.advanceHeight(int64(task.ChallengeEnd) + 1)
@@ -615,6 +630,7 @@ func TestGEMMFalseChallengeCannotBeatHonestWorker(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
+	h.satisfyDA(taskID)
 	h.advanceHeight(int64(task.ChallengeEnd) + 1)
 	res, err := h.msg.FinalizeGEMM(h.ctx, &types.MsgFinalizeGEMM{Actor: h.requester, GemmTaskId: taskID})
 	if err != nil {
@@ -642,3 +658,61 @@ func mustTask(t *testing.T, h *gemmHarness, taskID uint64) GEMMTask {
 var _ = json.Marshal
 var _ = errors.New
 var _ = sha256.Sum256
+
+// --- DA_REPLICA_V1 harness helpers -----------------------------------------
+
+func (h *gemmHarness) registerDAProvider(account string, keys *gemmKeys) {
+	h.t.Helper()
+	h.bondWorker(account, keys)
+	if _, err := h.msg.RegisterDAProvider(h.ctx, &types.MsgRegisterDAProvider{Provider: account}); err != nil {
+		h.t.Fatal(err)
+	}
+}
+
+// daAttestationUntil is the mandatory retention horizon of a task.
+func daAttestationUntil(task GEMMTask) uint64 {
+	return task.ResultSubmittedHeight + task.ChallengeWindow + DAWindowBlocks
+}
+
+func (h *gemmHarness) attestDA(taskID uint64, provider string, keys *gemmKeys, until uint64) {
+	h.t.Helper()
+	task, err := h.keeper.GetGEMMTask(h.ctx, taskID)
+	if err != nil {
+		h.t.Fatal(err)
+	}
+	attestation := gemmv1.DAAttestation{
+		ProtocolVersion: gemmv1.DAProtocolVersion,
+		TaskID:          task.ProtocolTaskID, AssignmentID: task.AssignmentID,
+		OutputRoot:      task.OutputRoot,
+		ProviderAccount: []byte(provider), ProviderPubKey: keys.networkPub,
+		OutputBytes:          task.M * task.N * 4,
+		AvailableUntilHeight: until,
+		AttestedHeight:       uint64(h.ctx.BlockHeight()),
+	}
+	if err := gemmv1.SignDAAttestation(&attestation, keys.networkPriv); err != nil {
+		h.t.Fatal(err)
+	}
+	raw, err := json.Marshal(&attestation)
+	if err != nil {
+		h.t.Fatal(err)
+	}
+	if _, err := h.msg.SubmitDAAttestation(h.ctx, &types.MsgSubmitDAAttestation{
+		Provider: provider, GemmTaskId: taskID, AttestationJson: raw,
+	}); err != nil {
+		h.t.Fatal(err)
+	}
+}
+
+// satisfyDA reaches the required quorum with two independent providers.
+func (h *gemmHarness) satisfyDA(taskID uint64) {
+	h.t.Helper()
+	h.registerDAProvider(h.provA, h.provAKeys)
+	h.registerDAProvider(h.provB, h.provBKeys)
+	task, err := h.keeper.GetGEMMTask(h.ctx, taskID)
+	if err != nil {
+		h.t.Fatal(err)
+	}
+	until := daAttestationUntil(task)
+	h.attestDA(taskID, h.provA, h.provAKeys, until)
+	h.attestDA(taskID, h.provB, h.provBKeys, until)
+}

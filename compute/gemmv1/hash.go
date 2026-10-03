@@ -111,17 +111,4 @@ func signProtocolObject(v any, sigField *[]byte, key ed25519.PrivateKey) error {
 	return nil
 }
 
-// verifyProtocolObject re-canonicalizes the object with its signature field
-// emptied and checks the Ed25519 signature under pub.
-func verifyProtocolObject(v any, pub []byte, sig []byte) bool {
-	if err := checkPubKey(pub); err != nil || len(sig) != ed25519SigSize {
-		return false
-	}
-	sigBytes, err := SignedBytes(v)
-	if err != nil {
-		return false
-	}
-	return VerifyObject(ed25519.PublicKey(pub), sigBytes, sig)
-}
-
 const ed25519SigSize = ed25519.SignatureSize

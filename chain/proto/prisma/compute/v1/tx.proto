@@ -28,6 +28,12 @@ service Msg {
   rpc TimeoutGEMM(MsgTimeoutGEMM) returns (MsgTimeoutGEMMResponse);
   rpc FinalizeGEMM(MsgFinalizeGEMM) returns (MsgFinalizeGEMMResponse);
   rpc AbortGEMMTask(MsgAbortGEMMTask) returns (MsgAbortGEMMTaskResponse);
+  rpc RegisterDAProvider(MsgRegisterDAProvider) returns (MsgRegisterDAProviderResponse);
+  rpc SubmitDAAttestation(MsgSubmitDAAttestation) returns (MsgSubmitDAAttestationResponse);
+  rpc OpenGEMMDAChallenge(MsgOpenGEMMDAChallenge) returns (MsgOpenGEMMDAChallengeResponse);
+  rpc RespondGEMMDAChallenge(MsgRespondGEMMDAChallenge) returns (MsgRespondGEMMDAChallengeResponse);
+  rpc TimeoutGEMMDAChallenge(MsgTimeoutGEMMDAChallenge) returns (MsgTimeoutGEMMDAChallengeResponse);
+  rpc FailGEMMAvailability(MsgFailGEMMAvailability) returns (MsgFailGEMMAvailabilityResponse);
 }
 
 message MsgRegisterModel {
@@ -277,3 +283,64 @@ message MsgAbortGEMMTask {
   uint64 gemm_task_id = 2;
 }
 message MsgAbortGEMMTaskResponse {}
+
+// DA_REPLICA_V1: bonded providers, availability attestations and objective
+// on-chain sampling challenges. The chain never performs network I/O: it
+// verifies signatures, bounded bytes, Merkle proofs and block heights only.
+
+message MsgRegisterDAProvider {
+  option (cosmos.msg.v1.signer) = "provider";
+  string provider = 1;
+}
+message MsgRegisterDAProviderResponse {}
+
+message MsgSubmitDAAttestation {
+  option (cosmos.msg.v1.signer) = "provider";
+  string provider = 1;
+  uint64 gemm_task_id = 2;
+  // JSON rendering of the canonical gemmv1.DAAttestation object. The
+  // signature always covers the canonical CBOR preimage; the chain
+  // re-encodes the decoded object through the protocol helpers.
+  bytes attestation_json = 3;
+}
+message MsgSubmitDAAttestationResponse {}
+
+message MsgOpenGEMMDAChallenge {
+  option (cosmos.msg.v1.signer) = "challenger";
+  string challenger = 1;
+  uint64 gemm_task_id = 2;
+  string provider = 3;
+  bytes nonce = 4;
+  uint64 bond = 5;
+}
+message MsgOpenGEMMDAChallengeResponse {
+  uint64 challenge_id = 1;
+  uint32 tile_i = 2;
+  uint32 tile_j = 3;
+  uint64 deadline = 4;
+}
+
+message MsgRespondGEMMDAChallenge {
+  option (cosmos.msg.v1.signer) = "provider";
+  string provider = 1;
+  uint64 challenge_id = 2;
+  bytes tile = 3;
+  repeated bytes proof_siblings = 4;
+  uint32 proof_index = 5;
+  uint32 proof_count = 6;
+}
+message MsgRespondGEMMDAChallengeResponse {}
+
+message MsgTimeoutGEMMDAChallenge {
+  option (cosmos.msg.v1.signer) = "actor";
+  string actor = 1;
+  uint64 challenge_id = 2;
+}
+message MsgTimeoutGEMMDAChallengeResponse {}
+
+message MsgFailGEMMAvailability {
+  option (cosmos.msg.v1.signer) = "actor";
+  string actor = 1;
+  uint64 gemm_task_id = 2;
+}
+message MsgFailGEMMAvailabilityResponse {}
