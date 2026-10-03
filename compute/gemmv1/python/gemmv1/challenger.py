@@ -98,8 +98,15 @@ def run(worker: str, m: int, n: int, k: int, seed: int, inject_fraud) -> dict:
     detection = time.time() - started
 
     if disputed is None:
+        report = {
+            "outcome": "optimistic_unchallenged",
+            "detection_s": round(detection, 3),
+            "output_root": commit["output_root"],
+            "canonical_mac_count": m * n * k,
+        }
+        print(json.dumps(report, indent=2))
         print(f"[challenger] PASS: outputs identical ({detection:.1f}s); outcome=optimistic_unchallenged")
-        return {"outcome": "optimistic_unchallenged", "detection_s": detection, "output_root": commit["output_root"]}
+        return report
 
     tile_i, tile_j = disputed
     print(f"[challenger] fraud detected at tile ({tile_i},{tile_j}) after {detection:.1f}s; opening dispute")
