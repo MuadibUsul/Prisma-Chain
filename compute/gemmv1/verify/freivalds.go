@@ -84,36 +84,7 @@ func VerifyFreivalds(a, b []int8, c []int32, m, n, k uint64, prof VerificationPr
 
 	for round := uint16(0); round < prof.Rounds; round++ {
 		r := RandomBinaryVector(src, n)
-		// x = B x r
-		x := make([]int64, k)
-		for t := uint64(0); t < k; t++ {
-			var acc int64
-			bt := b[t*n : (t+1)*n]
-			for j := uint64(0); j < n; j++ {
-				acc += int64(bt[j]) * int64(r[j])
-			}
-			x[t] = acc
-		}
-		// y = A x x
-		y := make([]int64, m)
-		for i := uint64(0); i < m; i++ {
-			var acc int64
-			ai := a[i*k : (i+1)*k]
-			for t := uint64(0); t < k; t++ {
-				acc += int64(ai[t]) * x[t]
-			}
-			y[i] = acc
-		}
-		// z = C x r
-		z := make([]int64, m)
-		for i := uint64(0); i < m; i++ {
-			var acc int64
-			ci := c[i*n : (i+1)*n]
-			for j := uint64(0); j < n; j++ {
-				acc += int64(ci[j]) * int64(r[j])
-			}
-			z[i] = acc
-		}
+		_, y, z := FreivaldsRound(a, b, c, m, n, k, r)
 		res.RoundsExecuted = round + 1
 		res.VerificationMACs += macsPerRound
 		if !equalInt64(y, z) {
@@ -150,13 +121,17 @@ func VerifyFreivaldsBatch(a, b []int8, c []int32, m, n, k uint64, prof Verificat
 	macsPerRound := n*k + m*k + m*n
 	res.VerificationMACs = macsPerRound * uint64(q)
 
-	// R[N][q]
+	// R[N][q]: one INDEPENDENT binary vector per round; reusing a single
+	// vector across columns would collapse q rounds to one round of
+	// detection power.
 	R := make([][]int64, n)
 	for j := uint64(0); j < n; j++ {
 		R[j] = make([]int64, q)
+	}
+	for s := 0; s < q; s++ {
 		vec := RandomBinaryVector(src, n)
-		for t := 0; t < q; t++ {
-			R[j][t] = int64(vec[j])
+		for j := uint64(0); j < n; j++ {
+			R[j][s] = int64(vec[j])
 		}
 	}
 	// X = B x R : X[t][s]
@@ -222,6 +197,41 @@ func VerifyFreivaldsBatch(a, b []int8, c []int32, m, n, k uint64, prof Verificat
 	res.Passed = true
 	res.Duration = msSince(started)
 	return res, nil
+}
+
+// FreivaldsRound computes x = B x r, y = A x x and z = C x r for one
+// binary vector r. It is the single-round primitive shared by the scalar
+// reference and exposed for cross-language vectors; the arithmetic is the
+// exact int64 model proven by Profile.AdmitFor.
+func FreivaldsRound(a, b []int8, c []int32, m, n, k uint64, r []uint8) (x, y, z []int64) {
+	x = make([]int64, k)
+	for t := uint64(0); t < k; t++ {
+		var acc int64
+		bt := b[t*n : (t+1)*n]
+		for j := uint64(0); j < n; j++ {
+			acc += int64(bt[j]) * int64(r[j])
+		}
+		x[t] = acc
+	}
+	y = make([]int64, m)
+	for i := uint64(0); i < m; i++ {
+		var acc int64
+		ai := a[i*k : (i+1)*k]
+		for t := uint64(0); t < k; t++ {
+			acc += int64(ai[t]) * x[t]
+		}
+		y[i] = acc
+	}
+	z = make([]int64, m)
+	for i := uint64(0); i < m; i++ {
+		var acc int64
+		ci := c[i*n : (i+1)*n]
+		for j := uint64(0); j < n; j++ {
+			acc += int64(ci[j]) * int64(r[j])
+		}
+		z[i] = acc
+	}
+	return x, y, z
 }
 
 // ResidualBadRows returns the rows where y and z differ.
