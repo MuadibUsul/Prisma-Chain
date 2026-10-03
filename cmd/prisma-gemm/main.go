@@ -45,6 +45,10 @@ func main() {
 		err = cmdTraceTile(os.Args[2:])
 	case "benchmark":
 		err = cmdBenchmark(os.Args[2:])
+	case "verify-fast":
+		err = cmdVerifyFast(os.Args[2:])
+	case "bench-verify":
+		err = cmdBenchVerify(os.Args[2:])
 	default:
 		usage()
 		os.Exit(2)
@@ -64,6 +68,8 @@ func usage() {
   prisma-gemm prove-step task.json result.json   (verbose arbitration detail)
   prisma-gemm trace-tile task.json result.json --i 0 --j 0
   prisma-gemm benchmark --m 512 --n 512 --k 512 | --sizes 128,256,512
+  prisma-gemm verify-fast [--algorithm freivalds-binary-v1] [--rounds 40] task.json result.json
+  prisma-gemm bench-verify --sizes 512,1024,2048,4096 --rounds 8,16,32,40,64
 `)
 }
 
