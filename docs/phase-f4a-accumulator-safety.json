@@ -1,0 +1,282 @@
+{
+ "formula": "max_safe_k(a,w) = floor((2^31-1) / 2^(a+w-2))",
+ "real_graph": {
+  "gemm_nodes": 83,
+  "k_max": 3072,
+  "all_k_values": [
+   16,
+   128,
+   1024,
+   3072
+  ]
+ },
+ "candidates": {
+  "A8W8": {
+   "a_bits": 8,
+   "w_bits": 8,
+   "a_max_magnitude": 128,
+   "w_max_magnitude": 128,
+   "worst_product": 16384,
+   "max_safe_k": 131071,
+   "real_graph_kmax": 3072,
+   "safe": true
+  },
+  "A8W9": {
+   "a_bits": 8,
+   "w_bits": 9,
+   "a_max_magnitude": 128,
+   "w_max_magnitude": 256,
+   "worst_product": 32768,
+   "max_safe_k": 65535,
+   "real_graph_kmax": 3072,
+   "safe": true
+  },
+  "A8W10": {
+   "a_bits": 8,
+   "w_bits": 10,
+   "a_max_magnitude": 128,
+   "w_max_magnitude": 512,
+   "worst_product": 65536,
+   "max_safe_k": 32767,
+   "real_graph_kmax": 3072,
+   "safe": true
+  },
+  "A8W11": {
+   "a_bits": 8,
+   "w_bits": 11,
+   "a_max_magnitude": 128,
+   "w_max_magnitude": 1024,
+   "worst_product": 131072,
+   "max_safe_k": 16383,
+   "real_graph_kmax": 3072,
+   "safe": true
+  },
+  "A8W12": {
+   "a_bits": 8,
+   "w_bits": 12,
+   "a_max_magnitude": 128,
+   "w_max_magnitude": 2048,
+   "worst_product": 262144,
+   "max_safe_k": 8191,
+   "real_graph_kmax": 3072,
+   "safe": true
+  },
+  "A8W13": {
+   "a_bits": 8,
+   "w_bits": 13,
+   "a_max_magnitude": 128,
+   "w_max_magnitude": 4096,
+   "worst_product": 524288,
+   "max_safe_k": 4095,
+   "real_graph_kmax": 3072,
+   "safe": true
+  },
+  "A9W8": {
+   "a_bits": 9,
+   "w_bits": 8,
+   "a_max_magnitude": 256,
+   "w_max_magnitude": 128,
+   "worst_product": 32768,
+   "max_safe_k": 65535,
+   "real_graph_kmax": 3072,
+   "safe": true
+  },
+  "A9W9": {
+   "a_bits": 9,
+   "w_bits": 9,
+   "a_max_magnitude": 256,
+   "w_max_magnitude": 256,
+   "worst_product": 65536,
+   "max_safe_k": 32767,
+   "real_graph_kmax": 3072,
+   "safe": true
+  },
+  "A9W10": {
+   "a_bits": 9,
+   "w_bits": 10,
+   "a_max_magnitude": 256,
+   "w_max_magnitude": 512,
+   "worst_product": 131072,
+   "max_safe_k": 16383,
+   "real_graph_kmax": 3072,
+   "safe": true
+  },
+  "A9W11": {
+   "a_bits": 9,
+   "w_bits": 11,
+   "a_max_magnitude": 256,
+   "w_max_magnitude": 1024,
+   "worst_product": 262144,
+   "max_safe_k": 8191,
+   "real_graph_kmax": 3072,
+   "safe": true
+  },
+  "A9W12": {
+   "a_bits": 9,
+   "w_bits": 12,
+   "a_max_magnitude": 256,
+   "w_max_magnitude": 2048,
+   "worst_product": 524288,
+   "max_safe_k": 4095,
+   "real_graph_kmax": 3072,
+   "safe": true
+  },
+  "A10W8": {
+   "a_bits": 10,
+   "w_bits": 8,
+   "a_max_magnitude": 512,
+   "w_max_magnitude": 128,
+   "worst_product": 65536,
+   "max_safe_k": 32767,
+   "real_graph_kmax": 3072,
+   "safe": true
+  },
+  "A10W9": {
+   "a_bits": 10,
+   "w_bits": 9,
+   "a_max_magnitude": 512,
+   "w_max_magnitude": 256,
+   "worst_product": 131072,
+   "max_safe_k": 16383,
+   "real_graph_kmax": 3072,
+   "safe": true
+  },
+  "A10W10": {
+   "a_bits": 10,
+   "w_bits": 10,
+   "a_max_magnitude": 512,
+   "w_max_magnitude": 512,
+   "worst_product": 262144,
+   "max_safe_k": 8191,
+   "real_graph_kmax": 3072,
+   "safe": true
+  },
+  "A10W11": {
+   "a_bits": 10,
+   "w_bits": 11,
+   "a_max_magnitude": 512,
+   "w_max_magnitude": 1024,
+   "worst_product": 524288,
+   "max_safe_k": 4095,
+   "real_graph_kmax": 3072,
+   "safe": true
+  },
+  "A11W8": {
+   "a_bits": 11,
+   "w_bits": 8,
+   "a_max_magnitude": 1024,
+   "w_max_magnitude": 128,
+   "worst_product": 131072,
+   "max_safe_k": 16383,
+   "real_graph_kmax": 3072,
+   "safe": true
+  },
+  "A11W9": {
+   "a_bits": 11,
+   "w_bits": 9,
+   "a_max_magnitude": 1024,
+   "w_max_magnitude": 256,
+   "worst_product": 262144,
+   "max_safe_k": 8191,
+   "real_graph_kmax": 3072,
+   "safe": true
+  },
+  "A11W10": {
+   "a_bits": 11,
+   "w_bits": 10,
+   "a_max_magnitude": 1024,
+   "w_max_magnitude": 512,
+   "worst_product": 524288,
+   "max_safe_k": 4095,
+   "real_graph_kmax": 3072,
+   "safe": true
+  },
+  "A12W8": {
+   "a_bits": 12,
+   "w_bits": 8,
+   "a_max_magnitude": 2048,
+   "w_max_magnitude": 128,
+   "worst_product": 262144,
+   "max_safe_k": 8191,
+   "real_graph_kmax": 3072,
+   "safe": true
+  },
+  "A12W9": {
+   "a_bits": 12,
+   "w_bits": 9,
+   "a_max_magnitude": 2048,
+   "w_max_magnitude": 256,
+   "worst_product": 524288,
+   "max_safe_k": 4095,
+   "real_graph_kmax": 3072,
+   "safe": true
+  },
+  "A13W8": {
+   "a_bits": 13,
+   "w_bits": 8,
+   "a_max_magnitude": 4096,
+   "w_max_magnitude": 128,
+   "worst_product": 524288,
+   "max_safe_k": 4095,
+   "real_graph_kmax": 3072,
+   "safe": true
+  }
+ },
+ "safety_grid": {
+  "A8": {
+   "W8": true,
+   "W9": true,
+   "W10": true,
+   "W11": true,
+   "W12": true,
+   "W13": true
+  },
+  "A9": {
+   "W8": true,
+   "W9": true,
+   "W10": true,
+   "W11": true,
+   "W12": true,
+   "W13": false
+  },
+  "A10": {
+   "W8": true,
+   "W9": true,
+   "W10": true,
+   "W11": true,
+   "W12": false,
+   "W13": false
+  },
+  "A11": {
+   "W8": true,
+   "W9": true,
+   "W10": true,
+   "W11": false,
+   "W12": false,
+   "W13": false
+  },
+  "A12": {
+   "W8": true,
+   "W9": true,
+   "W10": false,
+   "W11": false,
+   "W12": false,
+   "W13": false
+  },
+  "A13": {
+   "W8": true,
+   "W9": false,
+   "W10": false,
+   "W11": false,
+   "W12": false,
+   "W13": false
+  }
+ },
+ "diagnostic_excluded": {
+  "A13W10": {
+   "max_safe_k": 1023,
+   "status": "UNSAFE_DIAGNOSTIC_ONLY"
+  }
+ },
+ "note": "admission uses the THEORETICAL bound; observed ranges are recorded separately"
+}
