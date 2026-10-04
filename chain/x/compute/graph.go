@@ -92,8 +92,14 @@ type GraphTask struct {
 	AcceptedHeight       uint64 `json:"accepted_height,omitempty"`
 	ReservedBond         uint64 `json:"reserved_bond,omitempty"`
 
+	// ProtocolVersion is the descriptor's own version string ("" = V1,
+	// "CANONICAL_GRAPH_V2/1.0.0" = the wide-integer family).  Every later
+	// phase dispatches on it; V1 tasks never see the V2 route.
+	ProtocolVersion string `json:"protocol_version,omitempty"`
+
 	// CommitVersion selects the settlement receipt: "" / "1" = V1,
-	// "2" = GraphResultCommitV2 (node-output manifest).
+	// "2" = GraphResultCommitV2 (node-level manifest), "3" =
+	// GraphResultCommitV3 (wide-integer Graph V2 manifest).
 	CommitVersion          string `json:"commit_version,omitempty"`
 	NodeOutputManifestRoot []byte `json:"node_output_manifest_root,omitempty"`
 

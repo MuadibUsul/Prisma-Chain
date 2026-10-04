@@ -900,3 +900,59 @@ func BuildVerifiedGraphWorkReceiptV3(g *GraphDescriptorV2, taskRef, assignmentRe
 func (r *VerifiedGraphWorkReceiptV3) ReceiptIDV3() (Hash, error) {
 	return canonicalObjectHash(DomainReceiptV3, r)
 }
+
+// GraphWorkVectorV2 derives the canonical work vector of a V2 graph
+// STATICALLY from the descriptor (the chain never trusts a worker-declared
+// vector): same formulas the operators report at run time.
+func GraphWorkVectorV2(g *GraphDescriptorV2) (WorkVector, error) {
+	if err := g.ValidateV2(); err != nil {
+		return nil, err
+	}
+	var work WorkVector
+	for _, node := range g.Nodes {
+		elems := int64(1)
+		for _, d := range node.Output.Shape {
+			elems *= d
+		}
+		switch node.OperatorID {
+		case OpGEMMWideA13W10:
+			a := g.inputDescOfV2(node.Inputs[0])
+			b := g.inputDescOfV2(node.Inputs[1])
+			m, k := a.Shape[0], a.Shape[1]
+			n := b.Shape[1]
+			if node.Params.Get("transpose_b", 0) == 1 {
+				n = b.Shape[0]
+			}
+			work = work.Add("GEMM_A13W10_MAC", m*n*k)
+		case OpRequantizeWideV1:
+			work = work.Add("REQUANTIZE_WIDE_ELEMENT", elems)
+		default:
+			switch node.OperatorID {
+			case OpAddFixedV1:
+				work = work.Add("ADD_ELEMENT", elems)
+			case OpMulFixedV1:
+				work = work.Add("MUL_ELEMENT", elems)
+			case OpRMSNormFixedV1:
+				work = work.Add("RMSNORM_ELEMENT", elems)
+				work = work.Add("RMSNORM_REDUCTION", elems)
+			case OpRoPEFixedV1:
+				work = work.Add("ROPE_PAIR", elems/2)
+			case OpSiLUFixedV1:
+				work = work.Add("SILU_ELEMENT", elems)
+			case OpSoftmaxFixedV1:
+				work = work.Add("SOFTMAX_ELEMENT", elems)
+				work = work.Add("SOFTMAX_EXP", elems)
+			default:
+				return nil, fmt.Errorf("canonical/v2: unknown operator %s in work derivation", node.OperatorID)
+			}
+		}
+	}
+	return work.Canonical(), nil
+}
+
+func (g *GraphDescriptorV2) inputDescOfV2(ref TensorRef) TensorDescriptorV2 {
+	if ref.Kind == 0 {
+		return g.Inputs[ref.Index].Desc
+	}
+	return g.Nodes[ref.Index].Output
+}

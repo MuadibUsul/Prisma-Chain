@@ -61,6 +61,14 @@ func (s msgServer) PostGraphTask(ctx context.Context, msg *types.MsgPostGraphTas
 	if len(msg.GraphJson) == 0 || len(msg.GraphJson) > MaxGraphJSONBytes {
 		return nil, errors.New("graph descriptor size out of bounds")
 	}
+	// Explicit version dispatch on the descriptor's own protocol_version:
+	// a CANONICAL_GRAPH_V2 descriptor takes the wide-integer route; every
+	// other value is the frozen V1 route below (no reinterpretation).
+	if version, err := graphProtocolVersionOf(msg.GraphJson); err != nil {
+		return nil, fmt.Errorf("graph descriptor decode: %w", err)
+	} else if version == canonical.ProtocolVersionGraphV2 {
+		return s.postGraphTaskV2(ctx, msg, height, requester)
+	}
 	var graph canonical.GraphDescriptor
 	if err := json.Unmarshal(msg.GraphJson, &graph); err != nil {
 		return nil, fmt.Errorf("graph descriptor decode: %w", err)
@@ -760,13 +768,18 @@ func (s msgServer) FinalizeGraphTask(ctx context.Context, msg *types.MsgFinalize
 // derives the receipt and pays the feeSplit.
 func (s msgServer) finalizeGraphOptimistic(ctx context.Context, task *GraphTask) (*types.MsgFinalizeGraphTaskResponse, error) {
 	height := uint64(sdk.UnwrapSDKContext(ctx).BlockHeight())
-	graph, err := graphDescriptor(task)
-	if err != nil {
-		return nil, err
-	}
-	work, err := canonical.GraphWorkVector(graph)
-	if err != nil {
-		return nil, err
+	var graph *canonical.GraphDescriptor
+	var work canonical.WorkVector
+	if !graphTaskProtocolV2(task) {
+		var err error
+		graph, err = graphDescriptor(task)
+		if err != nil {
+			return nil, err
+		}
+		work, err = canonical.GraphWorkVector(graph)
+		if err != nil {
+			return nil, err
+		}
 	}
 	outputs := make([]canonical.Hash, len(task.OutputRoots))
 	for i, raw := range task.OutputRoots {
@@ -784,7 +797,31 @@ func (s msgServer) finalizeGraphOptimistic(ctx context.Context, task *GraphTask)
 	binary.BigEndian.PutUint64(taskRef[:], task.ID)
 	var receiptID canonical.Hash
 	var receiptJSON []byte
-	if task.CommitVersion == "2" {
+	if task.CommitVersion == "3" {
+		graph2, err := graphDescriptorV2(task)
+		if err != nil {
+			return nil, err
+		}
+		work2, err := canonical.GraphWorkVectorV2(graph2)
+		if err != nil {
+			return nil, err
+		}
+		receipt, err := canonical.BuildVerifiedGraphWorkReceiptV3(graph2,
+			taskRef[:], task.AssignmentRef, task.WorkerProtocolPubKey, outputs, work2,
+			task.NodeOutputManifestRoot, mode, height,
+			[]byte("graph:"+fmt.Sprint(task.ID)), nil, task.DisputeTranscriptDigest)
+		if err != nil {
+			return nil, err
+		}
+		receiptID, err = receipt.ReceiptIDV3()
+		if err != nil {
+			return nil, err
+		}
+		receiptJSON, err = json.Marshal(receipt)
+		if err != nil {
+			return nil, err
+		}
+	} else if task.CommitVersion == "2" {
 		receipt, err := canonical.BuildVerifiedGraphWorkReceiptV2(graph,
 			taskRef[:], task.AssignmentRef, task.WorkerProtocolPubKey, outputs, work,
 			task.NodeOutputManifestRoot, mode, height,
@@ -971,6 +1008,18 @@ func (s msgServer) SubmitGraphResultV2(ctx context.Context, msg *types.MsgSubmit
 	}
 	if msg.Worker != task.Worker {
 		return nil, errors.New("graph result is not from the assigned worker")
+	}
+	// Version dispatch: a V2 task's result is a GraphResultCommitV3 (the
+	// submission envelope bytes are identical; the commitment semantics
+	// follow the task's locked protocol version).
+	if graphTaskProtocolV2(&task) {
+		graph2, err := graphDescriptorV2(&task)
+		if err != nil {
+			return nil, err
+		}
+		s.consumeGraphGas(ctx, "result hashing",
+			GasGraphHash*uint64(len(graph2.Outputs)+len(msg.OutputRoots)+2))
+		return s.submitGraphResultV3(ctx, &task, graph2, msg, height)
 	}
 	graph, err := graphDescriptor(&task)
 	if err != nil {
