@@ -209,10 +209,10 @@
     "first_error": null
    },
    "STAGE_B_5LAUNCH_K3": {
-    "exact": 0,
+    "exact": 5,
     "mismatch": 0,
-    "error": 5,
-    "first_error": "RuntimeError: mat2.size(1) needs to be greater than 0 and a multiple of 8, but got 3"
+    "error": 0,
+    "first_error": null
    },
    "STAGE_C_TRUE_FUSED_MMA": {
     "exact": 5,
@@ -234,8 +234,8 @@
       "mismatches": 0
      },
      "STAGE_B_5LAUNCH_K3": {
-      "exact": false,
-      "error": "RuntimeError: mat2.size(1) needs to be greater than 0 and a multiple of 8, but got 3"
+      "exact": true,
+      "mismatches": 0
      },
      "STAGE_C_TRUE_FUSED_MMA": {
       "exact": true,
@@ -255,8 +255,8 @@
       "mismatches": 0
      },
      "STAGE_B_5LAUNCH_K3": {
-      "exact": false,
-      "error": "RuntimeError: mat2.size(1) needs to be greater than 0 and a multiple of 8, but got 3"
+      "exact": true,
+      "mismatches": 0
      },
      "STAGE_C_TRUE_FUSED_MMA": {
       "exact": true,
@@ -276,8 +276,8 @@
       "mismatches": 0
      },
      "STAGE_B_5LAUNCH_K3": {
-      "exact": false,
-      "error": "RuntimeError: mat2.size(1) needs to be greater than 0 and a multiple of 8, but got 5"
+      "exact": true,
+      "mismatches": 0
      },
      "STAGE_C_TRUE_FUSED_MMA": {
       "exact": true,
@@ -297,8 +297,8 @@
       "mismatches": 0
      },
      "STAGE_B_5LAUNCH_K3": {
-      "exact": false,
-      "error": "RuntimeError: mat2.size(1) needs to be greater than 0 and a multiple of 8, but got 3"
+      "exact": true,
+      "mismatches": 0
      },
      "STAGE_C_TRUE_FUSED_MMA": {
       "exact": true,
@@ -318,8 +318,8 @@
       "mismatches": 0
      },
      "STAGE_B_5LAUNCH_K3": {
-      "exact": false,
-      "error": "RuntimeError: mat2.size(1) needs to be greater than 0 and a multiple of 8, but got 1"
+      "exact": true,
+      "mismatches": 0
      },
      "STAGE_C_TRUE_FUSED_MMA": {
       "exact": true,
@@ -414,78 +414,78 @@
     "logical_mac": 2097152,
     "mac_fraction": 0.26556016597510373,
     "NATIVE_PADDED_INT8": {
-     "median_ms": 0.1311040073633194,
-     "p50_ms": 0.1311040073633194,
-     "p95_ms": 0.14217600226402283,
-     "min_ms": 0.12934400141239166,
-     "max_ms": 0.2348800003528595,
-     "stddev_ms": 0.00706640667551654,
-     "iterations": 500,
+     "median_ms": 0.1316159963607788,
+     "p50_ms": 0.1316159963607788,
+     "p95_ms": 0.14268800616264343,
+     "min_ms": 0.12892800569534302,
+     "max_ms": 0.14895999431610107,
+     "stddev_ms": 0.004209908797171373,
+     "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.09500736236572266,
+     "batched_median_ms": 0.09435104370117188,
      "batched_output_exact": true
     },
     "CUSTOM_NATIVE_INT8_M16": {
-     "median_ms": 0.04950400069355965,
-     "p50_ms": 0.04950400069355965,
-     "p95_ms": 0.054368000477552414,
-     "min_ms": 0.048576001077890396,
-     "max_ms": 0.06499200314283371,
-     "stddev_ms": 0.0021204326661725947,
+     "median_ms": 0.04927999898791313,
+     "p50_ms": 0.04927999898791313,
+     "p95_ms": 0.05113599821925163,
+     "min_ms": 0.04867200180888176,
+     "max_ms": 0.06080000102519989,
+     "stddev_ms": 0.0015915701058115564,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.026600959300994872,
+     "batched_median_ms": 0.02661952018737793,
      "batched_output_exact": true
     },
     "F5B_EAGER_KARATSUBA3": {
-     "median_ms": 0.6392159759998322,
-     "p50_ms": 0.6392159759998322,
-     "p95_ms": 0.6906560063362122,
-     "min_ms": 0.5936959981918335,
-     "max_ms": 0.7784320116043091,
-     "stddev_ms": 0.02762482427535925,
+     "median_ms": 0.6523679792881012,
+     "p50_ms": 0.6523679792881012,
+     "p95_ms": 0.6887040138244629,
+     "min_ms": 0.5980479717254639,
+     "max_ms": 0.7714560031890869,
+     "stddev_ms": 0.0310446199610929,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.5844400024414063,
+     "batched_median_ms": 0.6200912094116211,
      "batched_output_exact": true
     },
     "STAGE_A_CUDA_GRAPH_K3": {
-     "median_ms": 0.17400000244379044,
-     "p50_ms": 0.17400000244379044,
-     "p95_ms": 0.18038399517536163,
-     "min_ms": 0.1711360067129135,
-     "max_ms": 0.27811199426651,
-     "stddev_ms": 0.008128833695102318,
+     "median_ms": 0.17231999337673187,
+     "p50_ms": 0.17231999337673187,
+     "p95_ms": 0.17852799594402313,
+     "min_ms": 0.17126399278640747,
+     "max_ms": 0.27209600806236267,
+     "stddev_ms": 0.007267814980439162,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.14921631813049316,
+     "batched_median_ms": 0.15315903663635255,
      "batched_output_exact": true
     },
     "STAGE_B_5LAUNCH_K3": {
-     "median_ms": 0.1565759927034378,
-     "p50_ms": 0.1565759927034378,
-     "p95_ms": 0.16572800278663635,
-     "min_ms": 0.15276800096035004,
-     "max_ms": 0.17520000040531158,
-     "stddev_ms": 0.004187751047526484,
+     "median_ms": 0.1659040004014969,
+     "p50_ms": 0.1659040004014969,
+     "p95_ms": 0.17337599396705627,
+     "min_ms": 0.16486400365829468,
+     "max_ms": 0.17871999740600586,
+     "stddev_ms": 0.002329514774921351,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.10045727729797363,
+     "batched_median_ms": 0.11089407920837402,
      "batched_output_exact": true
     },
     "STAGE_C_TRUE_FUSED_MMA": {
-     "median_ms": 0.056352000683546066,
-     "p50_ms": 0.056352000683546066,
-     "p95_ms": 0.061344001442193985,
-     "min_ms": 0.05523199960589409,
-     "max_ms": 0.14271999895572662,
-     "stddev_ms": 0.004360844797195004,
+     "median_ms": 0.06067200005054474,
+     "p50_ms": 0.06067200005054474,
+     "p95_ms": 0.06249599903821945,
+     "min_ms": 0.0551999993622303,
+     "max_ms": 0.06934399902820587,
+     "stddev_ms": 0.0027209771543609414,
      "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.03183295965194702,
+     "batched_median_ms": 0.03184832096099854,
      "batched_output_exact": true
     },
-    "native_fastest_median_ms": 0.04950400069355965
+    "native_fastest_median_ms": 0.04927999898791313
    },
    "16x16x128T": {
     "M": 16,
@@ -496,78 +496,78 @@
     "logical_mac": 32768,
     "mac_fraction": 0.002074688796680498,
     "NATIVE_PADDED_INT8": {
-     "median_ms": 0.14044799655675888,
-     "p50_ms": 0.14044799655675888,
-     "p95_ms": 0.16089600324630737,
-     "min_ms": 0.12371200323104858,
-     "max_ms": 0.2322240024805069,
-     "stddev_ms": 0.012080097674639098,
-     "iterations": 500,
+     "median_ms": 0.1260800063610077,
+     "p50_ms": 0.1260800063610077,
+     "p95_ms": 0.13673600554466248,
+     "min_ms": 0.12399999797344208,
+     "max_ms": 0.15654399991035461,
+     "stddev_ms": 0.004364913053752824,
+     "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.10415648460388184,
+     "batched_median_ms": 0.09366880416870117,
      "batched_output_exact": true
     },
     "CUSTOM_NATIVE_INT8_M16": {
-     "median_ms": 0.04387199878692627,
-     "p50_ms": 0.04387199878692627,
-     "p95_ms": 0.05222399905323982,
-     "min_ms": 0.04108799993991852,
-     "max_ms": 0.07046400010585785,
-     "stddev_ms": 0.0041472433647809165,
+     "median_ms": 0.04137599840760231,
+     "p50_ms": 0.04137599840760231,
+     "p95_ms": 0.04886399954557419,
+     "min_ms": 0.04016000032424927,
+     "max_ms": 0.056384000927209854,
+     "stddev_ms": 0.00240620707930896,
      "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.017784639596939086,
+     "batched_median_ms": 0.015436799526214599,
      "batched_output_exact": true
     },
     "F5B_EAGER_KARATSUBA3": {
-     "median_ms": 0.646912008523941,
-     "p50_ms": 0.646912008523941,
-     "p95_ms": 0.6895040273666382,
-     "min_ms": 0.5975679755210876,
-     "max_ms": 0.7670720219612122,
-     "stddev_ms": 0.028093809644971768,
-     "iterations": 200,
+     "median_ms": 0.6645439863204956,
+     "p50_ms": 0.6645439863204956,
+     "p95_ms": 0.7117760181427002,
+     "min_ms": 0.6437119841575623,
+     "max_ms": 0.783519983291626,
+     "stddev_ms": 0.020543297619687127,
+     "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.5814803314208984,
+     "batched_median_ms": 0.6212086486816406,
      "batched_output_exact": true
     },
     "STAGE_A_CUDA_GRAPH_K3": {
-     "median_ms": 0.07265600189566612,
-     "p50_ms": 0.07265600189566612,
-     "p95_ms": 0.078015998005867,
-     "min_ms": 0.0711359977722168,
-     "max_ms": 0.10169599950313568,
-     "stddev_ms": 0.0027039283862230925,
-     "iterations": 500,
+     "median_ms": 0.07238399982452393,
+     "p50_ms": 0.07238399982452393,
+     "p95_ms": 0.07664000242948532,
+     "min_ms": 0.07171200215816498,
+     "max_ms": 0.08185599744319916,
+     "stddev_ms": 0.0017144815866908267,
+     "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.05310495853424072,
+     "batched_median_ms": 0.053134398460388185,
      "batched_output_exact": true
     },
     "STAGE_B_5LAUNCH_K3": {
-     "median_ms": 0.12670399993658066,
-     "p50_ms": 0.12670399993658066,
-     "p95_ms": 0.1425279974937439,
-     "min_ms": 0.12355200201272964,
-     "max_ms": 0.17577600479125977,
-     "stddev_ms": 0.006350915700421026,
+     "median_ms": 0.1409280002117157,
+     "p50_ms": 0.1409280002117157,
+     "p95_ms": 0.15196800231933594,
+     "min_ms": 0.1289920061826706,
+     "max_ms": 0.23311999440193176,
+     "stddev_ms": 0.006475913902943547,
      "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.11005439758300781,
+     "batched_median_ms": 0.11365663528442382,
      "batched_output_exact": true
     },
     "STAGE_C_TRUE_FUSED_MMA": {
-     "median_ms": 0.04726399853825569,
-     "p50_ms": 0.04726399853825569,
-     "p95_ms": 0.05788800120353699,
-     "min_ms": 0.042847998440265656,
-     "max_ms": 0.07606399804353714,
-     "stddev_ms": 0.004807249293786434,
+     "median_ms": 0.04681599885225296,
+     "p50_ms": 0.04681599885225296,
+     "p95_ms": 0.054655998945236206,
+     "min_ms": 0.04505600035190582,
+     "max_ms": 0.13414399325847626,
+     "stddev_ms": 0.0046286764074479295,
      "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.0179967999458313,
+     "batched_median_ms": 0.019249600172042847,
      "batched_output_exact": true
     },
-    "native_fastest_median_ms": 0.04387199878692627
+    "native_fastest_median_ms": 0.04137599840760231
    },
    "16x128x16": {
     "M": 16,
@@ -578,78 +578,78 @@
     "logical_mac": 32768,
     "mac_fraction": 0.002074688796680498,
     "NATIVE_PADDED_INT8": {
-     "median_ms": 0.12753599882125854,
-     "p50_ms": 0.12753599882125854,
-     "p95_ms": 0.14079999923706055,
-     "min_ms": 0.12243200093507767,
-     "max_ms": 0.15907199680805206,
-     "stddev_ms": 0.006131547929804533,
-     "iterations": 200,
+     "median_ms": 0.12348800152540207,
+     "p50_ms": 0.12348800152540207,
+     "p95_ms": 0.13468800485134125,
+     "min_ms": 0.12147200107574463,
+     "max_ms": 0.22524799406528473,
+     "stddev_ms": 0.0070774725070065474,
+     "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.09467328071594239,
+     "batched_median_ms": 0.09148320198059082,
      "batched_output_exact": true
     },
     "CUSTOM_NATIVE_INT8_M16": {
-     "median_ms": 0.042608000338077545,
-     "p50_ms": 0.042608000338077545,
-     "p95_ms": 0.05177599936723709,
-     "min_ms": 0.040991999208927155,
-     "max_ms": 0.13600000739097595,
-     "stddev_ms": 0.0054285835647351465,
+     "median_ms": 0.041152000427246094,
+     "p50_ms": 0.041152000427246094,
+     "p95_ms": 0.04806400090456009,
+     "min_ms": 0.040031999349594116,
+     "max_ms": 0.13843199610710144,
+     "stddev_ms": 0.005153372543323218,
      "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.015926079750061037,
+     "batched_median_ms": 0.015468159914016724,
      "batched_output_exact": true
     },
     "F5B_EAGER_KARATSUBA3": {
-     "median_ms": 0.684576004743576,
-     "p50_ms": 0.684576004743576,
-     "p95_ms": 0.749567985534668,
-     "min_ms": 0.596671998500824,
-     "max_ms": 0.8405439853668213,
-     "stddev_ms": 0.03944935163017944,
-     "iterations": 500,
+     "median_ms": 0.6100320219993591,
+     "p50_ms": 0.6100320219993591,
+     "p95_ms": 0.6294400095939636,
+     "min_ms": 0.596127986907959,
+     "max_ms": 0.7219520211219788,
+     "stddev_ms": 0.013210793688955532,
+     "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.6202336120605468,
+     "batched_median_ms": 0.5743190383911133,
      "batched_output_exact": true
     },
     "STAGE_A_CUDA_GRAPH_K3": {
-     "median_ms": 0.06207999959588051,
-     "p50_ms": 0.06207999959588051,
-     "p95_ms": 0.0682239979505539,
-     "min_ms": 0.06102399900555611,
-     "max_ms": 0.09881599992513657,
-     "stddev_ms": 0.0030869113204200333,
-     "iterations": 500,
+     "median_ms": 0.06230400130152702,
+     "p50_ms": 0.06230400130152702,
+     "p95_ms": 0.06604799628257751,
+     "min_ms": 0.061664000153541565,
+     "max_ms": 0.07168000191450119,
+     "stddev_ms": 0.0015727796068814282,
+     "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.04301568031311035,
+     "batched_median_ms": 0.04302656173706055,
      "batched_output_exact": true
     },
     "STAGE_B_5LAUNCH_K3": {
-     "median_ms": 0.12479999661445618,
-     "p50_ms": 0.12479999661445618,
-     "p95_ms": 0.13424000144004822,
-     "min_ms": 0.12291199713945389,
-     "max_ms": 0.22761599719524384,
-     "stddev_ms": 0.007245544531499756,
+     "median_ms": 0.14176000654697418,
+     "p50_ms": 0.14176000654697418,
+     "p95_ms": 0.15494400262832642,
+     "min_ms": 0.138047993183136,
+     "max_ms": 0.25443199276924133,
+     "stddev_ms": 0.00848139719950355,
      "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.09606847763061524,
+     "batched_median_ms": 0.11107263565063477,
      "batched_output_exact": true
     },
     "STAGE_C_TRUE_FUSED_MMA": {
-     "median_ms": 0.04662400111556053,
-     "p50_ms": 0.04662400111556053,
-     "p95_ms": 0.057631999254226685,
-     "min_ms": 0.04303999990224838,
-     "max_ms": 0.13174399733543396,
-     "stddev_ms": 0.005715980892470443,
+     "median_ms": 0.04639999940991402,
+     "p50_ms": 0.04639999940991402,
+     "p95_ms": 0.054496001452207565,
+     "min_ms": 0.04467200115323067,
+     "max_ms": 0.1335040032863617,
+     "stddev_ms": 0.004517655321577802,
      "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.019636160135269164,
+     "batched_median_ms": 0.01732192039489746,
      "batched_output_exact": true
     },
-    "native_fastest_median_ms": 0.042608000338077545
+    "native_fastest_median_ms": 0.041152000427246094
    },
    "16x1024x128": {
     "M": 16,
@@ -660,78 +660,78 @@
     "logical_mac": 2097152,
     "mac_fraction": 0.13278008298755187,
     "NATIVE_PADDED_INT8": {
-     "median_ms": 0.12460800260305405,
-     "p50_ms": 0.12460800260305405,
-     "p95_ms": 0.1343040019273758,
-     "min_ms": 0.1225920021533966,
-     "max_ms": 0.23004800081253052,
-     "stddev_ms": 0.005847806937716384,
+     "median_ms": 0.12534399330615997,
+     "p50_ms": 0.12534399330615997,
+     "p95_ms": 0.14963200688362122,
+     "min_ms": 0.12284799665212631,
+     "max_ms": 0.22540800273418427,
+     "stddev_ms": 0.009573397314797508,
      "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.09300000190734864,
+     "batched_median_ms": 0.09636608123779297,
      "batched_output_exact": true
     },
     "CUSTOM_NATIVE_INT8_M16": {
-     "median_ms": 0.04467200115323067,
-     "p50_ms": 0.04467200115323067,
-     "p95_ms": 0.052639998495578766,
-     "min_ms": 0.04102399945259094,
-     "max_ms": 0.06415999680757523,
-     "stddev_ms": 0.0031465457198825123,
+     "median_ms": 0.04131200164556503,
+     "p50_ms": 0.04131200164556503,
+     "p95_ms": 0.053119998425245285,
+     "min_ms": 0.04009599983692169,
+     "max_ms": 0.06431999802589417,
+     "stddev_ms": 0.003993706380254711,
      "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.017511039972305298,
+     "batched_median_ms": 0.015692800283432007,
      "batched_output_exact": true
     },
     "F5B_EAGER_KARATSUBA3": {
-     "median_ms": 0.6087679862976074,
-     "p50_ms": 0.6087679862976074,
-     "p95_ms": 0.634880006313324,
-     "min_ms": 0.5957440137863159,
-     "max_ms": 0.7214080095291138,
-     "stddev_ms": 0.01480350295305777,
-     "iterations": 200,
+     "median_ms": 0.6602559983730316,
+     "p50_ms": 0.6602559983730316,
+     "p95_ms": 0.7048320174217224,
+     "min_ms": 0.6005120277404785,
+     "max_ms": 1.2597440481185913,
+     "stddev_ms": 0.04024380078574664,
+     "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.5780112075805665,
+     "batched_median_ms": 0.6265311813354493,
      "batched_output_exact": true
     },
     "STAGE_A_CUDA_GRAPH_K3": {
-     "median_ms": 0.09446399658918381,
-     "p50_ms": 0.09446399658918381,
-     "p95_ms": 0.09971199929714203,
-     "min_ms": 0.09356799721717834,
-     "max_ms": 0.10918399691581726,
-     "stddev_ms": 0.0019065710397939905,
+     "median_ms": 0.09505600109696388,
+     "p50_ms": 0.09505600109696388,
+     "p95_ms": 0.10016000270843506,
+     "min_ms": 0.09417600184679031,
+     "max_ms": 0.10259199887514114,
+     "stddev_ms": 0.0015441788042578905,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.07618720054626466,
+     "batched_median_ms": 0.07618112087249757,
      "batched_output_exact": true
     },
     "STAGE_B_5LAUNCH_K3": {
-     "median_ms": 0.1258240044116974,
-     "p50_ms": 0.1258240044116974,
-     "p95_ms": 0.13494400680065155,
-     "min_ms": 0.12422399967908859,
-     "max_ms": 0.13993600010871887,
-     "stddev_ms": 0.003079163239744666,
-     "iterations": 200,
+     "median_ms": 0.13126400113105774,
+     "p50_ms": 0.13126400113105774,
+     "p95_ms": 0.1615999937057495,
+     "min_ms": 0.12918399274349213,
+     "max_ms": 0.23503999412059784,
+     "stddev_ms": 0.013412179353564943,
+     "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.09756735801696777,
+     "batched_median_ms": 0.10171711921691895,
      "batched_output_exact": true
     },
     "STAGE_C_TRUE_FUSED_MMA": {
-     "median_ms": 0.04713600128889084,
-     "p50_ms": 0.04713600128889084,
-     "p95_ms": 0.05987200140953064,
-     "min_ms": 0.043455999344587326,
-     "max_ms": 0.08390399813652039,
-     "stddev_ms": 0.005475332109517101,
-     "iterations": 500,
+     "median_ms": 0.0432640016078949,
+     "p50_ms": 0.0432640016078949,
+     "p95_ms": 0.04623999819159508,
+     "min_ms": 0.04224000126123428,
+     "max_ms": 0.054207999259233475,
+     "stddev_ms": 0.0018681388134027996,
+     "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.01830847978591919,
+     "batched_median_ms": 0.017514879703521728,
      "batched_output_exact": true
     },
-    "native_fastest_median_ms": 0.04467200115323067
+    "native_fastest_median_ms": 0.04131200164556503
    },
    "16x3072x1024": {
     "M": 16,
@@ -742,78 +742,78 @@
     "logical_mac": 50331648,
     "mac_fraction": 0.3983402489626556,
     "NATIVE_PADDED_INT8": {
-     "median_ms": 0.27084800601005554,
-     "p50_ms": 0.27084800601005554,
-     "p95_ms": 0.3002240061759949,
-     "min_ms": 0.2616960108280182,
-     "max_ms": 0.32281601428985596,
-     "stddev_ms": 0.012587412608823727,
+     "median_ms": 0.2646239995956421,
+     "p50_ms": 0.2646239995956421,
+     "p95_ms": 0.276095986366272,
+     "min_ms": 0.2611519992351532,
+     "max_ms": 0.3299520015716553,
+     "stddev_ms": 0.006635349492453525,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.20115327835083008,
+     "batched_median_ms": 0.20121856689453124,
      "batched_output_exact": true
     },
     "CUSTOM_NATIVE_INT8_M16": {
-     "median_ms": 0.06612799689173698,
-     "p50_ms": 0.06612799689173698,
-     "p95_ms": 0.06976000219583511,
-     "min_ms": 0.0652799978852272,
-     "max_ms": 0.07603199779987335,
-     "stddev_ms": 0.0017141954930905041,
+     "median_ms": 0.0663679987192154,
+     "p50_ms": 0.0663679987192154,
+     "p95_ms": 0.07014399766921997,
+     "min_ms": 0.06537599861621857,
+     "max_ms": 0.07807999849319458,
+     "stddev_ms": 0.0019268670469020051,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.04357439994812012,
+     "batched_median_ms": 0.043447041511535646,
      "batched_output_exact": true
     },
     "F5B_EAGER_KARATSUBA3": {
-     "median_ms": 0.9241119921207428,
-     "p50_ms": 0.9241119921207428,
-     "p95_ms": 0.9375680088996887,
-     "min_ms": 0.9151039719581604,
-     "max_ms": 0.950111985206604,
-     "stddev_ms": 0.006392739283419696,
+     "median_ms": 0.9259359836578369,
+     "p50_ms": 0.9259359836578369,
+     "p95_ms": 0.9394239783287048,
+     "min_ms": 0.9152960181236267,
+     "max_ms": 1.0290559530258179,
+     "stddev_ms": 0.012004164361706636,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.8391334533691406,
+     "batched_median_ms": 0.8403984069824219,
      "batched_output_exact": true
     },
     "STAGE_A_CUDA_GRAPH_K3": {
-     "median_ms": 0.552047997713089,
-     "p50_ms": 0.552047997713089,
-     "p95_ms": 0.555072009563446,
-     "min_ms": 0.5483199954032898,
-     "max_ms": 0.6134080290794373,
-     "stddev_ms": 0.004742220197401061,
+     "median_ms": 0.5527039766311646,
+     "p50_ms": 0.5527039766311646,
+     "p95_ms": 0.5576000213623047,
+     "min_ms": 0.5494400262832642,
+     "max_ms": 0.6541119813919067,
+     "stddev_ms": 0.007430185718666241,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.5319334411621094,
+     "batched_median_ms": 0.5320329666137695,
      "batched_output_exact": true
     },
     "STAGE_B_5LAUNCH_K3": {
-     "median_ms": 0.23907199501991272,
-     "p50_ms": 0.23907199501991272,
-     "p95_ms": 0.24588799476623535,
-     "min_ms": 0.23788799345493317,
-     "max_ms": 0.28672000765800476,
-     "stddev_ms": 0.0039300114212675605,
+     "median_ms": 0.2359360009431839,
+     "p50_ms": 0.2359360009431839,
+     "p95_ms": 0.24672000110149384,
+     "min_ms": 0.2343360036611557,
+     "max_ms": 0.26873600482940674,
+     "stddev_ms": 0.004464903690090045,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.1808415985107422,
+     "batched_median_ms": 0.18081056594848632,
      "batched_output_exact": true
     },
     "STAGE_C_TRUE_FUSED_MMA": {
-     "median_ms": 0.09539200365543365,
-     "p50_ms": 0.09539200365543365,
-     "p95_ms": 0.10268799960613251,
-     "min_ms": 0.09270399808883667,
-     "max_ms": 0.10838399827480316,
-     "stddev_ms": 0.002655555134117317,
+     "median_ms": 0.09286399930715561,
+     "p50_ms": 0.09286399930715561,
+     "p95_ms": 0.09683199971914291,
+     "min_ms": 0.09193599969148636,
+     "max_ms": 0.10512000322341919,
+     "stddev_ms": 0.0018277982101465532,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.0686736011505127,
+     "batched_median_ms": 0.06868063926696777,
      "batched_output_exact": true
     },
-    "native_fastest_median_ms": 0.06612799689173698
+    "native_fastest_median_ms": 0.0663679987192154
    },
    "16x1024x3072": {
     "M": 16,
@@ -824,173 +824,173 @@
     "logical_mac": 50331648,
     "mac_fraction": 0.1991701244813278,
     "NATIVE_PADDED_INT8": {
-     "median_ms": 0.25201600790023804,
-     "p50_ms": 0.25201600790023804,
-     "p95_ms": 0.26895999908447266,
-     "min_ms": 0.24803200364112854,
-     "max_ms": 0.355648010969162,
-     "stddev_ms": 0.010306231178836651,
+     "median_ms": 0.2518880069255829,
+     "p50_ms": 0.2518880069255829,
+     "p95_ms": 0.2618879973888397,
+     "min_ms": 0.2497279942035675,
+     "max_ms": 0.35343998670578003,
+     "stddev_ms": 0.00981876629087251,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.18711679458618163,
+     "batched_median_ms": 0.18734848022460937,
      "batched_output_exact": true
     },
     "CUSTOM_NATIVE_INT8_M16": {
-     "median_ms": 0.0952640026807785,
-     "p50_ms": 0.0952640026807785,
-     "p95_ms": 0.09699200093746185,
-     "min_ms": 0.09433600306510925,
-     "max_ms": 0.10233599692583084,
-     "stddev_ms": 0.0012536068042274813,
+     "median_ms": 0.09539200365543365,
+     "p50_ms": 0.09539200365543365,
+     "p95_ms": 0.09731200337409973,
+     "min_ms": 0.09462399780750275,
+     "max_ms": 0.10518400371074677,
+     "stddev_ms": 0.0013755339066835867,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.07285471916198731,
+     "batched_median_ms": 0.07268928050994873,
      "batched_output_exact": true
     },
     "F5B_EAGER_KARATSUBA3": {
-     "median_ms": 0.9607999920845032,
-     "p50_ms": 0.9607999920845032,
-     "p95_ms": 0.9983999729156494,
-     "min_ms": 0.9299200177192688,
-     "max_ms": 1.2911039590835571,
-     "stddev_ms": 0.02958037355654494,
-     "iterations": 500,
+     "median_ms": 0.943695992231369,
+     "p50_ms": 0.943695992231369,
+     "p95_ms": 0.9533439874649048,
+     "min_ms": 0.9328960180282593,
+     "max_ms": 0.9926080107688904,
+     "stddev_ms": 0.007749238040372537,
+     "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.8688249969482422,
+     "batched_median_ms": 0.8678067016601563,
      "batched_output_exact": true
     },
     "STAGE_A_CUDA_GRAPH_K3": {
-     "median_ms": 0.5761280059814453,
-     "p50_ms": 0.5761280059814453,
-     "p95_ms": 0.582912027835846,
-     "min_ms": 0.5694400072097778,
-     "max_ms": 0.5960320234298706,
-     "stddev_ms": 0.0034331062053453184,
+     "median_ms": 0.5726880133152008,
+     "p50_ms": 0.5726880133152008,
+     "p95_ms": 0.5768960118293762,
+     "min_ms": 0.5675839781761169,
+     "max_ms": 0.6659839749336243,
+     "stddev_ms": 0.006940555432010955,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.5521049499511719,
+     "batched_median_ms": 0.5518966293334961,
      "batched_output_exact": true
     },
     "STAGE_B_5LAUNCH_K3": {
-     "median_ms": 0.3190719932317734,
-     "p50_ms": 0.3190719932317734,
-     "p95_ms": 0.3521600067615509,
-     "min_ms": 0.31561601161956787,
-     "max_ms": 0.3737280070781708,
-     "stddev_ms": 0.010149737538644217,
+     "median_ms": 0.314303994178772,
+     "p50_ms": 0.314303994178772,
+     "p95_ms": 0.32252800464630127,
+     "min_ms": 0.31308799982070923,
+     "max_ms": 0.37462401390075684,
+     "stddev_ms": 0.004912041163338024,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.2588038444519043,
+     "batched_median_ms": 0.25868864059448243,
      "batched_output_exact": true
     },
     "STAGE_C_TRUE_FUSED_MMA": {
-     "median_ms": 0.13196800649166107,
-     "p50_ms": 0.13196800649166107,
-     "p95_ms": 0.13945600390434265,
-     "min_ms": 0.13075199723243713,
-     "max_ms": 0.15263999998569489,
-     "stddev_ms": 0.0031894584548214314,
+     "median_ms": 0.1319040060043335,
+     "p50_ms": 0.1319040060043335,
+     "p95_ms": 0.1345279961824417,
+     "min_ms": 0.1311040073633194,
+     "max_ms": 0.1435520052909851,
+     "stddev_ms": 0.0019099421651627387,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.10769311904907226,
+     "batched_median_ms": 0.10746080398559571,
      "batched_output_exact": true
     },
-    "native_fastest_median_ms": 0.0952640026807785
+    "native_fastest_median_ms": 0.09539200365543365
    }
   },
   "weighted_schedule": {
    "F5B_EAGER_KARATSUBA3": {
-    "wide_total_ms": 54.30803120136261,
-    "native_fastest_total_ms": 3.910080023109913,
-    "ratio": 13.889237785514243,
+    "wide_total_ms": 54.62865540385246,
+    "native_fastest_total_ms": 3.7865279763936996,
+    "ratio": 14.427109939348965,
     "major_shape_ratios": [
      {
       "shape": "16x128x1024",
-      "ratio": 12.912410452575656
+      "ratio": 13.23798686457171
      },
      {
       "shape": "16x1024x128",
-      "ratio": 13.62750650478933
+      "ratio": 15.982183677219911
      },
      {
       "shape": "16x3072x1024",
-      "ratio": 13.974595263087654
+      "ratio": 13.9515429352513
      },
      {
       "shape": "16x1024x3072",
-      "ratio": 10.085656334471494
+      "ratio": 9.892820740406105
      }
     ],
     "major_ok": false
    },
    "STAGE_A_CUDA_GRAPH_K3": {
-    "wide_total_ms": 10.915424048900604,
-    "native_fastest_total_ms": 3.910080023109913,
-    "ratio": 2.7916114208370946,
+    "wide_total_ms": 10.868239790201187,
+    "native_fastest_total_ms": 3.7865279763936996,
+    "ratio": 2.87023887264452,
     "major_shape_ratios": [
      {
       "shape": "16x128x1024",
-      "ratio": 3.514867485577331
+      "ratio": 3.4967531841670016
      },
      {
       "shape": "16x1024x128",
-      "ratio": 2.1146130495734954
+      "ratio": 2.300929446907311
      },
      {
       "shape": "16x3072x1024",
-      "ratio": 8.348173597589648
+      "ratio": 8.327868661062116
      },
      {
       "shape": "16x1024x3072",
-      "ratio": 6.0476989184676695
+      "ratio": 6.003522217478653
      }
     ],
     "major_ok": true
    },
    "STAGE_B_5LAUNCH_K3": {
-    "wide_total_ms": 11.844895765185356,
-    "native_fastest_total_ms": 3.910080023109913,
-    "ratio": 3.0293231072453666,
+    "wide_total_ms": 12.718336135149002,
+    "native_fastest_total_ms": 3.7865279763936996,
+    "ratio": 3.358838549309223,
     "major_shape_ratios": [
      {
       "shape": "16x128x1024",
-      "ratio": 3.1628957358957046
+      "ratio": 3.3665585188463183
      },
      {
       "shape": "16x1024x128",
-      "ratio": 2.8166189372198702
+      "ratio": 3.1773817753308817
      },
      {
       "shape": "16x3072x1024",
-      "ratio": 3.6152916503930266
+      "ratio": 3.554966331610566
      },
      {
       "shape": "16x1024x3072",
-      "ratio": 3.3493448128665793
+      "ratio": 3.294867306845471
      }
     ],
     "major_ok": true
    },
    "STAGE_C_TRUE_FUSED_MMA": {
-    "wide_total_ms": 4.3824000507593155,
-    "native_fastest_total_ms": 3.910080023109913,
-    "ratio": 1.120795488802743,
+    "wide_total_ms": 4.442816004157066,
+    "native_fastest_total_ms": 3.7865279763936996,
+    "ratio": 1.1733218483673842,
     "major_shape_ratios": [
      {
       "shape": "16x128x1024",
-      "ratio": 1.1383322538389777
+      "ratio": 1.2311688574795976
      },
      {
       "shape": "16x1024x128",
-      "ratio": 1.055157594736093
+      "ratio": 1.047250190854391
      },
      {
       "shape": "16x3072x1024",
-      "ratio": 1.4425358114446887
+      "ratio": 1.3992285604397603
      },
      {
       "shape": "16x1024x3072",
-      "ratio": 1.3852872310422912
+      "ratio": 1.382757473894617
      }
     ],
     "major_ok": true
@@ -1005,21 +1005,21 @@
    "results": {
     "STAGE_A_CUDA_GRAPH_K3": {
      "exact": true,
-     "weighted_ratio": 2.7916114208370946,
+     "weighted_ratio": 2.87023887264452,
      "major_ok": true,
      "ratio_ok": true,
      "pass": true
     },
     "STAGE_B_5LAUNCH_K3": {
-     "exact": false,
-     "weighted_ratio": 3.0293231072453666,
+     "exact": true,
+     "weighted_ratio": 3.358838549309223,
      "major_ok": true,
      "ratio_ok": true,
-     "pass": false
+     "pass": true
     },
     "STAGE_C_TRUE_FUSED_MMA": {
      "exact": true,
-     "weighted_ratio": 1.120795488802743,
+     "weighted_ratio": 1.1733218483673842,
      "major_ok": true,
      "ratio_ok": true,
      "pass": true
