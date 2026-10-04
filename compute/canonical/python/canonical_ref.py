@@ -89,6 +89,8 @@ DOMAIN_GRAPH = b"PRISMA_CANONICAL_GRAPH_V1\x00"
 DOMAIN_GRAPH_STATE = b"PRISMA_CANONICAL_GRAPH_STATE_V1\x00"
 DOMAIN_GRAPH_TRACE = b"PRISMA_CANONICAL_GRAPH_TRACE_V1\x00"
 DOMAIN_VWR = b"PRISMA_GRAPH_VWR_V1\x00"
+DOMAIN_RECEIPT = b"PRISMA_GRAPH_RECEIPT_V1\x00"
+DOMAIN_SIG = b"PRISMA_CANONICAL_SIG_V1\x00"
 DOMAIN_WORK_VECTOR = b"PRISMA_CANONICAL_WORK_VECTOR_V1\x00"
 
 GRAPH_PROTOCOL_VERSION = "1.0.0"
@@ -718,3 +720,117 @@ def execute_graph(descriptor: dict, inputs: dict, rope_tables=None) -> dict:
         "outputs": outputs,
         "work": work_list,
     }
+
+
+# --- trails, proofs and commitments (watcher / E2E tooling) -----------------
+
+
+def prove(levels, index: int):
+    """Sibling path of one leaf, canonical odd-node self-pairing rule."""
+    count = len(levels[0])
+    if index >= count:
+        raise ValueError("canonical: leaf index out of range")
+    siblings = []
+    idx = index
+    for nodes in levels[:-1]:
+        if idx % 2 == 0:
+            sib = idx + 1
+            if sib >= len(nodes):
+                sib = idx
+        else:
+            sib = idx - 1
+        siblings.append(nodes[sib])
+        idx //= 2
+    return siblings
+
+
+def verify_inclusion(root: bytes, leaf: bytes, index: int, count: int, siblings) -> bool:
+    if count == 0 or index >= count or len(siblings) != _depth_for(count):
+        return False
+    h = leaf
+    idx, cnt = index, count
+    for sib in siblings:
+        if idx % 2 == 0:
+            right = sib
+            if idx + 1 >= cnt:
+                right = h
+            h = hash_bytes(h, right)
+        else:
+            h = hash_bytes(sib, h)
+        idx //= 2
+        cnt = (cnt + 1) // 2
+    return h == root
+
+
+def _depth_for(count: int) -> int:
+    depth = 0
+    while count > 1:
+        count = (count + 1) // 2
+        depth += 1
+    return depth
+
+
+def trail_leaf(graph_id: bytes, step: int, state_root: bytes) -> bytes:
+    return hash_bytes(DOMAIN_GRAPH_TRACE, graph_id, _u32be(step), state_root)
+
+
+def trail_levels(graph_id: bytes, trail):
+    return build_levels([trail_leaf(graph_id, i, s) for i, s in enumerate(trail)])
+
+
+def trail_root(graph_id: bytes, trail) -> bytes:
+    return trail_levels(graph_id, trail)[-1][0]
+
+
+def trail_proof(graph_id: bytes, trail, index: int):
+    levels = trail_levels(graph_id, trail)
+    return index, len(trail), prove(levels, index)
+
+
+def chunk_proof(desc: dict, data, index: int):
+    """Sibling path of one tensor chunk leaf."""
+    desc_bytes = encode_canonical(desc)
+    count = chunk_count(desc)
+    leaves = [tensor_leaf(desc_bytes, i, chunk_bytes(desc, data, i)) for i in range(count)]
+    return count, prove(build_levels(leaves), index)
+
+
+def state_leaf_index(live, ref):
+    """Index of one tensor in the sorted live-set state tree."""
+    ids = sorted((kind << 32) | index for (kind, index) in live)
+    return ids.index((ref[0] << 32) | ref[1]), len(ids)
+
+
+def state_proof(live, ref):
+    """live: {(kind, index): root_bytes}; ref: (kind, index)."""
+    ids = sorted((kind << 32) | index for (kind, index) in live)
+    leaves = []
+    for tid in ids:
+        kind, index = tid >> 32, tid & 0xFFFFFFFF
+        leaves.append(hash_bytes(DOMAIN_GRAPH_STATE, _u32be(kind), _u32be(index), live[(kind, index)]))
+    levels = build_levels(leaves)
+    index = ids.index((ref[0] << 32) | ref[1])
+    return index, len(leaves), prove(levels, index)
+
+
+def graph_result_commit(graph_id: bytes, task_ref: bytes, assignment_ref: bytes,
+                        worker_pubkey: bytes, outputs, completed_epoch: int):
+    """The canonical signed object (signature filled by the caller)."""
+    roots = [bytes(o) for o in outputs]
+    return {
+        "protocol_version": "1.0.0",
+        "graph_id": graph_id,
+        "task_ref": task_ref,
+        "assignment_ref": assignment_ref,
+        "worker_pubkey": worker_pubkey,
+        "final_output_root": final_output_root(roots),
+        "output_roots": roots,
+        "completed_epoch": completed_epoch,
+        "signature": b"",
+    }
+
+
+def graph_result_commit_preimage(commit: dict) -> bytes:
+    unsigned = dict(commit)
+    unsigned["signature"] = b""
+    return DOMAIN_SIG + encode_canonical(unsigned)

@@ -461,8 +461,11 @@ func (s msgServer) GraphMidPoint(ctx context.Context, msg *types.MsgGraphMidPoin
 		return nil, errGraphWrongPhase
 	}
 	height := uint64(sdk.UnwrapSDKContext(ctx).BlockHeight())
-	if msg.Epoch != height {
-		return nil, errors.New("midpoint epoch must equal the block height")
+	// The epoch is the round clock, not the execution height: mempool
+	// timing makes exact-height equality unusable. It may not claim the
+	// distant future, and the canonical layer enforces the round window.
+	if msg.Epoch > height+2 {
+		return nil, errors.New("midpoint epoch is ahead of the chain clock")
 	}
 	graph, err := graphDescriptor(&task)
 	if err != nil {

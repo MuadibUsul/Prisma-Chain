@@ -1,0 +1,95 @@
+{
+  "phase": "F",
+  "schedule": {
+    "version": "GraphGasV1",
+    "source": "chain/x/compute/graph_gas.go (GraphGasScheduleJSON)",
+    "tx_base": 20000,
+    "node_decode": 4000,
+    "input_decode": 2000,
+    "work_unit": 1,
+    "free_work_units": 200000,
+    "hash": 1000,
+    "proof_sibling": 400,
+    "evidence_chunk": 800,
+    "state_leaf": 600,
+    "arbiter_unit": 4,
+    "receipt": 30000,
+    "store": 2000
+  },
+  "measured_devnet": {
+    "accept-graph-task": {
+      "gas_used": [
+        1279049,
+        1279049,
+        1279049
+      ],
+      "runs": 3
+    },
+    "arbitrate-graph-node": {
+      "gas_used": [
+        1382912
+      ],
+      "runs": 1
+    },
+    "finalize-graph-task": {
+      "gas_used": [
+        1381063
+      ],
+      "runs": 1
+    },
+    "graph-mid-point": {
+      "gas_used": [
+        258100,
+        258100,
+        258100,
+        258100,
+        258100,
+        258100,
+        258100,
+        258100,
+        258100,
+        258100,
+        258100,
+        258100,
+        258100,
+        258100
+      ],
+      "runs": 14
+    },
+    "graph-trail-claim": {
+      "gas_used": [
+        228393,
+        267657
+      ],
+      "runs": 2
+    },
+    "open-graph-challenge": {
+      "gas_used": [
+        1324350
+      ],
+      "runs": 1
+    },
+    "post-graph-task": {
+      "gas_used": [
+        4530916,
+        4517582,
+        4517582
+      ],
+      "runs": 3
+    },
+    "submit-graph-result": {
+      "gas_used": [
+        1393659,
+        1393659,
+        1393659
+      ],
+      "runs": 3
+    }
+  },
+  "environment": {
+    "chain": "prisma-mv-1",
+    "validators": 4,
+    "image": "prisma-chain:phase-f",
+    "note": "gas_used read from committed transactions on the four-validator devnet; the fee is the agreed flat fee (0 on devnet) and the schedule bounds execution"
+  }
+}

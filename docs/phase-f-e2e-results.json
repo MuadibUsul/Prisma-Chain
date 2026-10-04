@@ -1,0 +1,100 @@
+{
+  "graph_id": "a2d73f298d3b682eed77b6607038903d33730c1238cd54543f1309c780888aa9",
+  "nodes": 90,
+  "inputs": 23,
+  "work_vector": [
+    [
+      "ADD_ELEMENT",
+      10240
+    ],
+    [
+      "GEMM_MAC",
+      2686976
+    ],
+    [
+      "MUL_ELEMENT",
+      4096
+    ],
+    [
+      "REQUANTIZE_ELEMENT",
+      40960
+    ],
+    [
+      "RMSNORM_ELEMENT",
+      4096
+    ],
+    [
+      "RMSNORM_REDUCTION",
+      4096
+    ],
+    [
+      "ROPE_PAIR",
+      2048
+    ],
+    [
+      "SILU_ELEMENT",
+      4096
+    ],
+    [
+      "SOFTMAX_ELEMENT",
+      1024
+    ],
+    [
+      "SOFTMAX_EXP",
+      1024
+    ]
+  ],
+  "start_height": 1170,
+  "honest": {
+    "task_id": 16,
+    "challenge_end": 1206,
+    "early_finalize_refused": true,
+    "status": "finalized",
+    "receipt_id": "470b69eefe758dbdfe9b7fd31bfe91b578f7c2900af3744d43a5efeaf40587be",
+    "worker_new_bond": 6400000
+  },
+  "fraud": {
+    "task_id": 17,
+    "fraud_node": 89,
+    "fraud_operator": "ADD_FIXED_V1",
+    "bisection_rounds": 7,
+    "localized_node": 89,
+    "dispute_status": "arb_ready",
+    "arbitrate_tx": "21153A1B77B3A293CF531F2A27E10ED089450CB28271C4573618430B1C4CB8AD",
+    "arbitrate_gas": 1382912,
+    "status": "fraud",
+    "receipt_present": false,
+    "challenger_balance_after": 5500000,
+    "challenger_expected": 5500000,
+    "challenger_ledger_matches": true,
+    "worker_balance_after": 5000000,
+    "requester_escrow_refunded": true
+  },
+  "claims": [
+    "worker_corrupted",
+    "challenger_honest"
+  ],
+  "false_challenge": {
+    "task_id": 18,
+    "false_challenge_refused": true
+  },
+  "validators": {
+    "validator-a": {
+      "height": 1246,
+      "app_hash": "1727123A645B3F1A2169DC966D1A179E3460DB12CE3A4356FC83F650E1DCF1E4"
+    },
+    "validator-b": {
+      "height": 1246,
+      "app_hash": "1727123A645B3F1A2169DC966D1A179E3460DB12CE3A4356FC83F650E1DCF1E4"
+    },
+    "validator-c": {
+      "height": 1246,
+      "app_hash": "1727123A645B3F1A2169DC966D1A179E3460DB12CE3A4356FC83F650E1DCF1E4"
+    },
+    "validator-d": {
+      "height": 1246,
+      "app_hash": "1727123A645B3F1A2169DC966D1A179E3460DB12CE3A4356FC83F650E1DCF1E4"
+    },
+    "converged": true
+  }
+}
