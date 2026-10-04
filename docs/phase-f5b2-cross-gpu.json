@@ -1,0 +1,39 @@
+{
+ "phase": "F.5B.2",
+ "gpu_a": "NVIDIA A40",
+ "gpu_b": "NVIDIA RTX 2000 Ada Generation",
+ "cross_arch": true,
+ "graph_id": "cdad39513b76ab3dac07aed9014bcd6bd794af7f54cee5a17da0d3a62547bfb0",
+ "same_graph_id": true,
+ "nodes_exact": {
+  "a": 310,
+  "b": 310
+ },
+ "roots_exact": {
+  "a": 310,
+  "b": 310
+ },
+ "final_exact": {
+  "a": true,
+  "b": true
+ },
+ "operator_gate": {
+  "a": true,
+  "b": true
+ },
+ "gemm_regression": {
+  "a": true,
+  "b": true
+ },
+ "fallback_audit": {
+  "a": 0,
+  "b": 0
+ },
+ "latency": {
+  "a": 52.721,
+  "b": 50.645
+ },
+ "gpu1_gates_pass": true,
+ "gpu2_gates_pass": true,
+ "final": "FUSED_GPU_FEASIBLE_A13W10"
+}

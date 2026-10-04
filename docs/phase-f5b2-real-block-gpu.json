@@ -1,0 +1,36 @@
+{
+ "phase": "F.5B.2",
+ "model": "Qwen/Qwen3-0.6B-Base",
+ "revision": "57ca99e94acb83175495aa2c6b6b0cc498170924",
+ "layer": 0,
+ "seq_len": 16,
+ "case": "F.5A heldout case 0 (real tokenizer input; committed in qwen3_f5a_heldout.json)",
+ "graph_id": "cdad39513b76ab3dac07aed9014bcd6bd794af7f54cee5a17da0d3a62547bfb0",
+ "policy_id": "eb9a9fef403c95cd0ab876893acf14e02928245306f1d1cc6e12f4d99c5eb7a0",
+ "cpu_reference": "frozen F.5A A13W10 executor (run_block_bits), pure-capture instrumentation, final output asserted bit-identical to the pristine module",
+ "nodes_total": 310,
+ "nodes_exact": {
+  "cpu_is_reference": true,
+  "gpu_a40": 310,
+  "gpu_rtx2000_ada": 310
+ },
+ "roots_exact": {
+  "gpu_a40": 310,
+  "gpu_rtx2000_ada": 310
+ },
+ "final_root": "1a7b9c7d2d2f361e9b323e64d8636c1fe12abf926a2c6fedf3eebfc3eeb7388f",
+ "final_exact": {
+  "gpu_a40": true,
+  "gpu_rtx2000_ada": true
+ },
+ "cpu_fallback_count": {
+  "gpu_a40": 0,
+  "gpu_rtx2000_ada": 0
+ },
+ "float_canonical_op_count": {
+  "gpu_a40": 0,
+  "gpu_rtx2000_ada": 0
+ },
+ "gemm_backend": "TRUE_FUSED_MMA_A13W10 (one m16n8k32 s8 kernel per logical GEMM; in-kernel radix-128 split, 3 tensor-core streams, int64 Karatsuba epilogue)",
+ "verdict": "FUSED_GPU_FEASIBLE_A13W10"
+}
