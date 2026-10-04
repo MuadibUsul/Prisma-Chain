@@ -19,6 +19,19 @@ were reinterpreted: all V1 domains, objects and behaviours are untouched.
 | `fd8ed69` | **FREIVALDS_A13W10_I64_V1** (per-shape signed-bit admission bound; production 40 rounds; detection only) + **WIDE_GEMM_DISPUTE_V1** core (8×8 tiles, 512-MAC micro-step, BE64 state leaves, trace root, K-step bisection helper, exact-int64 arbiter; tests: tamper detection, first-divergent-step bisection, challenger-wins / worker-wins). |
 | `1719084` | **On-chain V2 honest path**: version dispatch on the descriptor's own `protocol_version` (no proto changes); V2 admission with bounds + typed validation; **GraphResultCommitV3** submission validation (manifest locked pre-randomness, wrong-domain signatures refused); V3 receipt on finalize; static chain-side `GraphWorkVectorV2`. Tests: full honest harvest through the harness + tamper + double-finalize + wrong-domain-signature refusal. |
 
+## Roadmap execution log (Prisma_Chain_AI_Engineering_Roadmap)
+
+| task | status | evidence |
+|---|---|---|
+| A0-01 baseline | **DONE** (`0d7ce2b`) | `docs/phase-f5c-baseline.{json,md}`; all modules green |
+| A0-02 legacy golden | **DONE** (`0d7ce2b`) | `testdata/f5c_legacy_golden.json` + `legacy_golden_test.go` (V1 roots/GraphID/commit preimage/receipt id recompute + cross-version rejection incl. V1-root+merkle through V2 verifier) |
+| A1-01 call-site map | **DONE** (`139966c`) | `docs/phase-f5c-v2-dispute-callsite-map.md` |
+| A1-02 GraphStateRootV2 | **DONE** (`139966c`) | `GraphStateRootV2FromRoots` + Python mirror + `testdata/canonical_graph_v2_state_vectors.json` |
+| A1-03 TrailRootV2/ProofV2 | **DONE** (`139966c`) | `TrailLeafV2/TrailRootV2/TrailProofV2/VerifyTrailProofV2` + Python mirror + `testdata/canonical_graph_v2_trail_vectors.json` |
+| A1-04..A1-08 | pending | trail/midpoint dispatch, first-divergent finalize, cheap-op typed evidence, snapshot/restart |
+| A2-01..A2-08 | pending | wide dispute wire/open/localization/trace/midpoint/512/bridge/restart |
+| A3..A7 | pending | watcher/bundle, DA, query/CLI/gas, E2E, docs/freeze |
+
 ## Not done (in dependency order)
 
 1. **V2 graph dispute chain** (§68–§72): trail claim / midpoint /
