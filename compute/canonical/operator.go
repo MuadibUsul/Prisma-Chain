@@ -67,6 +67,16 @@ func (w WorkVector) Add(key string, n int64) WorkVector {
 	return append(w, Pair{Key: key, Value: n})
 }
 
+// Get returns a counter or the default.
+func (w WorkVector) Get(key string, def int64) int64 {
+	for _, pair := range w {
+		if pair.Key == key {
+			return pair.Value
+		}
+	}
+	return def
+}
+
 // Canonical sorts the counters.
 func (w WorkVector) Canonical() WorkVector {
 	out := append(WorkVector(nil), w...)
@@ -123,6 +133,7 @@ func OperatorIDs() []string {
 }
 
 func init() {
+	Register(gemmInt8V1{})
 	Register(addFixed{})
 	Register(mulFixed{})
 	Register(requantize{})

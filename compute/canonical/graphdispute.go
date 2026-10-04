@@ -9,6 +9,7 @@ package canonical
 import (
 	"errors"
 	"fmt"
+	"math"
 )
 
 var (
@@ -410,63 +411,244 @@ func recomputeChunk(node GraphNode, evidence []ChunkEvidence, ropeTable *RopeCon
 		}
 		return int32sToChunk(out), nil
 	case OpRMSNormFixedV1:
-		// Bounded row arbitration: evidence carries the x row followed by
-		// the weight row as consecutive 64-element chunk blobs (the graph
-		// compiler requires row lengths that are multiples of ChunkElems).
-		if len(evidence) < 2 {
-			return nil, errors.New("canonical: rmsnorm needs the x and weight rows as chunk evidence")
-		}
-		row, err := concatChunks(evidence)
+		// Bounded row arbitration for a chunk in ANY row: evidence is the
+		// chunk-aligned span of x rows the disputed chunk touches, then
+		// the weight row chunks, each in index order and bound to its own
+		// committed tensor. Row boundaries must be chunk-aligned (enforced
+		// by the graph builder).
+		hidden, _, r0, r1, nX, firstChunk, err := rowEvidenceSpan(node.Output, index)
 		if err != nil {
 			return nil, err
 		}
-		hidden := int(node.Output.Shape[len(node.Output.Shape)-1])
-		if len(row) < 2*hidden {
-			return nil, errors.New("canonical: rmsnorm evidence rows are short")
+		wChunks := int((hidden + ChunkElems - 1) / ChunkElems)
+		if len(evidence) != nX+wChunks {
+			return nil, fmt.Errorf("canonical: rmsnorm needs %d x-row chunks plus %d weight chunks", nX, wChunks)
+		}
+		if len(node.Inputs) != 2 {
+			return nil, errors.New("canonical: rmsnorm node needs two inputs")
+		}
+		for i := 0; i < nX; i++ {
+			if evidence[i].Ref != node.Inputs[0] || evidence[i].ChunkIndex != uint32(firstChunk)+uint32(i) {
+				return nil, errors.New("canonical: rmsnorm evidence must cover the disputed x rows in index order")
+			}
+		}
+		for i := 0; i < wChunks; i++ {
+			if evidence[nX+i].Ref != node.Inputs[1] || evidence[nX+i].ChunkIndex != uint32(i) {
+				return nil, errors.New("canonical: rmsnorm weight evidence must be in index order")
+			}
+		}
+		xBlob, err := concatChunks(evidence[:nX])
+		if err != nil {
+			return nil, err
+		}
+		wBlob, err := concatChunks(evidence[nX:])
+		if err != nil {
+			return nil, err
 		}
 		epsFx := int32(node.Params.Get("eps_fx", 0))
-		rms, err := rmsFor(row[:hidden], epsFx)
-		if err != nil {
-			return nil, err
-		}
-		w := row[hidden : 2*hidden]
 		out := make([]int32, ChunkElems)
-		base := int(index) * ChunkElems
-		for i := 0; i < ChunkElems; i++ {
-			pos := base + i
-			out[i] = MulFx(MulFx(row[pos], rms), w[pos%hidden])
+		basePos := int64(index) * ChunkElems
+		for r := r0; r <= r1; r++ {
+			rowStart := r * hidden
+			off := rowStart - firstChunk*ChunkElems
+			rowData := xBlob[off : off+hidden]
+			rms, err := rmsFor(rowData, epsFx)
+			if err != nil {
+				return nil, err
+			}
+			lo := i64max(basePos, rowStart)
+			hi := i64min(basePos+ChunkElems, rowStart+hidden)
+			for pos := lo; pos < hi; pos++ {
+				j := pos - rowStart
+				out[pos-basePos] = MulFx(MulFx(rowData[j], rms), wBlob[j])
+			}
 		}
 		return int32sToChunk(out), nil
 	case OpSoftmaxFixedV1:
-		if len(evidence) < 1 {
-			return nil, errors.New("canonical: softmax needs the full row as chunk evidence")
-		}
-		row, err := concatChunks(evidence)
+		hidden, _, r0, r1, nChunks, firstChunk, err := rowEvidenceSpan(node.Output, index)
 		if err != nil {
 			return nil, err
 		}
-		hidden := int(node.Output.Shape[len(node.Output.Shape)-1])
-		if len(row) < hidden {
-			return nil, errors.New("canonical: softmax evidence row is short")
+		if len(evidence) != nChunks {
+			return nil, fmt.Errorf("canonical: softmax needs %d row chunks for the disputed chunk", nChunks)
 		}
-		probs, err := softmaxRow(row[:hidden])
+		if len(node.Inputs) != 1 {
+			return nil, errors.New("canonical: softmax node needs one input")
+		}
+		for i := 0; i < nChunks; i++ {
+			if evidence[i].Ref != node.Inputs[0] || evidence[i].ChunkIndex != uint32(firstChunk)+uint32(i) {
+				return nil, errors.New("canonical: softmax evidence must cover the disputed rows in index order")
+			}
+		}
+		blob, err := concatChunks(evidence)
 		if err != nil {
 			return nil, err
 		}
 		out := make([]int32, ChunkElems)
-		base := int(index) * ChunkElems
-		for i := 0; i < ChunkElems; i++ {
-			pos := base + i
-			if pos < hidden {
-				out[i] = probs[pos]
+		basePos := int64(index) * ChunkElems
+		for r := r0; r <= r1; r++ {
+			rowStart := r * hidden
+			off := rowStart - firstChunk*ChunkElems
+			probs, err := softmaxRow(blob[off : off+hidden])
+			if err != nil {
+				return nil, err
+			}
+			lo := i64max(basePos, rowStart)
+			hi := i64min(basePos+ChunkElems, rowStart+hidden)
+			for pos := lo; pos < hi; pos++ {
+				out[pos-basePos] = probs[pos-rowStart]
 			}
 		}
 		return int32sToChunk(out), nil
 	case OpGEMMInt8V1:
-		return nil, errors.New("canonical: GEMM node arbitration dispatches to the gemmv1 dispute (chain layer)")
+		return recomputeGEMMChunk(node, evidence, index)
 	default:
 		return nil, fmt.Errorf("canonical: operator %s has no arbiter", node.OperatorID)
 	}
+}
+
+// rowEvidenceSpan maps a disputed output chunk to the rows it touches and
+// the exact chunk range the arbiter must receive as evidence. Row
+// boundaries must fall on chunk boundaries (canonical block graphs
+// require every row length to divide or be a multiple of ChunkElems), so
+// the span always starts chunk-aligned.
+func rowEvidenceSpan(desc TensorDescriptor, index uint32) (hidden, elems, r0, r1 int64, nChunks int, firstChunk int64, err error) {
+	elems, err = desc.Elems()
+	if err != nil {
+		return
+	}
+	hidden = desc.Shape[len(desc.Shape)-1]
+	if hidden <= 0 || elems%hidden != 0 {
+		err = errors.New("canonical: malformed row geometry")
+		return
+	}
+	basePos := int64(index) * ChunkElems
+	if basePos >= elems {
+		err = errors.New("canonical: disputed chunk is outside the tensor")
+		return
+	}
+	endPos := basePos + ChunkElems
+	if endPos > elems {
+		endPos = elems
+	}
+	r0 = basePos / hidden
+	r1 = (endPos - 1) / hidden
+	needLo := r0 * hidden
+	needHi := (r1 + 1) * hidden
+	if needLo%ChunkElems != 0 {
+		err = errors.New("canonical: rows must be chunk-aligned for arbitration")
+		return
+	}
+	firstChunk = needLo / ChunkElems
+	lastChunk := (needHi + ChunkElems - 1) / ChunkElems
+	nChunks = int(lastChunk - firstChunk)
+	if nChunks <= 0 {
+		nChunks = 1
+	}
+	return
+}
+
+func i64min(a, b int64) int64 {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func i64max(a, b int64) int64 {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+// recomputeGEMMChunk adjudicates one output chunk of a GEMM node from the
+// FULL committed operands. The micro-arithmetic is v0.1.1: int64
+// accumulation of int8 x int8 products, which by the K <= MaxSafeK
+// admission is bit-identical to the frozen int32 accumulation. The chain
+// prices this by MACs through GraphGasV1; canonical v1 graphs declare
+// operand sizes that keep it affordable, while the v0.1.1 tile dispute
+// remains the specialized route for large standalone GEMM tasks.
+func recomputeGEMMChunk(node GraphNode, evidence []ChunkEvidence, index uint32) ([]byte, error) {
+	if len(node.Inputs) != 2 {
+		return nil, errors.New("canonical: GEMM node needs two inputs")
+	}
+	if len(evidence) < 2 {
+		return nil, errors.New("canonical: GEMM arbiter needs the full operands as chunk evidence")
+	}
+	aDesc := evidence[0].Desc
+	bDesc := evidence[len(evidence)-1].Desc
+	m, n, k, transB, err := GEMMNodeDims(aDesc, bDesc, node.Params)
+	if err != nil {
+		return nil, err
+	}
+	elemsA, err := aDesc.Elems()
+	if err != nil {
+		return nil, err
+	}
+	elemsB, err := bDesc.Elems()
+	if err != nil {
+		return nil, err
+	}
+	countA := uint32((elemsA + ChunkElems - 1) / ChunkElems)
+	countB := uint32((elemsB + ChunkElems - 1) / ChunkElems)
+	if uint32(len(evidence)) != countA+countB {
+		return nil, errors.New("canonical: GEMM arbiter requires every operand chunk in index order")
+	}
+	for i := uint32(0); i < countA; i++ {
+		if evidence[i].Ref != node.Inputs[0] || evidence[i].ChunkIndex != i {
+			return nil, errors.New("canonical: GEMM evidence does not match the A operand in order")
+		}
+	}
+	for i := uint32(0); i < countB; i++ {
+		if evidence[countA+i].Ref != node.Inputs[1] || evidence[countA+i].ChunkIndex != i {
+			return nil, errors.New("canonical: GEMM evidence does not match the B operand in order")
+		}
+	}
+	a, err := concatChunks(evidence[:countA])
+	if err != nil {
+		return nil, err
+	}
+	bt, err := concatChunks(evidence[countA:])
+	if err != nil {
+		return nil, err
+	}
+	for i := 0; i < int(elemsA); i++ {
+		if a[i] < -128 || a[i] > 127 {
+			return nil, errors.New("canonical: GEMM operand A is not int8 data")
+		}
+	}
+	for i := 0; i < int(elemsB); i++ {
+		if bt[i] < -128 || bt[i] > 127 {
+			return nil, errors.New("canonical: GEMM operand B is not int8 data")
+		}
+	}
+	out := make([]int32, ChunkElems)
+	base := int64(index) * ChunkElems
+	total := int64(m) * int64(n)
+	for e := int64(0); e < ChunkElems; e++ {
+		pos := base + e
+		if pos >= total {
+			break
+		}
+		row := pos / int64(n)
+		col := pos % int64(n)
+		var sum int64
+		for d := uint64(0); d < k; d++ {
+			var bv int32
+			if transB {
+				bv = bt[col*int64(k)+int64(d)]
+			} else {
+				bv = bt[int64(d)*int64(n)+col]
+			}
+			sum += int64(a[row*int64(k)+int64(d)]) * int64(bv)
+		}
+		if sum > math.MaxInt32 || sum < math.MinInt32 {
+			return nil, errors.New("canonical: GEMM arbiter accumulation overflow")
+		}
+		out[e] = int32(sum)
+	}
+	return int32sToChunk(out), nil
 }
 
 // concatChunks decodes evidence chunk blobs in order into one row.
