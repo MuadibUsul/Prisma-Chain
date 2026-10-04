@@ -199,7 +199,7 @@ func TestReferenceWideGEMMFrozenVectors(t *testing.T) {
 		} else {
 			n = v.WShape[1]
 		}
-		got, err := ReferenceWideGEMM(v.A, v.W, m, n, k, v.TransposeB)
+		got, err := ReferenceWideGEMM(v.A, v.W, m, n, k, v.TransposeB, false)
 		if err != nil {
 			t.Fatalf("%s: %v", v.Name, err)
 		}

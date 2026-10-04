@@ -65,12 +65,12 @@ const (
 // ArithmeticProfileV1 binds the frozen A13W10 arithmetic into a graph
 // descriptor so the policy can never be an off-chain implicit config.
 type ArithmeticProfileV1 struct {
-	ID        string `gemm:"id"`
-	ABits     int    `gemm:"a_bits"`
-	WBits     int    `gemm:"w_bits"`
-	Accum     string `gemm:"accum"`
-	Rounding  string `gemm:"rounding"`
-	PolicyID  string `gemm:"policy_id"`
+	ID        string `gemm:"id" json:"id"`
+	ABits     int    `gemm:"a_bits" json:"a_bits"`
+	WBits     int    `gemm:"w_bits" json:"w_bits"`
+	Accum     string `gemm:"accum" json:"accum"`
+	Rounding  string `gemm:"rounding" json:"rounding"`
+	PolicyID  string `gemm:"policy_id" json:"policy_id"`
 }
 
 // A13W10I64Profile is the frozen profile instance.
@@ -83,9 +83,9 @@ func A13W10I64Profile() ArithmeticProfileV1 {
 // the descriptor is hashed into every leaf and the root, so the same
 // bytes can never be reinterpreted as another dtype.
 type TensorDescriptorV2 struct {
-	Dtype  DtypeV2 `gemm:"dtype"`
-	Layout Layout  `gemm:"layout"`
-	Shape  []int64 `gemm:"shape"`
+	Dtype  DtypeV2 `gemm:"dtype" json:"dtype"`
+	Layout Layout  `gemm:"layout" json:"layout"`
+	Shape  []int64 `gemm:"shape" json:"shape"`
 }
 
 func NewDescV2(dtype DtypeV2, shape ...int64) TensorDescriptorV2 {
@@ -359,12 +359,18 @@ func MaxSafeK64(aBits, wBits int) uint64 {
 // C[i,j] = sum_k int64(A[i,k]) * int64(W[k,j]) with exact int64
 // accumulation.  It is the ONLY arbiter semantics; the GPU Karatsuba
 // decomposition is a worker backend detail and never appears on chain.
-// transpose_b selects W stored (N, K) instead of (K, N).
-func ReferenceWideGEMM(a []int64, w []int64, m, n, k int, transposeB bool) ([]int64, error) {
+// transpose_b selects W stored (N, K) instead of (K, N).  The right
+// operand is the logical signed weight operand: W10 for model weights,
+// A13 for attention inner products (Q x K^T, P x V); wA13 selects it.
+func ReferenceWideGEMM(a []int64, w []int64, m, n, k int, transposeB bool, wA13 bool) ([]int64, error) {
 	if m <= 0 || n <= 0 || k <= 0 {
 		return nil, errors.New("canonical/v2: empty GEMM")
 	}
-	if uint64(k) > MaxSafeK64(13, 10) {
+	wBits := 10
+	if wA13 {
+		wBits = 13
+	}
+	if uint64(k) > MaxSafeK64(13, wBits) {
 		return nil, fmt.Errorf("canonical/v2: K=%d exceeds MaxSafeK64", k)
 	}
 	if len(a) != m*k {
@@ -382,13 +388,15 @@ func ReferenceWideGEMM(a []int64, w []int64, m, n, k int, transposeB bool) ([]in
 	if err := aDesc.ValidateValues(a); err != nil {
 		return nil, err
 	}
-	wShape := int64(n)
-	if !transposeB {
-		wShape = int64(k)
+	wDtype := DtypeV2W10
+	if wA13 {
+		wDtype = DtypeV2A13
 	}
-	wDesc := NewDescV2(DtypeV2W10, wShape, int64(k))
-	if !transposeB {
-		wDesc = NewDescV2(DtypeV2W10, int64(k), int64(n))
+	var wDesc TensorDescriptorV2
+	if transposeB {
+		wDesc = NewDescV2(wDtype, int64(n), int64(k))
+	} else {
+		wDesc = NewDescV2(wDtype, int64(k), int64(n))
 	}
 	if err := wDesc.ValidateValues(w); err != nil {
 		return nil, err

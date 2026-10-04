@@ -227,8 +227,19 @@ func (gemmA13W10V1) OutputSpecV2(in []TensorDescriptorV2, p ParamList) (TensorDe
 		return TensorDescriptorV2{}, errors.New("canonical/v2: GEMM_A13W10 needs A and W")
 	}
 	a, w := in[0], in[1]
-	if a.Dtype != DtypeV2A13 || w.Dtype != DtypeV2W10 {
-		return TensorDescriptorV2{}, errors.New("canonical/v2: GEMM_A13W10 requires A13 x W10 operands")
+	if a.Dtype != DtypeV2A13 {
+		return TensorDescriptorV2{}, errors.New("canonical/v2: GEMM_A13W10 left operand must be A13")
+	}
+	// The right operand is the logical signed weight operand: model weights
+	// are W10, attention inner products (Q x K^T, P x V) use A13 containers.
+	// Both are logical signed wide operands; the same exact int64 math
+	// applies and admission bounds use the actual bit widths.
+	if w.Dtype != DtypeV2W10 && w.Dtype != DtypeV2A13 {
+		return TensorDescriptorV2{}, errors.New("canonical/v2: GEMM_A13W10 right operand must be W10 or A13")
+	}
+	wBits := 10
+	if w.Dtype == DtypeV2A13 {
+		wBits = 13
 	}
 	if len(a.Shape) != 2 || len(w.Shape) != 2 {
 		return TensorDescriptorV2{}, errors.New("canonical/v2: GEMM_A13W10 operands must be matrices")
@@ -252,19 +263,19 @@ func (gemmA13W10V1) OutputSpecV2(in []TensorDescriptorV2, p ParamList) (TensorDe
 	}
 	// Admission: the int64 accumulator must be provably safe for every
 	// admitted K, not only the observed model range.
-	if uint64(k) > MaxSafeK64(13, 10) {
+	if uint64(k) > MaxSafeK64(13, wBits) {
 		return TensorDescriptorV2{}, fmt.Errorf("canonical/v2: GEMM_A13W10 K=%d exceeds MaxSafeK64", k)
 	}
 	return NewDescV2(DtypeV2Int64Accum, m, n), nil
 }
 
-func (gemmA13W10V1) WorkV2(in []*TensorV2, _ ParamList) WorkVector {
+func (gemmA13W10V1) WorkV2(in []*TensorV2, p ParamList) WorkVector {
 	if len(in) != 2 {
 		return nil
 	}
 	m, k := in[0].Desc.Shape[0], in[0].Desc.Shape[1]
 	n := in[1].Desc.Shape[1]
-	if len(in[1].Desc.Shape) == 3 {
+	if p.Get("transpose_b", 0) == 1 {
 		n = in[1].Desc.Shape[0]
 	}
 	return WorkVector{}.Add("GEMM_A13W10_MAC", m*n*k)
@@ -284,7 +295,8 @@ func (gemmA13W10V1) ExecuteV2(in []*TensorV2, p ParamList) (*TensorV2, error) {
 	if tb {
 		n = in[1].Desc.Shape[0]
 	}
-	data, err := ReferenceWideGEMM(in[0].Data, in[1].Data, int(m), int(n), int(k), tb)
+	data, err := ReferenceWideGEMM(in[0].Data, in[1].Data, int(m), int(n), int(k), tb,
+		in[1].Desc.Dtype == DtypeV2A13)
 	if err != nil {
 		return nil, err
 	}
@@ -379,29 +391,29 @@ func (requantizeWideV1) ArbiterBoundV2(in []TensorDescriptorV2, _ ParamList) int
 // --- graph descriptor V2 ------------------------------------------------------
 
 type GraphInputV2 struct {
-	Name string             `gemm:"name"`
-	Desc TensorDescriptorV2 `gemm:"desc"`
-	Root []byte             `gemm:"root"`
+	Name string             `gemm:"name" json:"name"`
+	Desc TensorDescriptorV2 `gemm:"desc" json:"desc"`
+	Root []byte             `gemm:"root" json:"root"`
 }
 
 type GraphNodeV2 struct {
-	NodeID     uint32             `gemm:"node_id"`
-	OperatorID string             `gemm:"operator_id"`
-	Version    string             `gemm:"operator_version"`
-	Inputs     []TensorRef        `gemm:"inputs"`
-	Output     TensorDescriptorV2 `gemm:"output"`
-	Params     ParamList          `gemm:"params"`
+	NodeID     uint32             `gemm:"node_id" json:"node_id"`
+	OperatorID string             `gemm:"operator_id" json:"operator_id"`
+	Version    string             `gemm:"operator_version" json:"operator_version"`
+	Inputs     []TensorRef        `gemm:"inputs" json:"inputs"`
+	Output     TensorDescriptorV2 `gemm:"output" json:"output"`
+	Params     ParamList          `gemm:"params" json:"params"`
 }
 
 // GraphDescriptorV2 binds the arithmetic profile and policy id (§18): the
 // A13W10 policy is never an off-chain implicit config.
 type GraphDescriptorV2 struct {
-	ProtocolVersion string             `gemm:"protocol_version"`
-	Spec            string             `gemm:"spec"`
-	Arithmetic      ArithmeticProfileV1 `gemm:"arithmetic"`
-	Inputs          []GraphInputV2     `gemm:"inputs"`
-	Nodes           []GraphNodeV2      `gemm:"nodes"`
-	Outputs         []TensorRef        `gemm:"outputs"`
+	ProtocolVersion string             `gemm:"protocol_version" json:"protocol_version"`
+	Spec            string             `gemm:"spec" json:"spec"`
+	Arithmetic      ArithmeticProfileV1 `gemm:"arithmetic" json:"arithmetic"`
+	Inputs          []GraphInputV2     `gemm:"inputs" json:"inputs"`
+	Nodes           []GraphNodeV2      `gemm:"nodes" json:"nodes"`
+	Outputs         []TensorRef        `gemm:"outputs" json:"outputs"`
 }
 
 // GraphIDV2 = SHA256(PRISMA_CANONICAL_GRAPH_V2 || CBOR(descriptor)).

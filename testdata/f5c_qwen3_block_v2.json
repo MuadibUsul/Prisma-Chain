@@ -1,0 +1,10988 @@
+{
+ "protocol_version": "CANONICAL_GRAPH_V2/1.0.0",
+ "spec": "QWEN3_BLOCK_PROFILE_V2",
+ "arithmetic": {
+  "id": "A13W10_I64_PROFILE_V1",
+  "a_bits": 13,
+  "w_bits": 10,
+  "accum": "int64",
+  "rounding": "ties_to_even",
+  "policy_id": "eb9a9fef403c95cd0ab876893acf14e02928245306f1d1cc6e12f4d99c5eb7a0"
+ },
+ "nodes": [
+  {
+   "node_id": 0,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 0,
+     "index": 0
+    },
+    {
+     "kind": 0,
+     "index": 1
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 1,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 0
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 1185146
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 2,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 2
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 3,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 2
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 675876
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 4,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 3
+    },
+    {
+     "kind": 0,
+     "index": 3
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 5,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 4
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 6,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 5
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 216742
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 7,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 5
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 8,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 7
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 455718
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 9,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 8
+    },
+    {
+     "kind": 0,
+     "index": 3
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 10,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 9
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 11,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 10
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 143760
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 12,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 6
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 13,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 12
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 661380
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 14,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 13
+    },
+    {
+     "kind": 0,
+     "index": 3
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 15,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 14
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 16,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 15
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 146867
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 17,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 7
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 18,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 17
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 283578
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 19,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 18
+    },
+    {
+     "kind": 0,
+     "index": 3
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 20,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 19
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 21,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 20
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 296532
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 22,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 8
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 23,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 22
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 472932
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 24,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 23
+    },
+    {
+     "kind": 0,
+     "index": 3
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 25,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 24
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 26,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 25
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 139429
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 27,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 9
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 28,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 27
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 395922
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 29,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 28
+    },
+    {
+     "kind": 0,
+     "index": 3
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 30,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 29
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 31,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 30
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 156022
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 32,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 10
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 33,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 32
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 1082670
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 34,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 33
+    },
+    {
+     "kind": 0,
+     "index": 3
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 35,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 34
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 36,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 35
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 377149
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 37,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 11
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 38,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 37
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 350622
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 39,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 38
+    },
+    {
+     "kind": 0,
+     "index": 3
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 40,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 39
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 41,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 40
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 162960
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 42,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 12
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 43,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 42
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 1227630
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 44,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 43
+    },
+    {
+     "kind": 0,
+     "index": 3
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 45,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 44
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 46,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 45
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 373735
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 47,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 13
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 48,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 47
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 541788
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 49,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 48
+    },
+    {
+     "kind": 0,
+     "index": 3
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 50,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 49
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 51,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 50
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 146666
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 52,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 14
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 53,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 52
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 534540
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 54,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 53
+    },
+    {
+     "kind": 0,
+     "index": 3
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 55,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 54
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 56,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 55
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 157049
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 57,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 15
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 58,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 57
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 650508
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 59,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 58
+    },
+    {
+     "kind": 0,
+     "index": 3
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 60,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 59
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 61,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 60
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 329066
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 62,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 16
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 63,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 62
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 570780
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 64,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 63
+    },
+    {
+     "kind": 0,
+     "index": 3
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 65,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 64
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 66,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 65
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 134218
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 67,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 17
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 68,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 67
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 394110
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 69,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 68
+    },
+    {
+     "kind": 0,
+     "index": 3
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 70,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 69
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 71,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 70
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 161586
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 72,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 18
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 73,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 72
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 412230
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 74,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 73
+    },
+    {
+     "kind": 0,
+     "index": 3
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 75,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 74
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 76,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 75
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 134453
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 77,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 19
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 78,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 77
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 719364
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 79,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 78
+    },
+    {
+     "kind": 0,
+     "index": 3
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 80,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 79
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 81,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 80
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 134605
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 82,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 20
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 83,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 82
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 639636
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 84,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 83
+    },
+    {
+     "kind": 0,
+     "index": 21
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 85,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 84
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 86,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 85
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 15664
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 87,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 22
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 88,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 87
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 438
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 89,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 23
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 90,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 89
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 453906
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 91,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 90
+    },
+    {
+     "kind": 0,
+     "index": 21
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 92,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 91
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 93,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 92
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 61841
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 94,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 24
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 95,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 94
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 346
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 96,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 25
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 97,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 96
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 701244
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 98,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 97
+    },
+    {
+     "kind": 0,
+     "index": 21
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 99,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 98
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 100,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 99
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 11154
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 101,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 26
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 102,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 101
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 395
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 103,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 27
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 104,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 103
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 381426
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 105,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 104
+    },
+    {
+     "kind": 0,
+     "index": 21
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 106,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 105
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 107,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 106
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 9309
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 108,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 28
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 109,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 108
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 460
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 110,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 29
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 111,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 110
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 610644
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 112,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 111
+    },
+    {
+     "kind": 0,
+     "index": 21
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 113,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 112
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 114,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 113
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 17220
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 115,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 30
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 116,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 115
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 350
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 117,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 31
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 118,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 117
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 494676
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 119,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 118
+    },
+    {
+     "kind": 0,
+     "index": 21
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 120,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 119
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 121,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 120
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 15702
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 122,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 32
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 123,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 122
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 497
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 124,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 33
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 125,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 124
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 719364
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 126,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 125
+    },
+    {
+     "kind": 0,
+     "index": 21
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 127,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 126
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 128,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 127
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 11083
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 129,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 34
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 130,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 129
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 395
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 131,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 35
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 132,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 131
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 813588
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 133,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 132
+    },
+    {
+     "kind": 0,
+     "index": 21
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 134,
+   "operator_id": "ROPE_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 133
+    },
+    {
+     "kind": 0,
+     "index": 4
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "half_dim",
+     "value": 64
+    },
+    {
+     "key": "max_pos",
+     "value": 16
+    }
+   ]
+  },
+  {
+   "node_id": 135,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 134
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 13031
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 136,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 1
+    },
+    {
+     "kind": 0,
+     "index": 36
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 137,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 136
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 395
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 138,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 6
+    },
+    {
+     "kind": 1,
+     "index": 86
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 139,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 138
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 30015224
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 140,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 139
+    },
+    {
+     "kind": 0,
+     "index": 37
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 141,
+   "operator_id": "SOFTMAX_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 140
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 142,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 141
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": 0
+    },
+    {
+     "key": "mult",
+     "value": 4098251
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 143,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 142
+    },
+    {
+     "kind": 1,
+     "index": 88
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 144,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 143
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 269
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 145,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 144
+    },
+    {
+     "kind": 0,
+     "index": 38
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 146,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 145
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 181492
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 147,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 11
+    },
+    {
+     "kind": 1,
+     "index": 86
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 148,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 147
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 45253070
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 149,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 148
+    },
+    {
+     "kind": 0,
+     "index": 37
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 150,
+   "operator_id": "SOFTMAX_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 149
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 151,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 150
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": 0
+    },
+    {
+     "key": "mult",
+     "value": 4098251
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 152,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 151
+    },
+    {
+     "kind": 1,
+     "index": 88
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 153,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 152
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 269
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 154,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 153
+    },
+    {
+     "kind": 0,
+     "index": 39
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 155,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 154
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 268156
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 156,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 16
+    },
+    {
+     "kind": 1,
+     "index": 93
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 157,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 156
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 11219987
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 158,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 157
+    },
+    {
+     "kind": 0,
+     "index": 37
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 159,
+   "operator_id": "SOFTMAX_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 158
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 160,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 159
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": 0
+    },
+    {
+     "key": "mult",
+     "value": 4098251
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 161,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 160
+    },
+    {
+     "kind": 1,
+     "index": 95
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 162,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 161
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 269
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 163,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 162
+    },
+    {
+     "kind": 0,
+     "index": 40
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 164,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 163
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 180236
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 165,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 21
+    },
+    {
+     "kind": 1,
+     "index": 93
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 166,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 165
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 5557047
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 167,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 166
+    },
+    {
+     "kind": 0,
+     "index": 37
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 168,
+   "operator_id": "SOFTMAX_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 167
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 169,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 168
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": 0
+    },
+    {
+     "key": "mult",
+     "value": 4098251
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 170,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 169
+    },
+    {
+     "kind": 1,
+     "index": 95
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 171,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 170
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 269
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 172,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 171
+    },
+    {
+     "kind": 0,
+     "index": 41
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 173,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 172
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 325304
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 174,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 26
+    },
+    {
+     "kind": 1,
+     "index": 100
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 175,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 174
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 65525576
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 176,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 175
+    },
+    {
+     "kind": 0,
+     "index": 37
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 177,
+   "operator_id": "SOFTMAX_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 176
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 178,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 177
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": 0
+    },
+    {
+     "key": "mult",
+     "value": 4098251
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 179,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 178
+    },
+    {
+     "kind": 1,
+     "index": 102
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 180,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 179
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 269
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 181,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 180
+    },
+    {
+     "kind": 0,
+     "index": 42
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 182,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 181
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 222940
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 183,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 31
+    },
+    {
+     "kind": 1,
+     "index": 100
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 184,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 183
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 58556943
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 185,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 184
+    },
+    {
+     "kind": 0,
+     "index": 37
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 186,
+   "operator_id": "SOFTMAX_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 185
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 187,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 186
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": 0
+    },
+    {
+     "key": "mult",
+     "value": 4098251
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 188,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 187
+    },
+    {
+     "kind": 1,
+     "index": 102
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 189,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 188
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 269
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 190,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 189
+    },
+    {
+     "kind": 0,
+     "index": 43
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 191,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 190
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 269412
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 192,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 36
+    },
+    {
+     "kind": 1,
+     "index": 107
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 193,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 192
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 29025825
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 194,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 193
+    },
+    {
+     "kind": 0,
+     "index": 37
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 195,
+   "operator_id": "SOFTMAX_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 194
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 196,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 195
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": 0
+    },
+    {
+     "key": "mult",
+     "value": 4098251
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 197,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 196
+    },
+    {
+     "kind": 1,
+     "index": 109
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 198,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 197
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 269
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 199,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 198
+    },
+    {
+     "kind": 0,
+     "index": 44
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 200,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 199
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 248060
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 201,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 41
+    },
+    {
+     "kind": 1,
+     "index": 107
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 202,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 201
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 67176382
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 203,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 202
+    },
+    {
+     "kind": 0,
+     "index": 37
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 204,
+   "operator_id": "SOFTMAX_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 203
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 205,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 204
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": 0
+    },
+    {
+     "key": "mult",
+     "value": 4098251
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 206,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 205
+    },
+    {
+     "kind": 1,
+     "index": 109
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 207,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 206
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 269
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 208,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 207
+    },
+    {
+     "kind": 0,
+     "index": 45
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 209,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 208
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 561432
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 210,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 46
+    },
+    {
+     "kind": 1,
+     "index": 114
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 211,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 210
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 15834004
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 212,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 211
+    },
+    {
+     "kind": 0,
+     "index": 37
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 213,
+   "operator_id": "SOFTMAX_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 212
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 214,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 213
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": 0
+    },
+    {
+     "key": "mult",
+     "value": 4098251
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 215,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 214
+    },
+    {
+     "kind": 1,
+     "index": 116
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 216,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 215
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 269
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 217,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 216
+    },
+    {
+     "kind": 0,
+     "index": 46
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 218,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 217
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 259364
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 219,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 51
+    },
+    {
+     "kind": 1,
+     "index": 114
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 220,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 219
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 40348326
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 221,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 220
+    },
+    {
+     "kind": 0,
+     "index": 37
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 222,
+   "operator_id": "SOFTMAX_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 221
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 223,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 222
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": 0
+    },
+    {
+     "key": "mult",
+     "value": 4098251
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 224,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 223
+    },
+    {
+     "kind": 1,
+     "index": 116
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 225,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 224
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 269
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 226,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 225
+    },
+    {
+     "kind": 0,
+     "index": 47
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 227,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 226
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 244292
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 228,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 56
+    },
+    {
+     "kind": 1,
+     "index": 121
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 229,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 228
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 41323603
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 230,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 229
+    },
+    {
+     "kind": 0,
+     "index": 37
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 231,
+   "operator_id": "SOFTMAX_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 230
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 232,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 231
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": 0
+    },
+    {
+     "key": "mult",
+     "value": 4098251
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 233,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 232
+    },
+    {
+     "kind": 1,
+     "index": 123
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 234,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 233
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 269
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 235,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 234
+    },
+    {
+     "kind": 0,
+     "index": 48
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 236,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 235
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 271924
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 237,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 61
+    },
+    {
+     "kind": 1,
+     "index": 121
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 238,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 237
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 19721942
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 239,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 238
+    },
+    {
+     "kind": 0,
+     "index": 37
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 240,
+   "operator_id": "SOFTMAX_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 239
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 241,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 240
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": 0
+    },
+    {
+     "key": "mult",
+     "value": 4098251
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 242,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 241
+    },
+    {
+     "kind": 1,
+     "index": 123
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 243,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 242
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 269
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 244,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 243
+    },
+    {
+     "kind": 0,
+     "index": 49
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 245,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 244
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 335352
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 246,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 66
+    },
+    {
+     "kind": 1,
+     "index": 128
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 247,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 246
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 68503840
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 248,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 247
+    },
+    {
+     "kind": 0,
+     "index": 37
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 249,
+   "operator_id": "SOFTMAX_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 248
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 250,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 249
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": 0
+    },
+    {
+     "key": "mult",
+     "value": 4098251
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 251,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 250
+    },
+    {
+     "kind": 1,
+     "index": 130
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 252,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 251
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 269
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 253,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 252
+    },
+    {
+     "kind": 0,
+     "index": 50
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 254,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 253
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 340376
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 255,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 71
+    },
+    {
+     "kind": 1,
+     "index": 128
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 256,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 255
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 56901002
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 257,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 256
+    },
+    {
+     "kind": 0,
+     "index": 37
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 258,
+   "operator_id": "SOFTMAX_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 257
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 259,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 258
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": 0
+    },
+    {
+     "key": "mult",
+     "value": 4098251
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 260,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 259
+    },
+    {
+     "kind": 1,
+     "index": 130
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 261,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 260
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 269
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 262,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 261
+    },
+    {
+     "kind": 0,
+     "index": 51
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 263,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 262
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 330328
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 264,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 76
+    },
+    {
+     "kind": 1,
+     "index": 135
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 265,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 264
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 58162363
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 266,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 265
+    },
+    {
+     "kind": 0,
+     "index": 37
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 267,
+   "operator_id": "SOFTMAX_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 266
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 268,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 267
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": 0
+    },
+    {
+     "key": "mult",
+     "value": 4098251
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 269,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 268
+    },
+    {
+     "kind": 1,
+     "index": 137
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 270,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 269
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 269
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 271,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 270
+    },
+    {
+     "kind": 0,
+     "index": 52
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 272,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 271
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 290764
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 273,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 81
+    },
+    {
+     "kind": 1,
+     "index": 135
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 274,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 273
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 58096816
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 275,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 274
+    },
+    {
+     "kind": 0,
+     "index": 37
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 276,
+   "operator_id": "SOFTMAX_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 275
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 277,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 276
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": 0
+    },
+    {
+     "key": "mult",
+     "value": 4098251
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 278,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 277
+    },
+    {
+     "kind": 1,
+     "index": 137
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 279,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 278
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 269
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 280,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 279
+    },
+    {
+     "kind": 0,
+     "index": 53
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 281,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 280
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 255596
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 282,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 146
+    },
+    {
+     "kind": 1,
+     "index": 155
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 283,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 282
+    },
+    {
+     "kind": 1,
+     "index": 164
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 284,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 283
+    },
+    {
+     "kind": 1,
+     "index": 173
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 285,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 284
+    },
+    {
+     "kind": 1,
+     "index": 182
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 286,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 285
+    },
+    {
+     "kind": 1,
+     "index": 191
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 287,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 286
+    },
+    {
+     "kind": 1,
+     "index": 200
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 288,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 287
+    },
+    {
+     "kind": 1,
+     "index": 209
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 289,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 288
+    },
+    {
+     "kind": 1,
+     "index": 218
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 290,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 289
+    },
+    {
+     "kind": 1,
+     "index": 227
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 291,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 290
+    },
+    {
+     "kind": 1,
+     "index": 236
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 292,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 291
+    },
+    {
+     "kind": 1,
+     "index": 245
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 293,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 292
+    },
+    {
+     "kind": 1,
+     "index": 254
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 294,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 293
+    },
+    {
+     "kind": 1,
+     "index": 263
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 295,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 294
+    },
+    {
+     "kind": 1,
+     "index": 272
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 296,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 295
+    },
+    {
+     "kind": 1,
+     "index": 281
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 297,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 0,
+     "index": 0
+    },
+    {
+     "kind": 1,
+     "index": 296
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 298,
+   "operator_id": "RMSNORM_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 297
+    },
+    {
+     "kind": 0,
+     "index": 54
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "eps_fx",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "node_id": 299,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 298
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 394323
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 300,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 299
+    },
+    {
+     "kind": 0,
+     "index": 55
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     3072
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 301,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 300
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     3072
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 2205630
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 302,
+   "operator_id": "SILU_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 301
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     3072
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 303,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 299
+    },
+    {
+     "kind": 0,
+     "index": 56
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     3072
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 304,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 303
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     3072
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 2107602
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 305,
+   "operator_id": "MUL_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 302
+    },
+    {
+     "kind": 1,
+     "index": 304
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     3072
+    ]
+   },
+   "params": []
+  },
+  {
+   "node_id": 306,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 305
+    }
+   ],
+   "output": {
+    "dtype": 129,
+    "layout": 1,
+    "shape": [
+     16,
+     3072
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 4095
+    },
+    {
+     "key": "clamp_lo",
+     "value": -4095
+    },
+    {
+     "key": "mult",
+     "value": 915381
+    },
+    {
+     "key": "out_dtype",
+     "value": 129
+    },
+    {
+     "key": "shift",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "node_id": 307,
+   "operator_id": "GEMM_A13W10_I64_V1",
+   "operator_version": "GEMM_A13W10_I64_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 306
+    },
+    {
+     "kind": 0,
+     "index": 57
+    }
+   ],
+   "output": {
+    "dtype": 131,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "transpose_b",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "node_id": 308,
+   "operator_id": "REQUANTIZE_WIDE_V1",
+   "operator_version": "REQUANTIZE_WIDE_V1/1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 307
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": [
+    {
+     "key": "clamp_hi",
+     "value": 2147483647
+    },
+    {
+     "key": "clamp_lo",
+     "value": -2147483648
+    },
+    {
+     "key": "mult",
+     "value": 1020510
+    },
+    {
+     "key": "out_dtype",
+     "value": 1
+    },
+    {
+     "key": "shift",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "node_id": 309,
+   "operator_id": "ADD_FIXED_V1",
+   "operator_version": "1.0.0",
+   "inputs": [
+    {
+     "kind": 1,
+     "index": 297
+    },
+    {
+     "kind": 1,
+     "index": 308
+    }
+   ],
+   "output": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "params": []
+  }
+ ],
+ "outputs": [
+  {
+   "kind": 1,
+   "index": 309
+  }
+ ],
+ "inputs": [
+  {
+   "name": "const_0",
+   "desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   },
+   "root": "JGa6k3ufz07QhSX+tZ33nI7QH+5M7y5a4iw0gg+oSzY="
+  },
+  {
+   "name": "const_1",
+   "desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     1024
+    ]
+   },
+   "root": "iVJNbSTLc55lCtGFYr4/nVkkoinz1ePd+GvNYZR6gVc="
+  },
+  {
+   "name": "const_2",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "gtSLoFF3wsfkjGyy4xEpskfvzhwbuzIZ8R33PtrwriA="
+  },
+  {
+   "name": "const_3",
+   "desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     128
+    ]
+   },
+   "root": "s9k/PwkogkK9R+TetFl6G5YxD1dsIaYmgpqIy/WpHxM="
+  },
+  {
+   "name": "const_4",
+   "desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     2048
+    ]
+   },
+   "root": "VlS5Q4t36uj1GNL3ps2Tcf86yAODZGe+jBz9a1kEX8k="
+  },
+  {
+   "name": "const_5",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "DrxRBf7Elsm06Nl+VWHcmaw6WYKNEaTuHID/LbhqFJs="
+  },
+  {
+   "name": "const_6",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "qgzZb2xnjM49/K3tsGPkOGBjPghYyeoL/O6SrqfBVow="
+  },
+  {
+   "name": "const_7",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "RVRVlyUYyDj+MIXitfa6fHl2p56Z4QsdtQaFP9SIQiU="
+  },
+  {
+   "name": "const_8",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "CvCPRF9JXLaPNRwGYNXUWqfVmn1WchR+KiirmyyEsrY="
+  },
+  {
+   "name": "const_9",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "Lgqe5civdkvvI/gykV6kDnRCmdr9QG68gfn0K8kJdEE="
+  },
+  {
+   "name": "const_10",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "vmhlJyoHcSGYLdUnDq9siM4iwItLAHSYcUjojDxXqhM="
+  },
+  {
+   "name": "const_11",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "S+0LesRT1K/t6kj7V6WNmNb2vrlFJm3ul9JvTC7A3yg="
+  },
+  {
+   "name": "const_12",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "Cr+EVWL3Wly9gC5VsiHPGrqLkLVkckiqOV1hrpnNans="
+  },
+  {
+   "name": "const_13",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "kv7+blTvbmXdhIeq4fLN45CXqrtqI2/vvgV9G4MPKzQ="
+  },
+  {
+   "name": "const_14",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "stsrz0uGvR8Xdanxq4iJmCqDEMjt/2ZocjM2o77LXkY="
+  },
+  {
+   "name": "const_15",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "LgDs5ZOOVgihDvHBvG0pJX8NvRBeltLM72nRYWEe+Wk="
+  },
+  {
+   "name": "const_16",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "6Oh3KbrZV1y51t43rBegsPWTDH+YALFw1azaajxT0hU="
+  },
+  {
+   "name": "const_17",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "7qX98VoDBYLLANw/UbW3lF76WJikJJRpojLNWkrr5+Q="
+  },
+  {
+   "name": "const_18",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "e/0lgOFlRp+z+PruWrUQPqd+LnK5RV3oseKVRsVyewQ="
+  },
+  {
+   "name": "const_19",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "YT626nVhlf7npJuh078IQWYX1ihhVPF06YXdL9H/wFQ="
+  },
+  {
+   "name": "const_20",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "psMzQKzhr+6mylefvgTZ0gQYCQvv2ATyCHeyX4B6CnU="
+  },
+  {
+   "name": "const_21",
+   "desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     128
+    ]
+   },
+   "root": "3s5ZbgdBmelf8gtKvjT5I6cJUZkSdV7EsfX1pmA/bJw="
+  },
+  {
+   "name": "const_22",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "1N6rqAcl2FPdPzgyNfCJtWKI8Kg0sMgHqXSdEcgeRpo="
+  },
+  {
+   "name": "const_23",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "o4D18qZQ0ijl/dzutBZdpimFHe1YzSU06EEnc2TF/6I="
+  },
+  {
+   "name": "const_24",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "BiHNN6z2AlLxtBSjHud4+ujfJ6Ff5mc70drQaLBicVE="
+  },
+  {
+   "name": "const_25",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "XCntNZzG4qebNXiTkxcHnkua6nRsOYardbP8pKSapr4="
+  },
+  {
+   "name": "const_26",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "fi5GXWcMiyUg657AHupmMszcUxH8lcKPoDszcghRAt8="
+  },
+  {
+   "name": "const_27",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "mdM0kTTuxtK/TeWXOMOaCTMq4yL21yJUtTvbh6sMX9k="
+  },
+  {
+   "name": "const_28",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "TuqtWkjTt26pU2RjgmSqz6Da3mzLxngE9gcMMkd6scA="
+  },
+  {
+   "name": "const_29",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "weaA9KwWUNmaLXgA5/huhh7lVcOB5COobSpG4lm5sZI="
+  },
+  {
+   "name": "const_30",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "wvcH1WrZuLY2DLWbmTtkZLeuJH8+pTMbLa+JCpveyYI="
+  },
+  {
+   "name": "const_31",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "RD8ZQQm3JCbUdd6rU7as5cmhj6PO6mOjyl+aygpqP+s="
+  },
+  {
+   "name": "const_32",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "SY4HM/x3D5C0nIXVRfXNVLmvhr1Cv2OkQcky2Tugflc="
+  },
+  {
+   "name": "const_33",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "wpY6vnR7AevkqeaOpyVL9JGDDueRxyPaIY+9i2l3NtY="
+  },
+  {
+   "name": "const_34",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "nusNd+r6EkqRxUPpHlAnSfkGWJ/8ojwclNAI4lz5eLU="
+  },
+  {
+   "name": "const_35",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "qtGhcVzYS60hA3esQqutS2sZeyq+C9KkWDe/9S4MYLk="
+  },
+  {
+   "name": "const_36",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     128
+    ]
+   },
+   "root": "4aGUA5fMIwVrlpthy8H1r9sVNfjboXccXO9Itp/0R2U="
+  },
+  {
+   "name": "const_37",
+   "desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   },
+   "root": "NGHcpmnaSqV3KQib+Btdvrx8fY19gSfQy10FwGV9GQw="
+  },
+  {
+   "name": "const_38",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     128,
+     1024
+    ]
+   },
+   "root": "tsgmJUgda+HAEdYjvkrRC962vB02Jh4/MCQ3PSpfQRA="
+  },
+  {
+   "name": "const_39",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     128,
+     1024
+    ]
+   },
+   "root": "KY8x9Hp119+JL9QNVbNSCLKvReeOkaEXUmcpg0bTdEo="
+  },
+  {
+   "name": "const_40",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     128,
+     1024
+    ]
+   },
+   "root": "FSjnkF1mbEjqw/KDMHmx4LvN8KX8BtLe+AoeMUWXdb4="
+  },
+  {
+   "name": "const_41",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     128,
+     1024
+    ]
+   },
+   "root": "t/ZrNTGjG/E/7ZlRGWvrTzBJPVpyDKKVZweh0d2pVj8="
+  },
+  {
+   "name": "const_42",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     128,
+     1024
+    ]
+   },
+   "root": "rzeNYC/CIy1HTCabBc13626uOdKcAtkPfR+PZV2z6uM="
+  },
+  {
+   "name": "const_43",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     128,
+     1024
+    ]
+   },
+   "root": "BKVZPluC566dA5EYov8xnlTG7R4IpR1XoAJCOjg1LIg="
+  },
+  {
+   "name": "const_44",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     128,
+     1024
+    ]
+   },
+   "root": "ZzuGOD/DbDUJ4f9gFGIUaurUlKrccaoV0RX+/B/FeQM="
+  },
+  {
+   "name": "const_45",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     128,
+     1024
+    ]
+   },
+   "root": "u20mXKtKBj6f58QlQWTJtKt4CR53SKM6bG5XXZ6WYKg="
+  },
+  {
+   "name": "const_46",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     128,
+     1024
+    ]
+   },
+   "root": "2bQ+31iJZG/6FDISDtqdGdp0azkXuqEW0aJ9m6b4OWw="
+  },
+  {
+   "name": "const_47",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     128,
+     1024
+    ]
+   },
+   "root": "tZxvKjzP76p8SWPin0LMlpZnIs9ZZqdxz8/duGydq/Y="
+  },
+  {
+   "name": "const_48",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     128,
+     1024
+    ]
+   },
+   "root": "4rW/HlI6q9KIyVwXh6HzN7WDtSbqZM6zPKDgeFI+3l0="
+  },
+  {
+   "name": "const_49",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     128,
+     1024
+    ]
+   },
+   "root": "/pZL6wSjesk0Rb3IwCXLYclt3LvjDr5nAwPjWIABcO0="
+  },
+  {
+   "name": "const_50",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     128,
+     1024
+    ]
+   },
+   "root": "K9gpxW4hQXFYu4B3fg2zbj5BvTgdv+G9+k+LWGB1wCM="
+  },
+  {
+   "name": "const_51",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     128,
+     1024
+    ]
+   },
+   "root": "Qumbt02LqI3nQ2h4FFpWviNgpQ65QUd1Q2PZeCHvcjg="
+  },
+  {
+   "name": "const_52",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     128,
+     1024
+    ]
+   },
+   "root": "UYKQjuaRdZdC7Yoj3MRB99m3UgRHSGlLRf3lNS9tQT0="
+  },
+  {
+   "name": "const_53",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     128,
+     1024
+    ]
+   },
+   "root": "6pcG8cjczWyB/euzcbuWtqSNyy0pEH2HkjFrLuqsAhw="
+  },
+  {
+   "name": "const_54",
+   "desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     1024
+    ]
+   },
+   "root": "LunGv4srI6oCSHtcG2xrCU0iIzanPtF7+AFYvo96n2g="
+  },
+  {
+   "name": "const_55",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     3072
+    ]
+   },
+   "root": "jMAcPNt4ogHvD5FjtVwF0MJcPl9FjCDRIIcegAuT2iY="
+  },
+  {
+   "name": "const_56",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     1024,
+     3072
+    ]
+   },
+   "root": "uit7o6yfKNyT7NW28og75VcXCDud0u9EHtcXBwzvV4A="
+  },
+  {
+   "name": "const_57",
+   "desc": {
+    "dtype": 130,
+    "layout": 1,
+    "shape": [
+     3072,
+     1024
+    ]
+   },
+   "root": "l0gd7R53Kq9gCBUO+uubUirpTjKjV9pPLoHDiQLy3Uc="
+  }
+ ]
+}

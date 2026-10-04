@@ -1019,13 +1019,18 @@ def rshift_round_even64(v: int, s: int) -> int:
     return q
 
 
-def reference_wide_gemm(a, w, m: int, n: int, k: int, transpose_b: bool = False):
-    """GEMM_A13W10_I64_V1 reference: C = sum_k A13 * W10, exact int64."""
-    max_safe_k64 = (2**63 - 1) // (2**12 * 2**9)
+def reference_wide_gemm(a, w, m: int, n: int, k: int, transpose_b: bool = False,
+                        w_a13: bool = False):
+    """GEMM_A13W10_I64_V1 reference: C = sum_k A13 * W10, exact int64.
+    The right operand is W10 for model weights or A13 for attention
+    inner products (w_a13=True)."""
+    w_bits = 13 if w_a13 else 10
+    max_safe_k64 = (2**63 - 1) // (2**12 * 2**(w_bits - 1))
     if k > max_safe_k64:
         raise ValueError("canonical/v2: K exceeds MaxSafeK64")
     validate_values_v2(tensor_desc_v2(DTYPE_V2_A13, (m, k)), a)
-    w_desc = tensor_desc_v2(DTYPE_V2_W10, (n, k) if transpose_b else (k, n))
+    w_dtype = DTYPE_V2_A13 if w_a13 else DTYPE_V2_W10
+    w_desc = tensor_desc_v2(w_dtype, (n, k) if transpose_b else (k, n))
     validate_values_v2(w_desc, w)
     out = [0] * (m * n)
     for i in range(m):
