@@ -28,3 +28,4 @@ da-data/
 *.log
 runtime/
 tmp/
+.proto-out/
