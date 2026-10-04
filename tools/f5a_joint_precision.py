@@ -185,6 +185,28 @@ def run_block_bits(conf: Conformer, hidden: np.ndarray, plan: dict, stats: dict)
         assert INT64_MIN <= lo_v and hi_v <= INT64_MAX, "int64 accumulator overflow"
         return lo_v, hi_v
 
+    def mul_shift_guard(acc, mult, shift):
+        """Exact round(acc*mult >> shift) with ties-to-even; falls back to
+        Python bigints when the product would exceed int64, records the
+        required intermediate bits for the requant-bounds artifact."""
+        m = int(np.max(np.abs(acc))) if acc.size else 0
+        bits = m.bit_length() + int(mult).bit_length()
+        if "requant_links" in stats:
+            stats["requant_links"].append({"max_abs_acc": m, "mult": int(mult),
+                                           "shift": int(shift), "product_bits": bits})
+        if bits <= 62:
+            return N.rshift_round_even(acc.astype(np.int64) * np.int64(mult), int(shift))
+        sh = int(shift)
+        out = []
+        for v in acc.reshape(-1):
+            p = int(v) * int(mult)
+            q, r = p >> sh, p & ((1 << sh) - 1)
+            half = 1 << (sh - 1)
+            q += int(r > half or (r == half and (q & 1) == 1))
+            out.append(q)
+        return np.array(out, dtype=object).reshape(acc.shape).astype(np.int64,
+               copy=False, subok=False) if False else np.vectorize(int, otypes=[np.int64])(np.array(out, dtype=object).reshape(acc.shape))
+
     def requant_acc(acc, mult, shift=20):
         gated(acc, mult, shift)
         m = int(np.max(np.abs(acc))) if acc.size else 0
@@ -192,23 +214,15 @@ def run_block_bits(conf: Conformer, hidden: np.ndarray, plan: dict, stats: dict)
         if "requant_links" in stats:
             stats["requant_links"].append({"max_abs_acc": m, "mult": int(mult),
                                            "shift": int(shift), "product_bits": bits})
-        if bits <= 62:
-            return np.clip(N.rshift_round_even(acc.astype(np.int64) * np.int64(mult), shift),
-                           MIN_FX, MAX_FX)
-        # exact ties-to-even bigint path (research executor only; the F.5A
-        # report records exactly when this is required)
-        s = int(shift)
-        out = []
-        for v in acc.reshape(-1):
-            p = int(v) * int(mult)
-            q, r = p >> s, p & ((1 << s) - 1)
-            half = 1 << (s - 1)
-            q += int(r > half or (r == half and (q & 1) == 1))
-            out.append(q)
-        big = np.array(out, dtype=object).reshape(acc.shape)
-        return np.clip(np.vectorize(int, otypes=[np.int64])(big), MIN_FX, MAX_FX)
+        return np.clip(mul_shift_guard(acc, mult, shift), MIN_FX, MAX_FX)
 
     wqmax = qmax(int(plan.get("w_bits", 8)))
+    # Wide-shift mode (candidates): the ratio multipliers get extra
+    # fractional bits so their integer rounding never becomes the floor
+    # (spec sections 19-23/77-78). Legacy mode reproduces F.4A bit-exactly.
+    wide = bool(plan.get("wide_shifts", False))
+    SCORES_S = 42 if wide else 20
+    RATIO_K = 22 if wide else 0
 
     def wc(w, step):
         return np.clip(np.rint(w * ONE / step), -wqmax, wqmax)
@@ -242,22 +256,38 @@ def run_block_bits(conf: Conformer, hidden: np.ndarray, plan: dict, stats: dict)
         k8s.append(quant_bits(kvx, S["k_heads"][kh], bits))
         acc = gemm64(h8, wc(conf.v_slice(kh), W["wv"][kh]), False).astype(np.int64)
         gated(acc, 0)
-        mult_v = max(1, int(round(S["h"]["step_fx"] * W["wv"][kh] / S["v"]["step_fx"])))
-        v8s.append(np.clip(N.rshift_round_even(acc * np.int64(mult_v), 20), -qmax(bits), qmax(bits)))
+        if wide:
+            mult_v = max(1, int(round(S["h"]["step_fx"] * W["wv"][kh] * (1 << RATIO_K)
+                                      / S["v"]["step_fx"])))
+            sh_v = 20 + RATIO_K
+        else:
+            mult_v = max(1, int(round(S["h"]["step_fx"] * W["wv"][kh] / S["v"]["step_fx"])))
+            sh_v = 20
+        v8s.append(np.clip(mul_shift_guard(acc, mult_v, sh_v), -qmax(bits), qmax(bits)))
 
     attn = np.zeros((seq, 1024), dtype=np.int64)
     for qh in range(heads):
         kvh = qh // 2
         acc = gemm64(q8s[qh], k8s[kvh], True).astype(np.int64)
-        mult = max(1, int(round(S["q_heads"][qh] * S["k_heads"][kvh] * ATTN_SCALE_FX / ONE)))
-        sfx = np.clip(N.rshift_round_even(acc * np.int64(mult), 20), MIN_FX, MAX_FX)
+        if wide:
+            mult = max(1, int(round(S["q_heads"][qh] * S["k_heads"][kvh] * ATTN_SCALE_FX
+                                     * (1 << (SCORES_S - 40)))))
+        else:
+            mult = max(1, int(round(S["q_heads"][qh] * S["k_heads"][kvh] * ATTN_SCALE_FX / ONE)))
+        sfx = np.clip(mul_shift_guard(acc, mult, SCORES_S), MIN_FX, MAX_FX)
         gated(acc, mult)
         probs = N.op_softmax_rows(np.clip(sfx + causal, MIN_FX, MAX_FX).astype(np.int32)).astype(np.int64)
         p8 = quant_bits(probs, S["p"]["step_fx"], bits, lo=0)
         acc = gemm64(p8, v8s[kvh], False).astype(np.int64)
         gated(acc, 0)
-        mult_c = max(1, int(round(S["p"]["step_fx"] * S["v"]["step_fx"] / S["ctx"]["step_fx"])))
-        c8 = np.clip(N.rshift_round_even(acc * np.int64(mult_c), 20), -qmax(bits), qmax(bits))
+        if wide:
+            mult_c = max(1, int(round(S["p"]["step_fx"] * S["v"]["step_fx"] * (1 << RATIO_K)
+                                      / S["ctx"]["step_fx"])))
+            sh_c = 20 + RATIO_K
+        else:
+            mult_c = max(1, int(round(S["p"]["step_fx"] * S["v"]["step_fx"] / S["ctx"]["step_fx"])))
+            sh_c = 20
+        c8 = np.clip(mul_shift_guard(acc, mult_c, sh_c), -qmax(bits), qmax(bits))
         acc = gemm64(c8, wc(conf.o_slice(qh), W["wo"][qh]), False).astype(np.int64)
         ofx = requant_acc(acc, S["ctx"]["step_fx"] * W["wo"][qh])
         raw = attn + ofx
