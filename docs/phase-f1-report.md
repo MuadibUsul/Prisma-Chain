@@ -1,5 +1,21 @@
 # Phase F.1 report: real model closure — REAL_MODEL_BLOCK = FAIL (precision)
 
+> ## ERRATUM (added in Phase F.2A/F.3A)
+>
+> The F.1 accuracy numbers reported below (0.957 / 1.91) were measured
+> through a **scores dequant multiplier bug**: the multiplier used the
+> GLOBAL q/k steps while the operands were quantized with PER-HEAD steps,
+> scaling the attention logits by the step ratio. With the multiplier
+> derived from the actual per-head steps, the same F.1 policy measures
+> **cosine ≈ 0.9933 / max_abs ≈ 0.423** on the F.1 evaluation set.
+> The conclusion `REAL_MODEL_BLOCK = FAIL` is unchanged, but the original
+> attribution ("dominated by the K heavy-tail") was corrected by F.2A:
+> after the fix, k grouping HURTS and the residual error is a broad
+> 8-bit activation precision floor.
+> See **docs/phase-f2a-report.md** (NOT FEASIBLE /
+> CONTIGUOUS_GROUPWISE_INT8_NOT_SUFFICIENT) and the historical JSONs are
+> not overwritten.
+
 Branch `protocol/transformer-phase-f1-real-model` (worktree from
 `origin/protocol/transformer-phase-f` @ 8c0ce61, 15 commits behind the
 Phase E ref at start). Baseline suites (canonical Go, gemmv1 + verify,
