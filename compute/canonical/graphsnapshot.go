@@ -179,3 +179,16 @@ const (
 	GraphDisputeArbReady  = "arb_ready"
 	GraphDisputeResolved  = "resolved"
 )
+
+// LowStateRoot exposes the committed state root before the first
+// divergent node (the input state arbitration runs against).
+func (d *GraphDispute) LowStateRoot() Hash { return d.lowRoot }
+
+// DisputeDeadline exposes the current round deadline.
+func (d *GraphDispute) DisputeDeadline() uint64 { return d.deadline }
+
+// LastAcceptedEpoch exposes the epoch of the last accepted submission.
+func (d *GraphDispute) LastAcceptedEpoch() uint64 { return d.lastEpoch }
+
+// Interval exposes the current bisection interval [low, high].
+func (d *GraphDispute) Interval() (low, high uint32) { return d.low, d.high }

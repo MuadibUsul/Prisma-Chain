@@ -34,6 +34,14 @@ service Msg {
   rpc RespondGEMMDAChallenge(MsgRespondGEMMDAChallenge) returns (MsgRespondGEMMDAChallengeResponse);
   rpc TimeoutGEMMDAChallenge(MsgTimeoutGEMMDAChallenge) returns (MsgTimeoutGEMMDAChallengeResponse);
   rpc FailGEMMAvailability(MsgFailGEMMAvailability) returns (MsgFailGEMMAvailabilityResponse);
+  rpc PostGraphTask(MsgPostGraphTask) returns (MsgPostGraphTaskResponse);
+  rpc AcceptGraphTask(MsgAcceptGraphTask) returns (MsgAcceptGraphTaskResponse);
+  rpc SubmitGraphResult(MsgSubmitGraphResult) returns (MsgSubmitGraphResultResponse);
+  rpc OpenGraphChallenge(MsgOpenGraphChallenge) returns (MsgOpenGraphChallengeResponse);
+  rpc GraphTrailClaim(MsgGraphTrailClaim) returns (MsgGraphTrailClaimResponse);
+  rpc GraphMidPoint(MsgGraphMidPoint) returns (MsgGraphMidPointResponse);
+  rpc ArbitrateGraphNode(MsgArbitrateGraphNode) returns (MsgArbitrateGraphNodeResponse);
+  rpc FinalizeGraphTask(MsgFinalizeGraphTask) returns (MsgFinalizeGraphTaskResponse);
 }
 
 message MsgRegisterModel {
@@ -344,3 +352,123 @@ message MsgFailGEMMAvailability {
   uint64 gemm_task_id = 2;
 }
 message MsgFailGEMMAvailabilityResponse {}
+
+// --- CANONICAL_GRAPH_V1 settlement ----------------------------------------
+// Graph tasks reuse the GEMM settlement mechanics (escrow, worker bond,
+// challenge window, persisted dispute, permissionless bounded arbitration,
+// receipt) with their own storage namespace, statuses and gas schedule.
+
+message MsgPostGraphTask {
+  option (cosmos.msg.v1.signer) = "requester";
+  string requester = 1;
+  // 32-byte Ed25519 protocol key bound to the chain account by key proof.
+  bytes requester_protocol_pubkey = 2;
+  bytes requester_key_proof = 3;
+  bytes requester_nonce = 4;
+  // Canonical GraphDescriptor JSON (validated and hashed on chain).
+  bytes graph_json = 5;
+  string input_data_ref = 6;
+  uint64 challenge_window = 7;
+  uint64 max_price_per_cwu = 8;
+  uint64 max_fee = 9;
+}
+message MsgPostGraphTaskResponse {
+  uint64 graph_task_id = 1;
+  bytes graph_id = 2;
+}
+
+message MsgAcceptGraphTask {
+  option (cosmos.msg.v1.signer) = "worker";
+  string worker = 1;
+  uint64 graph_task_id = 2;
+  bytes assignment_nonce = 3;
+}
+message MsgAcceptGraphTaskResponse { bytes assignment_ref = 1; }
+
+message MsgSubmitGraphResult {
+  option (cosmos.msg.v1.signer) = "worker";
+  string worker = 1;
+  uint64 graph_task_id = 2;
+  repeated bytes output_roots = 3;
+  bytes final_output_root = 4;
+  uint64 completed_epoch = 5;
+  // Ed25519 signature by the bonded worker network key over the canonical
+  // GraphResultCommit rebuilt from these fields and chain state.
+  bytes worker_signature = 6;
+}
+message MsgSubmitGraphResultResponse { uint64 challenge_end = 1; }
+
+message MsgOpenGraphChallenge {
+  option (cosmos.msg.v1.signer) = "challenger";
+  string challenger = 1;
+  uint64 graph_task_id = 2;
+  // The challenger's counter-claimed output roots; they must differ from
+  // the committed final output root (false challenges are refused up
+  // front) and are re-derived into the dispute record.
+  repeated bytes challenger_output_roots = 3;
+  uint64 challenge_bond = 4;
+}
+message MsgOpenGraphChallengeResponse { uint64 challenge_end = 1; }
+
+message MsgGraphTrailClaim {
+  option (cosmos.msg.v1.signer) = "party";
+  string party = 1;
+  uint64 graph_task_id = 2;
+  bytes trail_root = 3;
+  bytes initial_root = 4;
+  repeated bytes initial_proof = 5;
+  bytes final_root = 6;
+  repeated bytes final_proof = 7;
+}
+message MsgGraphTrailClaimResponse {}
+
+message MsgGraphMidPoint {
+  option (cosmos.msg.v1.signer) = "party";
+  string party = 1;
+  uint64 graph_task_id = 2;
+  bytes state_root = 3;
+  repeated bytes proof_siblings = 4;
+  uint64 epoch = 5;
+}
+message MsgGraphMidPointResponse {}
+
+// One chunk of arbiter evidence: a tensor chunk (or every operand chunk
+// for GEMM nodes) with its chunk proof and the tensor-leaf proof inside
+// the committed input state tree.
+message GraphChunkEvidence {
+  uint32 ref_kind = 1;
+  uint32 ref_index = 2;
+  bytes desc_json = 3;
+  bytes root = 4;
+  uint32 chunk_index = 5;
+  uint32 count = 6;
+  bytes chunk = 7;
+  repeated bytes proof = 8;
+  repeated bytes state_proof = 9;
+}
+
+message MsgArbitrateGraphNode {
+  option (cosmos.msg.v1.signer) = "actor";
+  string actor = 1;
+  uint64 graph_task_id = 2;
+  bytes worker_out_root = 3;
+  uint32 worker_chunk_index = 4;
+  bytes worker_chunk = 5;
+  repeated bytes worker_chunk_proof = 6;
+  bytes challenger_out_root = 7;
+  uint32 challenger_chunk_index = 8;
+  bytes challenger_chunk = 9;
+  repeated bytes challenger_chunk_proof = 10;
+  repeated GraphChunkEvidence evidence = 11;
+  // Pinned RoPE sin/cos table (Q12.20 values) for ROPE nodes; verified
+  // against the committed table input root before use.
+  repeated int64 rope_table = 12;
+}
+message MsgArbitrateGraphNodeResponse { string outcome = 1; }
+
+message MsgFinalizeGraphTask {
+  option (cosmos.msg.v1.signer) = "actor";
+  string actor = 1;
+  uint64 graph_task_id = 2;
+}
+message MsgFinalizeGraphTaskResponse { bytes receipt_id = 1; }

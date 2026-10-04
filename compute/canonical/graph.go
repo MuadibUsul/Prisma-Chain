@@ -133,6 +133,13 @@ type GraphExecution struct {
 	WorkVector WorkVector
 }
 
+// StateLeaf hashes one live tensor of a graph state tree: the public
+// mirror of the internal leaf rule, used by the chain to verify arbiter
+// evidence against the committed input state.
+func StateLeaf(kind uint8, index uint32, root Hash) Hash {
+	return hashBytes([]byte(DomainGraphState), appendUint32BE(nil, uint32(kind)), appendUint32BE(nil, index), root[:])
+}
+
 // stateRootFor computes GraphStateRoot = MerkleRoot over sorted live
 // (tensorID, TensorRoot) pairs. The tensor id encodes kind||index so the
 // state covers every live tensor, not just the last one (transformer
@@ -153,7 +160,7 @@ func stateRootFor(tensors map[TensorRef]Tensor) (Hash, error) {
 		if err != nil {
 			return Hash{}, err
 		}
-		leaves = append(leaves, hashBytes([]byte(DomainGraphState), appendUint32BE(nil, uint32(id>>32)), appendUint32BE(nil, uint32(id)), root[:]))
+		leaves = append(leaves, StateLeaf(uint8(id>>32), uint32(id), root))
 	}
 	return MerkleRootOf(leaves)
 }
@@ -260,4 +267,86 @@ func equalBytes(a, b []byte) bool {
 		}
 	}
 	return true
+}
+
+// StateInclusionProof proves one live tensor leaf inside the state tree of
+// the given live set (used by tests and the fraud injector to assemble
+// objective arbiter evidence).
+func StateInclusionProof(live map[TensorRef]Tensor, ref TensorRef) (MerkleProof, error) {
+	ids := make([]uint64, 0, len(live))
+	byID := map[uint64]TensorRef{}
+	for r := range live {
+		id := uint64(r.Kind)<<32 | uint64(r.Index)
+		ids = append(ids, id)
+		byID[id] = r
+	}
+	sort.Slice(ids, func(i, j int) bool { return ids[i] < ids[j] })
+	leaves := make([]Hash, 0, len(ids))
+	index := -1
+	for _, id := range ids {
+		r := byID[id]
+		if r == ref {
+			index = len(leaves)
+		}
+		tens := live[r]
+		root, err := tens.TensorRoot()
+		if err != nil {
+			return MerkleProof{}, err
+		}
+		leaves = append(leaves, StateLeaf(uint8(id>>32), uint32(id), root))
+	}
+	if index < 0 {
+		return MerkleProof{}, errors.New("canonical: tensor is not part of the live set")
+	}
+	levels, err := buildLevels(leaves)
+	if err != nil {
+		return MerkleProof{}, err
+	}
+	siblings, err := proveLeaf(levels, index)
+	if err != nil {
+		return MerkleProof{}, err
+	}
+	return MerkleProof{Index: uint32(index), Count: uint32(len(leaves)), Siblings: siblings}, nil
+}
+
+// FraudTrail rebuilds a lying party's on-demand trail: the honest prefix
+// up to the corrupted node, then every later state recomputed from the
+// mutated tensor. It is the tooling entry point behind the dev fraud
+// injector and the chain tests.
+func FraudTrail(graph *GraphDescriptor, honest *GraphExecution, nodeID uint32, mutate func(*Tensor)) (_ []Hash, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			err = fmt.Errorf("canonical: fraud trail panic: %v", r)
+		}
+	}()
+	if nodeID >= uint32(len(graph.Nodes)) {
+		return nil, errors.New("canonical: fraud node out of range")
+	}
+	tensors := map[TensorRef]Tensor{}
+	for ref, t := range honest.Tensors {
+		tensors[ref] = t
+	}
+	ref := TensorRef{Kind: 1, Index: nodeID}
+	corrupted := tensors[ref]
+	corrupted.Data = append([]int32(nil), corrupted.Data...)
+	mutate(&corrupted)
+	tensors[ref] = corrupted
+	trail := append([]Hash(nil), honest.Trail[:nodeID+1]...)
+	live := map[TensorRef]Tensor{}
+	for key, t := range tensors {
+		if key.Kind == 0 || key.Index <= nodeID {
+			live[key] = t
+		}
+	}
+	for k := nodeID; k < uint32(len(graph.Nodes)); k++ {
+		if k > nodeID {
+			live[TensorRef{Kind: 1, Index: k}] = tensors[TensorRef{Kind: 1, Index: k}]
+		}
+		state, err := stateRootFor(live)
+		if err != nil {
+			return nil, err
+		}
+		trail = append(trail, state)
+	}
+	return trail, nil
 }

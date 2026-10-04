@@ -308,3 +308,9 @@ func VerifyLeafInclusion(root Hash, leaf Hash, proof MerkleProof) bool {
 	}
 	return h == root
 }
+
+// ChunkBytes exposes the canonical zero-padded chunk encoding (64 values,
+// 4 bytes each) for tooling that assembles arbiter evidence.
+func (t *Tensor) ChunkBytes(index int) ([]byte, error) {
+	return t.chunkBytes(index)
+}

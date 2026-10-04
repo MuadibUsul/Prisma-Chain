@@ -689,3 +689,17 @@ func binaryBE(dst []byte, v uint32) {
 	dst[2] = byte(v >> 8)
 	dst[3] = byte(v)
 }
+
+// TrailProof proves one trail state against the party's trail root (used
+// by tests, the watcher and the dev fraud injector).
+func TrailProof(graphID Hash, trail []Hash, index uint32) (MerkleProof, error) {
+	levels, err := TrailLevels(graphID, trail)
+	if err != nil {
+		return MerkleProof{}, err
+	}
+	siblings, err := proveLeaf(levels, int(index))
+	if err != nil {
+		return MerkleProof{}, err
+	}
+	return MerkleProof{Index: index, Count: uint32(len(trail)), Siblings: siblings}, nil
+}

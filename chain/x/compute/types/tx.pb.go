@@ -3295,6 +3295,1142 @@ func (m *MsgFailGEMMAvailabilityResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgFailGEMMAvailabilityResponse proto.InternalMessageInfo
 
+type MsgPostGraphTask struct {
+	Requester string `protobuf:"bytes,1,opt,name=requester,proto3" json:"requester,omitempty"`
+	// 32-byte Ed25519 protocol key bound to the chain account by key proof.
+	RequesterProtocolPubkey []byte `protobuf:"bytes,2,opt,name=requester_protocol_pubkey,json=requesterProtocolPubkey,proto3" json:"requester_protocol_pubkey,omitempty"`
+	RequesterKeyProof       []byte `protobuf:"bytes,3,opt,name=requester_key_proof,json=requesterKeyProof,proto3" json:"requester_key_proof,omitempty"`
+	RequesterNonce          []byte `protobuf:"bytes,4,opt,name=requester_nonce,json=requesterNonce,proto3" json:"requester_nonce,omitempty"`
+	// Canonical GraphDescriptor JSON (validated and hashed on chain).
+	GraphJson       []byte `protobuf:"bytes,5,opt,name=graph_json,json=graphJson,proto3" json:"graph_json,omitempty"`
+	InputDataRef    string `protobuf:"bytes,6,opt,name=input_data_ref,json=inputDataRef,proto3" json:"input_data_ref,omitempty"`
+	ChallengeWindow uint64 `protobuf:"varint,7,opt,name=challenge_window,json=challengeWindow,proto3" json:"challenge_window,omitempty"`
+	MaxPricePerCwu  uint64 `protobuf:"varint,8,opt,name=max_price_per_cwu,json=maxPricePerCwu,proto3" json:"max_price_per_cwu,omitempty"`
+	MaxFee          uint64 `protobuf:"varint,9,opt,name=max_fee,json=maxFee,proto3" json:"max_fee,omitempty"`
+}
+
+func (m *MsgPostGraphTask) Reset()         { *m = MsgPostGraphTask{} }
+func (m *MsgPostGraphTask) String() string { return proto.CompactTextString(m) }
+func (*MsgPostGraphTask) ProtoMessage()    {}
+func (*MsgPostGraphTask) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{56}
+}
+func (m *MsgPostGraphTask) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgPostGraphTask) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgPostGraphTask.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgPostGraphTask) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgPostGraphTask.Merge(m, src)
+}
+func (m *MsgPostGraphTask) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgPostGraphTask) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgPostGraphTask.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgPostGraphTask proto.InternalMessageInfo
+
+func (m *MsgPostGraphTask) GetRequester() string {
+	if m != nil {
+		return m.Requester
+	}
+	return ""
+}
+
+func (m *MsgPostGraphTask) GetRequesterProtocolPubkey() []byte {
+	if m != nil {
+		return m.RequesterProtocolPubkey
+	}
+	return nil
+}
+
+func (m *MsgPostGraphTask) GetRequesterKeyProof() []byte {
+	if m != nil {
+		return m.RequesterKeyProof
+	}
+	return nil
+}
+
+func (m *MsgPostGraphTask) GetRequesterNonce() []byte {
+	if m != nil {
+		return m.RequesterNonce
+	}
+	return nil
+}
+
+func (m *MsgPostGraphTask) GetGraphJson() []byte {
+	if m != nil {
+		return m.GraphJson
+	}
+	return nil
+}
+
+func (m *MsgPostGraphTask) GetInputDataRef() string {
+	if m != nil {
+		return m.InputDataRef
+	}
+	return ""
+}
+
+func (m *MsgPostGraphTask) GetChallengeWindow() uint64 {
+	if m != nil {
+		return m.ChallengeWindow
+	}
+	return 0
+}
+
+func (m *MsgPostGraphTask) GetMaxPricePerCwu() uint64 {
+	if m != nil {
+		return m.MaxPricePerCwu
+	}
+	return 0
+}
+
+func (m *MsgPostGraphTask) GetMaxFee() uint64 {
+	if m != nil {
+		return m.MaxFee
+	}
+	return 0
+}
+
+type MsgPostGraphTaskResponse struct {
+	GraphTaskId uint64 `protobuf:"varint,1,opt,name=graph_task_id,json=graphTaskId,proto3" json:"graph_task_id,omitempty"`
+	GraphId     []byte `protobuf:"bytes,2,opt,name=graph_id,json=graphId,proto3" json:"graph_id,omitempty"`
+}
+
+func (m *MsgPostGraphTaskResponse) Reset()         { *m = MsgPostGraphTaskResponse{} }
+func (m *MsgPostGraphTaskResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgPostGraphTaskResponse) ProtoMessage()    {}
+func (*MsgPostGraphTaskResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{57}
+}
+func (m *MsgPostGraphTaskResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgPostGraphTaskResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgPostGraphTaskResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgPostGraphTaskResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgPostGraphTaskResponse.Merge(m, src)
+}
+func (m *MsgPostGraphTaskResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgPostGraphTaskResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgPostGraphTaskResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgPostGraphTaskResponse proto.InternalMessageInfo
+
+func (m *MsgPostGraphTaskResponse) GetGraphTaskId() uint64 {
+	if m != nil {
+		return m.GraphTaskId
+	}
+	return 0
+}
+
+func (m *MsgPostGraphTaskResponse) GetGraphId() []byte {
+	if m != nil {
+		return m.GraphId
+	}
+	return nil
+}
+
+type MsgAcceptGraphTask struct {
+	Worker          string `protobuf:"bytes,1,opt,name=worker,proto3" json:"worker,omitempty"`
+	GraphTaskId     uint64 `protobuf:"varint,2,opt,name=graph_task_id,json=graphTaskId,proto3" json:"graph_task_id,omitempty"`
+	AssignmentNonce []byte `protobuf:"bytes,3,opt,name=assignment_nonce,json=assignmentNonce,proto3" json:"assignment_nonce,omitempty"`
+}
+
+func (m *MsgAcceptGraphTask) Reset()         { *m = MsgAcceptGraphTask{} }
+func (m *MsgAcceptGraphTask) String() string { return proto.CompactTextString(m) }
+func (*MsgAcceptGraphTask) ProtoMessage()    {}
+func (*MsgAcceptGraphTask) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{58}
+}
+func (m *MsgAcceptGraphTask) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgAcceptGraphTask) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgAcceptGraphTask.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgAcceptGraphTask) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgAcceptGraphTask.Merge(m, src)
+}
+func (m *MsgAcceptGraphTask) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgAcceptGraphTask) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgAcceptGraphTask.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgAcceptGraphTask proto.InternalMessageInfo
+
+func (m *MsgAcceptGraphTask) GetWorker() string {
+	if m != nil {
+		return m.Worker
+	}
+	return ""
+}
+
+func (m *MsgAcceptGraphTask) GetGraphTaskId() uint64 {
+	if m != nil {
+		return m.GraphTaskId
+	}
+	return 0
+}
+
+func (m *MsgAcceptGraphTask) GetAssignmentNonce() []byte {
+	if m != nil {
+		return m.AssignmentNonce
+	}
+	return nil
+}
+
+type MsgAcceptGraphTaskResponse struct {
+	AssignmentRef []byte `protobuf:"bytes,1,opt,name=assignment_ref,json=assignmentRef,proto3" json:"assignment_ref,omitempty"`
+}
+
+func (m *MsgAcceptGraphTaskResponse) Reset()         { *m = MsgAcceptGraphTaskResponse{} }
+func (m *MsgAcceptGraphTaskResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgAcceptGraphTaskResponse) ProtoMessage()    {}
+func (*MsgAcceptGraphTaskResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{59}
+}
+func (m *MsgAcceptGraphTaskResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgAcceptGraphTaskResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgAcceptGraphTaskResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgAcceptGraphTaskResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgAcceptGraphTaskResponse.Merge(m, src)
+}
+func (m *MsgAcceptGraphTaskResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgAcceptGraphTaskResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgAcceptGraphTaskResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgAcceptGraphTaskResponse proto.InternalMessageInfo
+
+func (m *MsgAcceptGraphTaskResponse) GetAssignmentRef() []byte {
+	if m != nil {
+		return m.AssignmentRef
+	}
+	return nil
+}
+
+type MsgSubmitGraphResult struct {
+	Worker          string   `protobuf:"bytes,1,opt,name=worker,proto3" json:"worker,omitempty"`
+	GraphTaskId     uint64   `protobuf:"varint,2,opt,name=graph_task_id,json=graphTaskId,proto3" json:"graph_task_id,omitempty"`
+	OutputRoots     [][]byte `protobuf:"bytes,3,rep,name=output_roots,json=outputRoots,proto3" json:"output_roots,omitempty"`
+	FinalOutputRoot []byte   `protobuf:"bytes,4,opt,name=final_output_root,json=finalOutputRoot,proto3" json:"final_output_root,omitempty"`
+	CompletedEpoch  uint64   `protobuf:"varint,5,opt,name=completed_epoch,json=completedEpoch,proto3" json:"completed_epoch,omitempty"`
+	// Ed25519 signature by the bonded worker network key over the canonical
+	// GraphResultCommit rebuilt from these fields and chain state.
+	WorkerSignature []byte `protobuf:"bytes,6,opt,name=worker_signature,json=workerSignature,proto3" json:"worker_signature,omitempty"`
+}
+
+func (m *MsgSubmitGraphResult) Reset()         { *m = MsgSubmitGraphResult{} }
+func (m *MsgSubmitGraphResult) String() string { return proto.CompactTextString(m) }
+func (*MsgSubmitGraphResult) ProtoMessage()    {}
+func (*MsgSubmitGraphResult) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{60}
+}
+func (m *MsgSubmitGraphResult) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSubmitGraphResult) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSubmitGraphResult.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSubmitGraphResult) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSubmitGraphResult.Merge(m, src)
+}
+func (m *MsgSubmitGraphResult) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSubmitGraphResult) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSubmitGraphResult.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSubmitGraphResult proto.InternalMessageInfo
+
+func (m *MsgSubmitGraphResult) GetWorker() string {
+	if m != nil {
+		return m.Worker
+	}
+	return ""
+}
+
+func (m *MsgSubmitGraphResult) GetGraphTaskId() uint64 {
+	if m != nil {
+		return m.GraphTaskId
+	}
+	return 0
+}
+
+func (m *MsgSubmitGraphResult) GetOutputRoots() [][]byte {
+	if m != nil {
+		return m.OutputRoots
+	}
+	return nil
+}
+
+func (m *MsgSubmitGraphResult) GetFinalOutputRoot() []byte {
+	if m != nil {
+		return m.FinalOutputRoot
+	}
+	return nil
+}
+
+func (m *MsgSubmitGraphResult) GetCompletedEpoch() uint64 {
+	if m != nil {
+		return m.CompletedEpoch
+	}
+	return 0
+}
+
+func (m *MsgSubmitGraphResult) GetWorkerSignature() []byte {
+	if m != nil {
+		return m.WorkerSignature
+	}
+	return nil
+}
+
+type MsgSubmitGraphResultResponse struct {
+	ChallengeEnd uint64 `protobuf:"varint,1,opt,name=challenge_end,json=challengeEnd,proto3" json:"challenge_end,omitempty"`
+}
+
+func (m *MsgSubmitGraphResultResponse) Reset()         { *m = MsgSubmitGraphResultResponse{} }
+func (m *MsgSubmitGraphResultResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgSubmitGraphResultResponse) ProtoMessage()    {}
+func (*MsgSubmitGraphResultResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{61}
+}
+func (m *MsgSubmitGraphResultResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSubmitGraphResultResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSubmitGraphResultResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSubmitGraphResultResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSubmitGraphResultResponse.Merge(m, src)
+}
+func (m *MsgSubmitGraphResultResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSubmitGraphResultResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSubmitGraphResultResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSubmitGraphResultResponse proto.InternalMessageInfo
+
+func (m *MsgSubmitGraphResultResponse) GetChallengeEnd() uint64 {
+	if m != nil {
+		return m.ChallengeEnd
+	}
+	return 0
+}
+
+type MsgOpenGraphChallenge struct {
+	Challenger  string `protobuf:"bytes,1,opt,name=challenger,proto3" json:"challenger,omitempty"`
+	GraphTaskId uint64 `protobuf:"varint,2,opt,name=graph_task_id,json=graphTaskId,proto3" json:"graph_task_id,omitempty"`
+	// The challenger's counter-claimed output roots; they must differ from
+	// the committed final output root (false challenges are refused up
+	// front) and are re-derived into the dispute record.
+	ChallengerOutputRoots [][]byte `protobuf:"bytes,3,rep,name=challenger_output_roots,json=challengerOutputRoots,proto3" json:"challenger_output_roots,omitempty"`
+	ChallengeBond         uint64   `protobuf:"varint,4,opt,name=challenge_bond,json=challengeBond,proto3" json:"challenge_bond,omitempty"`
+}
+
+func (m *MsgOpenGraphChallenge) Reset()         { *m = MsgOpenGraphChallenge{} }
+func (m *MsgOpenGraphChallenge) String() string { return proto.CompactTextString(m) }
+func (*MsgOpenGraphChallenge) ProtoMessage()    {}
+func (*MsgOpenGraphChallenge) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{62}
+}
+func (m *MsgOpenGraphChallenge) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgOpenGraphChallenge) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgOpenGraphChallenge.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgOpenGraphChallenge) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgOpenGraphChallenge.Merge(m, src)
+}
+func (m *MsgOpenGraphChallenge) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgOpenGraphChallenge) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgOpenGraphChallenge.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgOpenGraphChallenge proto.InternalMessageInfo
+
+func (m *MsgOpenGraphChallenge) GetChallenger() string {
+	if m != nil {
+		return m.Challenger
+	}
+	return ""
+}
+
+func (m *MsgOpenGraphChallenge) GetGraphTaskId() uint64 {
+	if m != nil {
+		return m.GraphTaskId
+	}
+	return 0
+}
+
+func (m *MsgOpenGraphChallenge) GetChallengerOutputRoots() [][]byte {
+	if m != nil {
+		return m.ChallengerOutputRoots
+	}
+	return nil
+}
+
+func (m *MsgOpenGraphChallenge) GetChallengeBond() uint64 {
+	if m != nil {
+		return m.ChallengeBond
+	}
+	return 0
+}
+
+type MsgOpenGraphChallengeResponse struct {
+	ChallengeEnd uint64 `protobuf:"varint,1,opt,name=challenge_end,json=challengeEnd,proto3" json:"challenge_end,omitempty"`
+}
+
+func (m *MsgOpenGraphChallengeResponse) Reset()         { *m = MsgOpenGraphChallengeResponse{} }
+func (m *MsgOpenGraphChallengeResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgOpenGraphChallengeResponse) ProtoMessage()    {}
+func (*MsgOpenGraphChallengeResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{63}
+}
+func (m *MsgOpenGraphChallengeResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgOpenGraphChallengeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgOpenGraphChallengeResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgOpenGraphChallengeResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgOpenGraphChallengeResponse.Merge(m, src)
+}
+func (m *MsgOpenGraphChallengeResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgOpenGraphChallengeResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgOpenGraphChallengeResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgOpenGraphChallengeResponse proto.InternalMessageInfo
+
+func (m *MsgOpenGraphChallengeResponse) GetChallengeEnd() uint64 {
+	if m != nil {
+		return m.ChallengeEnd
+	}
+	return 0
+}
+
+type MsgGraphTrailClaim struct {
+	Party        string   `protobuf:"bytes,1,opt,name=party,proto3" json:"party,omitempty"`
+	GraphTaskId  uint64   `protobuf:"varint,2,opt,name=graph_task_id,json=graphTaskId,proto3" json:"graph_task_id,omitempty"`
+	TrailRoot    []byte   `protobuf:"bytes,3,opt,name=trail_root,json=trailRoot,proto3" json:"trail_root,omitempty"`
+	InitialRoot  []byte   `protobuf:"bytes,4,opt,name=initial_root,json=initialRoot,proto3" json:"initial_root,omitempty"`
+	InitialProof [][]byte `protobuf:"bytes,5,rep,name=initial_proof,json=initialProof,proto3" json:"initial_proof,omitempty"`
+	FinalRoot    []byte   `protobuf:"bytes,6,opt,name=final_root,json=finalRoot,proto3" json:"final_root,omitempty"`
+	FinalProof   [][]byte `protobuf:"bytes,7,rep,name=final_proof,json=finalProof,proto3" json:"final_proof,omitempty"`
+}
+
+func (m *MsgGraphTrailClaim) Reset()         { *m = MsgGraphTrailClaim{} }
+func (m *MsgGraphTrailClaim) String() string { return proto.CompactTextString(m) }
+func (*MsgGraphTrailClaim) ProtoMessage()    {}
+func (*MsgGraphTrailClaim) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{64}
+}
+func (m *MsgGraphTrailClaim) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgGraphTrailClaim) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgGraphTrailClaim.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgGraphTrailClaim) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgGraphTrailClaim.Merge(m, src)
+}
+func (m *MsgGraphTrailClaim) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgGraphTrailClaim) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgGraphTrailClaim.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgGraphTrailClaim proto.InternalMessageInfo
+
+func (m *MsgGraphTrailClaim) GetParty() string {
+	if m != nil {
+		return m.Party
+	}
+	return ""
+}
+
+func (m *MsgGraphTrailClaim) GetGraphTaskId() uint64 {
+	if m != nil {
+		return m.GraphTaskId
+	}
+	return 0
+}
+
+func (m *MsgGraphTrailClaim) GetTrailRoot() []byte {
+	if m != nil {
+		return m.TrailRoot
+	}
+	return nil
+}
+
+func (m *MsgGraphTrailClaim) GetInitialRoot() []byte {
+	if m != nil {
+		return m.InitialRoot
+	}
+	return nil
+}
+
+func (m *MsgGraphTrailClaim) GetInitialProof() [][]byte {
+	if m != nil {
+		return m.InitialProof
+	}
+	return nil
+}
+
+func (m *MsgGraphTrailClaim) GetFinalRoot() []byte {
+	if m != nil {
+		return m.FinalRoot
+	}
+	return nil
+}
+
+func (m *MsgGraphTrailClaim) GetFinalProof() [][]byte {
+	if m != nil {
+		return m.FinalProof
+	}
+	return nil
+}
+
+type MsgGraphTrailClaimResponse struct {
+}
+
+func (m *MsgGraphTrailClaimResponse) Reset()         { *m = MsgGraphTrailClaimResponse{} }
+func (m *MsgGraphTrailClaimResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgGraphTrailClaimResponse) ProtoMessage()    {}
+func (*MsgGraphTrailClaimResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{65}
+}
+func (m *MsgGraphTrailClaimResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgGraphTrailClaimResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgGraphTrailClaimResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgGraphTrailClaimResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgGraphTrailClaimResponse.Merge(m, src)
+}
+func (m *MsgGraphTrailClaimResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgGraphTrailClaimResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgGraphTrailClaimResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgGraphTrailClaimResponse proto.InternalMessageInfo
+
+type MsgGraphMidPoint struct {
+	Party         string   `protobuf:"bytes,1,opt,name=party,proto3" json:"party,omitempty"`
+	GraphTaskId   uint64   `protobuf:"varint,2,opt,name=graph_task_id,json=graphTaskId,proto3" json:"graph_task_id,omitempty"`
+	StateRoot     []byte   `protobuf:"bytes,3,opt,name=state_root,json=stateRoot,proto3" json:"state_root,omitempty"`
+	ProofSiblings [][]byte `protobuf:"bytes,4,rep,name=proof_siblings,json=proofSiblings,proto3" json:"proof_siblings,omitempty"`
+	Epoch         uint64   `protobuf:"varint,5,opt,name=epoch,proto3" json:"epoch,omitempty"`
+}
+
+func (m *MsgGraphMidPoint) Reset()         { *m = MsgGraphMidPoint{} }
+func (m *MsgGraphMidPoint) String() string { return proto.CompactTextString(m) }
+func (*MsgGraphMidPoint) ProtoMessage()    {}
+func (*MsgGraphMidPoint) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{66}
+}
+func (m *MsgGraphMidPoint) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgGraphMidPoint) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgGraphMidPoint.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgGraphMidPoint) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgGraphMidPoint.Merge(m, src)
+}
+func (m *MsgGraphMidPoint) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgGraphMidPoint) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgGraphMidPoint.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgGraphMidPoint proto.InternalMessageInfo
+
+func (m *MsgGraphMidPoint) GetParty() string {
+	if m != nil {
+		return m.Party
+	}
+	return ""
+}
+
+func (m *MsgGraphMidPoint) GetGraphTaskId() uint64 {
+	if m != nil {
+		return m.GraphTaskId
+	}
+	return 0
+}
+
+func (m *MsgGraphMidPoint) GetStateRoot() []byte {
+	if m != nil {
+		return m.StateRoot
+	}
+	return nil
+}
+
+func (m *MsgGraphMidPoint) GetProofSiblings() [][]byte {
+	if m != nil {
+		return m.ProofSiblings
+	}
+	return nil
+}
+
+func (m *MsgGraphMidPoint) GetEpoch() uint64 {
+	if m != nil {
+		return m.Epoch
+	}
+	return 0
+}
+
+type MsgGraphMidPointResponse struct {
+}
+
+func (m *MsgGraphMidPointResponse) Reset()         { *m = MsgGraphMidPointResponse{} }
+func (m *MsgGraphMidPointResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgGraphMidPointResponse) ProtoMessage()    {}
+func (*MsgGraphMidPointResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{67}
+}
+func (m *MsgGraphMidPointResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgGraphMidPointResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgGraphMidPointResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgGraphMidPointResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgGraphMidPointResponse.Merge(m, src)
+}
+func (m *MsgGraphMidPointResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgGraphMidPointResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgGraphMidPointResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgGraphMidPointResponse proto.InternalMessageInfo
+
+// One chunk of arbiter evidence: a tensor chunk (or every operand chunk
+// for GEMM nodes) with its chunk proof and the tensor-leaf proof inside
+// the committed input state tree.
+type GraphChunkEvidence struct {
+	RefKind    uint32   `protobuf:"varint,1,opt,name=ref_kind,json=refKind,proto3" json:"ref_kind,omitempty"`
+	RefIndex   uint32   `protobuf:"varint,2,opt,name=ref_index,json=refIndex,proto3" json:"ref_index,omitempty"`
+	DescJson   []byte   `protobuf:"bytes,3,opt,name=desc_json,json=descJson,proto3" json:"desc_json,omitempty"`
+	Root       []byte   `protobuf:"bytes,4,opt,name=root,proto3" json:"root,omitempty"`
+	ChunkIndex uint32   `protobuf:"varint,5,opt,name=chunk_index,json=chunkIndex,proto3" json:"chunk_index,omitempty"`
+	Count      uint32   `protobuf:"varint,6,opt,name=count,proto3" json:"count,omitempty"`
+	Chunk      []byte   `protobuf:"bytes,7,opt,name=chunk,proto3" json:"chunk,omitempty"`
+	Proof      [][]byte `protobuf:"bytes,8,rep,name=proof,proto3" json:"proof,omitempty"`
+	StateProof [][]byte `protobuf:"bytes,9,rep,name=state_proof,json=stateProof,proto3" json:"state_proof,omitempty"`
+}
+
+func (m *GraphChunkEvidence) Reset()         { *m = GraphChunkEvidence{} }
+func (m *GraphChunkEvidence) String() string { return proto.CompactTextString(m) }
+func (*GraphChunkEvidence) ProtoMessage()    {}
+func (*GraphChunkEvidence) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{68}
+}
+func (m *GraphChunkEvidence) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GraphChunkEvidence) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GraphChunkEvidence.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GraphChunkEvidence) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GraphChunkEvidence.Merge(m, src)
+}
+func (m *GraphChunkEvidence) XXX_Size() int {
+	return m.Size()
+}
+func (m *GraphChunkEvidence) XXX_DiscardUnknown() {
+	xxx_messageInfo_GraphChunkEvidence.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GraphChunkEvidence proto.InternalMessageInfo
+
+func (m *GraphChunkEvidence) GetRefKind() uint32 {
+	if m != nil {
+		return m.RefKind
+	}
+	return 0
+}
+
+func (m *GraphChunkEvidence) GetRefIndex() uint32 {
+	if m != nil {
+		return m.RefIndex
+	}
+	return 0
+}
+
+func (m *GraphChunkEvidence) GetDescJson() []byte {
+	if m != nil {
+		return m.DescJson
+	}
+	return nil
+}
+
+func (m *GraphChunkEvidence) GetRoot() []byte {
+	if m != nil {
+		return m.Root
+	}
+	return nil
+}
+
+func (m *GraphChunkEvidence) GetChunkIndex() uint32 {
+	if m != nil {
+		return m.ChunkIndex
+	}
+	return 0
+}
+
+func (m *GraphChunkEvidence) GetCount() uint32 {
+	if m != nil {
+		return m.Count
+	}
+	return 0
+}
+
+func (m *GraphChunkEvidence) GetChunk() []byte {
+	if m != nil {
+		return m.Chunk
+	}
+	return nil
+}
+
+func (m *GraphChunkEvidence) GetProof() [][]byte {
+	if m != nil {
+		return m.Proof
+	}
+	return nil
+}
+
+func (m *GraphChunkEvidence) GetStateProof() [][]byte {
+	if m != nil {
+		return m.StateProof
+	}
+	return nil
+}
+
+type MsgArbitrateGraphNode struct {
+	Actor                string                `protobuf:"bytes,1,opt,name=actor,proto3" json:"actor,omitempty"`
+	GraphTaskId          uint64                `protobuf:"varint,2,opt,name=graph_task_id,json=graphTaskId,proto3" json:"graph_task_id,omitempty"`
+	WorkerOutRoot        []byte                `protobuf:"bytes,3,opt,name=worker_out_root,json=workerOutRoot,proto3" json:"worker_out_root,omitempty"`
+	WorkerChunkIndex     uint32                `protobuf:"varint,4,opt,name=worker_chunk_index,json=workerChunkIndex,proto3" json:"worker_chunk_index,omitempty"`
+	WorkerChunk          []byte                `protobuf:"bytes,5,opt,name=worker_chunk,json=workerChunk,proto3" json:"worker_chunk,omitempty"`
+	WorkerChunkProof     [][]byte              `protobuf:"bytes,6,rep,name=worker_chunk_proof,json=workerChunkProof,proto3" json:"worker_chunk_proof,omitempty"`
+	ChallengerOutRoot    []byte                `protobuf:"bytes,7,opt,name=challenger_out_root,json=challengerOutRoot,proto3" json:"challenger_out_root,omitempty"`
+	ChallengerChunkIndex uint32                `protobuf:"varint,8,opt,name=challenger_chunk_index,json=challengerChunkIndex,proto3" json:"challenger_chunk_index,omitempty"`
+	ChallengerChunk      []byte                `protobuf:"bytes,9,opt,name=challenger_chunk,json=challengerChunk,proto3" json:"challenger_chunk,omitempty"`
+	ChallengerChunkProof [][]byte              `protobuf:"bytes,10,rep,name=challenger_chunk_proof,json=challengerChunkProof,proto3" json:"challenger_chunk_proof,omitempty"`
+	Evidence             []*GraphChunkEvidence `protobuf:"bytes,11,rep,name=evidence,proto3" json:"evidence,omitempty"`
+	// Pinned RoPE sin/cos table (Q12.20 values) for ROPE nodes; verified
+	// against the committed table input root before use.
+	RopeTable []int64 `protobuf:"varint,12,rep,packed,name=rope_table,json=ropeTable,proto3" json:"rope_table,omitempty"`
+}
+
+func (m *MsgArbitrateGraphNode) Reset()         { *m = MsgArbitrateGraphNode{} }
+func (m *MsgArbitrateGraphNode) String() string { return proto.CompactTextString(m) }
+func (*MsgArbitrateGraphNode) ProtoMessage()    {}
+func (*MsgArbitrateGraphNode) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{69}
+}
+func (m *MsgArbitrateGraphNode) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgArbitrateGraphNode) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgArbitrateGraphNode.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgArbitrateGraphNode) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgArbitrateGraphNode.Merge(m, src)
+}
+func (m *MsgArbitrateGraphNode) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgArbitrateGraphNode) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgArbitrateGraphNode.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgArbitrateGraphNode proto.InternalMessageInfo
+
+func (m *MsgArbitrateGraphNode) GetActor() string {
+	if m != nil {
+		return m.Actor
+	}
+	return ""
+}
+
+func (m *MsgArbitrateGraphNode) GetGraphTaskId() uint64 {
+	if m != nil {
+		return m.GraphTaskId
+	}
+	return 0
+}
+
+func (m *MsgArbitrateGraphNode) GetWorkerOutRoot() []byte {
+	if m != nil {
+		return m.WorkerOutRoot
+	}
+	return nil
+}
+
+func (m *MsgArbitrateGraphNode) GetWorkerChunkIndex() uint32 {
+	if m != nil {
+		return m.WorkerChunkIndex
+	}
+	return 0
+}
+
+func (m *MsgArbitrateGraphNode) GetWorkerChunk() []byte {
+	if m != nil {
+		return m.WorkerChunk
+	}
+	return nil
+}
+
+func (m *MsgArbitrateGraphNode) GetWorkerChunkProof() [][]byte {
+	if m != nil {
+		return m.WorkerChunkProof
+	}
+	return nil
+}
+
+func (m *MsgArbitrateGraphNode) GetChallengerOutRoot() []byte {
+	if m != nil {
+		return m.ChallengerOutRoot
+	}
+	return nil
+}
+
+func (m *MsgArbitrateGraphNode) GetChallengerChunkIndex() uint32 {
+	if m != nil {
+		return m.ChallengerChunkIndex
+	}
+	return 0
+}
+
+func (m *MsgArbitrateGraphNode) GetChallengerChunk() []byte {
+	if m != nil {
+		return m.ChallengerChunk
+	}
+	return nil
+}
+
+func (m *MsgArbitrateGraphNode) GetChallengerChunkProof() [][]byte {
+	if m != nil {
+		return m.ChallengerChunkProof
+	}
+	return nil
+}
+
+func (m *MsgArbitrateGraphNode) GetEvidence() []*GraphChunkEvidence {
+	if m != nil {
+		return m.Evidence
+	}
+	return nil
+}
+
+func (m *MsgArbitrateGraphNode) GetRopeTable() []int64 {
+	if m != nil {
+		return m.RopeTable
+	}
+	return nil
+}
+
+type MsgArbitrateGraphNodeResponse struct {
+	Outcome string `protobuf:"bytes,1,opt,name=outcome,proto3" json:"outcome,omitempty"`
+}
+
+func (m *MsgArbitrateGraphNodeResponse) Reset()         { *m = MsgArbitrateGraphNodeResponse{} }
+func (m *MsgArbitrateGraphNodeResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgArbitrateGraphNodeResponse) ProtoMessage()    {}
+func (*MsgArbitrateGraphNodeResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{70}
+}
+func (m *MsgArbitrateGraphNodeResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgArbitrateGraphNodeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgArbitrateGraphNodeResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgArbitrateGraphNodeResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgArbitrateGraphNodeResponse.Merge(m, src)
+}
+func (m *MsgArbitrateGraphNodeResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgArbitrateGraphNodeResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgArbitrateGraphNodeResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgArbitrateGraphNodeResponse proto.InternalMessageInfo
+
+func (m *MsgArbitrateGraphNodeResponse) GetOutcome() string {
+	if m != nil {
+		return m.Outcome
+	}
+	return ""
+}
+
+type MsgFinalizeGraphTask struct {
+	Actor       string `protobuf:"bytes,1,opt,name=actor,proto3" json:"actor,omitempty"`
+	GraphTaskId uint64 `protobuf:"varint,2,opt,name=graph_task_id,json=graphTaskId,proto3" json:"graph_task_id,omitempty"`
+}
+
+func (m *MsgFinalizeGraphTask) Reset()         { *m = MsgFinalizeGraphTask{} }
+func (m *MsgFinalizeGraphTask) String() string { return proto.CompactTextString(m) }
+func (*MsgFinalizeGraphTask) ProtoMessage()    {}
+func (*MsgFinalizeGraphTask) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{71}
+}
+func (m *MsgFinalizeGraphTask) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgFinalizeGraphTask) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgFinalizeGraphTask.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgFinalizeGraphTask) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgFinalizeGraphTask.Merge(m, src)
+}
+func (m *MsgFinalizeGraphTask) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgFinalizeGraphTask) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgFinalizeGraphTask.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgFinalizeGraphTask proto.InternalMessageInfo
+
+func (m *MsgFinalizeGraphTask) GetActor() string {
+	if m != nil {
+		return m.Actor
+	}
+	return ""
+}
+
+func (m *MsgFinalizeGraphTask) GetGraphTaskId() uint64 {
+	if m != nil {
+		return m.GraphTaskId
+	}
+	return 0
+}
+
+type MsgFinalizeGraphTaskResponse struct {
+	ReceiptId []byte `protobuf:"bytes,1,opt,name=receipt_id,json=receiptId,proto3" json:"receipt_id,omitempty"`
+}
+
+func (m *MsgFinalizeGraphTaskResponse) Reset()         { *m = MsgFinalizeGraphTaskResponse{} }
+func (m *MsgFinalizeGraphTaskResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgFinalizeGraphTaskResponse) ProtoMessage()    {}
+func (*MsgFinalizeGraphTaskResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b18efc09f01bff14, []int{72}
+}
+func (m *MsgFinalizeGraphTaskResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgFinalizeGraphTaskResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgFinalizeGraphTaskResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgFinalizeGraphTaskResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgFinalizeGraphTaskResponse.Merge(m, src)
+}
+func (m *MsgFinalizeGraphTaskResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgFinalizeGraphTaskResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgFinalizeGraphTaskResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgFinalizeGraphTaskResponse proto.InternalMessageInfo
+
+func (m *MsgFinalizeGraphTaskResponse) GetReceiptId() []byte {
+	if m != nil {
+		return m.ReceiptId
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*MsgRegisterModel)(nil), "prisma.compute.v1.MsgRegisterModel")
 	proto.RegisterType((*MsgRegisterModelResponse)(nil), "prisma.compute.v1.MsgRegisterModelResponse")
@@ -3352,183 +4488,250 @@ func init() {
 	proto.RegisterType((*MsgTimeoutGEMMDAChallengeResponse)(nil), "prisma.compute.v1.MsgTimeoutGEMMDAChallengeResponse")
 	proto.RegisterType((*MsgFailGEMMAvailability)(nil), "prisma.compute.v1.MsgFailGEMMAvailability")
 	proto.RegisterType((*MsgFailGEMMAvailabilityResponse)(nil), "prisma.compute.v1.MsgFailGEMMAvailabilityResponse")
+	proto.RegisterType((*MsgPostGraphTask)(nil), "prisma.compute.v1.MsgPostGraphTask")
+	proto.RegisterType((*MsgPostGraphTaskResponse)(nil), "prisma.compute.v1.MsgPostGraphTaskResponse")
+	proto.RegisterType((*MsgAcceptGraphTask)(nil), "prisma.compute.v1.MsgAcceptGraphTask")
+	proto.RegisterType((*MsgAcceptGraphTaskResponse)(nil), "prisma.compute.v1.MsgAcceptGraphTaskResponse")
+	proto.RegisterType((*MsgSubmitGraphResult)(nil), "prisma.compute.v1.MsgSubmitGraphResult")
+	proto.RegisterType((*MsgSubmitGraphResultResponse)(nil), "prisma.compute.v1.MsgSubmitGraphResultResponse")
+	proto.RegisterType((*MsgOpenGraphChallenge)(nil), "prisma.compute.v1.MsgOpenGraphChallenge")
+	proto.RegisterType((*MsgOpenGraphChallengeResponse)(nil), "prisma.compute.v1.MsgOpenGraphChallengeResponse")
+	proto.RegisterType((*MsgGraphTrailClaim)(nil), "prisma.compute.v1.MsgGraphTrailClaim")
+	proto.RegisterType((*MsgGraphTrailClaimResponse)(nil), "prisma.compute.v1.MsgGraphTrailClaimResponse")
+	proto.RegisterType((*MsgGraphMidPoint)(nil), "prisma.compute.v1.MsgGraphMidPoint")
+	proto.RegisterType((*MsgGraphMidPointResponse)(nil), "prisma.compute.v1.MsgGraphMidPointResponse")
+	proto.RegisterType((*GraphChunkEvidence)(nil), "prisma.compute.v1.GraphChunkEvidence")
+	proto.RegisterType((*MsgArbitrateGraphNode)(nil), "prisma.compute.v1.MsgArbitrateGraphNode")
+	proto.RegisterType((*MsgArbitrateGraphNodeResponse)(nil), "prisma.compute.v1.MsgArbitrateGraphNodeResponse")
+	proto.RegisterType((*MsgFinalizeGraphTask)(nil), "prisma.compute.v1.MsgFinalizeGraphTask")
+	proto.RegisterType((*MsgFinalizeGraphTaskResponse)(nil), "prisma.compute.v1.MsgFinalizeGraphTaskResponse")
 }
 
 func init() { proto.RegisterFile("prisma/compute/v1/tx.proto", fileDescriptor_b18efc09f01bff14) }
 
 var fileDescriptor_b18efc09f01bff14 = []byte{
-	// 2727 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x5a, 0xcb, 0x6f, 0x1c, 0x49,
-	0x19, 0xdf, 0xb1, 0xc7, 0xaf, 0x6f, 0x5e, 0x76, 0xdb, 0x49, 0x26, 0xb3, 0xb1, 0x63, 0x4f, 0xb2,
-	0x89, 0x6d, 0x82, 0xbd, 0x09, 0x7b, 0x40, 0xe6, 0x82, 0xed, 0xec, 0x22, 0x67, 0x19, 0xd6, 0xea,
-	0x98, 0x5d, 0x04, 0x5a, 0x9a, 0x9e, 0xee, 0xf2, 0xa4, 0xe2, 0xe9, 0xee, 0xa1, 0xbb, 0xc7, 0x8f,
-	0x15, 0x07, 0x84, 0x84, 0x38, 0x21, 0xf6, 0xc2, 0x05, 0x21, 0x8e, 0x1c, 0x10, 0x87, 0xe5, 0xbf,
-	0xe0, 0x84, 0xf6, 0x88, 0xe0, 0x82, 0x36, 0x12, 0xf9, 0x37, 0x50, 0x7d, 0x55, 0x5d, 0x5d, 0xfd,
-	0x9a, 0x99, 0x6c, 0x22, 0x2e, 0x91, 0xeb, 0xab, 0x5f, 0xd7, 0xf7, 0x7e, 0x54, 0x4d, 0xa0, 0x35,
-	0xf0, 0x69, 0xe0, 0x98, 0xbb, 0x96, 0xe7, 0x0c, 0x86, 0x21, 0xd9, 0x3d, 0x7f, 0xb8, 0x1b, 0x5e,
-	0xee, 0x0c, 0x7c, 0x2f, 0xf4, 0xb4, 0x25, 0xbe, 0xb7, 0x23, 0xf6, 0x76, 0xce, 0x1f, 0xb6, 0x6e,
-	0x58, 0x5e, 0xe0, 0x78, 0xc1, 0xae, 0x13, 0xf4, 0x18, 0xd4, 0x09, 0x7a, 0x1c, 0xdb, 0xfe, 0xfd,
-	0x14, 0x2c, 0x76, 0x82, 0x9e, 0x4e, 0x7a, 0x34, 0x08, 0x89, 0xdf, 0xf1, 0x6c, 0xd2, 0xd7, 0x56,
-	0x60, 0xc6, 0xbb, 0x70, 0x89, 0xdf, 0x2c, 0xad, 0x97, 0x36, 0x17, 0x74, 0xbe, 0xd0, 0x6e, 0xc2,
-	0xbc, 0xc3, 0xb6, 0x0d, 0x6a, 0x37, 0xa7, 0x70, 0x63, 0x0e, 0xd7, 0x47, 0xb6, 0xb6, 0x01, 0xd5,
-	0x60, 0x40, 0x2c, 0xe3, 0x9c, 0xf8, 0x01, 0xf5, 0xdc, 0xe6, 0x34, 0x6e, 0x57, 0x18, 0xed, 0x63,
-	0x4e, 0xd2, 0x34, 0x28, 0x33, 0x74, 0xb3, 0x8c, 0x5b, 0xf8, 0x37, 0xfb, 0x8c, 0x3a, 0x66, 0x8f,
-	0x18, 0x36, 0xed, 0x91, 0x20, 0x6c, 0xce, 0xac, 0x97, 0x36, 0xab, 0x7a, 0x05, 0x69, 0x8f, 0x91,
-	0xa4, 0x6d, 0xc1, 0x62, 0xe8, 0x9d, 0x11, 0x97, 0x7e, 0x46, 0xfc, 0x08, 0x36, 0x8b, 0xb0, 0x86,
-	0xa4, 0x0b, 0xe8, 0x3b, 0x50, 0xbf, 0x20, 0xb4, 0xf7, 0x2c, 0x0c, 0x22, 0xe0, 0x1c, 0x02, 0x6b,
-	0x82, 0x2a, 0x60, 0x4d, 0x98, 0x1b, 0xf8, 0x5e, 0xcf, 0x37, 0x9d, 0xe6, 0x3c, 0xee, 0x47, 0xcb,
-	0x3d, 0xf8, 0xd5, 0xcb, 0x2f, 0xb6, 0xb9, 0xb2, 0xed, 0x16, 0x34, 0xd3, 0x66, 0xd1, 0x49, 0x30,
-	0xf0, 0xdc, 0x80, 0xb4, 0xff, 0x5c, 0x82, 0x5a, 0x27, 0xe8, 0x1d, 0x78, 0xae, 0xfd, 0x89, 0xe7,
-	0x9f, 0x11, 0x5f, 0xbb, 0x0e, 0xb3, 0x17, 0xf8, 0x97, 0xb0, 0x98, 0x58, 0x31, 0xba, 0xe9, 0x78,
-	0x43, 0x37, 0x44, 0x83, 0x95, 0x75, 0xb1, 0xd2, 0x1e, 0x80, 0xe6, 0x92, 0x90, 0x81, 0x8c, 0xc1,
-	0xb0, 0xdb, 0xa7, 0x96, 0x71, 0x46, 0xae, 0xd0, 0x6a, 0x55, 0x7d, 0x51, 0xec, 0x1c, 0xe3, 0xc6,
-	0x87, 0xe4, 0x4a, 0xdb, 0x86, 0xa5, 0x08, 0x7d, 0x46, 0xae, 0x8c, 0x81, 0xef, 0x79, 0xa7, 0x68,
-	0xc7, 0xaa, 0xde, 0x10, 0x1b, 0x1f, 0x92, 0xab, 0x63, 0x46, 0xde, 0xab, 0x30, 0x1d, 0x04, 0xfb,
-	0xf6, 0x0d, 0xb8, 0x96, 0x90, 0x53, 0x6a, 0xf0, 0x8f, 0x29, 0xa8, 0x74, 0x82, 0xde, 0xb1, 0x17,
-	0x84, 0x27, 0x66, 0x70, 0xa6, 0xdd, 0x82, 0x05, 0x9f, 0xfc, 0x7c, 0x48, 0x98, 0xae, 0x42, 0x85,
-	0x98, 0x20, 0x5d, 0x37, 0xa5, 0xb8, 0x4e, 0x0d, 0x86, 0xe9, 0xd1, 0xc1, 0x50, 0xce, 0x06, 0xc3,
-	0x16, 0x2c, 0x52, 0x77, 0x30, 0x0c, 0x0d, 0xcb, 0x73, 0x1c, 0x1a, 0x3a, 0xc4, 0x8d, 0x9c, 0xdf,
-	0x40, 0xfa, 0xa1, 0x24, 0x33, 0x46, 0xb6, 0x19, 0x9a, 0x86, 0x4f, 0x4e, 0xd1, 0xf1, 0x0b, 0xfa,
-	0x1c, 0x5b, 0xeb, 0xe4, 0x54, 0xbb, 0x01, 0x73, 0x8e, 0x79, 0x69, 0x9c, 0x12, 0x82, 0x9e, 0x2e,
-	0xeb, 0xb3, 0x8e, 0x79, 0xf9, 0x01, 0x21, 0x5a, 0x0b, 0xe6, 0x6d, 0x62, 0xda, 0x7d, 0xea, 0x12,
-	0xf4, 0x71, 0x59, 0x97, 0x6b, 0x26, 0xdd, 0xc0, 0xa7, 0xe7, 0xa6, 0x75, 0x65, 0x84, 0x94, 0xf8,
-	0xcd, 0x05, 0x2e, 0x9d, 0xa0, 0x9d, 0x50, 0xe2, 0x23, 0x84, 0x7b, 0x05, 0x85, 0x69, 0xc2, 0xfa,
-	0xf4, 0xa6, 0xa6, 0x57, 0x38, 0xed, 0x88, 0x91, 0xf6, 0xea, 0xcc, 0xcc, 0xb1, 0x89, 0xda, 0x3b,
-	0xb0, 0xac, 0xd8, 0x33, 0xb2, 0x33, 0x93, 0x30, 0x34, 0x83, 0x33, 0x66, 0xa4, 0x12, 0x97, 0x90,
-	0x2d, 0x8f, 0xec, 0x76, 0x07, 0x23, 0x68, 0xdf, 0xb2, 0xc8, 0x80, 0x7b, 0xa0, 0x28, 0x82, 0x94,
-	0x13, 0xa6, 0xd4, 0x13, 0xf2, 0x1c, 0x1d, 0x1f, 0x27, 0x1d, 0xfd, 0xd7, 0x29, 0x68, 0x74, 0x82,
-	0xde, 0xd3, 0x61, 0xd7, 0xa1, 0xa1, 0x4e, 0x82, 0x61, 0x3f, 0x7c, 0x65, 0x56, 0xda, 0x1d, 0xa8,
-	0x79, 0xc3, 0x90, 0xb9, 0x4b, 0xe4, 0x15, 0x0f, 0xd4, 0x2a, 0x27, 0x8a, 0xb4, 0x5a, 0x05, 0x08,
-	0x7d, 0xd3, 0x22, 0x86, 0xef, 0x79, 0xa1, 0x88, 0xce, 0x05, 0xa4, 0xe8, 0x9e, 0x87, 0xc9, 0xe9,
-	0x13, 0x8b, 0xd0, 0x41, 0x98, 0x4c, 0xf6, 0x9a, 0xa0, 0x8a, 0x53, 0x62, 0x56, 0x98, 0xdd, 0x01,
-	0xba, 0xbc, 0x1c, 0xb1, 0x3a, 0x41, 0x9a, 0xb6, 0x09, 0x8b, 0x9c, 0x95, 0xd5, 0x37, 0xa9, 0x63,
-	0x3c, 0x0f, 0x3c, 0x57, 0xa4, 0x7a, 0x1d, 0xe9, 0x87, 0x8c, 0xfc, 0x24, 0xf0, 0x5c, 0xe6, 0xc9,
-	0x88, 0x2b, 0xa2, 0x78, 0xc2, 0x57, 0x04, 0x8d, 0x41, 0x92, 0x76, 0xbc, 0x09, 0x37, 0x52, 0xd6,
-	0x92, 0x96, 0xd4, 0xd1, 0x90, 0xfb, 0x61, 0x48, 0x82, 0xc8, 0x90, 0x4d, 0x98, 0x73, 0x3c, 0x97,
-	0x86, 0x5e, 0x64, 0xc9, 0x68, 0x59, 0xec, 0xb5, 0x2a, 0xe3, 0x16, 0xc1, 0x04, 0x3b, 0xf5, 0x4c,
-	0xc9, 0xee, 0x37, 0x25, 0x58, 0x62, 0xa2, 0x84, 0xa6, 0x1f, 0x1e, 0x3e, 0x33, 0xfb, 0x7d, 0xe2,
-	0xf6, 0x88, 0xb6, 0x06, 0x60, 0x45, 0x8b, 0x88, 0xa9, 0x42, 0x29, 0x76, 0x61, 0x9e, 0xc9, 0xa6,
-	0xf3, 0x4c, 0xb6, 0xd7, 0x60, 0x12, 0x2a, 0x67, 0xb6, 0xdf, 0x86, 0x9b, 0x19, 0x41, 0xa4, 0x98,
-	0xbf, 0x2b, 0xc1, 0x4a, 0x27, 0xe8, 0xc9, 0x8d, 0x0e, 0xb5, 0x07, 0x1e, 0x75, 0x43, 0xd6, 0x42,
-	0x4c, 0x2b, 0xb6, 0x0c, 0x5f, 0x14, 0xcb, 0xb7, 0x0a, 0x10, 0x84, 0x66, 0x48, 0x54, 0xc9, 0x16,
-	0x90, 0x82, 0x7e, 0x5c, 0x05, 0xc0, 0xaa, 0xc7, 0xb7, 0x45, 0x70, 0x21, 0x05, 0x65, 0xe6, 0x85,
-	0x1b, 0x59, 0xb4, 0xd7, 0xe0, 0x56, 0x9e, 0x40, 0x52, 0xe2, 0x63, 0xcc, 0xd4, 0x13, 0xea, 0x10,
-	0x6f, 0xa8, 0x58, 0xf6, 0xd5, 0xe4, 0x4d, 0x70, 0x5c, 0x85, 0xb7, 0x73, 0x4e, 0x94, 0x0c, 0xbf,
-	0x8f, 0x81, 0xf3, 0x01, 0x75, 0xcd, 0x3e, 0xfd, 0x8c, 0x60, 0xb2, 0xbf, 0x06, 0x33, 0x1e, 0x32,
-	0xea, 0x69, 0x92, 0xd1, 0x13, 0xac, 0x29, 0x3a, 0x39, 0x1d, 0xba, 0xf6, 0xeb, 0xb2, 0xe1, 0x05,
-	0x25, 0x3e, 0x4b, 0x32, 0xf9, 0xf7, 0x34, 0xaa, 0xc3, 0x2a, 0xdd, 0xf7, 0xde, 0xef, 0x74, 0x26,
-	0xe8, 0x1e, 0x7b, 0x70, 0x53, 0x2e, 0x0c, 0x1c, 0x3a, 0x2c, 0xaf, 0xcf, 0xda, 0x1e, 0x6b, 0x79,
-	0x53, 0xe8, 0xca, 0x1b, 0x12, 0x70, 0x2c, 0xf6, 0x8f, 0x71, 0x5b, 0xdb, 0x81, 0xe5, 0xf8, 0xdb,
-	0xb8, 0xf7, 0xf1, 0xf8, 0x58, 0x92, 0x5b, 0x51, 0xf7, 0xd3, 0xee, 0x43, 0x23, 0xc6, 0xbb, 0x9e,
-	0x6b, 0x11, 0x11, 0x2c, 0x75, 0x49, 0xfe, 0x01, 0xa3, 0x6a, 0x55, 0x28, 0x39, 0x58, 0x81, 0xca,
-	0x7a, 0xc9, 0x61, 0x2b, 0x57, 0x54, 0x9a, 0x92, 0xcb, 0x56, 0x67, 0xa2, 0xa1, 0x94, 0xce, 0xb4,
-	0x36, 0xd4, 0x1c, 0x33, 0xf4, 0xe9, 0xa5, 0x61, 0xf2, 0xd2, 0x26, 0x6a, 0x08, 0x27, 0xee, 0x63,
-	0x71, 0x8b, 0x31, 0x5d, 0x8e, 0x59, 0x50, 0x31, 0x07, 0x88, 0xd9, 0x82, 0x45, 0x99, 0x54, 0xc6,
-	0x05, 0x75, 0x6d, 0xef, 0xa2, 0x09, 0xc8, 0xa4, 0x21, 0xe9, 0x9f, 0x20, 0x59, 0xdb, 0x82, 0x25,
-	0xd6, 0xd7, 0x06, 0x3e, 0xb5, 0x88, 0x31, 0x20, 0xbe, 0x61, 0x5d, 0x0c, 0x9b, 0x15, 0xc4, 0xd6,
-	0x1d, 0xf3, 0xf2, 0x98, 0xd1, 0x8f, 0x89, 0x7f, 0x78, 0x31, 0x54, 0x5b, 0x60, 0x35, 0xd1, 0x02,
-	0xef, 0x42, 0x9d, 0x77, 0x58, 0xd9, 0x3c, 0x6b, 0xe8, 0x98, 0x2a, 0x52, 0x1f, 0xf3, 0x0e, 0x9a,
-	0x69, 0x63, 0x04, 0xa3, 0x4b, 0x75, 0xae, 0x6c, 0x65, 0xeb, 0x50, 0xed, 0x11, 0xc7, 0x31, 0x92,
-	0xfd, 0x0c, 0x18, 0xed, 0x44, 0xd6, 0x18, 0xe9, 0x5e, 0x35, 0xc2, 0xaa, 0x7a, 0x3d, 0xa2, 0x73,
-	0x64, 0xfb, 0xd7, 0xbc, 0xb8, 0xf1, 0x7e, 0x25, 0xc3, 0xa8, 0xa8, 0x2f, 0xa5, 0x39, 0x4f, 0x65,
-	0x38, 0x6f, 0xc1, 0xa2, 0x19, 0x04, 0xb4, 0xe7, 0xb2, 0x89, 0x41, 0xf8, 0x9d, 0xc7, 0x48, 0x23,
-	0xa6, 0xa3, 0xe3, 0x93, 0xe5, 0xfe, 0xbb, 0x58, 0xda, 0x92, 0x62, 0x48, 0x85, 0xef, 0x40, 0x4d,
-	0x39, 0x54, 0x68, 0x5c, 0xd5, 0xab, 0x31, 0xf1, 0xc8, 0x6e, 0xff, 0x71, 0x0a, 0xcb, 0x09, 0xef,
-	0x18, 0xec, 0x88, 0x31, 0x3d, 0x76, 0xbc, 0x2e, 0xb7, 0xa1, 0x22, 0x3a, 0x20, 0x46, 0x12, 0x57,
-	0x03, 0x38, 0x09, 0x03, 0xe9, 0x1e, 0x34, 0xa2, 0x6e, 0x1c, 0xb9, 0x96, 0x4f, 0x58, 0xa2, 0x73,
-	0x0a, 0xdf, 0xb2, 0xde, 0x27, 0x70, 0xdd, 0xab, 0x90, 0x04, 0x22, 0xda, 0xc5, 0xe1, 0x07, 0x8c,
-	0xc4, 0xd2, 0x85, 0xdd, 0x11, 0xfa, 0x24, 0x24, 0xb6, 0x41, 0x06, 0x9e, 0xf5, 0x4c, 0x64, 0x41,
-	0x5d, 0x92, 0xdf, 0x67, 0x54, 0x66, 0x60, 0xae, 0x80, 0xc1, 0x74, 0x37, 0xc3, 0xa1, 0x4f, 0x44,
-	0xc7, 0x6d, 0x70, 0xfa, 0xd3, 0x88, 0x9c, 0x34, 0xf0, 0x01, 0x96, 0xc6, 0xb4, 0x75, 0x54, 0x13,
-	0xc7, 0x39, 0x41, 0xdc, 0x28, 0xa8, 0xaa, 0x92, 0xf8, 0xbe, 0x6b, 0xb7, 0x3f, 0xe5, 0xb1, 0x82,
-	0x4d, 0x52, 0xc6, 0x4a, 0x71, 0xeb, 0x1d, 0x6b, 0xe1, 0x54, 0x0f, 0xe6, 0xed, 0x2d, 0x79, 0xbc,
-	0xac, 0x76, 0x7f, 0x29, 0x63, 0x7b, 0xfb, 0x68, 0x40, 0x5c, 0xb6, 0x37, 0x79, 0x23, 0x1e, 0xef,
-	0xe7, 0x7b, 0xd0, 0xb0, 0x69, 0xc0, 0xee, 0x67, 0xb6, 0x11, 0xd2, 0x3e, 0x31, 0x28, 0xfa, 0xba,
-	0xac, 0xd7, 0x22, 0xf2, 0x09, 0xed, 0x93, 0xa3, 0x2c, 0xee, 0x39, 0xba, 0x3b, 0x85, 0x7b, 0xc2,
-	0xae, 0x14, 0xc2, 0x45, 0xd1, 0x00, 0x45, 0xfb, 0x44, 0x0c, 0x59, 0xc2, 0x79, 0x1f, 0xf1, 0x21,
-	0x8a, 0xf6, 0x89, 0xf6, 0x08, 0xae, 0x09, 0x34, 0xef, 0xab, 0x01, 0xed, 0xf6, 0xa9, 0xdb, 0x63,
-	0xf3, 0xd6, 0xf4, 0x66, 0x55, 0x5f, 0xe6, 0x9b, 0x58, 0x54, 0x9f, 0x8a, 0x2d, 0x85, 0x03, 0xff,
-	0x86, 0xba, 0x36, 0xb9, 0xc4, 0x30, 0xa8, 0x45, 0x1c, 0xf0, 0x83, 0x23, 0x46, 0xcf, 0xa0, 0x2d,
-	0xbc, 0x06, 0xcd, 0x67, 0xd0, 0x87, 0x78, 0x21, 0x7a, 0x0f, 0xae, 0xc7, 0xd6, 0x4b, 0x68, 0xc0,
-	0x4b, 0xe9, 0x4a, 0xbc, 0xab, 0x68, 0xf1, 0x0e, 0xd4, 0xe3, 0xf8, 0xe9, 0x7a, 0xae, 0x2d, 0x2a,
-	0x6a, 0x1c, 0x55, 0xec, 0xee, 0xa3, 0x3d, 0x04, 0xe5, 0x73, 0x25, 0x82, 0x2b, 0x78, 0xf4, 0x72,
-	0xbc, 0x27, 0xa3, 0x18, 0x93, 0x67, 0x40, 0x5c, 0x99, 0x16, 0x55, 0x91, 0x3c, 0x48, 0xc3, 0x9c,
-	0xc8, 0x0e, 0x4a, 0x87, 0x38, 0x79, 0x64, 0x62, 0xe5, 0xd5, 0xa2, 0xfd, 0x4f, 0x65, 0xd0, 0xd8,
-	0xfc, 0x82, 0x17, 0x20, 0x8c, 0x47, 0x36, 0x9e, 0x15, 0xb4, 0xf2, 0xf1, 0x51, 0x96, 0x9c, 0xca,
-	0xa7, 0xd3, 0x53, 0xf9, 0x1d, 0xa8, 0x51, 0x97, 0x86, 0xd4, 0xec, 0x1b, 0x38, 0x6c, 0x89, 0x6e,
-	0x59, 0x15, 0xc4, 0xa7, 0x8c, 0xc6, 0x7c, 0x13, 0x81, 0x52, 0xc1, 0x32, 0x83, 0xc1, 0xb2, 0x22,
-	0x76, 0x93, 0xd1, 0xb2, 0x03, 0xcb, 0xc9, 0xaf, 0x78, 0xb8, 0xcc, 0x62, 0x00, 0x2c, 0xa9, 0x9f,
-	0xf0, 0x78, 0xc9, 0xe0, 0x79, 0xc0, 0xcc, 0x65, 0xf1, 0x3c, 0x62, 0x6e, 0x43, 0xe5, 0x94, 0x4d,
-	0x41, 0x42, 0x70, 0xde, 0x95, 0x01, 0x49, 0x5c, 0xec, 0x77, 0x61, 0x85, 0x03, 0x52, 0x42, 0x2f,
-	0xa0, 0xd0, 0x1a, 0xee, 0x25, 0x45, 0xde, 0x86, 0x25, 0xf5, 0x0b, 0x2e, 0x30, 0xa0, 0x00, 0x8d,
-	0x18, 0xce, 0xc5, 0x4d, 0x61, 0xb9, 0xb0, 0x95, 0x34, 0x96, 0x8b, 0xba, 0x01, 0xd5, 0xbe, 0x67,
-	0x9d, 0xa5, 0x83, 0x89, 0xd3, 0x78, 0x81, 0xbd, 0x05, 0x0b, 0x71, 0x5c, 0xd6, 0xc4, 0xf8, 0x2b,
-	0x6b, 0xaa, 0x3a, 0x99, 0xdd, 0x82, 0x56, 0x36, 0x3e, 0x64, 0xc1, 0xfa, 0x57, 0x09, 0x07, 0xb7,
-	0xb8, 0xe2, 0x76, 0xa8, 0xcd, 0xcd, 0xf1, 0x75, 0x23, 0x68, 0x05, 0x66, 0xb8, 0x85, 0x79, 0xf0,
-	0xf0, 0x05, 0xcb, 0xbc, 0x94, 0x59, 0xcb, 0x68, 0xd6, 0xda, 0x20, 0x61, 0xd1, 0xdb, 0x50, 0x51,
-	0x6d, 0x39, 0x83, 0xf6, 0xe1, 0xa3, 0x3c, 0x37, 0xa3, 0x04, 0x70, 0x03, 0xce, 0x2a, 0x00, 0xb4,
-	0x5d, 0x42, 0xf5, 0xdb, 0xb0, 0x9a, 0xab, 0x9b, 0xd4, 0xfe, 0x0f, 0x65, 0x7c, 0xcc, 0xda, 0xf7,
-	0xbb, 0x34, 0xf4, 0xcd, 0x90, 0x30, 0xd0, 0xd7, 0x56, 0xfc, 0x1a, 0xcc, 0x9a, 0xbc, 0x04, 0x09,
-	0xcd, 0x4d, 0xac, 0x39, 0xd7, 0x60, 0xb6, 0xcb, 0xc9, 0x3c, 0x57, 0x66, 0xba, 0x48, 0xbe, 0x0f,
-	0x8b, 0xa6, 0x88, 0x05, 0xac, 0xd2, 0xbe, 0x77, 0x21, 0xd4, 0xad, 0x99, 0x18, 0x0a, 0x0c, 0xa5,
-	0x7b, 0x17, 0x19, 0xa0, 0xe5, 0xf5, 0x85, 0xda, 0x0a, 0xf0, 0xd0, 0xeb, 0xb3, 0x29, 0x30, 0x0d,
-	0x0c, 0x44, 0x3a, 0xd4, 0x13, 0x48, 0xbc, 0x10, 0x9b, 0xe9, 0x30, 0x9f, 0x47, 0x7f, 0x08, 0xa4,
-	0x74, 0x48, 0x1b, 0x6a, 0x66, 0x22, 0x64, 0x17, 0xf0, 0xc0, 0x8a, 0xa9, 0x84, 0xeb, 0x7d, 0x58,
-	0xec, 0xa6, 0x55, 0xe1, 0x59, 0x50, 0xeb, 0xa6, 0x55, 0xe9, 0xa6, 0x55, 0xa9, 0xa4, 0x81, 0x42,
-	0x95, 0x6e, 0x46, 0x95, 0x2a, 0x57, 0xa5, 0x9b, 0x51, 0xa5, 0x9b, 0x56, 0xa5, 0xc6, 0x55, 0xe9,
-	0x66, 0x54, 0xe9, 0x26, 0x54, 0xa9, 0x73, 0x55, 0xba, 0xc7, 0xf9, 0xd1, 0xf3, 0x1e, 0xbe, 0xe8,
-	0x25, 0x62, 0x43, 0x96, 0xe6, 0x26, 0xcc, 0x79, 0xc3, 0xd0, 0xf2, 0x1c, 0x12, 0x8d, 0x13, 0x62,
-	0xd9, 0x3e, 0x81, 0x7a, 0x7c, 0xb9, 0x7b, 0x9d, 0x78, 0x4a, 0xc8, 0xf2, 0x08, 0xae, 0x27, 0x4f,
-	0x9d, 0x40, 0x92, 0x1f, 0x26, 0xee, 0x91, 0x6f, 0x4c, 0x94, 0x6f, 0x27, 0x2e, 0x94, 0x09, 0x59,
-	0x56, 0x01, 0xa2, 0xd7, 0x13, 0x39, 0xfe, 0x2e, 0x08, 0xca, 0x91, 0xdd, 0xfe, 0x98, 0x27, 0x5b,
-	0xd7, 0xf3, 0xe3, 0xb9, 0xec, 0x4d, 0x48, 0xc4, 0x9f, 0x5e, 0x13, 0xe7, 0xca, 0x0c, 0x3f, 0x10,
-	0xf7, 0x52, 0xfe, 0x2c, 0xfb, 0x78, 0xff, 0xd8, 0xf7, 0xce, 0xa9, 0x4d, 0x7c, 0xad, 0x05, 0xf3,
-	0x03, 0xf1, 0xb7, 0xe0, 0x2d, 0xd7, 0x7b, 0x35, 0x76, 0xb8, 0x5c, 0x8a, 0x32, 0x92, 0x3d, 0x43,
-	0x32, 0xf9, 0xbc, 0x84, 0xee, 0xe1, 0x85, 0xe6, 0xf1, 0x3e, 0x9f, 0x0d, 0xcd, 0x90, 0x7a, 0xee,
-	0x28, 0x36, 0x13, 0xde, 0x53, 0xe2, 0xc3, 0xd4, 0xb7, 0x8e, 0x86, 0x42, 0xc7, 0x27, 0x8d, 0x94,
-	0xcc, 0xeb, 0xb0, 0x96, 0x2f, 0x91, 0x14, 0xfa, 0x6f, 0x5c, 0xe8, 0x68, 0xfc, 0x78, 0xbc, 0xff,
-	0x26, 0x87, 0x55, 0x55, 0xed, 0xe9, 0x94, 0xda, 0x2b, 0x30, 0xa3, 0xde, 0xb4, 0xf9, 0x42, 0xd3,
-	0xa0, 0x8c, 0x03, 0x19, 0xbf, 0x75, 0xe0, 0xdf, 0xd9, 0x89, 0xe9, 0xb7, 0x25, 0x54, 0x2b, 0x47,
-	0x66, 0x19, 0x83, 0x1b, 0x10, 0xcf, 0x47, 0xf1, 0xb5, 0xb3, 0x22, 0x69, 0xbc, 0x50, 0x8b, 0x01,
-	0x7a, 0x0a, 0x2b, 0xc0, 0x4c, 0x88, 0x83, 0x73, 0x44, 0x7e, 0x8e, 0x12, 0x0b, 0xf2, 0x93, 0xc4,
-	0xdb, 0x70, 0x39, 0xf9, 0x36, 0xdc, 0xfe, 0x6f, 0x09, 0x2f, 0x03, 0x9c, 0xb9, 0x9d, 0x36, 0xe3,
-	0x28, 0xdf, 0xa7, 0xc5, 0x9c, 0xca, 0x8a, 0xa9, 0x41, 0x59, 0xe9, 0x26, 0xf8, 0xf7, 0xff, 0xaf,
-	0x8d, 0xa6, 0xc2, 0xe9, 0x0e, 0x6c, 0x14, 0xea, 0x29, 0x23, 0xea, 0x67, 0x68, 0x0c, 0xa5, 0x48,
-	0xa9, 0xc6, 0xc8, 0x4f, 0xf4, 0xf1, 0x66, 0x48, 0x64, 0x3a, 0x17, 0x23, 0x9f, 0x83, 0x14, 0xe3,
-	0x53, 0x5e, 0xa0, 0x4c, 0xda, 0x67, 0x88, 0xfd, 0x73, 0x93, 0xf6, 0xcd, 0x2e, 0xed, 0xd3, 0xf0,
-	0xea, 0x8d, 0x54, 0x9b, 0x0d, 0xb8, 0x5d, 0x70, 0x7c, 0x24, 0xc1, 0xa3, 0x97, 0xd7, 0x61, 0xba,
-	0x13, 0xf4, 0x34, 0x13, 0x6a, 0xc9, 0xdf, 0xc9, 0xee, 0xec, 0x64, 0x7e, 0x69, 0xdb, 0x49, 0xff,
-	0x6a, 0xd4, 0xfa, 0xc6, 0x04, 0x20, 0x19, 0xee, 0x3f, 0x02, 0x50, 0x7e, 0x56, 0x5a, 0xcf, 0xff,
-	0x34, 0x46, 0xb4, 0x36, 0xc7, 0x21, 0xe4, 0xc9, 0x3a, 0xcc, 0xcb, 0x9f, 0x7b, 0xd6, 0xf2, 0xbf,
-	0x8a, 0xf6, 0x5b, 0xf7, 0x46, 0xef, 0xab, 0xd2, 0x2a, 0x3f, 0x61, 0x14, 0x48, 0x1b, 0x23, 0x8a,
-	0xa4, 0xcd, 0xfe, 0x6e, 0xa1, 0xfd, 0x14, 0xaa, 0x89, 0xdf, 0x2c, 0xda, 0xf9, 0x5f, 0xaa, 0x98,
-	0xd6, 0xf6, 0x78, 0x8c, 0x7a, 0x7e, 0xe2, 0x29, 0xbf, 0xe0, 0x7c, 0x15, 0x53, 0x74, 0x7e, 0xde,
-	0xf3, 0xbd, 0x66, 0x43, 0x3d, 0xf5, 0x74, 0x7f, 0xb7, 0x40, 0xba, 0x04, 0xaa, 0xf5, 0x60, 0x12,
-	0x94, 0xe4, 0xe2, 0xc0, 0x52, 0xf6, 0xe5, 0xfd, 0x7e, 0xfe, 0x11, 0x19, 0x60, 0x6b, 0x77, 0x42,
-	0xa0, 0x64, 0xf7, 0x1c, 0x16, 0x33, 0xef, 0xe6, 0x05, 0xa1, 0x92, 0xc6, 0xb5, 0x76, 0x26, 0xc3,
-	0xa9, 0x0e, 0x4a, 0x3c, 0x99, 0x17, 0x38, 0x48, 0xc5, 0x14, 0x39, 0x28, 0xef, 0xb1, 0x9c, 0x85,
-	0xae, 0xf2, 0x52, 0xbe, 0x5e, 0x94, 0xa3, 0x11, 0xa2, 0x28, 0x74, 0xb3, 0x2f, 0xe4, 0x4c, 0xf2,
-	0xc4, 0xeb, 0x78, 0xbb, 0x38, 0x99, 0x22, 0x4c, 0x91, 0xe4, 0xb9, 0x0f, 0xb1, 0x36, 0xd4, 0x53,
-	0x0f, 0xa7, 0x77, 0x47, 0xa5, 0x95, 0xe4, 0xf1, 0x60, 0x12, 0x94, 0xea, 0xeb, 0xcc, 0xa3, 0xe6,
-	0xbd, 0x51, 0x09, 0x16, 0xe3, 0x8a, 0x7c, 0x5d, 0xf8, 0x0c, 0xc8, 0x34, 0x4a, 0x3e, 0xef, 0xdd,
-	0x1d, 0x95, 0x6a, 0x63, 0x35, 0xca, 0x7d, 0xcb, 0x63, 0xc9, 0x92, 0x7d, 0xc7, 0x2b, 0x48, 0x96,
-	0x0c, 0xb0, 0x28, 0x59, 0x8a, 0x5f, 0x7b, 0x7a, 0xd0, 0x48, 0x3f, 0xe2, 0xbc, 0x53, 0x90, 0x70,
-	0x49, 0x58, 0xeb, 0x9b, 0x13, 0xc1, 0x24, 0xa3, 0x01, 0x68, 0x39, 0xd7, 0xfd, 0xcd, 0x71, 0x3e,
-	0x88, 0x90, 0xad, 0x77, 0x27, 0x45, 0x4a, 0x8e, 0x26, 0xd4, 0x92, 0x57, 0xec, 0x82, 0x3e, 0x98,
-	0x00, 0x15, 0xf5, 0xc1, 0xfc, 0x0b, 0xd9, 0x4f, 0xa0, 0xa2, 0xde, 0xb9, 0x36, 0x46, 0x56, 0x0f,
-	0x3c, 0x7e, 0x6b, 0x2c, 0x24, 0xaf, 0xb6, 0xe0, 0xe9, 0x63, 0x6a, 0x0b, 0x1e, 0xbf, 0x3d, 0x1e,
-	0x93, 0xb0, 0x4f, 0xe2, 0x56, 0x54, 0x64, 0x1f, 0x15, 0x54, 0x68, 0x9f, 0xbc, 0x7b, 0x10, 0x73,
-	0x7a, 0xce, 0x25, 0x68, 0x73, 0xf4, 0xa8, 0x11, 0x23, 0x8b, 0x9c, 0x5e, 0x7c, 0x29, 0xd2, 0x02,
-	0x58, 0xce, 0xbb, 0x10, 0x6d, 0x8d, 0x8a, 0x9e, 0x04, 0xb4, 0xf5, 0x70, 0x62, 0xa8, 0xca, 0x34,
-	0xef, 0x42, 0xb3, 0x35, 0x3a, 0x19, 0x15, 0x68, 0x11, 0xd3, 0x51, 0x57, 0x8e, 0x5f, 0xc0, 0xf5,
-	0x82, 0x1b, 0xc0, 0x83, 0x22, 0xab, 0xe5, 0xa1, 0x5b, 0xef, 0xbd, 0x0a, 0x5a, 0xe5, 0x5e, 0x30,
-	0x72, 0x3f, 0x18, 0x1b, 0xe1, 0x13, 0x70, 0x1f, 0x3d, 0x6c, 0x6b, 0xe7, 0xb0, 0x92, 0x3b, 0x69,
-	0x17, 0x85, 0x7f, 0x0e, 0xb6, 0xf5, 0x68, 0x72, 0x6c, 0xc4, 0xb7, 0x35, 0xf3, 0xcb, 0x97, 0x5f,
-	0x6c, 0x97, 0x0e, 0xbe, 0xf3, 0xf7, 0xaf, 0xd6, 0x4a, 0x5f, 0x7e, 0xb5, 0x56, 0xfa, 0xcf, 0x57,
-	0x6b, 0xa5, 0xcf, 0x5f, 0xac, 0xbd, 0xf5, 0xe5, 0x8b, 0xb5, 0xb7, 0xfe, 0xf9, 0x62, 0xed, 0xad,
-	0x1f, 0x6f, 0xf0, 0x33, 0xad, 0x67, 0x26, 0x75, 0x77, 0xf9, 0xbf, 0x97, 0xf2, 0x3f, 0xbf, 0x85,
-	0x57, 0x03, 0x12, 0x74, 0x67, 0xf1, 0x57, 0xc6, 0x6f, 0xfd, 0x2f, 0x00, 0x00, 0xff, 0xff, 0x1b,
-	0xb8, 0x8b, 0x9f, 0x1b, 0x27, 0x00, 0x00,
+	// 3525 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x5b, 0xdb, 0x6f, 0x1c, 0x49,
+	0xd5, 0xdf, 0xf1, 0x8c, 0x2f, 0x73, 0xe6, 0x66, 0x77, 0x9c, 0x64, 0x32, 0x89, 0x1d, 0x7b, 0x72,
+	0xb3, 0xf3, 0x65, 0x9d, 0x4d, 0xbe, 0xd5, 0xa7, 0x8f, 0x20, 0x24, 0x1c, 0x27, 0x8b, 0x9c, 0xc5,
+	0xbb, 0xd6, 0xc4, 0xec, 0x72, 0x5b, 0x86, 0x9e, 0xe9, 0xf2, 0xa4, 0xe3, 0x99, 0xee, 0xa1, 0xbb,
+	0x27, 0x8e, 0x57, 0x3c, 0xc0, 0x4a, 0x08, 0x78, 0x40, 0xec, 0x0b, 0x2f, 0x08, 0xf1, 0xc8, 0x03,
+	0x02, 0x69, 0x91, 0xf8, 0x07, 0x78, 0x43, 0x42, 0x42, 0xfb, 0x88, 0xe0, 0x05, 0xed, 0x4a, 0xec,
+	0xbf, 0x81, 0xea, 0x9c, 0xea, 0xea, 0xaa, 0xbe, 0xcc, 0x8c, 0xb3, 0x11, 0x12, 0x2f, 0x91, 0xeb,
+	0xd4, 0x6f, 0xaa, 0xce, 0xad, 0xce, 0x39, 0x75, 0xaa, 0x03, 0x8d, 0xa1, 0x67, 0xfb, 0x03, 0xf3,
+	0x76, 0xd7, 0x1d, 0x0c, 0x47, 0x01, 0xbb, 0xfd, 0xec, 0xce, 0xed, 0xe0, 0xf9, 0xd6, 0xd0, 0x73,
+	0x03, 0xd7, 0x58, 0xa2, 0xb9, 0x2d, 0x31, 0xb7, 0xf5, 0xec, 0x4e, 0xe3, 0x7c, 0xd7, 0xf5, 0x07,
+	0xae, 0x7f, 0x7b, 0xe0, 0xf7, 0x38, 0x74, 0xe0, 0xf7, 0x08, 0xdb, 0xfc, 0xc5, 0x0c, 0x2c, 0xee,
+	0xf9, 0xbd, 0x16, 0xeb, 0xd9, 0x7e, 0xc0, 0xbc, 0x3d, 0xd7, 0x62, 0x7d, 0x63, 0x19, 0x66, 0xdd,
+	0x63, 0x87, 0x79, 0xf5, 0xdc, 0x5a, 0x6e, 0xa3, 0xd8, 0xa2, 0x81, 0x71, 0x01, 0x16, 0x06, 0x7c,
+	0xba, 0x6d, 0x5b, 0xf5, 0x19, 0x9c, 0x98, 0xc7, 0xf1, 0xae, 0x65, 0xac, 0x43, 0xd9, 0x1f, 0xb2,
+	0x6e, 0xfb, 0x19, 0xf3, 0x7c, 0xdb, 0x75, 0xea, 0x79, 0x9c, 0x2e, 0x71, 0xda, 0x3b, 0x44, 0x32,
+	0x0c, 0x28, 0x70, 0x74, 0xbd, 0x80, 0x53, 0xf8, 0x37, 0xff, 0x99, 0x3d, 0x30, 0x7b, 0xac, 0x6d,
+	0xd9, 0x3d, 0xe6, 0x07, 0xf5, 0xd9, 0xb5, 0xdc, 0x46, 0xb9, 0x55, 0x42, 0xda, 0x03, 0x24, 0x19,
+	0x9b, 0xb0, 0x18, 0xb8, 0x47, 0xcc, 0xb1, 0xdf, 0x67, 0x5e, 0x08, 0x9b, 0x43, 0x58, 0x4d, 0xd2,
+	0x05, 0xf4, 0x1a, 0x54, 0x8f, 0x99, 0xdd, 0x7b, 0x12, 0xf8, 0x21, 0x70, 0x1e, 0x81, 0x15, 0x41,
+	0x15, 0xb0, 0x3a, 0xcc, 0x0f, 0x3d, 0xb7, 0xe7, 0x99, 0x83, 0xfa, 0x02, 0xce, 0x87, 0xc3, 0x7b,
+	0xf0, 0xc1, 0x67, 0x1f, 0xdd, 0x24, 0x61, 0x9b, 0x0d, 0xa8, 0xc7, 0xd5, 0xd2, 0x62, 0xfe, 0xd0,
+	0x75, 0x7c, 0xd6, 0xfc, 0x4d, 0x0e, 0x2a, 0x7b, 0x7e, 0xef, 0xbe, 0xeb, 0x58, 0xef, 0xba, 0xde,
+	0x11, 0xf3, 0x8c, 0x73, 0x30, 0x77, 0x8c, 0x7f, 0x09, 0x8d, 0x89, 0x11, 0xa7, 0x9b, 0x03, 0x77,
+	0xe4, 0x04, 0xa8, 0xb0, 0x42, 0x4b, 0x8c, 0x8c, 0x5b, 0x60, 0x38, 0x2c, 0xe0, 0xa0, 0xf6, 0x70,
+	0xd4, 0xe9, 0xdb, 0xdd, 0xf6, 0x11, 0x3b, 0x41, 0xad, 0x95, 0x5b, 0x8b, 0x62, 0x66, 0x1f, 0x27,
+	0xde, 0x64, 0x27, 0xc6, 0x4d, 0x58, 0x0a, 0xd1, 0x47, 0xec, 0xa4, 0x3d, 0xf4, 0x5c, 0xf7, 0x10,
+	0xf5, 0x58, 0x6e, 0xd5, 0xc4, 0xc4, 0x9b, 0xec, 0x64, 0x9f, 0x93, 0xef, 0x95, 0xb8, 0x0c, 0x62,
+	0xfb, 0xe6, 0x79, 0x38, 0xab, 0xf1, 0x29, 0x25, 0xf8, 0xeb, 0x0c, 0x94, 0xf6, 0xfc, 0xde, 0xbe,
+	0xeb, 0x07, 0x07, 0xa6, 0x7f, 0x64, 0x5c, 0x82, 0xa2, 0xc7, 0xbe, 0x37, 0x62, 0x5c, 0x56, 0x21,
+	0x42, 0x44, 0x90, 0xa6, 0x9b, 0x51, 0x4c, 0xa7, 0x3a, 0x43, 0x7e, 0xbc, 0x33, 0x14, 0x92, 0xce,
+	0xb0, 0x09, 0x8b, 0xb6, 0x33, 0x1c, 0x05, 0xed, 0xae, 0x3b, 0x18, 0xd8, 0xc1, 0x80, 0x39, 0xa1,
+	0xf1, 0x6b, 0x48, 0xdf, 0x91, 0x64, 0xbe, 0x91, 0x65, 0x06, 0x66, 0xdb, 0x63, 0x87, 0x68, 0xf8,
+	0x62, 0x6b, 0x9e, 0x8f, 0x5b, 0xec, 0xd0, 0x38, 0x0f, 0xf3, 0x03, 0xf3, 0x79, 0xfb, 0x90, 0x31,
+	0xb4, 0x74, 0xa1, 0x35, 0x37, 0x30, 0x9f, 0xbf, 0xc1, 0x98, 0xd1, 0x80, 0x05, 0x8b, 0x99, 0x56,
+	0xdf, 0x76, 0x18, 0xda, 0xb8, 0xd0, 0x92, 0x63, 0xce, 0xdd, 0xd0, 0xb3, 0x9f, 0x99, 0xdd, 0x93,
+	0x76, 0x60, 0x33, 0xaf, 0x5e, 0x24, 0xee, 0x04, 0xed, 0xc0, 0x66, 0x1e, 0x42, 0xc8, 0x2a, 0xc8,
+	0x4c, 0x1d, 0xd6, 0xf2, 0x1b, 0x46, 0xab, 0x44, 0xb4, 0x5d, 0x4e, 0xba, 0x57, 0xe5, 0x6a, 0x8e,
+	0x54, 0xd4, 0xdc, 0x82, 0x33, 0x8a, 0x3e, 0x43, 0x3d, 0x73, 0x0e, 0x03, 0xd3, 0x3f, 0xe2, 0x4a,
+	0xca, 0x11, 0x87, 0x7c, 0xb8, 0x6b, 0x35, 0xf7, 0xd0, 0x83, 0xb6, 0xbb, 0x5d, 0x36, 0x24, 0x0b,
+	0x64, 0x79, 0x90, 0xb2, 0xc2, 0x8c, 0xba, 0x42, 0x9a, 0xa1, 0xa3, 0xe5, 0xa4, 0xa1, 0x7f, 0x37,
+	0x03, 0xb5, 0x3d, 0xbf, 0xf7, 0x78, 0xd4, 0x19, 0xd8, 0x41, 0x8b, 0xf9, 0xa3, 0x7e, 0x70, 0xea,
+	0xad, 0x8c, 0x2b, 0x50, 0x71, 0x47, 0x01, 0x37, 0x97, 0x38, 0x57, 0xe4, 0xa8, 0x65, 0x22, 0x8a,
+	0x63, 0xb5, 0x02, 0x10, 0x78, 0x66, 0x97, 0xb5, 0x3d, 0xd7, 0x0d, 0x84, 0x77, 0x16, 0x91, 0xd2,
+	0x72, 0x5d, 0x3c, 0x9c, 0x1e, 0xeb, 0x32, 0x7b, 0x18, 0xe8, 0x87, 0xbd, 0x22, 0xa8, 0x62, 0x95,
+	0x68, 0x2b, 0x3c, 0xdd, 0x3e, 0x9a, 0xbc, 0x10, 0x6e, 0x75, 0x80, 0x34, 0x63, 0x03, 0x16, 0x69,
+	0xab, 0x6e, 0xdf, 0xb4, 0x07, 0xed, 0xa7, 0xbe, 0xeb, 0x88, 0xa3, 0x5e, 0x45, 0xfa, 0x0e, 0x27,
+	0x3f, 0xf2, 0x5d, 0x87, 0x5b, 0x32, 0xdc, 0x15, 0x51, 0x74, 0xe0, 0x4b, 0x82, 0xc6, 0x21, 0xba,
+	0x1e, 0x2f, 0xc0, 0xf9, 0x98, 0xb6, 0xa4, 0x26, 0x5b, 0xa8, 0xc8, 0xed, 0x20, 0x60, 0x7e, 0xa8,
+	0xc8, 0x3a, 0xcc, 0x0f, 0x5c, 0xc7, 0x0e, 0xdc, 0x50, 0x93, 0xe1, 0x30, 0xdb, 0x6a, 0x65, 0xbe,
+	0x5b, 0x08, 0x13, 0xdb, 0xa9, 0x6b, 0xca, 0xed, 0x7e, 0x9c, 0x83, 0x25, 0xce, 0x4a, 0x60, 0x7a,
+	0xc1, 0xce, 0x13, 0xb3, 0xdf, 0x67, 0x4e, 0x8f, 0x19, 0xab, 0x00, 0xdd, 0x70, 0x10, 0x6e, 0xaa,
+	0x50, 0xb2, 0x4d, 0x98, 0xa6, 0xb2, 0x7c, 0x9a, 0xca, 0xee, 0xd5, 0x38, 0x87, 0xca, 0x9a, 0xcd,
+	0x8b, 0x70, 0x21, 0xc1, 0x88, 0x64, 0xf3, 0xe7, 0x39, 0x58, 0xde, 0xf3, 0x7b, 0x72, 0x62, 0xcf,
+	0xb6, 0x86, 0xae, 0xed, 0x04, 0x3c, 0x85, 0x98, 0xdd, 0x48, 0x33, 0x34, 0xc8, 0xe6, 0x6f, 0x05,
+	0xc0, 0x0f, 0xcc, 0x80, 0xa9, 0x9c, 0x15, 0x91, 0x82, 0x76, 0x5c, 0x01, 0xc0, 0xa8, 0x47, 0xd3,
+	0xc2, 0xb9, 0x90, 0x82, 0x3c, 0x53, 0xe0, 0xc6, 0x2d, 0x9a, 0xab, 0x70, 0x29, 0x8d, 0x21, 0xc9,
+	0xf1, 0x3e, 0x9e, 0xd4, 0x03, 0x7b, 0xc0, 0xdc, 0x91, 0xa2, 0xd9, 0xd3, 0xf1, 0xab, 0xed, 0xb8,
+	0x02, 0x17, 0x53, 0x56, 0x94, 0x1b, 0x7e, 0x15, 0x1d, 0xe7, 0x0d, 0xdb, 0x31, 0xfb, 0xf6, 0xfb,
+	0x0c, 0x0f, 0xfb, 0xe7, 0xd8, 0x8c, 0x5c, 0x46, 0x5d, 0x4d, 0x6e, 0xf4, 0x08, 0x63, 0x4a, 0x8b,
+	0x1d, 0x8e, 0x1c, 0xeb, 0xf3, 0x6e, 0x43, 0x01, 0x25, 0x5a, 0x4b, 0x6e, 0xf2, 0x8f, 0x3c, 0x8a,
+	0xc3, 0x23, 0xdd, 0x57, 0x1e, 0xee, 0xed, 0x4d, 0x91, 0x3d, 0xee, 0xc1, 0x05, 0x39, 0x68, 0x63,
+	0xd1, 0xd1, 0x75, 0xfb, 0x3c, 0xed, 0xf1, 0x94, 0x37, 0x83, 0xa6, 0x3c, 0x2f, 0x01, 0xfb, 0x62,
+	0x7e, 0x1f, 0xa7, 0x8d, 0x2d, 0x38, 0x13, 0xfd, 0x36, 0xca, 0x7d, 0xe4, 0x1f, 0x4b, 0x72, 0x2a,
+	0xcc, 0x7e, 0xc6, 0x0d, 0xa8, 0x45, 0x78, 0xc7, 0x75, 0xba, 0x4c, 0x38, 0x4b, 0x55, 0x92, 0xdf,
+	0xe2, 0x54, 0xa3, 0x0c, 0xb9, 0x01, 0x46, 0xa0, 0x42, 0x2b, 0x37, 0xe0, 0x23, 0x47, 0x44, 0x9a,
+	0x9c, 0xc3, 0x47, 0x47, 0x22, 0xa1, 0xe4, 0x8e, 0x8c, 0x26, 0x54, 0x06, 0x66, 0xe0, 0xd9, 0xcf,
+	0xdb, 0x26, 0x85, 0x36, 0x11, 0x43, 0x88, 0xb8, 0x8d, 0xc1, 0x2d, 0xc2, 0x74, 0x08, 0x53, 0x54,
+	0x31, 0xf7, 0x11, 0xb3, 0x09, 0x8b, 0xf2, 0x50, 0xb5, 0x8f, 0x6d, 0xc7, 0x72, 0x8f, 0xeb, 0x80,
+	0x9b, 0xd4, 0x24, 0xfd, 0x5d, 0x24, 0x1b, 0x9b, 0xb0, 0xc4, 0xf3, 0xda, 0xd0, 0xb3, 0xbb, 0xac,
+	0x3d, 0x64, 0x5e, 0xbb, 0x7b, 0x3c, 0xaa, 0x97, 0x10, 0x5b, 0x1d, 0x98, 0xcf, 0xf7, 0x39, 0x7d,
+	0x9f, 0x79, 0x3b, 0xc7, 0x23, 0x35, 0x05, 0x96, 0xb5, 0x14, 0x78, 0x15, 0xaa, 0x94, 0x61, 0x65,
+	0xf2, 0xac, 0xa0, 0x61, 0xca, 0x48, 0x7d, 0x40, 0x19, 0x34, 0x91, 0xc6, 0x18, 0x7a, 0x97, 0x6a,
+	0x5c, 0x99, 0xca, 0xd6, 0xa0, 0xdc, 0x63, 0x83, 0x41, 0x5b, 0xcf, 0x67, 0xc0, 0x69, 0x07, 0x32,
+	0xc6, 0x48, 0xf3, 0xaa, 0x1e, 0x56, 0x6e, 0x55, 0x43, 0x3a, 0x21, 0x9b, 0x3f, 0xa2, 0xe0, 0x46,
+	0xf9, 0x4a, 0xba, 0x51, 0x56, 0x5e, 0x8a, 0xef, 0x3c, 0x93, 0xd8, 0x79, 0x13, 0x16, 0x4d, 0xdf,
+	0xb7, 0x7b, 0x0e, 0xaf, 0x18, 0x84, 0xdd, 0xc9, 0x47, 0x6a, 0x11, 0x1d, 0x0d, 0xaf, 0x87, 0xfb,
+	0x2f, 0x63, 0x68, 0xd3, 0xd9, 0x90, 0x02, 0x5f, 0x81, 0x8a, 0xb2, 0xa8, 0x90, 0xb8, 0xdc, 0x2a,
+	0x47, 0xc4, 0x5d, 0xab, 0xf9, 0xab, 0x19, 0x0c, 0x27, 0x94, 0x31, 0xf8, 0x12, 0x13, 0x72, 0xec,
+	0x64, 0x59, 0x2e, 0x43, 0x49, 0x64, 0x40, 0xf4, 0x24, 0x12, 0x03, 0x88, 0x84, 0x8e, 0x74, 0x1d,
+	0x6a, 0x61, 0x36, 0x0e, 0x4d, 0x4b, 0x15, 0x96, 0xc8, 0x9c, 0xc2, 0xb6, 0x3c, 0xf7, 0x09, 0x5c,
+	0xe7, 0x24, 0x60, 0xbe, 0xf0, 0x76, 0xb1, 0xf8, 0x7d, 0x4e, 0xe2, 0xc7, 0x85, 0xdf, 0x11, 0xfa,
+	0x2c, 0x60, 0x56, 0x9b, 0x0d, 0xdd, 0xee, 0x13, 0x71, 0x0a, 0xaa, 0x92, 0xfc, 0x90, 0x53, 0xb9,
+	0x82, 0x49, 0x80, 0x36, 0x97, 0xdd, 0x0c, 0x46, 0x1e, 0x13, 0x19, 0xb7, 0x46, 0xf4, 0xc7, 0x21,
+	0x59, 0x57, 0xf0, 0x7d, 0x0c, 0x8d, 0x71, 0xed, 0xa8, 0x2a, 0x8e, 0xce, 0x04, 0x73, 0x42, 0xa7,
+	0x2a, 0x4b, 0xe2, 0x43, 0xc7, 0x6a, 0xbe, 0x47, 0xbe, 0x82, 0x49, 0x52, 0xfa, 0x4a, 0x76, 0xea,
+	0x9d, 0xa8, 0xe1, 0x58, 0x0e, 0xa6, 0xf4, 0xa6, 0x2f, 0x2f, 0xa3, 0xdd, 0x6f, 0x0b, 0x98, 0xde,
+	0xde, 0x1e, 0x32, 0x87, 0xcf, 0x4d, 0x9f, 0x88, 0x27, 0xdb, 0xf9, 0x3a, 0xd4, 0x2c, 0xdb, 0xe7,
+	0xf7, 0x33, 0xab, 0x1d, 0xd8, 0x7d, 0xd6, 0xb6, 0xd1, 0xd6, 0x85, 0x56, 0x25, 0x24, 0x1f, 0xd8,
+	0x7d, 0xb6, 0x9b, 0xc4, 0x3d, 0x45, 0x73, 0xc7, 0x70, 0x8f, 0xf8, 0x95, 0x42, 0x98, 0x28, 0x2c,
+	0xa0, 0xec, 0x3e, 0x13, 0x45, 0x96, 0x30, 0xde, 0xdb, 0x54, 0x44, 0xd9, 0x7d, 0x66, 0xdc, 0x85,
+	0xb3, 0x02, 0x4d, 0x79, 0xd5, 0xb7, 0x3b, 0x7d, 0xdb, 0xe9, 0xf1, 0x7a, 0x2b, 0xbf, 0x51, 0x6e,
+	0x9d, 0xa1, 0x49, 0x0c, 0xaa, 0x8f, 0xc5, 0x94, 0xb2, 0x03, 0xfd, 0xc6, 0x76, 0x2c, 0xf6, 0x1c,
+	0xdd, 0xa0, 0x12, 0xee, 0x80, 0x3f, 0xd8, 0xe5, 0xf4, 0x04, 0xba, 0x8b, 0xd7, 0xa0, 0x85, 0x04,
+	0x7a, 0x07, 0x2f, 0x44, 0xaf, 0xc3, 0xb9, 0x48, 0x7b, 0x9a, 0x04, 0x14, 0x4a, 0x97, 0xa3, 0x59,
+	0x45, 0x8a, 0x6b, 0x50, 0x8d, 0xfc, 0xa7, 0xe3, 0x3a, 0x96, 0x88, 0xa8, 0x91, 0x57, 0xf1, 0xbb,
+	0x8f, 0x71, 0x07, 0x94, 0x9f, 0x2b, 0x1e, 0x5c, 0xc2, 0xa5, 0xcf, 0x44, 0x73, 0xd2, 0x8b, 0xf1,
+	0xf0, 0x0c, 0x99, 0x23, 0x8f, 0x45, 0x59, 0x1c, 0x1e, 0xa4, 0xe1, 0x99, 0x48, 0x16, 0x4a, 0x3b,
+	0x58, 0x79, 0x24, 0x7c, 0xe5, 0x74, 0xde, 0xfe, 0xeb, 0x02, 0x18, 0xbc, 0x7e, 0xc1, 0x0b, 0x10,
+	0xfa, 0x23, 0x2f, 0xcf, 0x32, 0x52, 0xf9, 0x64, 0x2f, 0xd3, 0xab, 0xf2, 0x7c, 0xbc, 0x2a, 0xbf,
+	0x02, 0x15, 0xdb, 0xb1, 0x03, 0xdb, 0xec, 0xb7, 0xb1, 0xd8, 0x12, 0xd9, 0xb2, 0x2c, 0x88, 0x8f,
+	0x39, 0x8d, 0xdb, 0x26, 0x04, 0xc5, 0x9c, 0x65, 0x16, 0x9d, 0x65, 0x59, 0xcc, 0xea, 0xde, 0xb2,
+	0x05, 0x67, 0xf4, 0x5f, 0x91, 0xbb, 0xcc, 0xa1, 0x03, 0x2c, 0xa9, 0x3f, 0x21, 0x7f, 0x49, 0xe0,
+	0xc9, 0x61, 0xe6, 0x93, 0x78, 0xf2, 0x98, 0xcb, 0x50, 0x3a, 0xe4, 0x55, 0x90, 0x60, 0x9c, 0xb2,
+	0x32, 0x20, 0x89, 0xd8, 0x7e, 0x0d, 0x96, 0x09, 0x10, 0x63, 0xba, 0x88, 0x4c, 0x1b, 0x38, 0xa7,
+	0xb3, 0x7c, 0x13, 0x96, 0xd4, 0x5f, 0x10, 0xc3, 0x80, 0x0c, 0xd4, 0x22, 0x38, 0xb1, 0x1b, 0xc3,
+	0x12, 0xb3, 0xa5, 0x38, 0x96, 0x58, 0x5d, 0x87, 0x72, 0xdf, 0xed, 0x1e, 0xc5, 0x9d, 0x89, 0x68,
+	0x14, 0x60, 0x2f, 0x41, 0x31, 0xf2, 0xcb, 0x8a, 0x28, 0x7f, 0x65, 0x4c, 0x55, 0x2b, 0xb3, 0x4b,
+	0xd0, 0x48, 0xfa, 0x87, 0x0c, 0x58, 0x7f, 0xcf, 0x61, 0xe1, 0x16, 0x45, 0xdc, 0x3d, 0xdb, 0x22,
+	0x75, 0xbc, 0xa8, 0x07, 0x2d, 0xc3, 0x2c, 0x69, 0x98, 0x9c, 0x87, 0x06, 0xfc, 0xe4, 0xc5, 0xd4,
+	0x5a, 0x40, 0xb5, 0x56, 0x86, 0x9a, 0x46, 0x2f, 0x43, 0x49, 0xd5, 0xe5, 0x2c, 0xea, 0x87, 0x4a,
+	0x79, 0x52, 0xa3, 0x04, 0x90, 0x02, 0xe7, 0x14, 0x00, 0xea, 0x4e, 0x13, 0xfd, 0x32, 0xac, 0xa4,
+	0xca, 0x26, 0xa5, 0xff, 0x65, 0x01, 0x9b, 0x59, 0xdb, 0x5e, 0xc7, 0x0e, 0x3c, 0x33, 0x60, 0x1c,
+	0xf4, 0xc2, 0x82, 0x9f, 0x85, 0x39, 0x93, 0x42, 0x90, 0x90, 0xdc, 0xc4, 0x98, 0x73, 0x16, 0xe6,
+	0x3a, 0x44, 0xa6, 0xb3, 0x32, 0xdb, 0x41, 0xf2, 0x0d, 0x58, 0x34, 0x85, 0x2f, 0x60, 0x94, 0xf6,
+	0xdc, 0x63, 0x21, 0x6e, 0xc5, 0x44, 0x57, 0xe0, 0xa8, 0x96, 0x7b, 0x9c, 0x00, 0x76, 0xdd, 0xbe,
+	0x10, 0x5b, 0x01, 0xee, 0xb8, 0x7d, 0x5e, 0x05, 0xc6, 0x81, 0xbe, 0x38, 0x0e, 0x55, 0x0d, 0x89,
+	0x17, 0x62, 0x33, 0xee, 0xe6, 0x0b, 0x68, 0x0f, 0x81, 0x94, 0x06, 0x69, 0x42, 0xc5, 0xd4, 0x5c,
+	0xb6, 0x88, 0x0b, 0x96, 0x4c, 0xc5, 0x5d, 0x6f, 0xc0, 0x62, 0x27, 0x2e, 0x0a, 0x9d, 0x82, 0x4a,
+	0x27, 0x2e, 0x4a, 0x27, 0x2e, 0x4a, 0x29, 0x0e, 0x14, 0xa2, 0x74, 0x12, 0xa2, 0x94, 0x49, 0x94,
+	0x4e, 0x42, 0x94, 0x4e, 0x5c, 0x94, 0x0a, 0x89, 0xd2, 0x49, 0x88, 0xd2, 0xd1, 0x44, 0xa9, 0x92,
+	0x28, 0x9d, 0xfd, 0x74, 0xef, 0x79, 0x1d, 0x3b, 0x7a, 0x9a, 0x6f, 0xc8, 0xd0, 0x5c, 0x87, 0x79,
+	0x77, 0x14, 0x74, 0xdd, 0x01, 0x0b, 0xcb, 0x09, 0x31, 0x6c, 0x1e, 0x40, 0x35, 0xba, 0xdc, 0x7d,
+	0x1e, 0x7f, 0xd2, 0x78, 0xb9, 0x0b, 0xe7, 0xf4, 0x55, 0xa7, 0xe0, 0xe4, 0x6b, 0xda, 0x3d, 0xf2,
+	0xa5, 0xb1, 0xf2, 0xff, 0xda, 0x85, 0x52, 0xe3, 0x65, 0x05, 0x20, 0xec, 0x9e, 0xc8, 0xf2, 0xb7,
+	0x28, 0x28, 0xbb, 0x56, 0xf3, 0x1d, 0x3a, 0x6c, 0x1d, 0xd7, 0x8b, 0xea, 0xb2, 0x97, 0xc1, 0x11,
+	0xb5, 0x5e, 0xb5, 0x75, 0xe5, 0x09, 0xbf, 0x2f, 0xee, 0xa5, 0xd4, 0x96, 0x7d, 0xb0, 0xbd, 0xef,
+	0xb9, 0xcf, 0x6c, 0x8b, 0x79, 0x46, 0x03, 0x16, 0x86, 0xe2, 0x6f, 0xb1, 0xb7, 0x1c, 0xdf, 0xab,
+	0xf0, 0xc5, 0xe5, 0x50, 0x84, 0x91, 0xe4, 0x1a, 0x72, 0x93, 0x0f, 0x73, 0x68, 0x1e, 0x0a, 0x34,
+	0x0f, 0xb6, 0xa9, 0x36, 0x34, 0x03, 0xdb, 0x75, 0xc6, 0x6d, 0x33, 0xe5, 0x3d, 0x25, 0x5a, 0x4c,
+	0xed, 0x75, 0xd4, 0x14, 0x3a, 0xb6, 0x34, 0x62, 0x3c, 0xaf, 0xc1, 0x6a, 0x3a, 0x47, 0x92, 0xe9,
+	0x3f, 0x10, 0xd3, 0x61, 0xf9, 0xf1, 0x60, 0xfb, 0x65, 0x16, 0xab, 0xaa, 0xd8, 0xf9, 0x98, 0xd8,
+	0xcb, 0x30, 0xab, 0xde, 0xb4, 0x69, 0x60, 0x18, 0x50, 0xc0, 0x82, 0x8c, 0x6e, 0x1d, 0xf8, 0x77,
+	0xb2, 0x62, 0xfa, 0x59, 0x0e, 0xc5, 0x4a, 0xe1, 0x59, 0xfa, 0xe0, 0x3a, 0x44, 0xf5, 0x51, 0x74,
+	0xed, 0x2c, 0x49, 0x1a, 0x05, 0x6a, 0x51, 0x40, 0xcf, 0x60, 0x04, 0x98, 0x0d, 0xb0, 0x70, 0x0e,
+	0xc9, 0x4f, 0x91, 0x63, 0x41, 0x7e, 0xa4, 0xf5, 0x86, 0x0b, 0x7a, 0x6f, 0xb8, 0xf9, 0xaf, 0x1c,
+	0x5e, 0x06, 0x68, 0x73, 0x2b, 0xae, 0xc6, 0x71, 0xb6, 0x8f, 0xb3, 0x39, 0x93, 0x64, 0xd3, 0x80,
+	0x82, 0x92, 0x4d, 0xf0, 0xef, 0xff, 0x5c, 0x1a, 0x8d, 0xb9, 0xd3, 0x15, 0x58, 0xcf, 0x94, 0x53,
+	0x7a, 0xd4, 0x77, 0x51, 0x19, 0x4a, 0x90, 0x52, 0x95, 0x91, 0x7e, 0xd0, 0x27, 0xab, 0x41, 0x3b,
+	0xe9, 0xc4, 0x46, 0xfa, 0x0e, 0x92, 0x8d, 0xf7, 0x28, 0x40, 0x99, 0x76, 0x9f, 0x23, 0xb6, 0x9f,
+	0x99, 0x76, 0xdf, 0xec, 0xd8, 0x7d, 0x3b, 0x38, 0x79, 0x29, 0xd1, 0x66, 0x1d, 0x2e, 0x67, 0x2c,
+	0x2f, 0x39, 0xf8, 0x69, 0x1e, 0x23, 0x1d, 0xb6, 0x45, 0x3c, 0x73, 0xf8, 0xe4, 0xbf, 0xb5, 0xe9,
+	0xb5, 0x02, 0xd0, 0xe3, 0xfc, 0x53, 0xe0, 0xa1, 0xab, 0x61, 0x11, 0x29, 0xd8, 0x64, 0x4d, 0xb6,
+	0x8c, 0xe6, 0x92, 0x2d, 0xa3, 0xd4, 0x3e, 0xd6, 0xfc, 0x29, 0xfa, 0x58, 0x0b, 0x93, 0xfa, 0x58,
+	0x45, 0xb5, 0x8f, 0x95, 0xe8, 0x50, 0x7d, 0x03, 0x93, 0x83, 0x66, 0x0a, 0x19, 0x2b, 0x9a, 0x50,
+	0x21, 0xf9, 0xf4, 0x1e, 0x55, 0xa9, 0x17, 0x22, 0x77, 0x2d, 0xe3, 0x02, 0x2c, 0x10, 0x46, 0x36,
+	0xa7, 0xe6, 0x71, 0xbc, 0x6b, 0x35, 0x7f, 0x92, 0xc3, 0xab, 0x97, 0x68, 0x07, 0x49, 0x43, 0x67,
+	0xb5, 0x72, 0x12, 0xbb, 0xcd, 0x24, 0x77, 0x7b, 0xd1, 0xc6, 0xd4, 0x0e, 0x16, 0xf9, 0x31, 0x4e,
+	0xa4, 0x9c, 0xd7, 0xa0, 0xaa, 0xac, 0xca, 0x0d, 0x45, 0xb9, 0x59, 0xe9, 0x57, 0xb5, 0xd8, 0x61,
+	0xf3, 0x83, 0x19, 0x6c, 0x5e, 0x88, 0x7a, 0x99, 0xaf, 0x32, 0xa1, 0x39, 0x35, 0x8d, 0x44, 0x51,
+	0x57, 0x89, 0xdf, 0x28, 0xfd, 0x7a, 0x1e, 0xe3, 0x55, 0x29, 0xea, 0x4f, 0x29, 0xd7, 0x28, 0xb5,
+	0x8f, 0x25, 0x9e, 0x2b, 0x71, 0xe2, 0xed, 0xa8, 0x99, 0x95, 0xd2, 0x81, 0x9a, 0x9d, 0xba, 0x03,
+	0x35, 0x37, 0x45, 0x07, 0x8a, 0x2e, 0xe5, 0x09, 0x1d, 0x9c, 0xee, 0x52, 0xfe, 0x17, 0xba, 0x55,
+	0x61, 0x9e, 0xe2, 0x6b, 0x4c, 0x9f, 0x5a, 0xa7, 0x51, 0xe9, 0xff, 0xc1, 0xf9, 0x64, 0xef, 0x43,
+	0xd5, 0xee, 0xd9, 0x78, 0xf3, 0x83, 0xf4, 0x9c, 0xec, 0x7e, 0x14, 0x52, 0xba, 0x1f, 0xc9, 0xac,
+	0xfb, 0x00, 0xeb, 0x9f, 0xa4, 0x30, 0xa7, 0xd3, 0xc9, 0x0f, 0x67, 0xf0, 0xb4, 0x90, 0x77, 0x7a,
+	0xa6, 0xdd, 0xc7, 0x27, 0x24, 0x1e, 0x92, 0x87, 0xa6, 0x17, 0x9c, 0x84, 0x21, 0x19, 0x07, 0x53,
+	0xa9, 0x81, 0x5a, 0x15, 0x76, 0x3f, 0xde, 0xaa, 0xb0, 0xfb, 0xe8, 0x29, 0xeb, 0x10, 0x76, 0x25,
+	0x54, 0x87, 0x2a, 0x09, 0x5a, 0xbc, 0x9b, 0x41, 0x21, 0x93, 0xfa, 0x13, 0x65, 0xb5, 0x79, 0xc0,
+	0xb7, 0x21, 0xef, 0xc4, 0x55, 0xc8, 0x85, 0x8a, 0x48, 0xc1, 0x35, 0x64, 0x5b, 0x81, 0x56, 0x98,
+	0xc7, 0x15, 0x20, 0xba, 0xd1, 0x8b, 0xdc, 0x81, 0x62, 0x89, 0xbb, 0x78, 0x4c, 0x05, 0x32, 0x6d,
+	0xfc, 0x31, 0x87, 0x69, 0x03, 0xa7, 0xf7, 0x6c, 0x6b, 0x3f, 0x7c, 0x17, 0x7b, 0x71, 0xfd, 0xd0,
+	0x13, 0x99, 0xaa, 0x1f, 0xa4, 0x84, 0x0f, 0xac, 0xd3, 0x94, 0x12, 0xcb, 0x30, 0xab, 0x1e, 0x33,
+	0x1a, 0x68, 0x42, 0x51, 0xf9, 0xad, 0x71, 0x2d, 0x45, 0xe2, 0x46, 0x17, 0x4e, 0x33, 0x72, 0x8e,
+	0x1e, 0xf2, 0x62, 0x82, 0x27, 0x96, 0x0b, 0xb0, 0xe0, 0xb1, 0xc3, 0xf6, 0x91, 0x2d, 0x7c, 0xa5,
+	0xd2, 0x9a, 0xf7, 0xd8, 0xe1, 0x9b, 0xb6, 0x63, 0x19, 0x17, 0x79, 0x9a, 0x0c, 0x0b, 0x17, 0xaa,
+	0xcf, 0x38, 0x96, 0xca, 0x96, 0x8b, 0x50, 0xb4, 0x98, 0xdf, 0x55, 0x0b, 0xe1, 0x05, 0x4e, 0xc0,
+	0x74, 0x64, 0x40, 0x41, 0x31, 0x34, 0xfe, 0xcd, 0xad, 0xd3, 0xe5, 0x3b, 0xeb, 0x85, 0x10, 0x92,
+	0x68, 0xc5, 0x65, 0x98, 0x55, 0x4b, 0x20, 0x1a, 0x20, 0x95, 0x63, 0x44, 0xcf, 0x9a, 0x06, 0x68,
+	0x0a, 0x34, 0x32, 0x5d, 0x95, 0x69, 0xc0, 0xb7, 0x20, 0x35, 0xd3, 0x1c, 0x75, 0x8b, 0x48, 0xf3,
+	0xe8, 0x00, 0xcd, 0xdf, 0x17, 0xe8, 0xb1, 0x5d, 0x5e, 0x24, 0xb9, 0x3e, 0xde, 0x72, 0xad, 0xac,
+	0x9a, 0x68, 0x1a, 0xdb, 0x5e, 0x87, 0x5a, 0xd4, 0xbc, 0x55, 0x0d, 0x5c, 0x91, 0x9d, 0x5b, 0x34,
+	0x72, 0xd4, 0x54, 0x55, 0xd5, 0x50, 0x50, 0x9b, 0xaa, 0x3b, 0x91, 0x32, 0xd6, 0xa1, 0xac, 0xa2,
+	0xc3, 0xcf, 0x6b, 0x14, 0x5c, 0x62, 0x41, 0x12, 0x9a, 0x9a, 0xc0, 0xea, 0x82, 0x74, 0x76, 0xb6,
+	0xe0, 0x8c, 0x1e, 0xa9, 0x88, 0x55, 0xd2, 0xea, 0x92, 0x16, 0xa5, 0x90, 0x5d, 0xbd, 0xab, 0xab,
+	0xb2, 0x4c, 0x7d, 0x60, 0xa5, 0x2d, 0xab, 0xb0, 0xad, 0x56, 0x18, 0x21, 0xeb, 0xd4, 0x05, 0xae,
+	0xc5, 0xf0, 0xa9, 0x1b, 0x90, 0x08, 0x40, 0xad, 0xc9, 0xd8, 0x0f, 0x48, 0x8c, 0x6d, 0x58, 0x60,
+	0xc2, 0x75, 0xeb, 0xa5, 0xb5, 0xfc, 0x46, 0xe9, 0xee, 0xb5, 0xad, 0xc4, 0x27, 0x53, 0x5b, 0x49,
+	0x3f, 0x6f, 0xc9, 0x9f, 0xe1, 0xd5, 0xd8, 0x1d, 0xb2, 0x76, 0x60, 0x76, 0xfa, 0xac, 0x5e, 0x5e,
+	0xcb, 0x6f, 0xe4, 0x5b, 0x45, 0x4e, 0x39, 0xe0, 0x04, 0xad, 0xc0, 0xfc, 0x02, 0x86, 0xdb, 0xa4,
+	0xbb, 0x4c, 0x71, 0xe5, 0xff, 0x36, 0x26, 0x70, 0x79, 0x37, 0x97, 0x25, 0xc9, 0x0b, 0x3b, 0x9a,
+	0xc6, 0xd8, 0x97, 0x30, 0x35, 0x26, 0x56, 0x9f, 0xf2, 0xfa, 0x7f, 0xf7, 0x4f, 0x2b, 0x90, 0xdf,
+	0xf3, 0x7b, 0x86, 0x09, 0x15, 0xfd, 0xeb, 0xb1, 0x2b, 0x29, 0xca, 0x8c, 0x7f, 0x4b, 0xd5, 0xf8,
+	0x9f, 0x29, 0x40, 0x92, 0x93, 0xaf, 0x03, 0x28, 0x1f, 0x5b, 0xad, 0xa5, 0xff, 0x34, 0x42, 0x34,
+	0x36, 0x26, 0x21, 0xe4, 0xca, 0x2d, 0x58, 0x90, 0x1f, 0x41, 0xad, 0xa6, 0xff, 0x2a, 0x9c, 0x6f,
+	0x5c, 0x1f, 0x3f, 0xaf, 0x72, 0xab, 0x7c, 0xd8, 0x93, 0xc1, 0x6d, 0x84, 0xc8, 0xe2, 0x36, 0xf9,
+	0x35, 0x8f, 0xf1, 0x1d, 0x28, 0x6b, 0x5f, 0xf2, 0x34, 0xd3, 0x7f, 0xa9, 0x62, 0x1a, 0x37, 0x27,
+	0x63, 0xd4, 0xf5, 0xb5, 0x0f, 0x5c, 0x32, 0xd6, 0x57, 0x31, 0x59, 0xeb, 0xa7, 0x7d, 0xd4, 0x62,
+	0x58, 0x50, 0x8d, 0x7d, 0xd0, 0x72, 0x35, 0x83, 0x3b, 0x0d, 0xd5, 0xb8, 0x35, 0x0d, 0x4a, 0xee,
+	0x32, 0x80, 0xa5, 0xe4, 0xf7, 0x28, 0x37, 0xd2, 0x97, 0x48, 0x00, 0x1b, 0xb7, 0xa7, 0x04, 0xca,
+	0xed, 0x9e, 0xc2, 0x62, 0xe2, 0x6b, 0x92, 0x0c, 0x57, 0x89, 0xe3, 0x1a, 0x5b, 0xd3, 0xe1, 0x54,
+	0x03, 0x69, 0x1f, 0x92, 0x64, 0x18, 0x48, 0xc5, 0x64, 0x19, 0x28, 0xed, 0x13, 0x12, 0xee, 0xba,
+	0xca, 0xf7, 0x23, 0x6b, 0x59, 0x67, 0x34, 0x44, 0x64, 0xb9, 0x6e, 0xf2, 0xbb, 0x11, 0xce, 0xb9,
+	0xf6, 0xcd, 0x48, 0x33, 0xfb, 0x30, 0x85, 0x98, 0x2c, 0xce, 0x53, 0x3f, 0x4f, 0xb0, 0xa0, 0x1a,
+	0xfb, 0x9c, 0xe0, 0xea, 0xb8, 0x63, 0x25, 0xf7, 0xb8, 0x35, 0x0d, 0x4a, 0xb5, 0x75, 0xe2, 0xa9,
+	0xff, 0xfa, 0xb8, 0x03, 0x16, 0xe1, 0xb2, 0x6c, 0x9d, 0xf9, 0x38, 0xce, 0x25, 0xd2, 0x1f, 0xbd,
+	0xaf, 0x8e, 0x3b, 0x6a, 0x13, 0x25, 0x4a, 0x7d, 0xe1, 0xe6, 0x87, 0x25, 0xf9, 0xba, 0x9d, 0x71,
+	0x58, 0x12, 0xc0, 0xac, 0xc3, 0x92, 0xfd, 0x06, 0xda, 0x83, 0x5a, 0xfc, 0x69, 0xf3, 0x5a, 0xc6,
+	0x81, 0xd3, 0x61, 0x8d, 0x57, 0xa7, 0x82, 0xc9, 0x8d, 0x86, 0x60, 0xa4, 0x3c, 0x82, 0x6d, 0x4c,
+	0xb2, 0x41, 0x88, 0x6c, 0xbc, 0x36, 0x2d, 0x52, 0xee, 0x68, 0x42, 0x45, 0x7f, 0x78, 0xca, 0xc8,
+	0x83, 0x1a, 0x28, 0x2b, 0x0f, 0xa6, 0x3f, 0x53, 0x7c, 0x0b, 0x4a, 0xea, 0x4b, 0xc4, 0xfa, 0xd8,
+	0xe8, 0x81, 0xcb, 0x6f, 0x4e, 0x84, 0xa4, 0xc5, 0x16, 0x5c, 0x7d, 0x42, 0x6c, 0xc1, 0xe5, 0x6f,
+	0x4e, 0xc6, 0x68, 0xfa, 0xd1, 0xde, 0x0a, 0xb2, 0xf4, 0xa3, 0x82, 0x32, 0xf5, 0x93, 0xf6, 0x3a,
+	0xc0, 0x8d, 0x9e, 0xf2, 0x34, 0xb0, 0x31, 0xbe, 0xd4, 0x88, 0x90, 0x59, 0x46, 0xcf, 0x7e, 0x2a,
+	0x30, 0x7c, 0x38, 0x93, 0xf6, 0x4c, 0xb0, 0x39, 0xce, 0x7b, 0x34, 0x68, 0xe3, 0xce, 0xd4, 0x50,
+	0x75, 0xd3, 0xb4, 0x36, 0xff, 0xe6, 0xf8, 0xc3, 0xa8, 0x40, 0xb3, 0x36, 0x1d, 0xd7, 0x88, 0xff,
+	0x3e, 0x9c, 0xcb, 0xe8, 0x8b, 0xdf, 0xca, 0xd2, 0x5a, 0x1a, 0xba, 0xf1, 0xfa, 0x69, 0xd0, 0xea,
+	0xee, 0x19, 0x8d, 0xe8, 0x5b, 0x13, 0x3d, 0x7c, 0x8a, 0xdd, 0xc7, 0xb7, 0xa0, 0x8d, 0x67, 0xb0,
+	0x9c, 0xda, 0x7f, 0xce, 0x72, 0xff, 0x14, 0x6c, 0xe3, 0xee, 0xf4, 0x58, 0xf5, 0xc8, 0xe8, 0x4d,
+	0xe7, 0x2b, 0x63, 0x32, 0x62, 0x08, 0xca, 0x3a, 0x32, 0xe9, 0x3d, 0xd3, 0x1e, 0xd4, 0xe2, 0x0d,
+	0xcf, 0x6b, 0x63, 0x53, 0xa2, 0xdc, 0xe6, 0xd5, 0xa9, 0x60, 0x6a, 0xa2, 0x49, 0x76, 0x22, 0x6f,
+	0x8c, 0x8d, 0xb2, 0x11, 0x30, 0x2b, 0xd1, 0x64, 0xf7, 0xf5, 0x86, 0x60, 0xa4, 0xb4, 0xeb, 0x36,
+	0xc6, 0xf8, 0xbd, 0x86, 0xcc, 0x0a, 0x05, 0x63, 0xba, 0x66, 0x3d, 0xa8, 0xc5, 0x9b, 0x61, 0x19,
+	0x9a, 0x8c, 0xc1, 0xb2, 0x34, 0x99, 0xd1, 0x57, 0xe2, 0x5e, 0xa1, 0xf7, 0x94, 0xae, 0x8c, 0xf9,
+	0x7d, 0x08, 0xca, 0xf2, 0x8a, 0xd4, 0x3e, 0x0f, 0xd7, 0x5e, 0x4a, 0x7f, 0x63, 0x63, 0x52, 0xae,
+	0x0a, 0x91, 0x59, 0xda, 0x1b, 0x73, 0x09, 0x1e, 0xc0, 0x52, 0xf2, 0x9e, 0x7b, 0x63, 0x42, 0x7a,
+	0x91, 0xbe, 0x78, 0x7b, 0x4a, 0x60, 0xb8, 0x5d, 0x63, 0xf6, 0x07, 0x9f, 0x7d, 0x74, 0x33, 0x77,
+	0xff, 0x8b, 0x7f, 0xfe, 0x64, 0x35, 0xf7, 0xf1, 0x27, 0xab, 0xb9, 0x7f, 0x7e, 0xb2, 0x9a, 0xfb,
+	0xf0, 0xd3, 0xd5, 0x57, 0x3e, 0xfe, 0x74, 0xf5, 0x95, 0xbf, 0x7d, 0xba, 0xfa, 0xca, 0x37, 0xd7,
+	0x69, 0xc1, 0xee, 0x13, 0xd3, 0x76, 0x6e, 0xd3, 0xbf, 0xcf, 0xe5, 0x7f, 0xb6, 0x0a, 0x4e, 0x86,
+	0xcc, 0xef, 0xcc, 0xe1, 0xbb, 0xce, 0xff, 0xfe, 0x3b, 0x00, 0x00, 0xff, 0xff, 0xbf, 0xa2, 0xb0,
+	0xce, 0x8b, 0x35, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -3571,6 +4774,14 @@ type MsgClient interface {
 	RespondGEMMDAChallenge(ctx context.Context, in *MsgRespondGEMMDAChallenge, opts ...grpc.CallOption) (*MsgRespondGEMMDAChallengeResponse, error)
 	TimeoutGEMMDAChallenge(ctx context.Context, in *MsgTimeoutGEMMDAChallenge, opts ...grpc.CallOption) (*MsgTimeoutGEMMDAChallengeResponse, error)
 	FailGEMMAvailability(ctx context.Context, in *MsgFailGEMMAvailability, opts ...grpc.CallOption) (*MsgFailGEMMAvailabilityResponse, error)
+	PostGraphTask(ctx context.Context, in *MsgPostGraphTask, opts ...grpc.CallOption) (*MsgPostGraphTaskResponse, error)
+	AcceptGraphTask(ctx context.Context, in *MsgAcceptGraphTask, opts ...grpc.CallOption) (*MsgAcceptGraphTaskResponse, error)
+	SubmitGraphResult(ctx context.Context, in *MsgSubmitGraphResult, opts ...grpc.CallOption) (*MsgSubmitGraphResultResponse, error)
+	OpenGraphChallenge(ctx context.Context, in *MsgOpenGraphChallenge, opts ...grpc.CallOption) (*MsgOpenGraphChallengeResponse, error)
+	GraphTrailClaim(ctx context.Context, in *MsgGraphTrailClaim, opts ...grpc.CallOption) (*MsgGraphTrailClaimResponse, error)
+	GraphMidPoint(ctx context.Context, in *MsgGraphMidPoint, opts ...grpc.CallOption) (*MsgGraphMidPointResponse, error)
+	ArbitrateGraphNode(ctx context.Context, in *MsgArbitrateGraphNode, opts ...grpc.CallOption) (*MsgArbitrateGraphNodeResponse, error)
+	FinalizeGraphTask(ctx context.Context, in *MsgFinalizeGraphTask, opts ...grpc.CallOption) (*MsgFinalizeGraphTaskResponse, error)
 }
 
 type msgClient struct {
@@ -3833,6 +5044,78 @@ func (c *msgClient) FailGEMMAvailability(ctx context.Context, in *MsgFailGEMMAva
 	return out, nil
 }
 
+func (c *msgClient) PostGraphTask(ctx context.Context, in *MsgPostGraphTask, opts ...grpc.CallOption) (*MsgPostGraphTaskResponse, error) {
+	out := new(MsgPostGraphTaskResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Msg/PostGraphTask", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) AcceptGraphTask(ctx context.Context, in *MsgAcceptGraphTask, opts ...grpc.CallOption) (*MsgAcceptGraphTaskResponse, error) {
+	out := new(MsgAcceptGraphTaskResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Msg/AcceptGraphTask", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) SubmitGraphResult(ctx context.Context, in *MsgSubmitGraphResult, opts ...grpc.CallOption) (*MsgSubmitGraphResultResponse, error) {
+	out := new(MsgSubmitGraphResultResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Msg/SubmitGraphResult", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) OpenGraphChallenge(ctx context.Context, in *MsgOpenGraphChallenge, opts ...grpc.CallOption) (*MsgOpenGraphChallengeResponse, error) {
+	out := new(MsgOpenGraphChallengeResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Msg/OpenGraphChallenge", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) GraphTrailClaim(ctx context.Context, in *MsgGraphTrailClaim, opts ...grpc.CallOption) (*MsgGraphTrailClaimResponse, error) {
+	out := new(MsgGraphTrailClaimResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Msg/GraphTrailClaim", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) GraphMidPoint(ctx context.Context, in *MsgGraphMidPoint, opts ...grpc.CallOption) (*MsgGraphMidPointResponse, error) {
+	out := new(MsgGraphMidPointResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Msg/GraphMidPoint", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) ArbitrateGraphNode(ctx context.Context, in *MsgArbitrateGraphNode, opts ...grpc.CallOption) (*MsgArbitrateGraphNodeResponse, error) {
+	out := new(MsgArbitrateGraphNodeResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Msg/ArbitrateGraphNode", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) FinalizeGraphTask(ctx context.Context, in *MsgFinalizeGraphTask, opts ...grpc.CallOption) (*MsgFinalizeGraphTaskResponse, error) {
+	out := new(MsgFinalizeGraphTaskResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Msg/FinalizeGraphTask", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	RegisterModel(context.Context, *MsgRegisterModel) (*MsgRegisterModelResponse, error)
@@ -3863,6 +5146,14 @@ type MsgServer interface {
 	RespondGEMMDAChallenge(context.Context, *MsgRespondGEMMDAChallenge) (*MsgRespondGEMMDAChallengeResponse, error)
 	TimeoutGEMMDAChallenge(context.Context, *MsgTimeoutGEMMDAChallenge) (*MsgTimeoutGEMMDAChallengeResponse, error)
 	FailGEMMAvailability(context.Context, *MsgFailGEMMAvailability) (*MsgFailGEMMAvailabilityResponse, error)
+	PostGraphTask(context.Context, *MsgPostGraphTask) (*MsgPostGraphTaskResponse, error)
+	AcceptGraphTask(context.Context, *MsgAcceptGraphTask) (*MsgAcceptGraphTaskResponse, error)
+	SubmitGraphResult(context.Context, *MsgSubmitGraphResult) (*MsgSubmitGraphResultResponse, error)
+	OpenGraphChallenge(context.Context, *MsgOpenGraphChallenge) (*MsgOpenGraphChallengeResponse, error)
+	GraphTrailClaim(context.Context, *MsgGraphTrailClaim) (*MsgGraphTrailClaimResponse, error)
+	GraphMidPoint(context.Context, *MsgGraphMidPoint) (*MsgGraphMidPointResponse, error)
+	ArbitrateGraphNode(context.Context, *MsgArbitrateGraphNode) (*MsgArbitrateGraphNodeResponse, error)
+	FinalizeGraphTask(context.Context, *MsgFinalizeGraphTask) (*MsgFinalizeGraphTaskResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -3952,6 +5243,30 @@ func (*UnimplementedMsgServer) TimeoutGEMMDAChallenge(ctx context.Context, req *
 }
 func (*UnimplementedMsgServer) FailGEMMAvailability(ctx context.Context, req *MsgFailGEMMAvailability) (*MsgFailGEMMAvailabilityResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FailGEMMAvailability not implemented")
+}
+func (*UnimplementedMsgServer) PostGraphTask(ctx context.Context, req *MsgPostGraphTask) (*MsgPostGraphTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PostGraphTask not implemented")
+}
+func (*UnimplementedMsgServer) AcceptGraphTask(ctx context.Context, req *MsgAcceptGraphTask) (*MsgAcceptGraphTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AcceptGraphTask not implemented")
+}
+func (*UnimplementedMsgServer) SubmitGraphResult(ctx context.Context, req *MsgSubmitGraphResult) (*MsgSubmitGraphResultResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitGraphResult not implemented")
+}
+func (*UnimplementedMsgServer) OpenGraphChallenge(ctx context.Context, req *MsgOpenGraphChallenge) (*MsgOpenGraphChallengeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OpenGraphChallenge not implemented")
+}
+func (*UnimplementedMsgServer) GraphTrailClaim(ctx context.Context, req *MsgGraphTrailClaim) (*MsgGraphTrailClaimResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GraphTrailClaim not implemented")
+}
+func (*UnimplementedMsgServer) GraphMidPoint(ctx context.Context, req *MsgGraphMidPoint) (*MsgGraphMidPointResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GraphMidPoint not implemented")
+}
+func (*UnimplementedMsgServer) ArbitrateGraphNode(ctx context.Context, req *MsgArbitrateGraphNode) (*MsgArbitrateGraphNodeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ArbitrateGraphNode not implemented")
+}
+func (*UnimplementedMsgServer) FinalizeGraphTask(ctx context.Context, req *MsgFinalizeGraphTask) (*MsgFinalizeGraphTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FinalizeGraphTask not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -4462,6 +5777,150 @@ func _Msg_FailGEMMAvailability_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_PostGraphTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgPostGraphTask)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).PostGraphTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Msg/PostGraphTask",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).PostGraphTask(ctx, req.(*MsgPostGraphTask))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_AcceptGraphTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgAcceptGraphTask)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).AcceptGraphTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Msg/AcceptGraphTask",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).AcceptGraphTask(ctx, req.(*MsgAcceptGraphTask))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_SubmitGraphResult_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSubmitGraphResult)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SubmitGraphResult(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Msg/SubmitGraphResult",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SubmitGraphResult(ctx, req.(*MsgSubmitGraphResult))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_OpenGraphChallenge_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgOpenGraphChallenge)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).OpenGraphChallenge(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Msg/OpenGraphChallenge",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).OpenGraphChallenge(ctx, req.(*MsgOpenGraphChallenge))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_GraphTrailClaim_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgGraphTrailClaim)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GraphTrailClaim(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Msg/GraphTrailClaim",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GraphTrailClaim(ctx, req.(*MsgGraphTrailClaim))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_GraphMidPoint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgGraphMidPoint)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GraphMidPoint(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Msg/GraphMidPoint",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GraphMidPoint(ctx, req.(*MsgGraphMidPoint))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_ArbitrateGraphNode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgArbitrateGraphNode)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ArbitrateGraphNode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Msg/ArbitrateGraphNode",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ArbitrateGraphNode(ctx, req.(*MsgArbitrateGraphNode))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_FinalizeGraphTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgFinalizeGraphTask)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).FinalizeGraphTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Msg/FinalizeGraphTask",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).FinalizeGraphTask(ctx, req.(*MsgFinalizeGraphTask))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Msg_serviceDesc = _Msg_serviceDesc
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "prisma.compute.v1.Msg",
@@ -4578,6 +6037,38 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FailGEMMAvailability",
 			Handler:    _Msg_FailGEMMAvailability_Handler,
+		},
+		{
+			MethodName: "PostGraphTask",
+			Handler:    _Msg_PostGraphTask_Handler,
+		},
+		{
+			MethodName: "AcceptGraphTask",
+			Handler:    _Msg_AcceptGraphTask_Handler,
+		},
+		{
+			MethodName: "SubmitGraphResult",
+			Handler:    _Msg_SubmitGraphResult_Handler,
+		},
+		{
+			MethodName: "OpenGraphChallenge",
+			Handler:    _Msg_OpenGraphChallenge_Handler,
+		},
+		{
+			MethodName: "GraphTrailClaim",
+			Handler:    _Msg_GraphTrailClaim_Handler,
+		},
+		{
+			MethodName: "GraphMidPoint",
+			Handler:    _Msg_GraphMidPoint_Handler,
+		},
+		{
+			MethodName: "ArbitrateGraphNode",
+			Handler:    _Msg_ArbitrateGraphNode_Handler,
+		},
+		{
+			MethodName: "FinalizeGraphTask",
+			Handler:    _Msg_FinalizeGraphTask_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -6849,6 +8340,838 @@ func (m *MsgFailGEMMAvailabilityResponse) MarshalToSizedBuffer(dAtA []byte) (int
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgPostGraphTask) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgPostGraphTask) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgPostGraphTask) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.MaxFee != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.MaxFee))
+		i--
+		dAtA[i] = 0x48
+	}
+	if m.MaxPricePerCwu != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.MaxPricePerCwu))
+		i--
+		dAtA[i] = 0x40
+	}
+	if m.ChallengeWindow != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ChallengeWindow))
+		i--
+		dAtA[i] = 0x38
+	}
+	if len(m.InputDataRef) > 0 {
+		i -= len(m.InputDataRef)
+		copy(dAtA[i:], m.InputDataRef)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.InputDataRef)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.GraphJson) > 0 {
+		i -= len(m.GraphJson)
+		copy(dAtA[i:], m.GraphJson)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.GraphJson)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.RequesterNonce) > 0 {
+		i -= len(m.RequesterNonce)
+		copy(dAtA[i:], m.RequesterNonce)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.RequesterNonce)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.RequesterKeyProof) > 0 {
+		i -= len(m.RequesterKeyProof)
+		copy(dAtA[i:], m.RequesterKeyProof)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.RequesterKeyProof)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.RequesterProtocolPubkey) > 0 {
+		i -= len(m.RequesterProtocolPubkey)
+		copy(dAtA[i:], m.RequesterProtocolPubkey)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.RequesterProtocolPubkey)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Requester) > 0 {
+		i -= len(m.Requester)
+		copy(dAtA[i:], m.Requester)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Requester)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgPostGraphTaskResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgPostGraphTaskResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgPostGraphTaskResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.GraphId) > 0 {
+		i -= len(m.GraphId)
+		copy(dAtA[i:], m.GraphId)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.GraphId)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.GraphTaskId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.GraphTaskId))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgAcceptGraphTask) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgAcceptGraphTask) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgAcceptGraphTask) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.AssignmentNonce) > 0 {
+		i -= len(m.AssignmentNonce)
+		copy(dAtA[i:], m.AssignmentNonce)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.AssignmentNonce)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.GraphTaskId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.GraphTaskId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Worker) > 0 {
+		i -= len(m.Worker)
+		copy(dAtA[i:], m.Worker)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Worker)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgAcceptGraphTaskResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgAcceptGraphTaskResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgAcceptGraphTaskResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.AssignmentRef) > 0 {
+		i -= len(m.AssignmentRef)
+		copy(dAtA[i:], m.AssignmentRef)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.AssignmentRef)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSubmitGraphResult) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSubmitGraphResult) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSubmitGraphResult) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.WorkerSignature) > 0 {
+		i -= len(m.WorkerSignature)
+		copy(dAtA[i:], m.WorkerSignature)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.WorkerSignature)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.CompletedEpoch != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.CompletedEpoch))
+		i--
+		dAtA[i] = 0x28
+	}
+	if len(m.FinalOutputRoot) > 0 {
+		i -= len(m.FinalOutputRoot)
+		copy(dAtA[i:], m.FinalOutputRoot)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.FinalOutputRoot)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.OutputRoots) > 0 {
+		for iNdEx := len(m.OutputRoots) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.OutputRoots[iNdEx])
+			copy(dAtA[i:], m.OutputRoots[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.OutputRoots[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if m.GraphTaskId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.GraphTaskId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Worker) > 0 {
+		i -= len(m.Worker)
+		copy(dAtA[i:], m.Worker)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Worker)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSubmitGraphResultResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSubmitGraphResultResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSubmitGraphResultResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ChallengeEnd != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ChallengeEnd))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgOpenGraphChallenge) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgOpenGraphChallenge) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgOpenGraphChallenge) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ChallengeBond != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ChallengeBond))
+		i--
+		dAtA[i] = 0x20
+	}
+	if len(m.ChallengerOutputRoots) > 0 {
+		for iNdEx := len(m.ChallengerOutputRoots) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.ChallengerOutputRoots[iNdEx])
+			copy(dAtA[i:], m.ChallengerOutputRoots[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.ChallengerOutputRoots[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if m.GraphTaskId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.GraphTaskId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Challenger) > 0 {
+		i -= len(m.Challenger)
+		copy(dAtA[i:], m.Challenger)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Challenger)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgOpenGraphChallengeResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgOpenGraphChallengeResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgOpenGraphChallengeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ChallengeEnd != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ChallengeEnd))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgGraphTrailClaim) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgGraphTrailClaim) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgGraphTrailClaim) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.FinalProof) > 0 {
+		for iNdEx := len(m.FinalProof) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.FinalProof[iNdEx])
+			copy(dAtA[i:], m.FinalProof[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.FinalProof[iNdEx])))
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if len(m.FinalRoot) > 0 {
+		i -= len(m.FinalRoot)
+		copy(dAtA[i:], m.FinalRoot)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.FinalRoot)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.InitialProof) > 0 {
+		for iNdEx := len(m.InitialProof) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.InitialProof[iNdEx])
+			copy(dAtA[i:], m.InitialProof[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.InitialProof[iNdEx])))
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.InitialRoot) > 0 {
+		i -= len(m.InitialRoot)
+		copy(dAtA[i:], m.InitialRoot)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.InitialRoot)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.TrailRoot) > 0 {
+		i -= len(m.TrailRoot)
+		copy(dAtA[i:], m.TrailRoot)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.TrailRoot)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.GraphTaskId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.GraphTaskId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Party) > 0 {
+		i -= len(m.Party)
+		copy(dAtA[i:], m.Party)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Party)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgGraphTrailClaimResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgGraphTrailClaimResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgGraphTrailClaimResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgGraphMidPoint) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgGraphMidPoint) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgGraphMidPoint) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Epoch != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Epoch))
+		i--
+		dAtA[i] = 0x28
+	}
+	if len(m.ProofSiblings) > 0 {
+		for iNdEx := len(m.ProofSiblings) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.ProofSiblings[iNdEx])
+			copy(dAtA[i:], m.ProofSiblings[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.ProofSiblings[iNdEx])))
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.StateRoot) > 0 {
+		i -= len(m.StateRoot)
+		copy(dAtA[i:], m.StateRoot)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.StateRoot)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.GraphTaskId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.GraphTaskId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Party) > 0 {
+		i -= len(m.Party)
+		copy(dAtA[i:], m.Party)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Party)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgGraphMidPointResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgGraphMidPointResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgGraphMidPointResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *GraphChunkEvidence) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GraphChunkEvidence) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GraphChunkEvidence) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.StateProof) > 0 {
+		for iNdEx := len(m.StateProof) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.StateProof[iNdEx])
+			copy(dAtA[i:], m.StateProof[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.StateProof[iNdEx])))
+			i--
+			dAtA[i] = 0x4a
+		}
+	}
+	if len(m.Proof) > 0 {
+		for iNdEx := len(m.Proof) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Proof[iNdEx])
+			copy(dAtA[i:], m.Proof[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.Proof[iNdEx])))
+			i--
+			dAtA[i] = 0x42
+		}
+	}
+	if len(m.Chunk) > 0 {
+		i -= len(m.Chunk)
+		copy(dAtA[i:], m.Chunk)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Chunk)))
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.Count != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Count))
+		i--
+		dAtA[i] = 0x30
+	}
+	if m.ChunkIndex != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ChunkIndex))
+		i--
+		dAtA[i] = 0x28
+	}
+	if len(m.Root) > 0 {
+		i -= len(m.Root)
+		copy(dAtA[i:], m.Root)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Root)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.DescJson) > 0 {
+		i -= len(m.DescJson)
+		copy(dAtA[i:], m.DescJson)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.DescJson)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.RefIndex != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.RefIndex))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.RefKind != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.RefKind))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgArbitrateGraphNode) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgArbitrateGraphNode) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgArbitrateGraphNode) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.RopeTable) > 0 {
+		dAtA5 := make([]byte, len(m.RopeTable)*10)
+		var j4 int
+		for _, num1 := range m.RopeTable {
+			num := uint64(num1)
+			for num >= 1<<7 {
+				dAtA5[j4] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j4++
+			}
+			dAtA5[j4] = uint8(num)
+			j4++
+		}
+		i -= j4
+		copy(dAtA[i:], dAtA5[:j4])
+		i = encodeVarintTx(dAtA, i, uint64(j4))
+		i--
+		dAtA[i] = 0x62
+	}
+	if len(m.Evidence) > 0 {
+		for iNdEx := len(m.Evidence) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Evidence[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTx(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x5a
+		}
+	}
+	if len(m.ChallengerChunkProof) > 0 {
+		for iNdEx := len(m.ChallengerChunkProof) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.ChallengerChunkProof[iNdEx])
+			copy(dAtA[i:], m.ChallengerChunkProof[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.ChallengerChunkProof[iNdEx])))
+			i--
+			dAtA[i] = 0x52
+		}
+	}
+	if len(m.ChallengerChunk) > 0 {
+		i -= len(m.ChallengerChunk)
+		copy(dAtA[i:], m.ChallengerChunk)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ChallengerChunk)))
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.ChallengerChunkIndex != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ChallengerChunkIndex))
+		i--
+		dAtA[i] = 0x40
+	}
+	if len(m.ChallengerOutRoot) > 0 {
+		i -= len(m.ChallengerOutRoot)
+		copy(dAtA[i:], m.ChallengerOutRoot)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ChallengerOutRoot)))
+		i--
+		dAtA[i] = 0x3a
+	}
+	if len(m.WorkerChunkProof) > 0 {
+		for iNdEx := len(m.WorkerChunkProof) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.WorkerChunkProof[iNdEx])
+			copy(dAtA[i:], m.WorkerChunkProof[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.WorkerChunkProof[iNdEx])))
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	if len(m.WorkerChunk) > 0 {
+		i -= len(m.WorkerChunk)
+		copy(dAtA[i:], m.WorkerChunk)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.WorkerChunk)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.WorkerChunkIndex != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.WorkerChunkIndex))
+		i--
+		dAtA[i] = 0x20
+	}
+	if len(m.WorkerOutRoot) > 0 {
+		i -= len(m.WorkerOutRoot)
+		copy(dAtA[i:], m.WorkerOutRoot)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.WorkerOutRoot)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.GraphTaskId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.GraphTaskId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Actor) > 0 {
+		i -= len(m.Actor)
+		copy(dAtA[i:], m.Actor)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Actor)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgArbitrateGraphNodeResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgArbitrateGraphNodeResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgArbitrateGraphNodeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Outcome) > 0 {
+		i -= len(m.Outcome)
+		copy(dAtA[i:], m.Outcome)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Outcome)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgFinalizeGraphTask) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgFinalizeGraphTask) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgFinalizeGraphTask) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.GraphTaskId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.GraphTaskId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Actor) > 0 {
+		i -= len(m.Actor)
+		copy(dAtA[i:], m.Actor)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Actor)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgFinalizeGraphTaskResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgFinalizeGraphTaskResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgFinalizeGraphTaskResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ReceiptId) > 0 {
+		i -= len(m.ReceiptId)
+		copy(dAtA[i:], m.ReceiptId)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ReceiptId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -7931,6 +10254,416 @@ func (m *MsgFailGEMMAvailabilityResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
+	return n
+}
+
+func (m *MsgPostGraphTask) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Requester)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.RequesterProtocolPubkey)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.RequesterKeyProof)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.RequesterNonce)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.GraphJson)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.InputDataRef)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.ChallengeWindow != 0 {
+		n += 1 + sovTx(uint64(m.ChallengeWindow))
+	}
+	if m.MaxPricePerCwu != 0 {
+		n += 1 + sovTx(uint64(m.MaxPricePerCwu))
+	}
+	if m.MaxFee != 0 {
+		n += 1 + sovTx(uint64(m.MaxFee))
+	}
+	return n
+}
+
+func (m *MsgPostGraphTaskResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.GraphTaskId != 0 {
+		n += 1 + sovTx(uint64(m.GraphTaskId))
+	}
+	l = len(m.GraphId)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgAcceptGraphTask) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Worker)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.GraphTaskId != 0 {
+		n += 1 + sovTx(uint64(m.GraphTaskId))
+	}
+	l = len(m.AssignmentNonce)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgAcceptGraphTaskResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.AssignmentRef)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgSubmitGraphResult) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Worker)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.GraphTaskId != 0 {
+		n += 1 + sovTx(uint64(m.GraphTaskId))
+	}
+	if len(m.OutputRoots) > 0 {
+		for _, b := range m.OutputRoots {
+			l = len(b)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	l = len(m.FinalOutputRoot)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.CompletedEpoch != 0 {
+		n += 1 + sovTx(uint64(m.CompletedEpoch))
+	}
+	l = len(m.WorkerSignature)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgSubmitGraphResultResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ChallengeEnd != 0 {
+		n += 1 + sovTx(uint64(m.ChallengeEnd))
+	}
+	return n
+}
+
+func (m *MsgOpenGraphChallenge) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Challenger)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.GraphTaskId != 0 {
+		n += 1 + sovTx(uint64(m.GraphTaskId))
+	}
+	if len(m.ChallengerOutputRoots) > 0 {
+		for _, b := range m.ChallengerOutputRoots {
+			l = len(b)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	if m.ChallengeBond != 0 {
+		n += 1 + sovTx(uint64(m.ChallengeBond))
+	}
+	return n
+}
+
+func (m *MsgOpenGraphChallengeResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ChallengeEnd != 0 {
+		n += 1 + sovTx(uint64(m.ChallengeEnd))
+	}
+	return n
+}
+
+func (m *MsgGraphTrailClaim) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Party)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.GraphTaskId != 0 {
+		n += 1 + sovTx(uint64(m.GraphTaskId))
+	}
+	l = len(m.TrailRoot)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.InitialRoot)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if len(m.InitialProof) > 0 {
+		for _, b := range m.InitialProof {
+			l = len(b)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	l = len(m.FinalRoot)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if len(m.FinalProof) > 0 {
+		for _, b := range m.FinalProof {
+			l = len(b)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *MsgGraphTrailClaimResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgGraphMidPoint) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Party)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.GraphTaskId != 0 {
+		n += 1 + sovTx(uint64(m.GraphTaskId))
+	}
+	l = len(m.StateRoot)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if len(m.ProofSiblings) > 0 {
+		for _, b := range m.ProofSiblings {
+			l = len(b)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	if m.Epoch != 0 {
+		n += 1 + sovTx(uint64(m.Epoch))
+	}
+	return n
+}
+
+func (m *MsgGraphMidPointResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *GraphChunkEvidence) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.RefKind != 0 {
+		n += 1 + sovTx(uint64(m.RefKind))
+	}
+	if m.RefIndex != 0 {
+		n += 1 + sovTx(uint64(m.RefIndex))
+	}
+	l = len(m.DescJson)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Root)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.ChunkIndex != 0 {
+		n += 1 + sovTx(uint64(m.ChunkIndex))
+	}
+	if m.Count != 0 {
+		n += 1 + sovTx(uint64(m.Count))
+	}
+	l = len(m.Chunk)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if len(m.Proof) > 0 {
+		for _, b := range m.Proof {
+			l = len(b)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	if len(m.StateProof) > 0 {
+		for _, b := range m.StateProof {
+			l = len(b)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *MsgArbitrateGraphNode) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Actor)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.GraphTaskId != 0 {
+		n += 1 + sovTx(uint64(m.GraphTaskId))
+	}
+	l = len(m.WorkerOutRoot)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.WorkerChunkIndex != 0 {
+		n += 1 + sovTx(uint64(m.WorkerChunkIndex))
+	}
+	l = len(m.WorkerChunk)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if len(m.WorkerChunkProof) > 0 {
+		for _, b := range m.WorkerChunkProof {
+			l = len(b)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	l = len(m.ChallengerOutRoot)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.ChallengerChunkIndex != 0 {
+		n += 1 + sovTx(uint64(m.ChallengerChunkIndex))
+	}
+	l = len(m.ChallengerChunk)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if len(m.ChallengerChunkProof) > 0 {
+		for _, b := range m.ChallengerChunkProof {
+			l = len(b)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	if len(m.Evidence) > 0 {
+		for _, e := range m.Evidence {
+			l = e.Size()
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	if len(m.RopeTable) > 0 {
+		l = 0
+		for _, e := range m.RopeTable {
+			l += sovTx(uint64(e))
+		}
+		n += 1 + sovTx(uint64(l)) + l
+	}
+	return n
+}
+
+func (m *MsgArbitrateGraphNodeResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Outcome)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgFinalizeGraphTask) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Actor)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.GraphTaskId != 0 {
+		n += 1 + sovTx(uint64(m.GraphTaskId))
+	}
+	return n
+}
+
+func (m *MsgFinalizeGraphTaskResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ReceiptId)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
 	return n
 }
 
@@ -14932,6 +17665,2706 @@ func (m *MsgFailGEMMAvailabilityResponse) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: MsgFailGEMMAvailabilityResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgPostGraphTask) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgPostGraphTask: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgPostGraphTask: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Requester", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Requester = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequesterProtocolPubkey", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RequesterProtocolPubkey = append(m.RequesterProtocolPubkey[:0], dAtA[iNdEx:postIndex]...)
+			if m.RequesterProtocolPubkey == nil {
+				m.RequesterProtocolPubkey = []byte{}
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequesterKeyProof", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RequesterKeyProof = append(m.RequesterKeyProof[:0], dAtA[iNdEx:postIndex]...)
+			if m.RequesterKeyProof == nil {
+				m.RequesterKeyProof = []byte{}
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequesterNonce", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RequesterNonce = append(m.RequesterNonce[:0], dAtA[iNdEx:postIndex]...)
+			if m.RequesterNonce == nil {
+				m.RequesterNonce = []byte{}
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GraphJson", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.GraphJson = append(m.GraphJson[:0], dAtA[iNdEx:postIndex]...)
+			if m.GraphJson == nil {
+				m.GraphJson = []byte{}
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InputDataRef", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.InputDataRef = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChallengeWindow", wireType)
+			}
+			m.ChallengeWindow = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ChallengeWindow |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxPricePerCwu", wireType)
+			}
+			m.MaxPricePerCwu = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.MaxPricePerCwu |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 9:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxFee", wireType)
+			}
+			m.MaxFee = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.MaxFee |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgPostGraphTaskResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgPostGraphTaskResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgPostGraphTaskResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GraphTaskId", wireType)
+			}
+			m.GraphTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GraphTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GraphId", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.GraphId = append(m.GraphId[:0], dAtA[iNdEx:postIndex]...)
+			if m.GraphId == nil {
+				m.GraphId = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgAcceptGraphTask) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgAcceptGraphTask: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgAcceptGraphTask: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Worker", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Worker = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GraphTaskId", wireType)
+			}
+			m.GraphTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GraphTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AssignmentNonce", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AssignmentNonce = append(m.AssignmentNonce[:0], dAtA[iNdEx:postIndex]...)
+			if m.AssignmentNonce == nil {
+				m.AssignmentNonce = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgAcceptGraphTaskResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgAcceptGraphTaskResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgAcceptGraphTaskResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AssignmentRef", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AssignmentRef = append(m.AssignmentRef[:0], dAtA[iNdEx:postIndex]...)
+			if m.AssignmentRef == nil {
+				m.AssignmentRef = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSubmitGraphResult) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSubmitGraphResult: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSubmitGraphResult: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Worker", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Worker = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GraphTaskId", wireType)
+			}
+			m.GraphTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GraphTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OutputRoots", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.OutputRoots = append(m.OutputRoots, make([]byte, postIndex-iNdEx))
+			copy(m.OutputRoots[len(m.OutputRoots)-1], dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FinalOutputRoot", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.FinalOutputRoot = append(m.FinalOutputRoot[:0], dAtA[iNdEx:postIndex]...)
+			if m.FinalOutputRoot == nil {
+				m.FinalOutputRoot = []byte{}
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CompletedEpoch", wireType)
+			}
+			m.CompletedEpoch = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.CompletedEpoch |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WorkerSignature", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.WorkerSignature = append(m.WorkerSignature[:0], dAtA[iNdEx:postIndex]...)
+			if m.WorkerSignature == nil {
+				m.WorkerSignature = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSubmitGraphResultResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSubmitGraphResultResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSubmitGraphResultResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChallengeEnd", wireType)
+			}
+			m.ChallengeEnd = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ChallengeEnd |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgOpenGraphChallenge) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgOpenGraphChallenge: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgOpenGraphChallenge: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Challenger", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Challenger = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GraphTaskId", wireType)
+			}
+			m.GraphTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GraphTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChallengerOutputRoots", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ChallengerOutputRoots = append(m.ChallengerOutputRoots, make([]byte, postIndex-iNdEx))
+			copy(m.ChallengerOutputRoots[len(m.ChallengerOutputRoots)-1], dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChallengeBond", wireType)
+			}
+			m.ChallengeBond = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ChallengeBond |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgOpenGraphChallengeResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgOpenGraphChallengeResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgOpenGraphChallengeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChallengeEnd", wireType)
+			}
+			m.ChallengeEnd = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ChallengeEnd |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgGraphTrailClaim) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgGraphTrailClaim: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgGraphTrailClaim: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Party", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Party = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GraphTaskId", wireType)
+			}
+			m.GraphTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GraphTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TrailRoot", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TrailRoot = append(m.TrailRoot[:0], dAtA[iNdEx:postIndex]...)
+			if m.TrailRoot == nil {
+				m.TrailRoot = []byte{}
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InitialRoot", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.InitialRoot = append(m.InitialRoot[:0], dAtA[iNdEx:postIndex]...)
+			if m.InitialRoot == nil {
+				m.InitialRoot = []byte{}
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InitialProof", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.InitialProof = append(m.InitialProof, make([]byte, postIndex-iNdEx))
+			copy(m.InitialProof[len(m.InitialProof)-1], dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FinalRoot", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.FinalRoot = append(m.FinalRoot[:0], dAtA[iNdEx:postIndex]...)
+			if m.FinalRoot == nil {
+				m.FinalRoot = []byte{}
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FinalProof", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.FinalProof = append(m.FinalProof, make([]byte, postIndex-iNdEx))
+			copy(m.FinalProof[len(m.FinalProof)-1], dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgGraphTrailClaimResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgGraphTrailClaimResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgGraphTrailClaimResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgGraphMidPoint) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgGraphMidPoint: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgGraphMidPoint: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Party", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Party = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GraphTaskId", wireType)
+			}
+			m.GraphTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GraphTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StateRoot", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.StateRoot = append(m.StateRoot[:0], dAtA[iNdEx:postIndex]...)
+			if m.StateRoot == nil {
+				m.StateRoot = []byte{}
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProofSiblings", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ProofSiblings = append(m.ProofSiblings, make([]byte, postIndex-iNdEx))
+			copy(m.ProofSiblings[len(m.ProofSiblings)-1], dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Epoch", wireType)
+			}
+			m.Epoch = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Epoch |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgGraphMidPointResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgGraphMidPointResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgGraphMidPointResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GraphChunkEvidence) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GraphChunkEvidence: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GraphChunkEvidence: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RefKind", wireType)
+			}
+			m.RefKind = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.RefKind |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RefIndex", wireType)
+			}
+			m.RefIndex = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.RefIndex |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DescJson", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DescJson = append(m.DescJson[:0], dAtA[iNdEx:postIndex]...)
+			if m.DescJson == nil {
+				m.DescJson = []byte{}
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Root", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Root = append(m.Root[:0], dAtA[iNdEx:postIndex]...)
+			if m.Root == nil {
+				m.Root = []byte{}
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChunkIndex", wireType)
+			}
+			m.ChunkIndex = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ChunkIndex |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Count", wireType)
+			}
+			m.Count = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Count |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Chunk", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Chunk = append(m.Chunk[:0], dAtA[iNdEx:postIndex]...)
+			if m.Chunk == nil {
+				m.Chunk = []byte{}
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Proof", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Proof = append(m.Proof, make([]byte, postIndex-iNdEx))
+			copy(m.Proof[len(m.Proof)-1], dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StateProof", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.StateProof = append(m.StateProof, make([]byte, postIndex-iNdEx))
+			copy(m.StateProof[len(m.StateProof)-1], dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgArbitrateGraphNode) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgArbitrateGraphNode: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgArbitrateGraphNode: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Actor", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Actor = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GraphTaskId", wireType)
+			}
+			m.GraphTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GraphTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WorkerOutRoot", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.WorkerOutRoot = append(m.WorkerOutRoot[:0], dAtA[iNdEx:postIndex]...)
+			if m.WorkerOutRoot == nil {
+				m.WorkerOutRoot = []byte{}
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WorkerChunkIndex", wireType)
+			}
+			m.WorkerChunkIndex = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.WorkerChunkIndex |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WorkerChunk", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.WorkerChunk = append(m.WorkerChunk[:0], dAtA[iNdEx:postIndex]...)
+			if m.WorkerChunk == nil {
+				m.WorkerChunk = []byte{}
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WorkerChunkProof", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.WorkerChunkProof = append(m.WorkerChunkProof, make([]byte, postIndex-iNdEx))
+			copy(m.WorkerChunkProof[len(m.WorkerChunkProof)-1], dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChallengerOutRoot", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ChallengerOutRoot = append(m.ChallengerOutRoot[:0], dAtA[iNdEx:postIndex]...)
+			if m.ChallengerOutRoot == nil {
+				m.ChallengerOutRoot = []byte{}
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChallengerChunkIndex", wireType)
+			}
+			m.ChallengerChunkIndex = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ChallengerChunkIndex |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChallengerChunk", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ChallengerChunk = append(m.ChallengerChunk[:0], dAtA[iNdEx:postIndex]...)
+			if m.ChallengerChunk == nil {
+				m.ChallengerChunk = []byte{}
+			}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChallengerChunkProof", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ChallengerChunkProof = append(m.ChallengerChunkProof, make([]byte, postIndex-iNdEx))
+			copy(m.ChallengerChunkProof[len(m.ChallengerChunkProof)-1], dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Evidence", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Evidence = append(m.Evidence, &GraphChunkEvidence{})
+			if err := m.Evidence[len(m.Evidence)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 12:
+			if wireType == 0 {
+				var v int64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTx
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= int64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.RopeTable = append(m.RopeTable, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTx
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthTx
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTx
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				var count int
+				for _, integer := range dAtA[iNdEx:postIndex] {
+					if integer < 128 {
+						count++
+					}
+				}
+				elementCount = count
+				if elementCount != 0 && len(m.RopeTable) == 0 {
+					m.RopeTable = make([]int64, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v int64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTx
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= int64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.RopeTable = append(m.RopeTable, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field RopeTable", wireType)
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgArbitrateGraphNodeResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgArbitrateGraphNodeResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgArbitrateGraphNodeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Outcome", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Outcome = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgFinalizeGraphTask) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgFinalizeGraphTask: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgFinalizeGraphTask: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Actor", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Actor = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GraphTaskId", wireType)
+			}
+			m.GraphTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GraphTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgFinalizeGraphTaskResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgFinalizeGraphTaskResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgFinalizeGraphTaskResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReceiptId", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ReceiptId = append(m.ReceiptId[:0], dAtA[iNdEx:postIndex]...)
+			if m.ReceiptId == nil {
+				m.ReceiptId = []byte{}
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])
