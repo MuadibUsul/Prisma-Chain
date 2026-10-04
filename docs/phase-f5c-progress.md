@@ -28,7 +28,9 @@ were reinterpreted: all V1 domains, objects and behaviours are untouched.
 | A1-01 call-site map | **DONE** (`139966c`) | `docs/phase-f5c-v2-dispute-callsite-map.md` |
 | A1-02 GraphStateRootV2 | **DONE** (`139966c`) | `GraphStateRootV2FromRoots` + Python mirror + `testdata/canonical_graph_v2_state_vectors.json` |
 | A1-03 TrailRootV2/ProofV2 | **DONE** (`139966c`) | `TrailLeafV2/TrailRootV2/TrailProofV2/VerifyTrailProofV2` + Python mirror + `testdata/canonical_graph_v2_trail_vectors.json` |
-| A1-04..A1-08 | pending | trail/midpoint dispatch, first-divergent finalize, cheap-op typed evidence, snapshot/restart |
+| A1-04..A1-08 (canonical layer) | **DONE** | `GraphDisputeV2` (`compute/canonical/graphv2dispute.go`): fork of the bisection state machine over V2 trail leaves; `NewGraphDisputeV2`/`SubmitMid`/`FirstDivergentNode`/`Timeout`; **snapshot V2 incl. in-flight round medians** + `RestoreGraphDisputeV2` with graph-id/node-count revalidation; tests: injected fraud at node 0 and node 1 both bisect to the exact first-divergent node, snapshot mid-round -> restore -> continue reaches the same verdict, V1-domain trail material refused, identical endpoints refused, round-window/duplicate rejections |
+| A1-04..A1-05 (chain layer) | pending | `buildTrailClaimV2` + GraphTrailClaim / GraphMidPoint dispatch (`graphV2InitialStateRoot` from descriptor inputs) |
+| A1-07 cheap-op typed evidence | pending | V2 typed chunk evidence adapter |
 | A2-01..A2-08 | pending | wide dispute wire/open/localization/trace/midpoint/512/bridge/restart |
 | A3..A7 | pending | watcher/bundle, DA, query/CLI/gas, E2E, docs/freeze |
 
