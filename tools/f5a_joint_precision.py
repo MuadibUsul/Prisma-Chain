@@ -207,6 +207,15 @@ def run_block_bits(conf: Conformer, hidden: np.ndarray, plan: dict, stats: dict)
         return np.array(out, dtype=object).reshape(acc.shape).astype(np.int64,
                copy=False, subok=False) if False else np.vectorize(int, otypes=[np.int64])(np.array(out, dtype=object).reshape(acc.shape))
 
+    def gemm(a, b, transpose_b=False):
+        acc = gemm64(a, b, transpose_b)
+        if "gemm_dump" in stats:
+            stats["gemm_dump"].append({"a": np.asarray(a, np.int16),
+                                       "w": np.asarray(b, np.int16),
+                                       "transpose_b": bool(transpose_b),
+                                       "c": acc.astype(np.int64)})
+        return acc
+
     def requant_acc(acc, mult, shift=20):
         gated(acc, mult, shift)
         m = int(np.max(np.abs(acc))) if acc.size else 0
@@ -243,18 +252,18 @@ def run_block_bits(conf: Conformer, hidden: np.ndarray, plan: dict, stats: dict)
     kn = np.rint(conf.k_norm() * ONE).astype(np.int64)
     q8s, k8s, v8s = [], [], []
     for qh in range(heads):
-        acc = gemm64(h8, wc(conf.q_slice(qh), W["wq"][qh]), False).astype(np.int64)
+        acc = gemm(h8, wc(conf.q_slice(qh), W["wq"][qh]), False).astype(np.int64)
         qv = requant_acc(acc, S["h"]["step_fx"] * W["wq"][qh])
         qv = N.op_rmsnorm(qv, qn, 1).astype(np.int64)
         qv = rope(qv)
         q8s.append(quant_bits(qv, S["q_heads"][qh], bits))
     for kh in range(kv):
-        acc = gemm64(h8, wc(conf.k_slice(kh), W["wk"][kh]), False).astype(np.int64)
+        acc = gemm(h8, wc(conf.k_slice(kh), W["wk"][kh]), False).astype(np.int64)
         kvx = requant_acc(acc, S["h"]["step_fx"] * W["wk"][kh])
         kvx = N.op_rmsnorm(kvx, kn, 1).astype(np.int64)
         kvx = rope(kvx)
         k8s.append(quant_bits(kvx, S["k_heads"][kh], bits))
-        acc = gemm64(h8, wc(conf.v_slice(kh), W["wv"][kh]), False).astype(np.int64)
+        acc = gemm(h8, wc(conf.v_slice(kh), W["wv"][kh]), False).astype(np.int64)
         gated(acc, 0)
         if wide:
             mult_v = max(1, int(round(S["h"]["step_fx"] * W["wv"][kh] * (1 << RATIO_K)
@@ -268,7 +277,7 @@ def run_block_bits(conf: Conformer, hidden: np.ndarray, plan: dict, stats: dict)
     attn = np.zeros((seq, 1024), dtype=np.int64)
     for qh in range(heads):
         kvh = qh // 2
-        acc = gemm64(q8s[qh], k8s[kvh], True).astype(np.int64)
+        acc = gemm(q8s[qh], k8s[kvh], True).astype(np.int64)
         if wide:
             mult = max(1, int(round(S["q_heads"][qh] * S["k_heads"][kvh] * ATTN_SCALE_FX
                                      * (1 << (SCORES_S - 40)))))
@@ -278,7 +287,7 @@ def run_block_bits(conf: Conformer, hidden: np.ndarray, plan: dict, stats: dict)
         gated(acc, mult)
         probs = N.op_softmax_rows(np.clip(sfx + causal, MIN_FX, MAX_FX).astype(np.int32)).astype(np.int64)
         p8 = quant_bits(probs, S["p"]["step_fx"], bits, lo=0)
-        acc = gemm64(p8, v8s[kvh], False).astype(np.int64)
+        acc = gemm(p8, v8s[kvh], False).astype(np.int64)
         gated(acc, 0)
         if wide:
             mult_c = max(1, int(round(S["p"]["step_fx"] * S["v"]["step_fx"] * (1 << RATIO_K)
@@ -288,7 +297,7 @@ def run_block_bits(conf: Conformer, hidden: np.ndarray, plan: dict, stats: dict)
             mult_c = max(1, int(round(S["p"]["step_fx"] * S["v"]["step_fx"] / S["ctx"]["step_fx"])))
             sh_c = 20
         c8 = np.clip(mul_shift_guard(acc, mult_c, sh_c), -qmax(bits), qmax(bits))
-        acc = gemm64(c8, wc(conf.o_slice(qh), W["wo"][qh]), False).astype(np.int64)
+        acc = gemm(c8, wc(conf.o_slice(qh), W["wo"][qh]), False).astype(np.int64)
         ofx = requant_acc(acc, S["ctx"]["step_fx"] * W["wo"][qh])
         raw = attn + ofx
         stats["fx_saturations"] += int(np.count_nonzero((raw < MIN_FX) | (raw > MAX_FX)))
@@ -298,13 +307,13 @@ def run_block_bits(conf: Conformer, hidden: np.ndarray, plan: dict, stats: dict)
     h2 = N.op_rmsnorm(x1.astype(np.int32),
                       np.rint(conf.weights["post_attention_layernorm.weight"] * ONE).astype(np.int64), 1)
     h2q = quant_bits(h2.astype(np.int64), S["h2"]["step_fx"], bits)
-    acc = gemm64(h2q, wc(conf.gate_slice(), W["wg"]), False).astype(np.int64)
+    acc = gemm(h2q, wc(conf.gate_slice(), W["wg"]), False).astype(np.int64)
     gate = requant_acc(acc, S["h2"]["step_fx"] * W["wg"])
-    acc = gemm64(h2q, wc(conf.up_slice(), W["wu"]), False).astype(np.int64)
+    acc = gemm(h2q, wc(conf.up_slice(), W["wu"]), False).astype(np.int64)
     upv = requant_acc(acc, S["h2"]["step_fx"] * W["wu"])
     hm = N.op_mul(N.op_silu(gate.astype(np.int32)), upv.astype(np.int32)).astype(np.int64)
     hmq = quant_bits(hm, S["hm"]["step_fx"], bits)
-    acc = gemm64(hmq, wc(conf.down_slice(), W["wd"]), False).astype(np.int64)
+    acc = gemm(hmq, wc(conf.down_slice(), W["wd"]), False).astype(np.int64)
     down = requant_acc(acc, S["hm"]["step_fx"] * W["wd"])
     return np.clip(x1 + down, MIN_FX, MAX_FX)
 
