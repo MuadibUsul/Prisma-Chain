@@ -110,5 +110,6 @@
   ],
   "worst_cosine": 0.993290245769499,
   "worst_max_abs": 0.4232528783302132,
-  "verdict": "FAIL"
+  "verdict": "FAIL",
+  "f2a_note": "these numbers are the CORRECTED F.1-policy measurement from the F.2A round: the F.1 converter's scores dequant used global q/k steps while the operands were quantized with per-head steps (logits scaled by the step ratio). The historical (buggy) measurement 0.957/1.91 remains on the F.1 branch; the corrected values here are 0.9933/0.423."
 }

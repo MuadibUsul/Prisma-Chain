@@ -1,0 +1,34 @@
+[
+ {
+  "policy": "frozen",
+  "worst_cosine": 0.9949629991408896,
+  "worst_max_abs": 0.3229579646282543,
+  "mean_max_abs": 0.19550352132179663,
+  "cases": 32,
+  "saturations": 0
+ },
+ {
+  "policy": "without q",
+  "worst_cosine": 0.9942608962032856,
+  "worst_max_abs": 0.3001793458228832,
+  "mean_max_abs": 0.20631843521478296,
+  "cases": 32,
+  "saturations": 0
+ },
+ {
+  "policy": "without hm",
+  "worst_cosine": 0.9935412952677736,
+  "worst_max_abs": 0.36637112685969964,
+  "mean_max_abs": 0.20350237895035186,
+  "cases": 32,
+  "saturations": 0
+ },
+ {
+  "policy": "without h2",
+  "worst_cosine": 0.9946921326600581,
+  "worst_max_abs": 0.31325718948176995,
+  "mean_max_abs": 0.2001424730316775,
+  "cases": 32,
+  "saturations": 0
+ }
+]

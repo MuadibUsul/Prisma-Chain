@@ -1,0 +1,30 @@
+{
+ "baseline": {
+  "nodes": 310,
+  "gemm_nodes": 83,
+  "requantize_nodes": 126,
+  "manifest_leaves": 310,
+  "gemm_mac_per_case": 252706816,
+  "freivalds_checks": 83,
+  "dispute_depth_bits": 9
+ },
+ "frozen_policy": {
+  "nodes": 1141,
+  "nodes_x": 3.6806451612903226,
+  "gemm_nodes": 336,
+  "gemm_x": 4.048192771084337,
+  "requantize_nodes": 379,
+  "add_nodes_added": 253,
+  "manifest_leaves": 1141,
+  "freivalds_checks": 336,
+  "dispute_depth": 2,
+  "mac_invariant": "sum M*N*K_s == M*N*K (asserted at run time)",
+  "gemm_mac_per_case": 252706816,
+  "mac_note": "SUM_s M*N*K_s == M*N*K asserted at run time"
+ },
+ "da_bytes_estimate": {
+  "baseline_intermediates": "sum of node output bytes",
+  "growth": "proportional to added node outputs (estimate)",
+  "nodes_ratio": 3.6806451612903226
+ }
+}

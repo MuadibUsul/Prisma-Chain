@@ -1,0 +1,15 @@
+{
+ "policy_id": "f4d63575269a718f882e6df6d0433e013a47a68511ba40295b21d658c724368d",
+ "frozen": true,
+ "heldout_size": 64,
+ "worst_cosine": 0.9942098252313258,
+ "worst_max_abs": 0.3138955226141231,
+ "mean_max_abs": 0.20284362571076955,
+ "cases": 64,
+ "saturations": 0,
+ "verdict": "FAIL",
+ "thresholds": {
+  "worst_cosine": 0.995,
+  "worst_max_abs": 0.05
+ }
+}

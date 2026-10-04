@@ -166,17 +166,15 @@ def run_block(conf: Conformer, hidden: np.ndarray, policy: GroupPolicy,
     kn = np.rint(conf.k_norm() * ONE).astype(np.int64)
     q_steps_all = site_steps.get("q") or [[base_steps["q"]]] * heads
     k_steps_all = site_steps.get("k") or [[base_steps["k"]]] * kv
-    q_slices_per_head, k_slices_per_head, v8_per_head = [], [], []
+    q_fx_per_head, k_fx_per_head, v8_per_head = [], [], []
     for qh in range(heads):
         qv = partial_gemm_fx(h_slices, conf.q_slice(qh), wsteps["wq"][qh])
         qv = N.op_rmsnorm(qv, qn, 1).astype(np.int64)
-        qv = rope(qv)
-        q_slices_per_head.append(split_slices(qv, q_steps_all[qh]))
+        q_fx_per_head.append(rope(qv))
     for kh in range(kv):
         kvx = partial_gemm_fx(h_slices, conf.k_slice(kh), wsteps["wk"][kh])
         kvx = N.op_rmsnorm(kvx, kn, 1).astype(np.int64)
-        kvx = rope(kvx)
-        k_slices_per_head.append(split_slices(kvx, k_steps_all[kh]))
+        k_fx_per_head.append(rope(kvx))
         # V: with the h site OFF replicate F.1's one-step accum->int8; with
         # it ON use the two-step groupwise formulation (documented rounding
         # change; single-slice two-step vs F.1 one-step differ by <= 1 LSB).
@@ -192,21 +190,38 @@ def run_block(conf: Conformer, hidden: np.ndarray, policy: GroupPolicy,
             v8 = np.clip(N.rshift_round_even(acc * np.int64(mult_v), 20), -127, 127).astype(np.int8)
         v8_per_head.append(v8)
         if debug_out is not None and len(v8_per_head) == 1:
-            debug_out["q8_h0"] = q_slices_per_head[0][0][0]
-            debug_out["k8_h0"] = k_slices_per_head[0][0][0]
+            debug_out["q8_h0"] = quant_counts(q_fx_per_head[0][:, :part], q_step_of(0, 0))
+            debug_out["k8_h0"] = quant_counts(k_fx_per_head[0][:, :part], k_step_of(0, 0))
             debug_out["v8_h0"] = v8
 
     # ---- scores (K = head_dim, groupwise q/k) --------------------------
+    # The reduction is partitioned at the FINEST enabled group size; both
+    # operands use the SAME partition (a non-groupwise site keeps its one
+    # step for every sub-slice; a coarser groupwise site keeps its group
+    # step for sub-slices inside that group). Partial GEMMs are then
+    # requantized to the common score scale and added (section 19-20).
+    g_q, g_k = policy.group("q"), policy.group("k")
+    active = [g for g in (g_q, g_k) if g > 0]
+    part = min(active) if active else hd
+    q_step_of = lambda qh, s_lo: (q_steps_all[qh][s_lo // g_q] if g_q > 0 else q_steps_all[qh][0])
+    k_step_of = lambda kh, s_lo: (k_steps_all[kh][s_lo // g_k] if g_k > 0 else k_steps_all[kh][0])
     ctx_group = policy.group("ctx")
     attn_sum = np.zeros((seq, 1024), dtype=np.int64)
     p_step = base_steps["p"]
     for qh in range(heads):
         kvh = qh // 2
         total = None
-        for (q8, qs, _ql, _qh), (k8, ks, _kl, _kh) in zip(q_slices_per_head[qh], k_slices_per_head[kvh]):
+        qv_fx = q_fx_per_head[qh]
+        kv_fx = k_fx_per_head[kvh]
+        for s_lo in range(0, hd, part):
+            s_hi = min(hd, s_lo + part)
+            qs = q_step_of(qh, s_lo)
+            ks = k_step_of(kvh, s_lo)
+            q8 = quant_counts(qv_fx[:, s_lo:s_hi], qs)
+            k8 = quant_counts(kv_fx[:, s_lo:s_hi], ks)
             acc = N.op_gemm(q8, k8, True).astype(np.int64)
             stats.partial_gemms += 1
-            stats.mac_total += seq * seq * q8.shape[1]
+            stats.mac_total += seq * seq * (s_hi - s_lo)
             mult = max(1, int(round(qs * ks * ATTN_SCALE_FX / ONE)))
             target = qs * ks * ATTN_SCALE_FX
             stats.scale_rel_error_max = max(stats.scale_rel_error_max,
@@ -225,7 +240,10 @@ def run_block(conf: Conformer, hidden: np.ndarray, policy: GroupPolicy,
         stats.partial_gemms += 1
         stats.mac_total += seq * 128 * seq
         if ctx_group > 0:
-            mult_c = max(1, int(round(p_step * base_steps["v"] / ONE)))
+            # cacc counts are p8*v8 with steps (p_step, v_step): the common
+            # fx dequant is cacc * p_step * v_step >> 20 (one shift, the
+            # /2^20 of the Q12.20 product).
+            mult_c = int(p_step) * int(base_steps["v"])
             cfx = np.clip(N.rshift_round_even(cacc * np.int64(mult_c), 20), MIN_FX, MAX_FX)
             ctx_steps_all = site_steps["ctx"]
             c_slices = split_slices(cfx, ctx_steps_all[qh] if isinstance(ctx_steps_all[0], list)
