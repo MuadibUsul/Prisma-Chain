@@ -28,7 +28,7 @@
  "full_block_gpu": "NOT STARTED (gated on GEMM performance PASS, spec section 81)",
  "extension": {
   "built": true,
-  "build_seconds": 28.4
+  "build_seconds": 0.3
  },
  "selftest": {
   "cases": [
@@ -177,16 +177,16 @@
     "first_error": null
    },
    "STAGE_A_CUDA_GRAPH_K3": {
-    "exact": 0,
+    "exact": 83,
     "mismatch": 0,
-    "error": 83,
-    "first_error": "RuntimeError: graph capture failed: AcceleratorError: CUDA error: operation failed due to a previous error during capture\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrac"
+    "error": 0,
+    "first_error": null
    },
    "STAGE_B_5LAUNCH_K3": {
-    "exact": 34,
+    "exact": 83,
     "mismatch": 0,
-    "error": 49,
-    "first_error": "RuntimeError: self.size(1) needs to match mat2.size(0) but got 1024 and 128"
+    "error": 0,
+    "first_error": null
    },
    "STAGE_C_TRUE_FUSED_MMA": {
     "exact": 83,
@@ -203,23 +203,136 @@
     "first_error": null
    },
    "STAGE_A_CUDA_GRAPH_K3": {
-    "exact": 0,
+    "exact": 5,
     "mismatch": 0,
-    "error": 5,
-    "first_error": "RuntimeError: graph capture failed: AcceleratorError: CUDA error: operation failed due to a previous error during capture\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrac"
+    "error": 0,
+    "first_error": null
    },
    "STAGE_B_5LAUNCH_K3": {
     "exact": 0,
     "mismatch": 0,
     "error": 5,
-    "first_error": "RuntimeError: The size of tensor a (16) must match the size of tensor b (2) at non-singleton dimension 0"
+    "first_error": "RuntimeError: mat2.size(1) needs to be greater than 0 and a multiple of 8, but got 3"
    },
    "STAGE_C_TRUE_FUSED_MMA": {
-    "exact": 0,
-    "mismatch": 1,
-    "error": 4,
-    "first_error": "RuntimeError: The size of tensor a (16) must match the size of tensor b (2) at non-singleton dimension 0"
+    "exact": 5,
+    "mismatch": 0,
+    "error": 0,
+    "first_error": null
    }
+  },
+  "vectors_detail": [
+   {
+    "name": "boundary_all_max",
+    "backends": {
+     "F5B_EAGER_KARATSUBA3": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "STAGE_A_CUDA_GRAPH_K3": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "STAGE_B_5LAUNCH_K3": {
+      "exact": false,
+      "error": "RuntimeError: mat2.size(1) needs to be greater than 0 and a multiple of 8, but got 3"
+     },
+     "STAGE_C_TRUE_FUSED_MMA": {
+      "exact": true,
+      "mismatches": 0
+     }
+    }
+   },
+   {
+    "name": "boundary_all_min",
+    "backends": {
+     "F5B_EAGER_KARATSUBA3": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "STAGE_A_CUDA_GRAPH_K3": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "STAGE_B_5LAUNCH_K3": {
+      "exact": false,
+      "error": "RuntimeError: mat2.size(1) needs to be greater than 0 and a multiple of 8, but got 3"
+     },
+     "STAGE_C_TRUE_FUSED_MMA": {
+      "exact": true,
+      "mismatches": 0
+     }
+    }
+   },
+   {
+    "name": "small_random",
+    "backends": {
+     "F5B_EAGER_KARATSUBA3": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "STAGE_A_CUDA_GRAPH_K3": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "STAGE_B_5LAUNCH_K3": {
+      "exact": false,
+      "error": "RuntimeError: mat2.size(1) needs to be greater than 0 and a multiple of 8, but got 5"
+     },
+     "STAGE_C_TRUE_FUSED_MMA": {
+      "exact": true,
+      "mismatches": 0
+     }
+    }
+   },
+   {
+    "name": "transpose_b",
+    "backends": {
+     "F5B_EAGER_KARATSUBA3": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "STAGE_A_CUDA_GRAPH_K3": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "STAGE_B_5LAUNCH_K3": {
+      "exact": false,
+      "error": "RuntimeError: mat2.size(1) needs to be greater than 0 and a multiple of 8, but got 3"
+     },
+     "STAGE_C_TRUE_FUSED_MMA": {
+      "exact": true,
+      "mismatches": 0
+     }
+    }
+   },
+   {
+    "name": "k1",
+    "backends": {
+     "F5B_EAGER_KARATSUBA3": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "STAGE_A_CUDA_GRAPH_K3": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "STAGE_B_5LAUNCH_K3": {
+      "exact": false,
+      "error": "RuntimeError: mat2.size(1) needs to be greater than 0 and a multiple of 8, but got 1"
+     },
+     "STAGE_C_TRUE_FUSED_MMA": {
+      "exact": true,
+      "mismatches": 0
+     }
+    }
+   }
+  ],
+  "stage_a_vs_eager_nodes": {
+   "match": 83,
+   "differ": 0,
+   "error": 0,
+   "not_captured": 0
   },
   "nodes_total": 83,
   "vectors_total": 5
@@ -242,10 +355,14 @@
     "runs_profiled": 5
    },
    "STAGE_A_CUDA_GRAPH_K3": {
-    "error": "RuntimeError: graph capture failed: AcceleratorError: CUDA error: operation failed due to a previous error during capture\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrac"
+    "gpu_ops_per_logical_gemm": 31.0,
+    "kernels_per_logical_gemm": 27.0,
+    "runs_profiled": 5
    },
    "STAGE_B_5LAUNCH_K3": {
-    "error": "RuntimeError: self.size(1) needs to match mat2.size(0) but got 1024 and 128"
+    "gpu_ops_per_logical_gemm": 6.0,
+    "kernels_per_logical_gemm": 5.0,
+    "runs_profiled": 5
    },
    "STAGE_C_TRUE_FUSED_MMA": {
     "gpu_ops_per_logical_gemm": 1.0,
@@ -270,7 +387,9 @@
     "runs_profiled": 5
    },
    "STAGE_A_CUDA_GRAPH_K3": {
-    "error": "RuntimeError: graph capture failed: AssertionError: A1 digit range violated"
+    "gpu_ops_per_logical_gemm": 31.0,
+    "kernels_per_logical_gemm": 27.0,
+    "runs_profiled": 5
    },
    "STAGE_B_5LAUNCH_K3": {
     "gpu_ops_per_logical_gemm": 6.0,
@@ -295,60 +414,78 @@
     "logical_mac": 2097152,
     "mac_fraction": 0.26556016597510373,
     "NATIVE_PADDED_INT8": {
-     "median_ms": 0.1714399978518486,
-     "p50_ms": 0.1714399978518486,
-     "p95_ms": 0.2152000069618225,
-     "min_ms": 0.16636799275875092,
-     "max_ms": 0.338591992855072,
-     "stddev_ms": 0.018624821487417016,
+     "median_ms": 0.1311040073633194,
+     "p50_ms": 0.1311040073633194,
+     "p95_ms": 0.14217600226402283,
+     "min_ms": 0.12934400141239166,
+     "max_ms": 0.2348800003528595,
+     "stddev_ms": 0.00706640667551654,
      "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.1467561626434326,
+     "batched_median_ms": 0.09500736236572266,
      "batched_output_exact": true
     },
     "CUSTOM_NATIVE_INT8_M16": {
-     "median_ms": 0.058368001133203506,
-     "p50_ms": 0.058368001133203506,
-     "p95_ms": 0.08694399893283844,
-     "min_ms": 0.05721599981188774,
-     "max_ms": 0.12489599734544754,
-     "stddev_ms": 0.009990056022236123,
-     "iterations": 500,
+     "median_ms": 0.04950400069355965,
+     "p50_ms": 0.04950400069355965,
+     "p95_ms": 0.054368000477552414,
+     "min_ms": 0.048576001077890396,
+     "max_ms": 0.06499200314283371,
+     "stddev_ms": 0.0021204326661725947,
+     "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.026772799491882323,
+     "batched_median_ms": 0.026600959300994872,
      "batched_output_exact": true
     },
     "F5B_EAGER_KARATSUBA3": {
-     "median_ms": 0.9703039824962616,
-     "p50_ms": 0.9703039824962616,
-     "p95_ms": 1.0401599407196045,
-     "min_ms": 0.9407680034637451,
-     "max_ms": 1.1161919832229614,
-     "stddev_ms": 0.03291074871986336,
+     "median_ms": 0.6392159759998322,
+     "p50_ms": 0.6392159759998322,
+     "p95_ms": 0.6906560063362122,
+     "min_ms": 0.5936959981918335,
+     "max_ms": 0.7784320116043091,
+     "stddev_ms": 0.02762482427535925,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.9693116760253906,
+     "batched_median_ms": 0.5844400024414063,
      "batched_output_exact": true
     },
     "STAGE_A_CUDA_GRAPH_K3": {
-     "error": "RuntimeError: graph capture failed: AcceleratorError: CUDA error: operation failed due to a previous error during capture\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\nFor debugging consider"
-    },
-    "STAGE_B_5LAUNCH_K3": {
-     "error": "RuntimeError: self.size(1) needs to match mat2.size(0) but got 1024 and 128"
-    },
-    "STAGE_C_TRUE_FUSED_MMA": {
-     "median_ms": 0.06932799890637398,
-     "p50_ms": 0.06932799890637398,
-     "p95_ms": 0.09689600020647049,
-     "min_ms": 0.06828799843788147,
-     "max_ms": 0.151296004652977,
-     "stddev_ms": 0.010076040117815892,
-     "iterations": 500,
+     "median_ms": 0.17400000244379044,
+     "p50_ms": 0.17400000244379044,
+     "p95_ms": 0.18038399517536163,
+     "min_ms": 0.1711360067129135,
+     "max_ms": 0.27811199426651,
+     "stddev_ms": 0.008128833695102318,
+     "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.03679744005203247,
+     "batched_median_ms": 0.14921631813049316,
      "batched_output_exact": true
     },
-    "native_fastest_median_ms": 0.058368001133203506
+    "STAGE_B_5LAUNCH_K3": {
+     "median_ms": 0.1565759927034378,
+     "p50_ms": 0.1565759927034378,
+     "p95_ms": 0.16572800278663635,
+     "min_ms": 0.15276800096035004,
+     "max_ms": 0.17520000040531158,
+     "stddev_ms": 0.004187751047526484,
+     "iterations": 200,
+     "warmup": 50,
+     "batched_median_ms": 0.10045727729797363,
+     "batched_output_exact": true
+    },
+    "STAGE_C_TRUE_FUSED_MMA": {
+     "median_ms": 0.056352000683546066,
+     "p50_ms": 0.056352000683546066,
+     "p95_ms": 0.061344001442193985,
+     "min_ms": 0.05523199960589409,
+     "max_ms": 0.14271999895572662,
+     "stddev_ms": 0.004360844797195004,
+     "iterations": 500,
+     "warmup": 50,
+     "batched_median_ms": 0.03183295965194702,
+     "batched_output_exact": true
+    },
+    "native_fastest_median_ms": 0.04950400069355965
    },
    "16x16x128T": {
     "M": 16,
@@ -359,60 +496,78 @@
     "logical_mac": 32768,
     "mac_fraction": 0.002074688796680498,
     "NATIVE_PADDED_INT8": {
-     "median_ms": 0.16409599781036377,
-     "p50_ms": 0.16409599781036377,
-     "p95_ms": 0.19142399728298187,
-     "min_ms": 0.16140800714492798,
-     "max_ms": 0.26044800877571106,
-     "stddev_ms": 0.013064519724450628,
+     "median_ms": 0.14044799655675888,
+     "p50_ms": 0.14044799655675888,
+     "p95_ms": 0.16089600324630737,
+     "min_ms": 0.12371200323104858,
+     "max_ms": 0.2322240024805069,
+     "stddev_ms": 0.012080097674639098,
      "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.13137791633605958,
+     "batched_median_ms": 0.10415648460388184,
      "batched_output_exact": true
     },
     "CUSTOM_NATIVE_INT8_M16": {
-     "median_ms": 0.05183999985456467,
-     "p50_ms": 0.05183999985456467,
-     "p95_ms": 0.06207999959588051,
-     "min_ms": 0.050783999264240265,
-     "max_ms": 0.09232000261545181,
-     "stddev_ms": 0.004322982168910983,
+     "median_ms": 0.04387199878692627,
+     "p50_ms": 0.04387199878692627,
+     "p95_ms": 0.05222399905323982,
+     "min_ms": 0.04108799993991852,
+     "max_ms": 0.07046400010585785,
+     "stddev_ms": 0.0041472433647809165,
      "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.024811201095581055,
+     "batched_median_ms": 0.017784639596939086,
      "batched_output_exact": true
     },
     "F5B_EAGER_KARATSUBA3": {
-     "median_ms": 1.0147199630737305,
-     "p50_ms": 1.0147199630737305,
-     "p95_ms": 1.1019519567489624,
-     "min_ms": 0.9679999947547913,
-     "max_ms": 1.2308800220489502,
-     "stddev_ms": 0.03604202753766061,
+     "median_ms": 0.646912008523941,
+     "p50_ms": 0.646912008523941,
+     "p95_ms": 0.6895040273666382,
+     "min_ms": 0.5975679755210876,
+     "max_ms": 0.7670720219612122,
+     "stddev_ms": 0.028093809644971768,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.9675676727294922,
+     "batched_median_ms": 0.5814803314208984,
      "batched_output_exact": true
     },
     "STAGE_A_CUDA_GRAPH_K3": {
-     "error": "RuntimeError: graph capture failed: AcceleratorError: CUDA error: operation failed due to a previous error during capture\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\nFor debugging consider"
-    },
-    "STAGE_B_5LAUNCH_K3": {
-     "error": "RuntimeError: self.size(1) needs to match mat2.size(0) but got 128 and 16"
-    },
-    "STAGE_C_TRUE_FUSED_MMA": {
-     "median_ms": 0.052671998739242554,
-     "p50_ms": 0.052671998739242554,
-     "p95_ms": 0.06300800293684006,
-     "min_ms": 0.0514880008995533,
-     "max_ms": 0.1420159935951233,
-     "stddev_ms": 0.006729244255373602,
+     "median_ms": 0.07265600189566612,
+     "p50_ms": 0.07265600189566612,
+     "p95_ms": 0.078015998005867,
+     "min_ms": 0.0711359977722168,
+     "max_ms": 0.10169599950313568,
+     "stddev_ms": 0.0027039283862230925,
      "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.025945279598236084,
+     "batched_median_ms": 0.05310495853424072,
      "batched_output_exact": true
     },
-    "native_fastest_median_ms": 0.05183999985456467
+    "STAGE_B_5LAUNCH_K3": {
+     "median_ms": 0.12670399993658066,
+     "p50_ms": 0.12670399993658066,
+     "p95_ms": 0.1425279974937439,
+     "min_ms": 0.12355200201272964,
+     "max_ms": 0.17577600479125977,
+     "stddev_ms": 0.006350915700421026,
+     "iterations": 500,
+     "warmup": 50,
+     "batched_median_ms": 0.11005439758300781,
+     "batched_output_exact": true
+    },
+    "STAGE_C_TRUE_FUSED_MMA": {
+     "median_ms": 0.04726399853825569,
+     "p50_ms": 0.04726399853825569,
+     "p95_ms": 0.05788800120353699,
+     "min_ms": 0.042847998440265656,
+     "max_ms": 0.07606399804353714,
+     "stddev_ms": 0.004807249293786434,
+     "iterations": 500,
+     "warmup": 50,
+     "batched_median_ms": 0.0179967999458313,
+     "batched_output_exact": true
+    },
+    "native_fastest_median_ms": 0.04387199878692627
    },
    "16x128x16": {
     "M": 16,
@@ -423,69 +578,78 @@
     "logical_mac": 32768,
     "mac_fraction": 0.002074688796680498,
     "NATIVE_PADDED_INT8": {
-     "median_ms": 0.16627199947834015,
-     "p50_ms": 0.16627199947834015,
-     "p95_ms": 0.2048960030078888,
-     "min_ms": 0.16182400286197662,
-     "max_ms": 0.2672959864139557,
-     "stddev_ms": 0.015453698952531287,
-     "iterations": 500,
+     "median_ms": 0.12753599882125854,
+     "p50_ms": 0.12753599882125854,
+     "p95_ms": 0.14079999923706055,
+     "min_ms": 0.12243200093507767,
+     "max_ms": 0.15907199680805206,
+     "stddev_ms": 0.006131547929804533,
+     "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.1452387237548828,
+     "batched_median_ms": 0.09467328071594239,
      "batched_output_exact": true
     },
     "CUSTOM_NATIVE_INT8_M16": {
-     "median_ms": 0.05252800136804581,
-     "p50_ms": 0.05252800136804581,
-     "p95_ms": 0.0859839990735054,
-     "min_ms": 0.05081599950790405,
-     "max_ms": 0.11680000275373459,
-     "stddev_ms": 0.01227552237876792,
+     "median_ms": 0.042608000338077545,
+     "p50_ms": 0.042608000338077545,
+     "p95_ms": 0.05177599936723709,
+     "min_ms": 0.040991999208927155,
+     "max_ms": 0.13600000739097595,
+     "stddev_ms": 0.0054285835647351465,
      "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.028058879375457764,
+     "batched_median_ms": 0.015926079750061037,
      "batched_output_exact": true
     },
     "F5B_EAGER_KARATSUBA3": {
-     "median_ms": 1.0051040053367615,
-     "p50_ms": 1.0051040053367615,
-     "p95_ms": 1.1170239448547363,
-     "min_ms": 0.9549760222434998,
-     "max_ms": 1.1737600564956665,
-     "stddev_ms": 0.04800951432246248,
-     "iterations": 200,
+     "median_ms": 0.684576004743576,
+     "p50_ms": 0.684576004743576,
+     "p95_ms": 0.749567985534668,
+     "min_ms": 0.596671998500824,
+     "max_ms": 0.8405439853668213,
+     "stddev_ms": 0.03944935163017944,
+     "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.95683837890625,
+     "batched_median_ms": 0.6202336120605468,
      "batched_output_exact": true
     },
     "STAGE_A_CUDA_GRAPH_K3": {
-     "error": "RuntimeError: graph capture failed: AcceleratorError: CUDA error: operation failed due to a previous error during capture\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\nFor debugging consider"
-    },
-    "STAGE_B_5LAUNCH_K3": {
-     "median_ms": 0.16860799491405487,
-     "p50_ms": 0.16860799491405487,
-     "p95_ms": 0.22217600047588348,
-     "min_ms": 0.1621759980916977,
-     "max_ms": 0.25990399718284607,
-     "stddev_ms": 0.019874003706596078,
+     "median_ms": 0.06207999959588051,
+     "p50_ms": 0.06207999959588051,
+     "p95_ms": 0.0682239979505539,
+     "min_ms": 0.06102399900555611,
+     "max_ms": 0.09881599992513657,
+     "stddev_ms": 0.0030869113204200333,
      "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.15172703742980956,
+     "batched_median_ms": 0.04301568031311035,
+     "batched_output_exact": true
+    },
+    "STAGE_B_5LAUNCH_K3": {
+     "median_ms": 0.12479999661445618,
+     "p50_ms": 0.12479999661445618,
+     "p95_ms": 0.13424000144004822,
+     "min_ms": 0.12291199713945389,
+     "max_ms": 0.22761599719524384,
+     "stddev_ms": 0.007245544531499756,
+     "iterations": 500,
+     "warmup": 50,
+     "batched_median_ms": 0.09606847763061524,
      "batched_output_exact": true
     },
     "STAGE_C_TRUE_FUSED_MMA": {
-     "median_ms": 0.05363199859857559,
-     "p50_ms": 0.05363199859857559,
-     "p95_ms": 0.0854400023818016,
-     "min_ms": 0.05215999856591225,
-     "max_ms": 0.13583999872207642,
-     "stddev_ms": 0.011958692520828386,
+     "median_ms": 0.04662400111556053,
+     "p50_ms": 0.04662400111556053,
+     "p95_ms": 0.057631999254226685,
+     "min_ms": 0.04303999990224838,
+     "max_ms": 0.13174399733543396,
+     "stddev_ms": 0.005715980892470443,
      "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.02742624044418335,
+     "batched_median_ms": 0.019636160135269164,
      "batched_output_exact": true
     },
-    "native_fastest_median_ms": 0.05252800136804581
+    "native_fastest_median_ms": 0.042608000338077545
    },
    "16x1024x128": {
     "M": 16,
@@ -496,69 +660,78 @@
     "logical_mac": 2097152,
     "mac_fraction": 0.13278008298755187,
     "NATIVE_PADDED_INT8": {
-     "median_ms": 0.16606400161981583,
-     "p50_ms": 0.16606400161981583,
-     "p95_ms": 0.23017600178718567,
-     "min_ms": 0.16204799711704254,
-     "max_ms": 0.32444798946380615,
-     "stddev_ms": 0.02220972924886985,
+     "median_ms": 0.12460800260305405,
+     "p50_ms": 0.12460800260305405,
+     "p95_ms": 0.1343040019273758,
+     "min_ms": 0.1225920021533966,
+     "max_ms": 0.23004800081253052,
+     "stddev_ms": 0.005847806937716384,
      "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.1337235164642334,
+     "batched_median_ms": 0.09300000190734864,
      "batched_output_exact": true
     },
     "CUSTOM_NATIVE_INT8_M16": {
-     "median_ms": 0.05196800082921982,
-     "p50_ms": 0.05196800082921982,
-     "p95_ms": 0.06143999844789505,
-     "min_ms": 0.050912000238895416,
-     "max_ms": 0.150176003575325,
-     "stddev_ms": 0.006366209028214413,
+     "median_ms": 0.04467200115323067,
+     "p50_ms": 0.04467200115323067,
+     "p95_ms": 0.052639998495578766,
+     "min_ms": 0.04102399945259094,
+     "max_ms": 0.06415999680757523,
+     "stddev_ms": 0.0031465457198825123,
      "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.026038401126861573,
+     "batched_median_ms": 0.017511039972305298,
      "batched_output_exact": true
     },
     "F5B_EAGER_KARATSUBA3": {
-     "median_ms": 1.0169599652290344,
-     "p50_ms": 1.0169599652290344,
-     "p95_ms": 1.1319999694824219,
-     "min_ms": 0.9667840003967285,
-     "max_ms": 1.3424639701843262,
-     "stddev_ms": 0.048744774128190005,
+     "median_ms": 0.6087679862976074,
+     "p50_ms": 0.6087679862976074,
+     "p95_ms": 0.634880006313324,
+     "min_ms": 0.5957440137863159,
+     "max_ms": 0.7214080095291138,
+     "stddev_ms": 0.01480350295305777,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 1.0544255828857423,
+     "batched_median_ms": 0.5780112075805665,
      "batched_output_exact": true
     },
     "STAGE_A_CUDA_GRAPH_K3": {
-     "error": "RuntimeError: graph capture failed: AssertionError: A1 digit range violated"
+     "median_ms": 0.09446399658918381,
+     "p50_ms": 0.09446399658918381,
+     "p95_ms": 0.09971199929714203,
+     "min_ms": 0.09356799721717834,
+     "max_ms": 0.10918399691581726,
+     "stddev_ms": 0.0019065710397939905,
+     "iterations": 200,
+     "warmup": 50,
+     "batched_median_ms": 0.07618720054626466,
+     "batched_output_exact": true
     },
     "STAGE_B_5LAUNCH_K3": {
-     "median_ms": 0.168783999979496,
-     "p50_ms": 0.168783999979496,
-     "p95_ms": 0.22368000447750092,
-     "min_ms": 0.16448000073432922,
-     "max_ms": 0.266431987285614,
-     "stddev_ms": 0.019436396852671824,
-     "iterations": 500,
+     "median_ms": 0.1258240044116974,
+     "p50_ms": 0.1258240044116974,
+     "p95_ms": 0.13494400680065155,
+     "min_ms": 0.12422399967908859,
+     "max_ms": 0.13993600010871887,
+     "stddev_ms": 0.003079163239744666,
+     "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.14464608192443848,
+     "batched_median_ms": 0.09756735801696777,
      "batched_output_exact": true
     },
     "STAGE_C_TRUE_FUSED_MMA": {
-     "median_ms": 0.05286400020122528,
-     "p50_ms": 0.05286400020122528,
-     "p95_ms": 0.08364800363779068,
-     "min_ms": 0.05164799839258194,
-     "max_ms": 0.10953599959611893,
-     "stddev_ms": 0.009117313520808567,
+     "median_ms": 0.04713600128889084,
+     "p50_ms": 0.04713600128889084,
+     "p95_ms": 0.05987200140953064,
+     "min_ms": 0.043455999344587326,
+     "max_ms": 0.08390399813652039,
+     "stddev_ms": 0.005475332109517101,
      "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 0.027627520561218262,
+     "batched_median_ms": 0.01830847978591919,
      "batched_output_exact": true
     },
-    "native_fastest_median_ms": 0.05196800082921982
+    "native_fastest_median_ms": 0.04467200115323067
    },
    "16x3072x1024": {
     "M": 16,
@@ -569,69 +742,78 @@
     "logical_mac": 50331648,
     "mac_fraction": 0.3983402489626556,
     "NATIVE_PADDED_INT8": {
-     "median_ms": 0.2824160009622574,
-     "p50_ms": 0.2824160009622574,
-     "p95_ms": 0.30851200222969055,
-     "min_ms": 0.2764799892902374,
-     "max_ms": 0.34784001111984253,
-     "stddev_ms": 0.011584440250089735,
-     "iterations": 500,
+     "median_ms": 0.27084800601005554,
+     "p50_ms": 0.27084800601005554,
+     "p95_ms": 0.3002240061759949,
+     "min_ms": 0.2616960108280182,
+     "max_ms": 0.32281601428985596,
+     "stddev_ms": 0.012587412608823727,
+     "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.18668447494506835,
+     "batched_median_ms": 0.20115327835083008,
      "batched_output_exact": true
     },
     "CUSTOM_NATIVE_INT8_M16": {
-     "median_ms": 0.07011199742555618,
-     "p50_ms": 0.07011199742555618,
-     "p95_ms": 0.07542400062084198,
-     "min_ms": 0.06918399780988693,
-     "max_ms": 0.16275200247764587,
-     "stddev_ms": 0.004603579582957251,
-     "iterations": 500,
+     "median_ms": 0.06612799689173698,
+     "p50_ms": 0.06612799689173698,
+     "p95_ms": 0.06976000219583511,
+     "min_ms": 0.0652799978852272,
+     "max_ms": 0.07603199779987335,
+     "stddev_ms": 0.0017141954930905041,
+     "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.03773407936096192,
+     "batched_median_ms": 0.04357439994812012,
      "batched_output_exact": true
     },
     "F5B_EAGER_KARATSUBA3": {
-     "median_ms": 1.1512640118598938,
-     "p50_ms": 1.1512640118598938,
-     "p95_ms": 1.2208640575408936,
-     "min_ms": 1.1291840076446533,
-     "max_ms": 1.3265279531478882,
-     "stddev_ms": 0.030530268731316874,
+     "median_ms": 0.9241119921207428,
+     "p50_ms": 0.9241119921207428,
+     "p95_ms": 0.9375680088996887,
+     "min_ms": 0.9151039719581604,
+     "max_ms": 0.950111985206604,
+     "stddev_ms": 0.006392739283419696,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 1.0098617553710938,
+     "batched_median_ms": 0.8391334533691406,
      "batched_output_exact": true
     },
     "STAGE_A_CUDA_GRAPH_K3": {
-     "error": "RuntimeError: graph capture failed: AssertionError: A1 digit range violated"
-    },
-    "STAGE_B_5LAUNCH_K3": {
-     "median_ms": 0.2531520128250122,
-     "p50_ms": 0.2531520128250122,
-     "p95_ms": 0.2762239873409271,
-     "min_ms": 0.249439999461174,
-     "max_ms": 0.29151999950408936,
-     "stddev_ms": 0.008638065219377523,
+     "median_ms": 0.552047997713089,
+     "p50_ms": 0.552047997713089,
+     "p95_ms": 0.555072009563446,
+     "min_ms": 0.5483199954032898,
+     "max_ms": 0.6134080290794373,
+     "stddev_ms": 0.004742220197401061,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.18108928680419922,
+     "batched_median_ms": 0.5319334411621094,
+     "batched_output_exact": true
+    },
+    "STAGE_B_5LAUNCH_K3": {
+     "median_ms": 0.23907199501991272,
+     "p50_ms": 0.23907199501991272,
+     "p95_ms": 0.24588799476623535,
+     "min_ms": 0.23788799345493317,
+     "max_ms": 0.28672000765800476,
+     "stddev_ms": 0.0039300114212675605,
+     "iterations": 200,
+     "warmup": 50,
+     "batched_median_ms": 0.1808415985107422,
      "batched_output_exact": true
     },
     "STAGE_C_TRUE_FUSED_MMA": {
-     "median_ms": 0.10496000200510025,
-     "p50_ms": 0.10496000200510025,
-     "p95_ms": 0.1181119978427887,
-     "min_ms": 0.10147199779748917,
-     "max_ms": 0.12566399574279785,
-     "stddev_ms": 0.005038221577703978,
+     "median_ms": 0.09539200365543365,
+     "p50_ms": 0.09539200365543365,
+     "p95_ms": 0.10268799960613251,
+     "min_ms": 0.09270399808883667,
+     "max_ms": 0.10838399827480316,
+     "stddev_ms": 0.002655555134117317,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.06877632141113281,
+     "batched_median_ms": 0.0686736011505127,
      "batched_output_exact": true
     },
-    "native_fastest_median_ms": 0.07011199742555618
+    "native_fastest_median_ms": 0.06612799689173698
    },
    "16x1024x3072": {
     "M": 16,
@@ -642,113 +824,173 @@
     "logical_mac": 50331648,
     "mac_fraction": 0.1991701244813278,
     "NATIVE_PADDED_INT8": {
-     "median_ms": 0.29016000032424927,
-     "p50_ms": 0.29016000032424927,
-     "p95_ms": 0.31884801387786865,
-     "min_ms": 0.27856001257896423,
-     "max_ms": 0.34908801317214966,
-     "stddev_ms": 0.010750524235795582,
+     "median_ms": 0.25201600790023804,
+     "p50_ms": 0.25201600790023804,
+     "p95_ms": 0.26895999908447266,
+     "min_ms": 0.24803200364112854,
+     "max_ms": 0.355648010969162,
+     "stddev_ms": 0.010306231178836651,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.18776992797851563,
+     "batched_median_ms": 0.18711679458618163,
      "batched_output_exact": true
     },
     "CUSTOM_NATIVE_INT8_M16": {
-     "median_ms": 0.10524799674749374,
-     "p50_ms": 0.10524799674749374,
-     "p95_ms": 0.1170239970088005,
-     "min_ms": 0.10416000336408615,
-     "max_ms": 0.13235199451446533,
-     "stddev_ms": 0.004647571300859596,
+     "median_ms": 0.0952640026807785,
+     "p50_ms": 0.0952640026807785,
+     "p95_ms": 0.09699200093746185,
+     "min_ms": 0.09433600306510925,
+     "max_ms": 0.10233599692583084,
+     "stddev_ms": 0.0012536068042274813,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.07286367893218994,
+     "batched_median_ms": 0.07285471916198731,
      "batched_output_exact": true
     },
     "F5B_EAGER_KARATSUBA3": {
-     "median_ms": 1.2133280038833618,
-     "p50_ms": 1.2133280038833618,
-     "p95_ms": 1.4323519468307495,
-     "min_ms": 1.1487360000610352,
-     "max_ms": 1.6917120218276978,
-     "stddev_ms": 0.07487532084751837,
+     "median_ms": 0.9607999920845032,
+     "p50_ms": 0.9607999920845032,
+     "p95_ms": 0.9983999729156494,
+     "min_ms": 0.9299200177192688,
+     "max_ms": 1.2911039590835571,
+     "stddev_ms": 0.02958037355654494,
      "iterations": 500,
      "warmup": 50,
-     "batched_median_ms": 1.0662489318847657,
+     "batched_median_ms": 0.8688249969482422,
      "batched_output_exact": true
     },
     "STAGE_A_CUDA_GRAPH_K3": {
-     "error": "RuntimeError: graph capture failed: AssertionError: A1 digit range violated"
-    },
-    "STAGE_B_5LAUNCH_K3": {
-     "error": "RuntimeError: self.size(1) needs to match mat2.size(0) but got 3072 and 1024"
-    },
-    "STAGE_C_TRUE_FUSED_MMA": {
-     "median_ms": 0.1403840035200119,
-     "p50_ms": 0.1403840035200119,
-     "p95_ms": 0.1462080031633377,
-     "min_ms": 0.13967999815940857,
-     "max_ms": 0.1605760008096695,
-     "stddev_ms": 0.002396763294397489,
+     "median_ms": 0.5761280059814453,
+     "p50_ms": 0.5761280059814453,
+     "p95_ms": 0.582912027835846,
+     "min_ms": 0.5694400072097778,
+     "max_ms": 0.5960320234298706,
+     "stddev_ms": 0.0034331062053453184,
      "iterations": 200,
      "warmup": 50,
-     "batched_median_ms": 0.10759231567382813,
+     "batched_median_ms": 0.5521049499511719,
      "batched_output_exact": true
     },
-    "native_fastest_median_ms": 0.10524799674749374
+    "STAGE_B_5LAUNCH_K3": {
+     "median_ms": 0.3190719932317734,
+     "p50_ms": 0.3190719932317734,
+     "p95_ms": 0.3521600067615509,
+     "min_ms": 0.31561601161956787,
+     "max_ms": 0.3737280070781708,
+     "stddev_ms": 0.010149737538644217,
+     "iterations": 200,
+     "warmup": 50,
+     "batched_median_ms": 0.2588038444519043,
+     "batched_output_exact": true
+    },
+    "STAGE_C_TRUE_FUSED_MMA": {
+     "median_ms": 0.13196800649166107,
+     "p50_ms": 0.13196800649166107,
+     "p95_ms": 0.13945600390434265,
+     "min_ms": 0.13075199723243713,
+     "max_ms": 0.15263999998569489,
+     "stddev_ms": 0.0031894584548214314,
+     "iterations": 200,
+     "warmup": 50,
+     "batched_median_ms": 0.10769311904907226,
+     "batched_output_exact": true
+    },
+    "native_fastest_median_ms": 0.0952640026807785
    }
   },
   "weighted_schedule": {
    "F5B_EAGER_KARATSUBA3": {
-    "wide_total_ms": 83.15412640571594,
-    "native_fastest_total_ms": 4.614624060690403,
-    "ratio": 18.019696796985688,
+    "wide_total_ms": 54.30803120136261,
+    "native_fastest_total_ms": 3.910080023109913,
+    "ratio": 13.889237785514243,
     "major_shape_ratios": [
      {
       "shape": "16x128x1024",
-      "ratio": 16.62390288613618
+      "ratio": 12.912410452575656
      },
      {
       "shape": "16x1024x128",
-      "ratio": 19.568964535907888
+      "ratio": 13.62750650478933
      },
      {
       "shape": "16x3072x1024",
-      "ratio": 16.420356773921437
+      "ratio": 13.974595263087654
      },
      {
       "shape": "16x1024x3072",
-      "ratio": 11.528276464912903
+      "ratio": 10.085656334471494
      }
     ],
     "major_ok": false
    },
    "STAGE_A_CUDA_GRAPH_K3": {
-    "error": "not all shapes measured"
-   },
-   "STAGE_B_5LAUNCH_K3": {
-    "error": "not all shapes measured"
-   },
-   "STAGE_C_TRUE_FUSED_MMA": {
-    "wide_total_ms": 5.1154879331588745,
-    "native_fastest_total_ms": 4.614624060690403,
-    "ratio": 1.10853839140117,
+    "wide_total_ms": 10.915424048900604,
+    "native_fastest_total_ms": 3.910080023109913,
+    "ratio": 2.7916114208370946,
     "major_shape_ratios": [
      {
       "shape": "16x128x1024",
-      "ratio": 1.1877740810098723
+      "ratio": 3.514867485577331
      },
      {
       "shape": "16x1024x128",
-      "ratio": 1.017241366950981
+      "ratio": 2.1146130495734954
      },
      {
       "shape": "16x3072x1024",
-      "ratio": 1.4970334016877087
+      "ratio": 8.348173597589648
      },
      {
       "shape": "16x1024x3072",
-      "ratio": 1.3338401476354451
+      "ratio": 6.0476989184676695
+     }
+    ],
+    "major_ok": true
+   },
+   "STAGE_B_5LAUNCH_K3": {
+    "wide_total_ms": 11.844895765185356,
+    "native_fastest_total_ms": 3.910080023109913,
+    "ratio": 3.0293231072453666,
+    "major_shape_ratios": [
+     {
+      "shape": "16x128x1024",
+      "ratio": 3.1628957358957046
+     },
+     {
+      "shape": "16x1024x128",
+      "ratio": 2.8166189372198702
+     },
+     {
+      "shape": "16x3072x1024",
+      "ratio": 3.6152916503930266
+     },
+     {
+      "shape": "16x1024x3072",
+      "ratio": 3.3493448128665793
+     }
+    ],
+    "major_ok": true
+   },
+   "STAGE_C_TRUE_FUSED_MMA": {
+    "wide_total_ms": 4.3824000507593155,
+    "native_fastest_total_ms": 3.910080023109913,
+    "ratio": 1.120795488802743,
+    "major_shape_ratios": [
+     {
+      "shape": "16x128x1024",
+      "ratio": 1.1383322538389777
+     },
+     {
+      "shape": "16x1024x128",
+      "ratio": 1.055157594736093
+     },
+     {
+      "shape": "16x3072x1024",
+      "ratio": 1.4425358114446887
+     },
+     {
+      "shape": "16x1024x3072",
+      "ratio": 1.3852872310422912
      }
     ],
     "major_ok": true
@@ -762,28 +1004,28 @@
    ],
    "results": {
     "STAGE_A_CUDA_GRAPH_K3": {
-     "exact": false,
-     "weighted_ratio": null,
-     "major_ok": false,
-     "ratio_ok": false,
-     "pass": false
+     "exact": true,
+     "weighted_ratio": 2.7916114208370946,
+     "major_ok": true,
+     "ratio_ok": true,
+     "pass": true
     },
     "STAGE_B_5LAUNCH_K3": {
      "exact": false,
-     "weighted_ratio": null,
-     "major_ok": false,
-     "ratio_ok": false,
-     "pass": false
-    },
-    "STAGE_C_TRUE_FUSED_MMA": {
-     "exact": false,
-     "weighted_ratio": 1.10853839140117,
+     "weighted_ratio": 3.0293231072453666,
      "major_ok": true,
      "ratio_ok": true,
      "pass": false
+    },
+    "STAGE_C_TRUE_FUSED_MMA": {
+     "exact": true,
+     "weighted_ratio": 1.120795488802743,
+     "major_ok": true,
+     "ratio_ok": true,
+     "pass": true
     }
    },
-   "winner": null
+   "winner": "STAGE_A_CUDA_GRAPH_K3"
   },
   "gates": {
    "schedule_ratio_max": 6.0,

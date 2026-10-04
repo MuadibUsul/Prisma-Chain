@@ -134,12 +134,23 @@ class StageB5Launch:
         self.w = w_nk
         self.N, self.K = int(w_nk.shape[0]), int(w_nk.shape[1])
         self.Kpad = max(32, (self.K + 31) // 32 * 32)
+        # torch._int_mm also requires the output-column dim to be a multiple
+        # of 8; zero-pad N there (inert) while real shapes are already 8-aligned.
+        self.N8 = max(8, (self.N + 7) // 8 * 8)
         w0, w1, ws = f5b1_ext.prepack_w10(w_nk)
-        # (Kpad, N) contiguous B operands for torch._int_mm: drop the padded
-        # N rows of the (Npad, Kpad) prepack, then transpose.
-        self.b0 = w0[: self.N, :].t().contiguous()
-        self.b1 = w1[: self.N, :].t().contiguous()
-        self.bs = ws[: self.N, :].t().contiguous()
+        # (Kpad, N8) contiguous B operands: take N rows of the (Npad, Kpad)
+        # prepack, zero-pad N to the _int_mm minimum, then transpose.
+        def b_of(t: torch.Tensor) -> torch.Tensor:
+            rows = t[: self.N, :]                      # (N, Kpad)
+            if self.N8 != self.N:
+                pad = torch.zeros((self.N8 - self.N, self.Kpad), dtype=t.dtype,
+                                  device=t.device)
+                rows = torch.cat([rows, pad], dim=0)
+            return rows.t().contiguous()               # (Kpad, N8)
+
+        self.b0 = b_of(w0)
+        self.b1 = b_of(w1)
+        self.bs = b_of(ws)
         dev = "cuda"
         self.a_pad = torch.zeros((16, self.Kpad), dtype=torch.int16, device=dev)
         self.A0 = torch.zeros((32, self.Kpad), dtype=torch.int8, device=dev)
@@ -155,8 +166,8 @@ class StageB5Launch:
         c00 = torch._int_mm(self.A0, self.b0)
         c11 = torch._int_mm(self.A1, self.b1)
         cs = torch._int_mm(self.AS, self.bs)
-        out = self.ext.merge_k3(c00, c11, cs)
-        return out[:m] if m < 16 else out
+        out = self.ext.merge_k3(c00, c11, cs)   # (16, N8)
+        return out[:m, : self.N]
 
 
 class StageCFusedMMA:
