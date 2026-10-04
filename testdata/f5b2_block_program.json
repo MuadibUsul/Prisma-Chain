@@ -1,0 +1,9478 @@
+{
+ "graph_id": "cdad39513b76ab3dac07aed9014bcd6bd794af7f54cee5a17da0d3a62547bfb0",
+ "case_index": 0,
+ "policy_id": "eb9a9fef403c95cd0ab876893acf14e02928245306f1d1cc6e12f4d99c5eb7a0",
+ "input_x_shape": [
+  16,
+  1024
+ ],
+ "note": "research node program derived from the frozen F.5A executor by pure capture insertions; node ids are the converted real-block graph's (positional operator-sequence identity, F.5B GEMM-dump precedent)",
+ "consts": [
+  {
+   "id": 0,
+   "shape": [
+    16,
+    1024
+   ]
+  },
+  {
+   "id": 1,
+   "shape": [
+    1024
+   ]
+  },
+  {
+   "id": 2,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 3,
+   "shape": [
+    128
+   ]
+  },
+  {
+   "id": 4,
+   "shape": [
+    2048
+   ]
+  },
+  {
+   "id": 5,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 6,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 7,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 8,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 9,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 10,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 11,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 12,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 13,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 14,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 15,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 16,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 17,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 18,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 19,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 20,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 21,
+   "shape": [
+    128
+   ]
+  },
+  {
+   "id": 22,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 23,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 24,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 25,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 26,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 27,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 28,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 29,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 30,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 31,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 32,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 33,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 34,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 35,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 36,
+   "shape": [
+    1024,
+    128
+   ]
+  },
+  {
+   "id": 37,
+   "shape": [
+    16,
+    16
+   ]
+  },
+  {
+   "id": 38,
+   "shape": [
+    128,
+    1024
+   ]
+  },
+  {
+   "id": 39,
+   "shape": [
+    128,
+    1024
+   ]
+  },
+  {
+   "id": 40,
+   "shape": [
+    128,
+    1024
+   ]
+  },
+  {
+   "id": 41,
+   "shape": [
+    128,
+    1024
+   ]
+  },
+  {
+   "id": 42,
+   "shape": [
+    128,
+    1024
+   ]
+  },
+  {
+   "id": 43,
+   "shape": [
+    128,
+    1024
+   ]
+  },
+  {
+   "id": 44,
+   "shape": [
+    128,
+    1024
+   ]
+  },
+  {
+   "id": 45,
+   "shape": [
+    128,
+    1024
+   ]
+  },
+  {
+   "id": 46,
+   "shape": [
+    128,
+    1024
+   ]
+  },
+  {
+   "id": 47,
+   "shape": [
+    128,
+    1024
+   ]
+  },
+  {
+   "id": 48,
+   "shape": [
+    128,
+    1024
+   ]
+  },
+  {
+   "id": 49,
+   "shape": [
+    128,
+    1024
+   ]
+  },
+  {
+   "id": 50,
+   "shape": [
+    128,
+    1024
+   ]
+  },
+  {
+   "id": 51,
+   "shape": [
+    128,
+    1024
+   ]
+  },
+  {
+   "id": 52,
+   "shape": [
+    128,
+    1024
+   ]
+  },
+  {
+   "id": 53,
+   "shape": [
+    128,
+    1024
+   ]
+  },
+  {
+   "id": 54,
+   "shape": [
+    1024
+   ]
+  },
+  {
+   "id": 55,
+   "shape": [
+    1024,
+    3072
+   ]
+  },
+  {
+   "id": 56,
+   "shape": [
+    1024,
+    3072
+   ]
+  },
+  {
+   "id": 57,
+   "shape": [
+    3072,
+    1024
+   ]
+  }
+ ],
+ "nodes": [
+  {
+   "seq": 0,
+   "node_id": 0,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "const",
+     "index": 0
+    },
+    {
+     "kind": "const",
+     "index": 1
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 1,
+   "node_id": 1,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 1185146,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 0
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 2,
+   "node_id": 2,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 2
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 3,
+   "node_id": 3,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 675876,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 2
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 4,
+   "node_id": 4,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 3
+    },
+    {
+     "kind": "const",
+     "index": 3
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 5,
+   "node_id": 5,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 4
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 6,
+   "node_id": 6,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 216742,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 5
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 7,
+   "node_id": 7,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 5
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 8,
+   "node_id": 8,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 455718,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 7
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 9,
+   "node_id": 9,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 8
+    },
+    {
+     "kind": "const",
+     "index": 3
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 10,
+   "node_id": 10,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 9
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 11,
+   "node_id": 11,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 143760,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 10
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 12,
+   "node_id": 12,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 6
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 13,
+   "node_id": 13,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 661380,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 12
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 14,
+   "node_id": 14,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 13
+    },
+    {
+     "kind": "const",
+     "index": 3
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 15,
+   "node_id": 15,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 14
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 16,
+   "node_id": 16,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 146867,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 15
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 17,
+   "node_id": 17,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 7
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 18,
+   "node_id": 18,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 283578,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 17
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 19,
+   "node_id": 19,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 18
+    },
+    {
+     "kind": "const",
+     "index": 3
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 20,
+   "node_id": 20,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 19
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 21,
+   "node_id": 21,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 296532,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 20
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 22,
+   "node_id": 22,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 8
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 23,
+   "node_id": 23,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 472932,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 22
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 24,
+   "node_id": 24,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 23
+    },
+    {
+     "kind": "const",
+     "index": 3
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 25,
+   "node_id": 25,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 24
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 26,
+   "node_id": 26,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 139429,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 25
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 27,
+   "node_id": 27,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 9
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 28,
+   "node_id": 28,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 395922,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 27
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 29,
+   "node_id": 29,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 28
+    },
+    {
+     "kind": "const",
+     "index": 3
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 30,
+   "node_id": 30,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 29
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 31,
+   "node_id": 31,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 156022,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 30
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 32,
+   "node_id": 32,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 10
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 33,
+   "node_id": 33,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 1082670,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 32
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 34,
+   "node_id": 34,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 33
+    },
+    {
+     "kind": "const",
+     "index": 3
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 35,
+   "node_id": 35,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 34
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 36,
+   "node_id": 36,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 377149,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 35
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 37,
+   "node_id": 37,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 11
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 38,
+   "node_id": 38,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 350622,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 37
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 39,
+   "node_id": 39,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 38
+    },
+    {
+     "kind": "const",
+     "index": 3
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 40,
+   "node_id": 40,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 39
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 41,
+   "node_id": 41,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 162960,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 40
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 42,
+   "node_id": 42,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 12
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 43,
+   "node_id": 43,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 1227630,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 42
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 44,
+   "node_id": 44,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 43
+    },
+    {
+     "kind": "const",
+     "index": 3
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 45,
+   "node_id": 45,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 44
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 46,
+   "node_id": 46,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 373735,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 45
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 47,
+   "node_id": 47,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 13
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 48,
+   "node_id": 48,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 541788,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 47
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 49,
+   "node_id": 49,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 48
+    },
+    {
+     "kind": "const",
+     "index": 3
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 50,
+   "node_id": 50,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 49
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 51,
+   "node_id": 51,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 146666,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 50
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 52,
+   "node_id": 52,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 14
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 53,
+   "node_id": 53,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 534540,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 52
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 54,
+   "node_id": 54,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 53
+    },
+    {
+     "kind": "const",
+     "index": 3
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 55,
+   "node_id": 55,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 54
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 56,
+   "node_id": 56,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 157049,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 55
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 57,
+   "node_id": 57,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 15
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 58,
+   "node_id": 58,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 650508,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 57
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 59,
+   "node_id": 59,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 58
+    },
+    {
+     "kind": "const",
+     "index": 3
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 60,
+   "node_id": 60,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 59
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 61,
+   "node_id": 61,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 329066,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 60
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 62,
+   "node_id": 62,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 16
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 63,
+   "node_id": 63,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 570780,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 62
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 64,
+   "node_id": 64,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 63
+    },
+    {
+     "kind": "const",
+     "index": 3
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 65,
+   "node_id": 65,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 64
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 66,
+   "node_id": 66,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 134218,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 65
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 67,
+   "node_id": 67,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 17
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 68,
+   "node_id": 68,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 394110,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 67
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 69,
+   "node_id": 69,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 68
+    },
+    {
+     "kind": "const",
+     "index": 3
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 70,
+   "node_id": 70,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 69
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 71,
+   "node_id": 71,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 161586,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 70
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 72,
+   "node_id": 72,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 18
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 73,
+   "node_id": 73,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 412230,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 72
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 74,
+   "node_id": 74,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 73
+    },
+    {
+     "kind": "const",
+     "index": 3
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 75,
+   "node_id": 75,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 74
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 76,
+   "node_id": 76,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 134453,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 75
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 77,
+   "node_id": 77,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 19
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 78,
+   "node_id": 78,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 719364,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 77
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 79,
+   "node_id": 79,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 78
+    },
+    {
+     "kind": "const",
+     "index": 3
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 80,
+   "node_id": 80,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 79
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 81,
+   "node_id": 81,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 134605,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 80
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 82,
+   "node_id": 82,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 20
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 83,
+   "node_id": 83,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 639636,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 82
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 84,
+   "node_id": 84,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 83
+    },
+    {
+     "kind": "const",
+     "index": 21
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 85,
+   "node_id": 85,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 84
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 86,
+   "node_id": 86,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 15664,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 85
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 87,
+   "node_id": 87,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 22
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 88,
+   "node_id": 88,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 438,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 87
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 89,
+   "node_id": 89,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 23
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 90,
+   "node_id": 90,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 453906,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 89
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 91,
+   "node_id": 91,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 90
+    },
+    {
+     "kind": "const",
+     "index": 21
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 92,
+   "node_id": 92,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 91
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 93,
+   "node_id": 93,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 61841,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 92
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 94,
+   "node_id": 94,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 24
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 95,
+   "node_id": 95,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 346,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 94
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 96,
+   "node_id": 96,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 25
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 97,
+   "node_id": 97,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 701244,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 96
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 98,
+   "node_id": 98,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 97
+    },
+    {
+     "kind": "const",
+     "index": 21
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 99,
+   "node_id": 99,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 98
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 100,
+   "node_id": 100,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 11154,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 99
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 101,
+   "node_id": 101,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 26
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 102,
+   "node_id": 102,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 395,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 101
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 103,
+   "node_id": 103,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 27
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 104,
+   "node_id": 104,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 381426,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 103
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 105,
+   "node_id": 105,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 104
+    },
+    {
+     "kind": "const",
+     "index": 21
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 106,
+   "node_id": 106,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 105
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 107,
+   "node_id": 107,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 9309,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 106
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 108,
+   "node_id": 108,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 28
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 109,
+   "node_id": 109,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 460,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 108
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 110,
+   "node_id": 110,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 29
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 111,
+   "node_id": 111,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 610644,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 110
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 112,
+   "node_id": 112,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 111
+    },
+    {
+     "kind": "const",
+     "index": 21
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 113,
+   "node_id": 113,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 112
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 114,
+   "node_id": 114,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 17220,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 113
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 115,
+   "node_id": 115,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 30
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 116,
+   "node_id": 116,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 350,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 115
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 117,
+   "node_id": 117,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 31
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 118,
+   "node_id": 118,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 494676,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 117
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 119,
+   "node_id": 119,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 118
+    },
+    {
+     "kind": "const",
+     "index": 21
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 120,
+   "node_id": 120,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 119
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 121,
+   "node_id": 121,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 15702,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 120
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 122,
+   "node_id": 122,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 32
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 123,
+   "node_id": 123,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 497,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 122
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 124,
+   "node_id": 124,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 33
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 125,
+   "node_id": 125,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 719364,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 124
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 126,
+   "node_id": 126,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 125
+    },
+    {
+     "kind": "const",
+     "index": 21
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 127,
+   "node_id": 127,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 126
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 128,
+   "node_id": 128,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 11083,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 127
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 129,
+   "node_id": 129,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 34
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 130,
+   "node_id": 130,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 395,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 129
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 131,
+   "node_id": 131,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 35
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 132,
+   "node_id": 132,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 813588,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 131
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 133,
+   "node_id": 133,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 132
+    },
+    {
+     "kind": "const",
+     "index": 21
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 134,
+   "node_id": 134,
+   "op": "ROPE",
+   "params": {
+    "half_dim": 64,
+    "max_pos": 16
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 133
+    },
+    {
+     "kind": "const",
+     "index": 4
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 135,
+   "node_id": 135,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 13031,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 134
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 136,
+   "node_id": 136,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 1
+    },
+    {
+     "kind": "const",
+     "index": 36
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 137,
+   "node_id": 137,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 395,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 136
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 138,
+   "node_id": 138,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 6
+    },
+    {
+     "kind": "node",
+     "index": 86
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 139,
+   "node_id": 139,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 30015224,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 138
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 140,
+   "node_id": 140,
+   "op": "ADD",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 139
+    },
+    {
+     "kind": "const",
+     "index": 37
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 141,
+   "node_id": 141,
+   "op": "SOFTMAX",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 140
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 142,
+   "node_id": 142,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 4098251,
+    "shift": 30,
+    "lo": 0,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 141
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 143,
+   "node_id": 143,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 142
+    },
+    {
+     "kind": "node",
+     "index": 88
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 144,
+   "node_id": 144,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 269,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 143
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 145,
+   "node_id": 145,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 144
+    },
+    {
+     "kind": "const",
+     "index": 38
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 146,
+   "node_id": 146,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 181492,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 145
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 147,
+   "node_id": 147,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 11
+    },
+    {
+     "kind": "node",
+     "index": 86
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 148,
+   "node_id": 148,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 45253070,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 147
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 149,
+   "node_id": 149,
+   "op": "ADD",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 148
+    },
+    {
+     "kind": "const",
+     "index": 37
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 150,
+   "node_id": 150,
+   "op": "SOFTMAX",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 149
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 151,
+   "node_id": 151,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 4098251,
+    "shift": 30,
+    "lo": 0,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 150
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 152,
+   "node_id": 152,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 151
+    },
+    {
+     "kind": "node",
+     "index": 88
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 153,
+   "node_id": 153,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 269,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 152
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 154,
+   "node_id": 154,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 153
+    },
+    {
+     "kind": "const",
+     "index": 39
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 155,
+   "node_id": 155,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 268156,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 154
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 156,
+   "node_id": 156,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 16
+    },
+    {
+     "kind": "node",
+     "index": 93
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 157,
+   "node_id": 157,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 11219987,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 156
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 158,
+   "node_id": 158,
+   "op": "ADD",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 157
+    },
+    {
+     "kind": "const",
+     "index": 37
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 159,
+   "node_id": 159,
+   "op": "SOFTMAX",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 158
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 160,
+   "node_id": 160,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 4098251,
+    "shift": 30,
+    "lo": 0,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 159
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 161,
+   "node_id": 161,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 160
+    },
+    {
+     "kind": "node",
+     "index": 95
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 162,
+   "node_id": 162,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 269,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 161
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 163,
+   "node_id": 163,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 162
+    },
+    {
+     "kind": "const",
+     "index": 40
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 164,
+   "node_id": 164,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 180236,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 163
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 165,
+   "node_id": 165,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 21
+    },
+    {
+     "kind": "node",
+     "index": 93
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 166,
+   "node_id": 166,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 5557047,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 165
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 167,
+   "node_id": 167,
+   "op": "ADD",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 166
+    },
+    {
+     "kind": "const",
+     "index": 37
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 168,
+   "node_id": 168,
+   "op": "SOFTMAX",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 167
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 169,
+   "node_id": 169,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 4098251,
+    "shift": 30,
+    "lo": 0,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 168
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 170,
+   "node_id": 170,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 169
+    },
+    {
+     "kind": "node",
+     "index": 95
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 171,
+   "node_id": 171,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 269,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 170
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 172,
+   "node_id": 172,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 171
+    },
+    {
+     "kind": "const",
+     "index": 41
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 173,
+   "node_id": 173,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 325304,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 172
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 174,
+   "node_id": 174,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 26
+    },
+    {
+     "kind": "node",
+     "index": 100
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 175,
+   "node_id": 175,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 65525576,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 174
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 176,
+   "node_id": 176,
+   "op": "ADD",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 175
+    },
+    {
+     "kind": "const",
+     "index": 37
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 177,
+   "node_id": 177,
+   "op": "SOFTMAX",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 176
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 178,
+   "node_id": 178,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 4098251,
+    "shift": 30,
+    "lo": 0,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 177
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 179,
+   "node_id": 179,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 178
+    },
+    {
+     "kind": "node",
+     "index": 102
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 180,
+   "node_id": 180,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 269,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 179
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 181,
+   "node_id": 181,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 180
+    },
+    {
+     "kind": "const",
+     "index": 42
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 182,
+   "node_id": 182,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 222940,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 181
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 183,
+   "node_id": 183,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 31
+    },
+    {
+     "kind": "node",
+     "index": 100
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 184,
+   "node_id": 184,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 58556943,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 183
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 185,
+   "node_id": 185,
+   "op": "ADD",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 184
+    },
+    {
+     "kind": "const",
+     "index": 37
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 186,
+   "node_id": 186,
+   "op": "SOFTMAX",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 185
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 187,
+   "node_id": 187,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 4098251,
+    "shift": 30,
+    "lo": 0,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 186
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 188,
+   "node_id": 188,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 187
+    },
+    {
+     "kind": "node",
+     "index": 102
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 189,
+   "node_id": 189,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 269,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 188
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 190,
+   "node_id": 190,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 189
+    },
+    {
+     "kind": "const",
+     "index": 43
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 191,
+   "node_id": 191,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 269412,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 190
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 192,
+   "node_id": 192,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 36
+    },
+    {
+     "kind": "node",
+     "index": 107
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 193,
+   "node_id": 193,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 29025825,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 192
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 194,
+   "node_id": 194,
+   "op": "ADD",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 193
+    },
+    {
+     "kind": "const",
+     "index": 37
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 195,
+   "node_id": 195,
+   "op": "SOFTMAX",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 194
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 196,
+   "node_id": 196,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 4098251,
+    "shift": 30,
+    "lo": 0,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 195
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 197,
+   "node_id": 197,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 196
+    },
+    {
+     "kind": "node",
+     "index": 109
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 198,
+   "node_id": 198,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 269,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 197
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 199,
+   "node_id": 199,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 198
+    },
+    {
+     "kind": "const",
+     "index": 44
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 200,
+   "node_id": 200,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 248060,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 199
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 201,
+   "node_id": 201,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 41
+    },
+    {
+     "kind": "node",
+     "index": 107
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 202,
+   "node_id": 202,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 67176382,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 201
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 203,
+   "node_id": 203,
+   "op": "ADD",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 202
+    },
+    {
+     "kind": "const",
+     "index": 37
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 204,
+   "node_id": 204,
+   "op": "SOFTMAX",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 203
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 205,
+   "node_id": 205,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 4098251,
+    "shift": 30,
+    "lo": 0,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 204
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 206,
+   "node_id": 206,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 205
+    },
+    {
+     "kind": "node",
+     "index": 109
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 207,
+   "node_id": 207,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 269,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 206
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 208,
+   "node_id": 208,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 207
+    },
+    {
+     "kind": "const",
+     "index": 45
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 209,
+   "node_id": 209,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 561432,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 208
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 210,
+   "node_id": 210,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 46
+    },
+    {
+     "kind": "node",
+     "index": 114
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 211,
+   "node_id": 211,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 15834004,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 210
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 212,
+   "node_id": 212,
+   "op": "ADD",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 211
+    },
+    {
+     "kind": "const",
+     "index": 37
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 213,
+   "node_id": 213,
+   "op": "SOFTMAX",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 212
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 214,
+   "node_id": 214,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 4098251,
+    "shift": 30,
+    "lo": 0,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 213
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 215,
+   "node_id": 215,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 214
+    },
+    {
+     "kind": "node",
+     "index": 116
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 216,
+   "node_id": 216,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 269,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 215
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 217,
+   "node_id": 217,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 216
+    },
+    {
+     "kind": "const",
+     "index": 46
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 218,
+   "node_id": 218,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 259364,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 217
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 219,
+   "node_id": 219,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 51
+    },
+    {
+     "kind": "node",
+     "index": 114
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 220,
+   "node_id": 220,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 40348326,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 219
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 221,
+   "node_id": 221,
+   "op": "ADD",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 220
+    },
+    {
+     "kind": "const",
+     "index": 37
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 222,
+   "node_id": 222,
+   "op": "SOFTMAX",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 221
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 223,
+   "node_id": 223,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 4098251,
+    "shift": 30,
+    "lo": 0,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 222
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 224,
+   "node_id": 224,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 223
+    },
+    {
+     "kind": "node",
+     "index": 116
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 225,
+   "node_id": 225,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 269,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 224
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 226,
+   "node_id": 226,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 225
+    },
+    {
+     "kind": "const",
+     "index": 47
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 227,
+   "node_id": 227,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 244292,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 226
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 228,
+   "node_id": 228,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 56
+    },
+    {
+     "kind": "node",
+     "index": 121
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 229,
+   "node_id": 229,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 41323603,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 228
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 230,
+   "node_id": 230,
+   "op": "ADD",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 229
+    },
+    {
+     "kind": "const",
+     "index": 37
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 231,
+   "node_id": 231,
+   "op": "SOFTMAX",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 230
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 232,
+   "node_id": 232,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 4098251,
+    "shift": 30,
+    "lo": 0,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 231
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 233,
+   "node_id": 233,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 232
+    },
+    {
+     "kind": "node",
+     "index": 123
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 234,
+   "node_id": 234,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 269,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 233
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 235,
+   "node_id": 235,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 234
+    },
+    {
+     "kind": "const",
+     "index": 48
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 236,
+   "node_id": 236,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 271924,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 235
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 237,
+   "node_id": 237,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 61
+    },
+    {
+     "kind": "node",
+     "index": 121
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 238,
+   "node_id": 238,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 19721942,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 237
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 239,
+   "node_id": 239,
+   "op": "ADD",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 238
+    },
+    {
+     "kind": "const",
+     "index": 37
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 240,
+   "node_id": 240,
+   "op": "SOFTMAX",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 239
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 241,
+   "node_id": 241,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 4098251,
+    "shift": 30,
+    "lo": 0,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 240
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 242,
+   "node_id": 242,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 241
+    },
+    {
+     "kind": "node",
+     "index": 123
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 243,
+   "node_id": 243,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 269,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 242
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 244,
+   "node_id": 244,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 243
+    },
+    {
+     "kind": "const",
+     "index": 49
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 245,
+   "node_id": 245,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 335352,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 244
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 246,
+   "node_id": 246,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 66
+    },
+    {
+     "kind": "node",
+     "index": 128
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 247,
+   "node_id": 247,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 68503840,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 246
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 248,
+   "node_id": 248,
+   "op": "ADD",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 247
+    },
+    {
+     "kind": "const",
+     "index": 37
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 249,
+   "node_id": 249,
+   "op": "SOFTMAX",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 248
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 250,
+   "node_id": 250,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 4098251,
+    "shift": 30,
+    "lo": 0,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 249
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 251,
+   "node_id": 251,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 250
+    },
+    {
+     "kind": "node",
+     "index": 130
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 252,
+   "node_id": 252,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 269,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 251
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 253,
+   "node_id": 253,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 252
+    },
+    {
+     "kind": "const",
+     "index": 50
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 254,
+   "node_id": 254,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 340376,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 253
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 255,
+   "node_id": 255,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 71
+    },
+    {
+     "kind": "node",
+     "index": 128
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 256,
+   "node_id": 256,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 56901002,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 255
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 257,
+   "node_id": 257,
+   "op": "ADD",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 256
+    },
+    {
+     "kind": "const",
+     "index": 37
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 258,
+   "node_id": 258,
+   "op": "SOFTMAX",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 257
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 259,
+   "node_id": 259,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 4098251,
+    "shift": 30,
+    "lo": 0,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 258
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 260,
+   "node_id": 260,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 259
+    },
+    {
+     "kind": "node",
+     "index": 130
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 261,
+   "node_id": 261,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 269,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 260
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 262,
+   "node_id": 262,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 261
+    },
+    {
+     "kind": "const",
+     "index": 51
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 263,
+   "node_id": 263,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 330328,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 262
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 264,
+   "node_id": 264,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 76
+    },
+    {
+     "kind": "node",
+     "index": 135
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 265,
+   "node_id": 265,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 58162363,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 264
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 266,
+   "node_id": 266,
+   "op": "ADD",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 265
+    },
+    {
+     "kind": "const",
+     "index": 37
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 267,
+   "node_id": 267,
+   "op": "SOFTMAX",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 266
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 268,
+   "node_id": 268,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 4098251,
+    "shift": 30,
+    "lo": 0,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 267
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 269,
+   "node_id": 269,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 268
+    },
+    {
+     "kind": "node",
+     "index": 137
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 270,
+   "node_id": 270,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 269,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 269
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 271,
+   "node_id": 271,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 270
+    },
+    {
+     "kind": "const",
+     "index": 52
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 272,
+   "node_id": 272,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 290764,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 271
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 273,
+   "node_id": 273,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 81
+    },
+    {
+     "kind": "node",
+     "index": 135
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 274,
+   "node_id": 274,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 58096816,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 273
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 275,
+   "node_id": 275,
+   "op": "ADD",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 274
+    },
+    {
+     "kind": "const",
+     "index": 37
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 276,
+   "node_id": 276,
+   "op": "SOFTMAX",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 275
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 277,
+   "node_id": 277,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 4098251,
+    "shift": 30,
+    "lo": 0,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 276
+    }
+   ],
+   "shape": [
+    16,
+    16
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     16
+    ]
+   }
+  },
+  {
+   "seq": 278,
+   "node_id": 278,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 277
+    },
+    {
+     "kind": "node",
+     "index": 137
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 279,
+   "node_id": 279,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 269,
+    "shift": 20,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 278
+    }
+   ],
+   "shape": [
+    16,
+    128
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     128
+    ]
+   }
+  },
+  {
+   "seq": 280,
+   "node_id": 280,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 279
+    },
+    {
+     "kind": "const",
+     "index": 53
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 281,
+   "node_id": 281,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 255596,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 280
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 282,
+   "node_id": 282,
+   "op": "ADD",
+   "params": {
+    "attn_chain": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 146
+    },
+    {
+     "kind": "node",
+     "index": 155
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 283,
+   "node_id": 283,
+   "op": "ADD",
+   "params": {
+    "attn_chain": 2
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 282
+    },
+    {
+     "kind": "node",
+     "index": 164
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 284,
+   "node_id": 284,
+   "op": "ADD",
+   "params": {
+    "attn_chain": 3
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 283
+    },
+    {
+     "kind": "node",
+     "index": 173
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 285,
+   "node_id": 285,
+   "op": "ADD",
+   "params": {
+    "attn_chain": 4
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 284
+    },
+    {
+     "kind": "node",
+     "index": 182
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 286,
+   "node_id": 286,
+   "op": "ADD",
+   "params": {
+    "attn_chain": 5
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 285
+    },
+    {
+     "kind": "node",
+     "index": 191
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 287,
+   "node_id": 287,
+   "op": "ADD",
+   "params": {
+    "attn_chain": 6
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 286
+    },
+    {
+     "kind": "node",
+     "index": 200
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 288,
+   "node_id": 288,
+   "op": "ADD",
+   "params": {
+    "attn_chain": 7
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 287
+    },
+    {
+     "kind": "node",
+     "index": 209
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 289,
+   "node_id": 289,
+   "op": "ADD",
+   "params": {
+    "attn_chain": 8
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 288
+    },
+    {
+     "kind": "node",
+     "index": 218
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 290,
+   "node_id": 290,
+   "op": "ADD",
+   "params": {
+    "attn_chain": 9
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 289
+    },
+    {
+     "kind": "node",
+     "index": 227
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 291,
+   "node_id": 291,
+   "op": "ADD",
+   "params": {
+    "attn_chain": 10
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 290
+    },
+    {
+     "kind": "node",
+     "index": 236
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 292,
+   "node_id": 292,
+   "op": "ADD",
+   "params": {
+    "attn_chain": 11
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 291
+    },
+    {
+     "kind": "node",
+     "index": 245
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 293,
+   "node_id": 293,
+   "op": "ADD",
+   "params": {
+    "attn_chain": 12
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 292
+    },
+    {
+     "kind": "node",
+     "index": 254
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 294,
+   "node_id": 294,
+   "op": "ADD",
+   "params": {
+    "attn_chain": 13
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 293
+    },
+    {
+     "kind": "node",
+     "index": 263
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 295,
+   "node_id": 295,
+   "op": "ADD",
+   "params": {
+    "attn_chain": 14
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 294
+    },
+    {
+     "kind": "node",
+     "index": 272
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 296,
+   "node_id": 296,
+   "op": "ADD",
+   "params": {
+    "attn_chain": 15
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 295
+    },
+    {
+     "kind": "node",
+     "index": 281
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 297,
+   "node_id": 297,
+   "op": "ADD",
+   "params": {
+    "residual": "x1"
+   },
+   "inputs": [
+    {
+     "kind": "const",
+     "index": 0
+    },
+    {
+     "kind": "node",
+     "index": 296
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 298,
+   "node_id": 298,
+   "op": "RMSNORM",
+   "params": {
+    "eps_fx": 1
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 297
+    },
+    {
+     "kind": "const",
+     "index": 54
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 299,
+   "node_id": 299,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 394323,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 298
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 300,
+   "node_id": 300,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 299
+    },
+    {
+     "kind": "const",
+     "index": 55
+    }
+   ],
+   "shape": [
+    16,
+    3072
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     3072
+    ]
+   }
+  },
+  {
+   "seq": 301,
+   "node_id": 301,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 2205630,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647,
+    "mlp": "gate_req"
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 300
+    }
+   ],
+   "shape": [
+    16,
+    3072
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     3072
+    ]
+   }
+  },
+  {
+   "seq": 302,
+   "node_id": 302,
+   "op": "SILU",
+   "params": {
+    "mlp": "silu"
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 301
+    }
+   ],
+   "shape": [
+    16,
+    3072
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     3072
+    ]
+   }
+  },
+  {
+   "seq": 303,
+   "node_id": 303,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 299
+    },
+    {
+     "kind": "const",
+     "index": 56
+    }
+   ],
+   "shape": [
+    16,
+    3072
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     3072
+    ]
+   }
+  },
+  {
+   "seq": 304,
+   "node_id": 304,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 2107602,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 303
+    }
+   ],
+   "shape": [
+    16,
+    3072
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     3072
+    ]
+   }
+  },
+  {
+   "seq": 305,
+   "node_id": 305,
+   "op": "MUL",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 302
+    },
+    {
+     "kind": "node",
+     "index": 304
+    }
+   ],
+   "shape": [
+    16,
+    3072
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     3072
+    ]
+   }
+  },
+  {
+   "seq": 306,
+   "node_id": 306,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 915381,
+    "shift": 30,
+    "lo": -4095,
+    "hi": 4095
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 305
+    }
+   ],
+   "shape": [
+    16,
+    3072
+   ],
+   "output_desc": {
+    "dtype": 1,
+    "layout": 1,
+    "shape": [
+     16,
+     3072
+    ]
+   }
+  },
+  {
+   "seq": 307,
+   "node_id": 307,
+   "op": "GEMM",
+   "params": {
+    "transpose_b": 0
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 306
+    },
+    {
+     "kind": "const",
+     "index": 57
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 2,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 308,
+   "node_id": 308,
+   "op": "REQUANTIZE",
+   "params": {
+    "mult": 1020510,
+    "shift": 20,
+    "lo": -2147483648,
+    "hi": 2147483647
+   },
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 307
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  },
+  {
+   "seq": 309,
+   "node_id": 309,
+   "op": "ADD",
+   "params": {},
+   "inputs": [
+    {
+     "kind": "node",
+     "index": 297
+    },
+    {
+     "kind": "node",
+     "index": 308
+    }
+   ],
+   "shape": [
+    16,
+    1024
+   ],
+   "output_desc": {
+    "dtype": 3,
+    "layout": 1,
+    "shape": [
+     16,
+     1024
+    ]
+   }
+  }
+ ]
+}

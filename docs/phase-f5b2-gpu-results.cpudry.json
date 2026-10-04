@@ -1,0 +1,38 @@
+{
+ "phase": "F.5B.2",
+ "environment": {
+  "platform": "Windows-10-10.0.22000-SP0",
+  "python": "3.10.6",
+  "torch": "2.14.1+cpu",
+  "cuda_runtime": null,
+  "cuda_available": false,
+  "device": "cpu"
+ },
+ "cuda_probe": {
+  "note": "CPU dry-run; CUDA probes skipped"
+ },
+ "float_audit": {
+  "files": {
+   "gpu/f5b2/f5b2_kernels.cu": {},
+   "gpu/f5b1/f5b1_kernels.cu": {},
+   "gpu/f5b2/f5b2_ext.py": {},
+   "gpu/f5b2/f5b2_block.py": {}
+  },
+  "total_hits": {
+   "float(": 0,
+   "float32": 0,
+   "float64": 0,
+   "half(": 0,
+   "bfloat16": 0,
+   ".to(torch.float": 0,
+   "expf": 0,
+   "sqrtf": 0,
+   "rsqrtf": 0,
+   " sin(": 0,
+   " cos(": 0
+  },
+  "canonical_float_ops": 0,
+  "note": "hits are listed verbatim; the canonical path contains no floating-point arithmetic (integer kernels + int8 tensor-core MMA only)"
+ },
+ "note": "CPU dry-run: structure validation only; kernels NOT TESTED"
+}
