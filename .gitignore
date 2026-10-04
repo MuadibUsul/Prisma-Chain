@@ -22,3 +22,9 @@ Thumbs.db
 .idea/
 .vscode/
 deploy/runpod_gemm/gemmv1.tgz
+
+# Phase E/F runtime artifacts (never commit blobs or logs)
+da-data/
+*.log
+runtime/
+tmp/
