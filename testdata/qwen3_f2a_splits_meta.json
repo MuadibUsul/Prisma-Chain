@@ -1,0 +1,9 @@
+{
+ "generation_seed": 20261004,
+ "seq_len": 16,
+ "tokenizer_file_sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+ "note": "F.2A splits are disjoint from the F.1 calibration/eval sets",
+ "calibration_sha256": "0b05aa3570b97021905c2a85b5ee0224e0d21af553194e22c097c12a70d9da5d",
+ "tuning_sha256": "b86ff01fccab501ef0ba3a88e756a0ae9b396d10576de1e93145042a771cb334",
+ "heldout_sha256": "a99c4be13a368a45d91e14315aa699aef656532ee8aba1839432053de8462d81"
+}

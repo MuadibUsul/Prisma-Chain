@@ -44,7 +44,8 @@ from qwen3_reference import (  # noqa: E402
     _load_all, load_layer_weights, load_qwen3_block_config, qwen_rope_permutation,
 )
 
-MODEL_DIR = REPO / "models" / "qwen3-0.6b-base"
+import os as _os
+MODEL_DIR = Path(_os.environ.get("PRISMA_MODEL_DIR", str(REPO / "models" / "qwen3-0.6b-base")))
 OUT_DIR = REPO / "models" / "qwen3-0.6b-base-canonical" / "layer0"
 TESTDATA = REPO / "testdata"
 
@@ -623,11 +624,13 @@ def main() -> None:
                 "percentile": pct,
                 "mse": mse,
                 "step_real": step_fx / (1 << 20),
-                "calibration_max_abs": maxima[key],
+                "calibration_max_abs": maxima.get(key, float(np.max(vals))),
                 "clipped_fraction": float(np.mean(np.abs(vals) > step_fx / (1 << 20) * 127)),
             }
-            print(f"site {key:4s}: step={step_fx/(1<<20):.6f} pct={pct} mse={mse:.3e} "
-                  f"clip={chosen[key]['clipped_fraction']*100:.3f}% (max {maxima[key]:.2f})")
+            if not key.startswith("chan_"):
+                print(f"site {key:4s}: step={step_fx/(1<<20):.6f} pct={pct} mse={mse:.3e} "
+                      f"clip={chosen[key]['clipped_fraction']*100:.3f}% "
+                      f"(max {chosen[key]['calibration_max_abs']:.2f})")
         scales = {"chosen": chosen, "p": 1.0}
         seq = args.seq
         snake, go, plan, tensor_data, graph_id = build_converted_graph(conf, seq, scales)

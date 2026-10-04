@@ -13,7 +13,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-MODEL_DIR = Path(__file__).resolve().parents[1] / "models" / "qwen3-0.6b-base"
+import os
+MODEL_DIR = Path(os.environ.get("PRISMA_MODEL_DIR",
+                                   str(Path(__file__).resolve().parents[1] / "models" / "qwen3-0.6b-base")))
 TESTDATA = Path(__file__).resolve().parents[1] / "testdata"
 
 SEQ_LEN = 16

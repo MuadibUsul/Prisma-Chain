@@ -26,7 +26,9 @@ from pathlib import Path
 
 import numpy as np
 
-MODEL_DIR = Path(__file__).resolve().parents[1] / "models" / "qwen3-0.6b-base"
+import os
+MODEL_DIR = Path(os.environ.get("PRISMA_MODEL_DIR",
+                                   str(Path(__file__).resolve().parents[1] / "models" / "qwen3-0.6b-base")))
 
 
 def load_qwen3_block_config():

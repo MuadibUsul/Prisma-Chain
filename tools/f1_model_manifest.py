@@ -16,7 +16,7 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-MODEL_DIR = REPO_ROOT / "models" / "qwen3-0.6b-base"
+MODEL_DIR = Path(os.environ.get("PRISMA_MODEL_DIR", str(REPO_ROOT / "models" / "qwen3-0.6b-base")))
 
 REPO_ID = "Qwen/Qwen3-0.6B-Base"
 REVISION = "57ca99e94acb83175495aa2c6b6b0cc498170924"
