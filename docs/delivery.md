@@ -353,3 +353,32 @@ model block was converted and no GPU backend exists, so
 predeclared rule. Protocol relevance ("we verify one canonical quantized
 Transformer block") must not be stated as model verification until item 6
 runs.
+
+## Verifiable Transformer block gate (Phase F.1 real-model closure)
+
+Phase F.1 converts one exact pinned real model block and applies the
+predeclared accuracy gate. The REAL_MODEL_BLOCK item is met only when the
+holdout gate passes AND the block is settled on chain with the manifest
+commitment:
+
+1. Exact pinned checkpoint with a full hash manifest — PASS.
+2. Exact layer identity and weight conversion, q/k norm, GQA and causal
+   mask expressed with existing operators only — PASS.
+3. Manual float reference validated against the official model BEFORE
+   quantization — PASS (cosine 1.00000000, max_abs 1.6e-6).
+4. Predeclared accuracy gate on a held-out evaluation set — FAIL (worst
+   cosine 0.957 vs 0.995, worst max_abs 1.91 vs 0.05); error sources are
+   located in docs/phase-f1-real-model-accuracy.json (k path dominated by
+   the k_norm weight tail; distributed activation quantization;
+   single-static-scale-per-tensor expressivity limit).
+5. GraphResultCommitV2 with the node-output manifest, V2 receipt and
+   chain settlement — PASS at the protocol level (canonical and chain
+   suites green); the real-block devnet run is NOT TESTED.
+
+Status: item 4 fails on the measured numbers, so `REAL_MODEL_BLOCK =
+FAIL` and Phase F remains PARTIAL. Per the Phase F.1 rules the
+predeclared thresholds were NOT adjusted and the frozen canonical
+arithmetic was NOT touched; the unblocking protocol extension
+(per-slice/per-block static steps, or a canonical slice op) is proposed
+in docs/phase-f1-report.md and NOT implemented. GPU_BACKEND, GRAPH_DA
+and the graph-to-GEMM 512-MAC bridge remain NOT TESTED in this branch.
