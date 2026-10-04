@@ -1,5 +1,5 @@
 {
- "backend_used": "TC_RADIX128_KARATSUBA3 (primary), SIMT + DP2A alternatives",
+ "backend_used": "GPU_TC_KARATSUBA3 (primary) + GPU_SCHOOLBOOK4 (independent merge, on-hardware reference)",
  "environment": {
   "platform": "Linux-6.8.0-134-generic-x86_64-with-glibc2.39",
   "python": "3.12.3",
@@ -14,15 +14,26 @@
   "device_index": null,
   "nvidia_smi": "NVIDIA A40, 580.159.04, 8.6"
  },
+ "cuda_probe": {
+  "floor_div_int64_ok": true,
+  "int_mm_m_rows_probe": {
+   "16": "RuntimeError: self.size(0) needs to be greater than 16, but got 16",
+   "17": "ok",
+   "24": "ok",
+   "32": "ok"
+  },
+  "padding_rule": "M -> max(32, align16); K -> max(16, align16); N -> max(16, align16)",
+  "padding_rule_justification": "torch._int_mm on CUDA requires left-operand M > 16 (see probe); zero padding is mathematically inert so exactness is preserved"
+ },
  "float_audit": {
   "file": "gpu/f5b/f5b_gpu_backends.py",
   "hits": {
-   "float(": 2,
+   "float(": 1,
    "float32": 1,
    "half(": 1,
    "bfloat16": 1,
    ".to(torch.float": 1,
-   "_int_mm": 6
+   "_int_mm": 7
   },
   "note": "_int_mm is the sanctioned integer tensor-core GEMM primitive",
   "float_primitives_used_for_canonical": 0
@@ -32,13 +43,17 @@
    {
     "name": "boundary_all_max",
     "backends": {
+     "GPU_TC_KARATSUBA3": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "GPU_SCHOOLBOOK4": {
+      "exact": true,
+      "mismatches": 0
+     },
      "GPU_SIMT_INT64_REFERENCE": {
       "exact": false,
       "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
-     },
-     "GPU_TC_KARATSUBA3": {
-      "exact": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 2"
      },
      "GPU_DP2A_W_SPLIT2": {
       "exact": false,
@@ -49,13 +64,17 @@
    {
     "name": "boundary_all_min",
     "backends": {
+     "GPU_TC_KARATSUBA3": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "GPU_SCHOOLBOOK4": {
+      "exact": true,
+      "mismatches": 0
+     },
      "GPU_SIMT_INT64_REFERENCE": {
       "exact": false,
       "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
-     },
-     "GPU_TC_KARATSUBA3": {
-      "exact": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 2"
      },
      "GPU_DP2A_W_SPLIT2": {
       "exact": false,
@@ -66,13 +85,17 @@
    {
     "name": "small_random",
     "backends": {
+     "GPU_TC_KARATSUBA3": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "GPU_SCHOOLBOOK4": {
+      "exact": true,
+      "mismatches": 0
+     },
      "GPU_SIMT_INT64_REFERENCE": {
       "exact": false,
       "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
-     },
-     "GPU_TC_KARATSUBA3": {
-      "exact": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 3"
      },
      "GPU_DP2A_W_SPLIT2": {
       "exact": false,
@@ -83,13 +106,17 @@
    {
     "name": "transpose_b",
     "backends": {
+     "GPU_TC_KARATSUBA3": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "GPU_SCHOOLBOOK4": {
+      "exact": true,
+      "mismatches": 0
+     },
      "GPU_SIMT_INT64_REFERENCE": {
       "exact": false,
       "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
-     },
-     "GPU_TC_KARATSUBA3": {
-      "exact": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 3"
      },
      "GPU_DP2A_W_SPLIT2": {
       "exact": false,
@@ -100,13 +127,17 @@
    {
     "name": "k1",
     "backends": {
+     "GPU_TC_KARATSUBA3": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "GPU_SCHOOLBOOK4": {
+      "exact": true,
+      "mismatches": 0
+     },
      "GPU_SIMT_INT64_REFERENCE": {
       "exact": false,
       "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
-     },
-     "GPU_TC_KARATSUBA3": {
-      "exact": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 1"
      },
      "GPU_DP2A_W_SPLIT2": {
       "exact": false,
@@ -115,28 +146,77 @@
     }
    }
   ],
+  "summary": {
+   "GPU_TC_KARATSUBA3": {
+    "exact_nodes": 5,
+    "mismatch_nodes": 0,
+    "error_nodes": 0,
+    "executable": true
+   },
+   "GPU_SCHOOLBOOK4": {
+    "exact_nodes": 5,
+    "mismatch_nodes": 0,
+    "error_nodes": 0,
+    "executable": true
+   },
+   "GPU_SIMT_INT64_REFERENCE": {
+    "exact_nodes": 0,
+    "mismatch_nodes": 0,
+    "error_nodes": 5,
+    "executable": false,
+    "first_error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+   },
+   "GPU_DP2A_W_SPLIT2": {
+    "exact_nodes": 0,
+    "mismatch_nodes": 0,
+    "error_nodes": 5,
+    "executable": false,
+    "first_error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+   }
+  },
+  "executable_backends": [
+   "GPU_TC_KARATSUBA3",
+   "GPU_SCHOOLBOOK4"
+  ],
+  "required_cuda_backends_exact": true,
   "all_exact": false,
   "note": "GPU outputs compared elementwise against the CPU int64 oracle"
  },
  "nodes": {
   "summary": {
+   "GPU_TC_KARATSUBA3": {
+    "exact_nodes": 83,
+    "mismatch_nodes": 0,
+    "error_nodes": 0,
+    "executable": true
+   },
+   "GPU_SCHOOLBOOK4": {
+    "exact_nodes": 83,
+    "mismatch_nodes": 0,
+    "error_nodes": 0,
+    "executable": true
+   },
    "GPU_SIMT_INT64_REFERENCE": {
     "exact_nodes": 0,
-    "mismatch_nodes": 83
-   },
-   "GPU_TC_KARATSUBA3": {
-    "exact_nodes": 0,
-    "mismatch_nodes": 83
+    "mismatch_nodes": 0,
+    "error_nodes": 83,
+    "executable": false,
+    "first_error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
    },
    "GPU_DP2A_W_SPLIT2": {
     "exact_nodes": 0,
-    "mismatch_nodes": 83
+    "mismatch_nodes": 0,
+    "error_nodes": 83,
+    "executable": false,
+    "first_error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
    }
   },
   "detail": {
-   "GPU_SIMT_INT64_REFERENCE": {
-    "exact": 0,
-    "mismatch": 83,
+   "GPU_TC_KARATSUBA3": {
+    "exact": 83,
+    "mismatch": 0,
+    "error": 0,
+    "first_error": null,
     "nodes": [
      {
       "node_id": 2,
@@ -144,7 +224,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.6937119960784912
      },
      {
       "node_id": 7,
@@ -152,7 +232,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.6877759993076324
      },
      {
       "node_id": 12,
@@ -160,7 +240,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.6548320055007935
      },
      {
       "node_id": 17,
@@ -168,7 +248,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.6565120220184326
      },
      {
       "node_id": 22,
@@ -176,7 +256,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.6566559970378876
      },
      {
       "node_id": 27,
@@ -184,7 +264,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.6587999761104584
      },
      {
       "node_id": 32,
@@ -192,7 +272,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.6550720036029816
      },
      {
       "node_id": 37,
@@ -200,7 +280,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.6531519889831543
      },
      {
       "node_id": 42,
@@ -208,7 +288,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.6571199893951416
      },
      {
       "node_id": 47,
@@ -216,7 +296,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.6577120125293732
      },
      {
       "node_id": 52,
@@ -224,7 +304,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.6595999896526337
      },
      {
       "node_id": 57,
@@ -232,7 +312,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.659743994474411
      },
      {
       "node_id": 62,
@@ -240,7 +320,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.659280002117157
      },
      {
       "node_id": 67,
@@ -248,7 +328,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.6559839844703674
      },
      {
       "node_id": 72,
@@ -256,7 +336,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.6590879857540131
      },
      {
       "node_id": 77,
@@ -264,7 +344,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.6575520038604736
      },
      {
       "node_id": 82,
@@ -272,7 +352,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.6574560105800629
      },
      {
       "node_id": 87,
@@ -280,7 +360,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.657232016324997
      },
      {
       "node_id": 89,
@@ -288,7 +368,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.657151997089386
      },
      {
       "node_id": 94,
@@ -296,7 +376,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.6559999883174896
      },
      {
       "node_id": 96,
@@ -304,7 +384,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.7492640018463135
      },
      {
       "node_id": 101,
@@ -312,7 +392,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.6652480065822601
      },
      {
       "node_id": 103,
@@ -320,7 +400,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.6675679981708527
      },
      {
       "node_id": 108,
@@ -328,7 +408,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.6556800007820129
      },
      {
       "node_id": 110,
@@ -336,7 +416,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.6578879952430725
      },
      {
       "node_id": 115,
@@ -344,7 +424,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.6528639793395996
      },
      {
       "node_id": 117,
@@ -352,7 +432,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5664960145950317
      },
      {
       "node_id": 122,
@@ -360,7 +440,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5632799863815308
      },
      {
       "node_id": 124,
@@ -368,7 +448,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.562175989151001
      },
      {
       "node_id": 129,
@@ -376,7 +456,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5652320086956024
      },
      {
       "node_id": 131,
@@ -384,7 +464,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5615519881248474
      },
      {
       "node_id": 136,
@@ -392,7 +472,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5659520030021667
      },
      {
       "node_id": 138,
@@ -400,7 +480,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5562720000743866
      },
      {
       "node_id": 143,
@@ -408,7 +488,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5261600017547607
      },
      {
       "node_id": 145,
@@ -416,7 +496,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.550464004278183
      },
      {
       "node_id": 147,
@@ -424,7 +504,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5648639798164368
      },
      {
       "node_id": 152,
@@ -432,7 +512,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5130239725112915
      },
      {
       "node_id": 154,
@@ -440,7 +520,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.546640008687973
      },
      {
       "node_id": 156,
@@ -448,7 +528,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5598559975624084
      },
      {
       "node_id": 161,
@@ -456,7 +536,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5150879919528961
      },
      {
       "node_id": 163,
@@ -464,7 +544,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5610879957675934
      },
      {
       "node_id": 165,
@@ -472,7 +552,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5693599879741669
      },
      {
       "node_id": 170,
@@ -480,7 +560,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5255360007286072
      },
      {
       "node_id": 172,
@@ -488,7 +568,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5569279789924622
      },
      {
       "node_id": 174,
@@ -496,7 +576,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5725600123405457
      },
      {
       "node_id": 179,
@@ -504,7 +584,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5242399871349335
      },
      {
       "node_id": 181,
@@ -512,7 +592,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5633600056171417
      },
      {
       "node_id": 183,
@@ -520,7 +600,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5539200007915497
      },
      {
       "node_id": 188,
@@ -528,7 +608,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5343360006809235
      },
      {
       "node_id": 190,
@@ -536,7 +616,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5560959875583649
      },
      {
       "node_id": 192,
@@ -544,7 +624,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5650720000267029
      },
      {
       "node_id": 197,
@@ -552,7 +632,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5262400209903717
      },
      {
       "node_id": 199,
@@ -560,7 +640,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5473439991474152
      },
      {
       "node_id": 201,
@@ -568,7 +648,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5727200210094452
      },
      {
       "node_id": 206,
@@ -576,7 +656,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5174240171909332
      },
      {
       "node_id": 208,
@@ -584,7 +664,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5580960214138031
      },
      {
       "node_id": 210,
@@ -592,7 +672,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5525760054588318
      },
      {
       "node_id": 215,
@@ -600,7 +680,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.526608020067215
      },
      {
       "node_id": 217,
@@ -608,7 +688,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5517120063304901
      },
      {
       "node_id": 219,
@@ -616,7 +696,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5623360276222229
      },
      {
       "node_id": 224,
@@ -624,7 +704,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5265760123729706
      },
      {
       "node_id": 226,
@@ -632,7 +712,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5416159927845001
      },
      {
       "node_id": 228,
@@ -640,7 +720,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5684159994125366
      },
      {
       "node_id": 233,
@@ -648,7 +728,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.519567996263504
      },
      {
       "node_id": 235,
@@ -656,7 +736,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5571199953556061
      },
      {
       "node_id": 237,
@@ -664,7 +744,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5518719851970673
      },
      {
       "node_id": 242,
@@ -672,7 +752,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5121920108795166
      },
      {
       "node_id": 244,
@@ -680,7 +760,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.562639981508255
      },
      {
       "node_id": 246,
@@ -688,7 +768,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.563040018081665
      },
      {
       "node_id": 251,
@@ -696,7 +776,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.535968005657196
      },
      {
       "node_id": 253,
@@ -704,7 +784,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.550432026386261
      },
      {
       "node_id": 255,
@@ -712,7 +792,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.583184003829956
      },
      {
       "node_id": 260,
@@ -720,7 +800,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5167680084705353
      },
      {
       "node_id": 262,
@@ -728,7 +808,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5735839903354645
      },
      {
       "node_id": 264,
@@ -736,7 +816,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5640960037708282
      },
      {
       "node_id": 269,
@@ -744,7 +824,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.524863988161087
      },
      {
       "node_id": 271,
@@ -752,7 +832,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5511679947376251
      },
      {
       "node_id": 273,
@@ -760,7 +840,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5620959997177124
      },
      {
       "node_id": 278,
@@ -768,7 +848,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5235199928283691
      },
      {
       "node_id": 280,
@@ -776,7 +856,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 0.5537440180778503
      },
      {
       "node_id": 300,
@@ -784,7 +864,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 1.1804800033569336
      },
      {
       "node_id": 303,
@@ -792,7 +872,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 1.1935040354728699
      },
      {
       "node_id": 307,
@@ -800,13 +880,15 @@
       "N": 3072,
       "K": 3072,
       "transpose_b": false,
-      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+      "median_ms": 1.4321439862251282
      }
     ]
    },
-   "GPU_TC_KARATSUBA3": {
-    "exact": 0,
-    "mismatch": 83,
+   "GPU_SCHOOLBOOK4": {
+    "exact": 83,
+    "mismatch": 0,
+    "error": 0,
+    "first_error": null,
     "nodes": [
      {
       "node_id": 2,
@@ -814,7 +896,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.7150560021400452
      },
      {
       "node_id": 7,
@@ -822,7 +904,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6786240041255951
      },
      {
       "node_id": 12,
@@ -830,7 +912,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6851840019226074
      },
      {
       "node_id": 17,
@@ -838,7 +920,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6824800074100494
      },
      {
       "node_id": 22,
@@ -846,7 +928,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.680976003408432
      },
      {
       "node_id": 27,
@@ -854,7 +936,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6817440092563629
      },
      {
       "node_id": 32,
@@ -862,7 +944,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6811680197715759
      },
      {
       "node_id": 37,
@@ -870,7 +952,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6814559996128082
      },
      {
       "node_id": 42,
@@ -878,7 +960,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6823199987411499
      },
      {
       "node_id": 47,
@@ -886,7 +968,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6818720102310181
      },
      {
       "node_id": 52,
@@ -894,7 +976,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6811040043830872
      },
      {
       "node_id": 57,
@@ -902,7 +984,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6824159920215607
      },
      {
       "node_id": 62,
@@ -910,7 +992,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6814079880714417
      },
      {
       "node_id": 67,
@@ -918,7 +1000,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6818080246448517
      },
      {
       "node_id": 72,
@@ -926,7 +1008,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6840320229530334
      },
      {
       "node_id": 77,
@@ -934,7 +1016,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6838559806346893
      },
      {
       "node_id": 82,
@@ -942,7 +1024,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6870719790458679
      },
      {
       "node_id": 87,
@@ -950,7 +1032,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6824160218238831
      },
      {
       "node_id": 89,
@@ -958,7 +1040,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.683791995048523
      },
      {
       "node_id": 94,
@@ -966,7 +1048,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6876479983329773
      },
      {
       "node_id": 96,
@@ -974,7 +1056,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.7419200241565704
      },
      {
       "node_id": 101,
@@ -982,7 +1064,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6884480118751526
      },
      {
       "node_id": 103,
@@ -990,7 +1072,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6993120014667511
      },
      {
       "node_id": 108,
@@ -998,7 +1080,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6830559968948364
      },
      {
       "node_id": 110,
@@ -1006,7 +1088,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.679967999458313
      },
      {
       "node_id": 115,
@@ -1014,7 +1096,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6797760128974915
      },
      {
       "node_id": 117,
@@ -1022,7 +1104,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6140320003032684
      },
      {
       "node_id": 122,
@@ -1030,7 +1112,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6076800227165222
      },
      {
       "node_id": 124,
@@ -1038,7 +1120,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.607807993888855
      },
      {
       "node_id": 129,
@@ -1046,7 +1128,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6042080223560333
      },
      {
       "node_id": 131,
@@ -1054,7 +1136,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6171840131282806
      },
      {
       "node_id": 136,
@@ -1062,7 +1144,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.6087519824504852
      },
      {
       "node_id": 138,
@@ -1070,7 +1152,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5879359841346741
      },
      {
       "node_id": 143,
@@ -1078,7 +1160,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5306079983711243
      },
      {
       "node_id": 145,
@@ -1086,7 +1168,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5749599933624268
      },
      {
       "node_id": 147,
@@ -1094,7 +1176,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.570063978433609
      },
      {
       "node_id": 152,
@@ -1102,7 +1184,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5277119874954224
      },
      {
       "node_id": 154,
@@ -1110,7 +1192,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5730719864368439
      },
      {
       "node_id": 156,
@@ -1118,7 +1200,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5869919955730438
      },
      {
       "node_id": 161,
@@ -1126,7 +1208,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5298720002174377
      },
      {
       "node_id": 163,
@@ -1134,7 +1216,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5780799984931946
      },
      {
       "node_id": 165,
@@ -1142,7 +1224,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5794399976730347
      },
      {
       "node_id": 170,
@@ -1150,7 +1232,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5295359790325165
      },
      {
       "node_id": 172,
@@ -1158,7 +1240,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.590751975774765
      },
      {
       "node_id": 174,
@@ -1166,7 +1248,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5851040184497833
      },
      {
       "node_id": 179,
@@ -1174,7 +1256,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5415360033512115
      },
      {
       "node_id": 181,
@@ -1182,7 +1264,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5720640122890472
      },
      {
       "node_id": 183,
@@ -1190,7 +1272,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5861440002918243
      },
      {
       "node_id": 188,
@@ -1198,7 +1280,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5259360074996948
      },
      {
       "node_id": 190,
@@ -1206,7 +1288,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5788800120353699
      },
      {
       "node_id": 192,
@@ -1214,7 +1296,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5826559960842133
      },
      {
       "node_id": 197,
@@ -1222,7 +1304,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5405919849872589
      },
      {
       "node_id": 199,
@@ -1230,7 +1312,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5758080184459686
      },
      {
       "node_id": 201,
@@ -1238,7 +1320,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5926400125026703
      },
      {
       "node_id": 206,
@@ -1246,7 +1328,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.536191999912262
      },
      {
       "node_id": 208,
@@ -1254,7 +1336,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5768960118293762
      },
      {
       "node_id": 210,
@@ -1262,7 +1344,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5920480191707611
      },
      {
       "node_id": 215,
@@ -1270,7 +1352,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5314240157604218
      },
      {
       "node_id": 217,
@@ -1278,7 +1360,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5734560191631317
      },
      {
       "node_id": 219,
@@ -1286,7 +1368,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5792959928512573
      },
      {
       "node_id": 224,
@@ -1294,7 +1376,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5373120009899139
      },
      {
       "node_id": 226,
@@ -1302,7 +1384,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5690079927444458
      },
      {
       "node_id": 228,
@@ -1310,7 +1392,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5822080075740814
      },
      {
       "node_id": 233,
@@ -1318,7 +1400,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5382240116596222
      },
      {
       "node_id": 235,
@@ -1326,7 +1408,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5678400099277496
      },
      {
       "node_id": 237,
@@ -1334,7 +1416,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.585536003112793
      },
      {
       "node_id": 242,
@@ -1342,7 +1424,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5307520031929016
      },
      {
       "node_id": 244,
@@ -1350,7 +1432,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5787679851055145
      },
      {
       "node_id": 246,
@@ -1358,7 +1440,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5928959846496582
      },
      {
       "node_id": 251,
@@ -1366,7 +1448,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5391040146350861
      },
      {
       "node_id": 253,
@@ -1374,7 +1456,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5966880023479462
      },
      {
       "node_id": 255,
@@ -1382,7 +1464,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5846720039844513
      },
      {
       "node_id": 260,
@@ -1390,7 +1472,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5365599989891052
      },
      {
       "node_id": 262,
@@ -1398,7 +1480,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5719360113143921
      },
      {
       "node_id": 264,
@@ -1406,7 +1488,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5882239937782288
      },
      {
       "node_id": 269,
@@ -1414,7 +1496,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5344640016555786
      },
      {
       "node_id": 271,
@@ -1422,7 +1504,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5848160088062286
      },
      {
       "node_id": 273,
@@ -1430,7 +1512,7 @@
       "N": 16,
       "K": 128,
       "transpose_b": true,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5755839943885803
      },
      {
       "node_id": 278,
@@ -1438,7 +1520,7 @@
       "N": 16,
       "K": 16,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5352960228919983
      },
      {
       "node_id": 280,
@@ -1446,7 +1528,7 @@
       "N": 128,
       "K": 128,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 0.5651519894599915
      },
      {
       "node_id": 300,
@@ -1454,7 +1536,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 1.2679359912872314
      },
      {
       "node_id": 303,
@@ -1462,7 +1544,7 @@
       "N": 1024,
       "K": 1024,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 1.2758879661560059
      },
      {
       "node_id": 307,
@@ -1470,13 +1552,687 @@
       "N": 3072,
       "K": 3072,
       "transpose_b": false,
-      "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+      "median_ms": 1.594864010810852
+     }
+    ]
+   },
+   "GPU_SIMT_INT64_REFERENCE": {
+    "exact": 0,
+    "mismatch": 0,
+    "error": 83,
+    "first_error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'",
+    "nodes": [
+     {
+      "node_id": 2,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 7,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 12,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 17,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 22,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 27,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 32,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 37,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 42,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 47,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 52,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 57,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 62,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 67,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 72,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 77,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 82,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 87,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 89,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 94,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 96,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 101,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 103,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 108,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 110,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 115,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 117,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 122,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 124,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 129,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 131,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 136,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 138,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 143,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 145,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 147,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 152,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 154,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 156,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 161,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 163,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 165,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 170,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 172,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 174,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 179,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 181,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 183,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 188,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 190,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 192,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 197,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 199,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 201,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 206,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 208,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 210,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 215,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 217,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 219,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 224,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 226,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 228,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 233,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 235,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 237,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 242,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 244,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 246,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 251,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 253,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 255,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 260,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 262,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 264,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 269,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 271,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 273,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 278,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 280,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 300,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 303,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 307,
+      "M": 16,
+      "N": 3072,
+      "K": 3072,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
      }
     ]
    },
    "GPU_DP2A_W_SPLIT2": {
     "exact": 0,
-    "mismatch": 83,
+    "mismatch": 0,
+    "error": 83,
+    "first_error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'",
     "nodes": [
      {
       "node_id": 2,
@@ -2145,6 +2901,11 @@
     ]
    }
   },
+  "executable_backends": [
+   "GPU_TC_KARATSUBA3",
+   "GPU_SCHOOLBOOK4"
+  ],
+  "required_cuda_backends_exact": true,
   "all_exact": false
  },
  "benchmark": {
@@ -2157,11 +2918,31 @@
     "schedule_frequency": 32,
     "logical_mac": 2097152,
     "mac_fraction": 0.26556016597510373,
+    "padded_shapes": {
+     "m": 32,
+     "k": 1024,
+     "n": 128
+    },
     "native_int8": {
-     "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+     "median_ms": 0.05475199967622757,
+     "p95_ms": 0.05795200169086456,
+     "min_ms": 0.052032001316547394,
+     "iterations": 100,
+     "warmup": 20
     },
     "karatsuba3": {
-     "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+     "median_ms": 0.39764800667762756,
+     "p95_ms": 0.4094400107860565,
+     "min_ms": 0.37567999958992004,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "schoolbook4": {
+     "median_ms": 0.4477440118789673,
+     "p95_ms": 0.4588800072669983,
+     "min_ms": 0.4331839978694916,
+     "iterations": 100,
+     "warmup": 20
     },
     "simt_int64": {
      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
@@ -2169,9 +2950,8 @@
     "dp2a_w_split2": {
      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
     },
-    "karatsuba3_ratio": null,
-    "dp2a_ratio": null,
-    "simt_ratio": null
+    "karatsuba3_ratio": 7.262712029315705,
+    "schoolbook4_ratio": 8.177674140244607
    },
    "16x16x128T": {
     "M": 16,
@@ -2181,11 +2961,31 @@
     "schedule_frequency": 16,
     "logical_mac": 32768,
     "mac_fraction": 0.002074688796680498,
+    "padded_shapes": {
+     "m": 32,
+     "k": 128,
+     "n": 16
+    },
     "native_int8": {
-     "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+     "median_ms": 0.021407999098300934,
+     "p95_ms": 0.023391999304294586,
+     "min_ms": 0.01836800016462803,
+     "iterations": 100,
+     "warmup": 20
     },
     "karatsuba3": {
-     "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+     "median_ms": 0.4042079895734787,
+     "p95_ms": 0.4203839898109436,
+     "min_ms": 0.3819519877433777,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "schoolbook4": {
+     "median_ms": 0.4351840019226074,
+     "p95_ms": 0.4496319890022278,
+     "min_ms": 0.42233601212501526,
+     "iterations": 100,
+     "warmup": 20
     },
     "simt_int64": {
      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
@@ -2193,9 +2993,8 @@
     "dp2a_w_split2": {
      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
     },
-    "karatsuba3_ratio": null,
-    "dp2a_ratio": null,
-    "simt_ratio": null
+    "karatsuba3_ratio": 18.881166227513482,
+    "schoolbook4_ratio": 20.32810259026712
    },
    "16x128x16": {
     "M": 16,
@@ -2205,11 +3004,31 @@
     "schedule_frequency": 16,
     "logical_mac": 32768,
     "mac_fraction": 0.002074688796680498,
+    "padded_shapes": {
+     "m": 32,
+     "k": 16,
+     "n": 128
+    },
     "native_int8": {
-     "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+     "median_ms": 0.02107200026512146,
+     "p95_ms": 0.025472000241279602,
+     "min_ms": 0.020096000283956528,
+     "iterations": 100,
+     "warmup": 20
     },
     "karatsuba3": {
-     "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+     "median_ms": 0.36528000235557556,
+     "p95_ms": 0.38233599066734314,
+     "min_ms": 0.3497920036315918,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "schoolbook4": {
+     "median_ms": 0.3822240084409714,
+     "p95_ms": 0.47011199593544006,
+     "min_ms": 0.36368000507354736,
+     "iterations": 100,
+     "warmup": 20
     },
     "simt_int64": {
      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
@@ -2217,9 +3036,8 @@
     "dp2a_w_split2": {
      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
     },
-    "karatsuba3_ratio": null,
-    "dp2a_ratio": null,
-    "simt_ratio": null
+    "karatsuba3_ratio": 17.33485182990387,
+    "schoolbook4_ratio": 18.138952336367968
    },
    "16x1024x128": {
     "M": 16,
@@ -2229,11 +3047,31 @@
     "schedule_frequency": 16,
     "logical_mac": 2097152,
     "mac_fraction": 0.13278008298755187,
+    "padded_shapes": {
+     "m": 32,
+     "k": 128,
+     "n": 1024
+    },
     "native_int8": {
-     "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+     "median_ms": 0.025919999927282333,
+     "p95_ms": 0.02768000029027462,
+     "min_ms": 0.021695999428629875,
+     "iterations": 100,
+     "warmup": 20
     },
     "karatsuba3": {
-     "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+     "median_ms": 0.3668320029973984,
+     "p95_ms": 0.4689599871635437,
+     "min_ms": 0.34544000029563904,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "schoolbook4": {
+     "median_ms": 0.37995199859142303,
+     "p95_ms": 0.4100480079650879,
+     "min_ms": 0.3671039938926697,
+     "iterations": 100,
+     "warmup": 20
     },
     "simt_int64": {
      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
@@ -2241,9 +3079,8 @@
     "dp2a_w_split2": {
      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
     },
-    "karatsuba3_ratio": null,
-    "dp2a_ratio": null,
-    "simt_ratio": null
+    "karatsuba3_ratio": 14.152469291147103,
+    "schoolbook4_ratio": 14.65864196208971
    },
    "16x3072x1024": {
     "M": 16,
@@ -2253,11 +3090,31 @@
     "schedule_frequency": 2,
     "logical_mac": 50331648,
     "mac_fraction": 0.3983402489626556,
+    "padded_shapes": {
+     "m": 32,
+     "k": 1024,
+     "n": 3072
+    },
     "native_int8": {
-     "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+     "median_ms": 0.0540159996598959,
+     "p95_ms": 0.057023998349905014,
+     "min_ms": 0.04972799867391586,
+     "iterations": 100,
+     "warmup": 20
     },
     "karatsuba3": {
-     "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+     "median_ms": 0.4124000072479248,
+     "p95_ms": 0.4864639937877655,
+     "min_ms": 0.39103999733924866,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "schoolbook4": {
+     "median_ms": 0.4538400024175644,
+     "p95_ms": 0.510208010673523,
+     "min_ms": 0.43273600935935974,
+     "iterations": 100,
+     "warmup": 20
     },
     "simt_int64": {
      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
@@ -2265,9 +3122,8 @@
     "dp2a_w_split2": {
      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
     },
-    "karatsuba3_ratio": null,
-    "dp2a_ratio": null,
-    "simt_ratio": null
+    "karatsuba3_ratio": 7.6347750637689415,
+    "schoolbook4_ratio": 8.401955073961489
    },
    "16x1024x3072": {
     "M": 16,
@@ -2277,11 +3133,31 @@
     "schedule_frequency": 1,
     "logical_mac": 50331648,
     "mac_fraction": 0.1991701244813278,
+    "padded_shapes": {
+     "m": 32,
+     "k": 3072,
+     "n": 1024
+    },
     "native_int8": {
-     "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+     "median_ms": 0.1295040026307106,
+     "p95_ms": 0.13279999792575836,
+     "min_ms": 0.12432000041007996,
+     "iterations": 100,
+     "warmup": 20
     },
     "karatsuba3": {
-     "error": "RuntimeError: self.size(0) needs to be greater than 16, but got 16"
+     "median_ms": 0.6789759993553162,
+     "p95_ms": 0.7244799733161926,
+     "min_ms": 0.6661760210990906,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "schoolbook4": {
+     "median_ms": 0.800000011920929,
+     "p95_ms": 0.8654080033302307,
+     "min_ms": 0.7888960242271423,
+     "iterations": 100,
+     "warmup": 20
     },
     "simt_int64": {
      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
@@ -2289,21 +3165,47 @@
     "dp2a_w_split2": {
      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
     },
-    "karatsuba3_ratio": null,
-    "dp2a_ratio": null,
-    "simt_ratio": null
+    "karatsuba3_ratio": 5.242895860844255,
+    "schoolbook4_ratio": 6.177415335973691
    }
   },
   "weighted_schedule": {
-   "karatsuba3_total_ms": 0,
-   "native_int8_total_ms": 0,
-   "ratio": 0.0
+   "karatsuba3_total_ms": 32.40963214635849,
+   "schoolbook4_total_ms": 35.19324854016304,
+   "native_int8_total_ms": 3.0839999802410603,
+   "ratio": 10.50895990726472,
+   "schoolbook4_ratio": 11.41155926253027
   },
-  "major_shape_ratios": [],
-  "performance_pass": true,
+  "major_shape_ratios": [
+   {
+    "shape": "16x128x1024",
+    "ratio": 7.262712029315705
+   },
+   {
+    "shape": "16x1024x128",
+    "ratio": 14.152469291147103
+   },
+   {
+    "shape": "16x3072x1024",
+    "ratio": 7.6347750637689415
+   },
+   {
+    "shape": "16x1024x3072",
+    "ratio": 5.242895860844255
+   }
+  ],
+  "performance_pass": false,
+  "performance_pass_components": {
+   "exactness_ok": true,
+   "all_shapes_measured": true,
+   "ratio_ok": false,
+   "major_shapes_ok": false,
+   "note": "the gate cannot pass vacuously: exactness, measured shapes and positive totals are all required"
+  },
   "gates": {
    "schedule_ratio_max": 6.0,
-   "major_shape_ratio_max": 10.0
+   "major_shape_ratio_max": 10.0,
+   "major_shape_fraction": 0.05
   },
   "physical_mac_note": "Karatsuba3 performs ~3x physical int8 MAC per logical MAC; protocol work accounting remains 1x logical (F.5B section 23/24)"
  },

@@ -1,220 +1,172 @@
 # Phase F.5B report — Exact Wide-Integer GPU Feasibility (A13W10)
 
-# GPU_BACKEND = NOT TESTED
+# GPU_CORRECT_BUT_NOT_PRACTICAL
 
-**Current maximum claimable state.** The entire CPU-side program is
-complete and PASSES: the radix-128 decomposition proof, the 83-note
-GEMM evidence dump, the three exact GPU backends, and a full CPU
-dry-run that exercises the runner end to end (all vectors exact, all
-83 nodes exact on all three backends, schedule ratio 3.31). The GPU
-verdict itself — bit-exactness on real NVIDIA hardware, cross-GPU
-agreement, and the performance gate — **requires two GPU runs that
-have not happened yet**. Until then this phase claims exactly
-GPU_BACKEND = NOT TESTED; the CPU dry-run is harness validation only
-and is excluded from any verdict (file name `docs/phase-f5b-harness-cpudry.json`,
-environment field marks it a DRY RUN).
+A13W10 canonical arithmetic **executes exactly on real NVIDIA GPUs** — both
+frozen tensor-core strategies (Karatsuba3 and Schoolbook4) are bit-identical
+to the CPU int64 oracle on **all 83 real GEMM nodes** and all wide vectors,
+on **two different GPU architectures** (A40, cc 8.6 / RTX 4000 Ada, cc 8.9).
+The **predeclared performance gate FAILS** on both: the weighted 83-node
+schedule runs at **10.51×** (A40) and **12.77×** (RTX 4000 Ada) vs the
+frozen 6× limit, with major shapes up to **15.18×** vs the frozen 10× limit.
+The cost driver is the eager-PyTorch kernel count per GEMM node (activation
+split + 3–4 int8 GEMMs + 6-kernel int64 merge ≈ 15–20 launches vs the
+native baseline's single `torch._int_mm` call), not the 3× physical MAC of
+the decomposition. No threshold was adjusted. The full 310-node GPU block
+remains **NOT STARTED** (gated on the performance PASS). Zero protocol
+diff; the protocol work accounting stays 1× logical MAC.
 
-Branch `research/transformer-phase-f5b-gpu-feasibility` (from F.5A
-step 10, 959b701). `git diff origin/research/transformer-phase-f5a-int64-frontier
--- chain compute proto` is empty: **zero protocol diff**. No
-threshold was changed; CanonicalMathV1 untouched; no wide-integer
-protocol code; no full-block GPU work (gated).
+Branch `research/transformer-phase-f5b-gpu-feasibility` (steps 1–8, head
+`step 8`). `git diff origin/research/transformer-phase-f5a-int64-frontier
+-- chain compute proto` is empty. One protocol-adjacent change: none.
 
-## Where F.5B stands
+## The two GPU runs (round 2, fixed harness)
 
-| item | status |
-|---|---|
-| F.5A evidence normalization (mechanically derived, hashed) | **DONE** — `docs/phase-f5a-verdict-final.json` |
-| Balanced radix-128 split proof (exhaustive A13/W10 values) | **PASS** — CPU |
-| Schoolbook + Karatsuba3 exactness vs direct int64 oracle | **PASS** — CPU, 10 shapes × adversarial patterns |
-| Theoretical requant int64 safety (all requant links) | **PASS** — THEORETICAL_REQUANT_INT64_SAFE, worst product 55 bits |
-| Real 83-node GEMM evidence dump (inputs + CPU-correct outputs) | **DONE** — `testdata/f5b_gemm_nodes.npz` |
-| Three exact GPU backends (SIMT ref, TC Karatsuba3, DP2A W-split2) | **WRITTEN**, no float in canonical path (source audit); runtime audit pending |
-| Harness end-to-end validation | **PASS** — CPU dry-run, recorded as harness validation only |
-| Bit-exactness on real NVIDIA GPUs | **NOT TESTED** — requires hardware |
-| Cross-GPU agreement (≥2 different models / compute capabilities) | **NOT TESTED** |
-| Performance gates (≤6× weighted schedule; >5%-MAC shapes ≤10×) | **NOT TESTED** on GPU |
-| Full 310-node block on GPU | **NOT STARTED** — gated on GEMM performance PASS (§62) |
+| | A40 (cc 8.6, Ampere) | RTX 4000 Ada (cc 8.9, Ada) |
+|---|---|---|
+| torch / CUDA / driver | 2.8.0+cu128 / 12.8 / 580.159.04 | 2.8.0+cu128 / 12.8 / 595.91.07 |
+| Karatsuba3 — 83 nodes exact | **83/83** | **83/83** |
+| Schoolbook4 — 83 nodes exact | **83/83** | **83/83** |
+| wide vectors exact | **yes (5/5)** | **yes (5/5)** |
+| SIMT / DP2A direct matmul | platform-limited (below) | platform-limited (below) |
+| weighted schedule ratio (K3) | **10.51×** | **12.77×** |
+| weighted schedule ratio (SB4) | 11.41× | 13.31× |
+| major shapes (≥5% MAC) K3 | 7.26 / 14.15 / 7.63 / 5.24 | 10.03 / 15.18 / 9.92 / 5.80 |
+| performance gate (6× / 10×) | **FAIL** | **FAIL** |
+| float ops in canonical path | 0 | 0 |
 
-## 1. F.5A evidence normalization (commit 1)
+Results downloaded byte-exact over the terminal relay (chunked base64,
+md5-verified); `docs/phase-f5b-final-verdict.json` is produced by the
+`--compare` step from exactly these two files.
 
-`docs/phase-f5a-verdict-final.json` is derived mechanically (script,
-not hand-typed) from four frozen F.5A artifacts, each recorded with its
-SHA256: winner **A13W10**, worst cosine **0.9999123540730438**, worst
-max_abs **0.038933493885028536**, count(>0.05)=0, MaxSafeK32 1023,
-MaxSafeK64 4398046511103, int64 accumulation / requant / Freivalds
-flags true, PolicyID `eb9a9fef403c95cd0ab876893acf14e02928245306f1d1cc6e12f4d99c5eb7a0`,
-family_sha256 4b0ab6d5e0c69402, final verdict PASS. The F.5A report got
-an addendum pointing at the normalization; the original heldout file is
-preserved unmodified and the stale `max_safe_k64` field in it is
-explicitly superseded.
+## CUDA platform facts the CPU dry-run could not see (found live, fixed)
 
-## 2. Radix-128 decomposition — CPU proof (PASS)
+The first pod run (also on both GPUs) produced 0/83 everywhere and the
+verbatim errors below; they are now first-class evidence, captured in every
+result file (`cuda_probe`) and in the per-backend `first_error` fields:
 
-Balanced split emitted on hardware as signed int8 tiles:
-`q = floor((x + 64) / 128)`, `lo = x − 128q`.
+1. **`NotImplementedError: "addmm_cuda" not implemented for 'Long'`** —
+   torch has **no generic integer matmul on CUDA**. The direct
+   `GPU_SIMT_INT64_REFERENCE` and `GPU_DP2A_W_SPLIT2` paths are
+   CPU-executable only (they still run in the CPU proof and dry-run); on
+   GPU their cross-check role is filled by `GPU_SCHOOLBOOK4`, an
+   independent merge formula (C00 + (C01+C10)<<7 + C11<<14) over the same
+   radix-128 split.
+2. **`torch._int_mm` requires the left operand M > 16** — probed on both
+   GPUs: M=16 → "needs to be greater than 16"; M=17/24/32 → ok. Every real
+   block GEMM has M = 16 (seq length), so all tensor-core calls now
+   zero-pad **by role** (M → max(32, align16), K/N → max(16, align16)).
+   Zero padding is mathematically inert (exactness preserved) and is
+   applied identically to the native int8 baseline, so ratios stay fair.
+3. **The performance gate could pass vacuously** when every timed shape
+   errored (0/0 ratio → "≤ 6×"). The gate now requires exactness on the
+   CUDA-executable backends **and** every shape measured **and** positive
+   totals **and** the ratio limits. (Integrity fix — a gate that can pass on
+   zero measurements is a fake gate.)
 
-- **Exhaustive split proof**: every A13 value (8192) and every W10
-  value (1024) splits with exact reconstruction and digit ranges
-  A0∈[−64,63], A1∈[−32,32], W0∈[−64,63], W1∈[−4,4]; sums
-  A0+A1∈[−96,95], W0+W1∈[−68,67]. All products fit int8×int8→int32.
-- **Exactness**: schoolbook (C00, C01, C10, C11) and **Karatsuba3**
-  (Cross = Csum − C00 − C11, C = C00 + 128·Cross + 16384·C11) are
-  bit-identical to the direct int64 oracle on all shapes, including
-  the real ones with K = 16, 128, 1024, 3072, and on adversarial
-  patterns (all-max, all-min, mixed extremes, alternating, zeros,
-  one-hot rows, random). Partial bounds
-  C00 ≤ 12,582,912, C11 ≤ 393,216, Csum ≤ 20,054,016 — int32-safe;
-  final merge in int64.
-- **Requant**: per-link theoretical analysis over full signed
-  magnitudes gives **THEORETICAL_REQUANT_INT64_SAFE**, worst product
-  55 bits ≪ 62 (the assertion budget in the hardware requant).
-- 83 real GEMM node shapes extracted from the converted graph
-  (`docs/phase-f5b-gemm-shapes.json`); wide vectors frozen in
-  `testdata/f5b_wide_gemm_vectors.json` (boundary all-max, all-min,
-  small random, transpose_b, k=1).
+Fix commit: `950c6db` (F.5B step 7). The CPU dry-run was re-verified green
+after the fix (4 backends × 83 nodes exact, ratio 3.14).
 
-## 3. Real 83-node evidence (DONE)
+## Why the performance gate fails (measured, not speculated)
 
-`tools/f5b_dump_gemm_nodes.py` reruns the frozen F.5A executor on the
-heldout case with a GEMM dump hook and maps the 83 pipeline GEMM calls
-one-to-one onto graph GEMM node ids (assert 83 == 83). The dump
-(`testdata/f5b_gemm_nodes.npz`, with meta json) stores, per node: the
-exact int16 activation tile, int8/int16 weight tile, transpose flag,
-and the CPU-correct int64 output. The hook in `tools/f5a_joint_precision.py`
-was re-anchored bit-identical to F.4A (A12W9/A13W8 spot checks) before
-any evidence was produced.
+Native int8 baseline totals (schedule-weighted): 3.08 ms (A40) / 3.29 ms
+(Ada); wide totals: 32.41 ms / 41.97 ms. Per-occurrence times are tiny
+(native 0.021–0.130 ms; wide 0.15–0.75 ms), so **neither side is at MAC
+throughput**: at M=16-padded-to-32, a single cuBLASLt int8 GEMM already
+runs at a small fraction of peak, and the wide path multiplies that by
+strategy overhead. Per GEMM node the wide path executes ~15–20 kernels
+(activation split ≈ 8 elementwise ops, 3–4 `_int_mm`, merge ≈ 6 int64
+elementwise ops) against the baseline's 1 — the ratio tracks kernel count,
+not arithmetic. Schoolbook4 (4 GEMMs) is ~5–8% slower than Karatsuba3, so
+the failure is **overhead-dominated, not strategy-specific**. Event-based
+per-iteration timing adds the same absolute overhead to both sides, which
+biases the measured ratio *down*: the true wide/native cost is at least
+what is reported.
 
-## 4. GPU backends (WRITTEN; runtime NOT TESTED)
+The obvious path to ≤6× is **fusion** — a single kernel (or compiled graph)
+doing split + int8 tensor-core products + int64 merge without materializing
+intermediates. That is future work, **NOT attempted and NOT tested here**;
+this phase answers the feasibility question for the straightforward
+composition of sanctioned primitives, and the answer for that realization
+is: correct, but not practical.
 
-All three produce the exact same int64 result; selected by
-benchmarking on the pods:
+## What was proven before the pods (CPU, unchanged from step 6)
 
-- `GPU_SIMT_INT64_REFERENCE` — direct int64 integer matmul in chunks
-  (ground truth on hardware, no decomposition).
-- `GPU_TC_KARATSUBA3` — three s8×s8→s32 tensor-core GEMMs
-  (`torch._int_mm`, i.e. cuBLASLt integer path, **no float anywhere**):
-  C00 = A0·W0, C11 = A1·W1, Csum = Asum·Wsum, Cross = Csum − C00 − C11,
-  then C = C00 + (Cross << 7) + (C11 << 14) in int64. Physical 3× MAC
-  (protocol counts logical MAC only).
-- `GPU_DP2A_W_SPLIT2` — int16×int8 integer dot (the dp2a style split
-  on the weight side; not tensor core).
+Radix-128 split exhaustive proof (all 8192 A13 + 1024 W10 values, exact
+reconstruction, digit ranges); schoolbook + Karatsuba3 bit-identical to the
+direct int64 oracle on 10 shapes × adversarial patterns (K up to 3072);
+int32 safety bounds for C00/C11/Csum/Cross and the int64 final bound;
+THEORETICAL per-node requant verdict THEORETICAL_REQUANT_INT64_SAFE (worst
+product 55 bits); the real 83-node shape manifest; frozen wide vectors
+(CPU columns exact; GPU columns now measured). See commit history, steps
+1–6, and `docs/phase-f5b-radix128-proof.json`.
 
-`requant_wide` executes `round(acc·mult >> shift)` with a hard
-`acc_bits + m.bit_length() ≤ 62` assertion (justified by §2's 55-bit
-theoretical bound), never a float approximation. `source_float_audit()`
-reports **FLOAT_OPS_USED = 0** for the canonical path; a runtime audit
-accompanies every GPU run.
+## Report questions
 
-## 5. Harness validation (CPU dry-run — NOT evidence)
+**Q1.** Does A13W10 canonical arithmetic execute bit-identically to the
+CPU int64 oracle on real NVIDIA GPUs? **YES** — both CUDA-executable
+tensor-core strategies, all 83 nodes, all vectors, on both GPUs.
 
-`python gpu/f5b/f5b_gpu_runner.py --device cpu --out docs/phase-f5b-harness-cpudry.json`:
+**Q2.** Two different GPU models / compute capabilities? **YES** — A40
+(8.6) and RTX 4000 Ada (8.9); cross-architecture equality follows from
+bit-exactness against the same CPU oracle (and each other, by transitivity
+of equality on the identical expected values).
 
-- vectors: all exact (all three backends vs the direct CPU oracle);
-- nodes: 83/83 exact, 0 mismatches, for **each of the three backends**
-  (CPU torch._int_mm availability lets the full Karatsuba3 path run);
-- weighted 83-node schedule ratio vs native int8 baseline: **3.307**
-  (the expected ≈3× physical cost; the gate constant is 6.0);
-  `performance_pass: True` — of the harness logic, on CPU, nothing more;
-- per-shape ratios, per-node medians, environment capture, error/WARN
-  capture: all exercised.
+**Q3.** Which strategies are CUDA-executable? **Karatsuba3 (3 int8 GEMMs +
+int64 merge) and Schoolbook4 (4 int8 GEMMs + independent merge)**;
+direct int64/int16 matmul (`SIMT` reference, `DP2A` W-split) is not a
+torch CUDA primitive — verbatim error recorded; those run on CPU only.
 
-This validates the harness end to end so the pod time is minimal, and
-is explicitly **excluded from any GPU verdict**.
+**Q4.** Requant intermediate int64 safety on hardware? Theoretical bound
+55 bits (int64-safe) with a runtime assertion in `requant_wide`; the
+requant kernel is deterministic integer code and was exercised on the CPU
+paths. **GPU-exercised: NOT TESTED** in this harness run (GEMM arm focus).
 
-## 6. Runbook (what remains; needs the two GPUs)
+**Q5.** Performance vs native INT8: ≤6× weighted, ≤10× major shapes?
+**NO** — 10.51× / 12.77× weighted; majors up to 14.15× / 15.18×. The
+frozen gate failed on both GPUs and is reported as a failure.
 
-On each pod (any CUDA PyTorch image, torch ≥ 2.4 for `torch._int_mm`;
-**no model download needed** — the 83-node evidence and vectors are in
-the repo):
+**Q6.** Is the failure strategy-specific? **NO** — Schoolbook4 is within
+~5–8% of Karatsuba3; both are dominated by per-node kernel count in eager
+PyTorch, not by the 3× physical MAC.
 
-```
-git clone --depth 1 -b research/transformer-phase-f5b-gpu-feasibility \
-    https://github.com/MuadibUsul/Prisma-Chain.git f5b && cd f5b
-python gpu/f5b/f5b_gpu_runner.py --device cuda \
-    --out docs/phase-f5b-gpu-results.<gpu>.json
-```
+**Q7.** Was any threshold, gate or accepted input adjusted? **NO.** The
+only harness changes were integrity/platform fixes (padding for a real
+hardware constraint, non-vacuous gate, verbatim error capture).
 
-Then, on any machine with the two result files (CPU is fine):
+**Q8.** Was the full 310-node block run on GPU? **NO — not started**
+(gated on GEMM performance PASS per the phase specification).
 
-```
-python gpu/f5b/f5b_gpu_runner.py --compare \
-    docs/phase-f5b-gpu-results.<gpuA>.json docs/phase-f5b-gpu-results.<gpuB>.json
-```
+**Q9.** What would plausibly bring the ratio under the gate? **Fusion**
+(split + tensor-core + merge in one kernel / compiled graph). Not
+attempted; no fusion claim is made.
 
-→ writes `docs/phase-f5b-final-verdict.json` with the cross-GPU
-verdict. Verdict selection (predeclared): both GPUs exact (nodes +
-vectors) and distinct GPU models required; if both performance gates
-pass → **GPU_FEASIBLE_A13W10**; exact but not practical →
-**GPU_CORRECT_BUT_NOT_PRACTICAL**; otherwise
-**GPU_NOT_FEASIBLE_OR_INCONCLUSIVE**. If only one GPU is ever
-available, the verdict is **INCONCLUSIVE_NO_SECOND_GPU** (recorded in
-this report, not by the tool).
-
-Two different NVIDIA models (ideally different compute capabilities,
-e.g. the RTX 4000 Ada + RTX 2000 Ada pair used in the earlier GEMM
-E2E) are required for the cross-architecture claim.
-
-## 7. Report questions
-
-**Q1.** Does a balanced radix-128 int8 decomposition exist for every
-A13 and W10 value with exact reconstruction and provable digit
-ranges? **YES** (exhaustive, all 8192 + 1024 values).
-
-**Q2.** Are schoolbook and Karatsuba3 bit-identical to the direct
-int64 product on the real node shapes and adversarial patterns?
-**YES** — CPU proof; on real NVIDIA GPUs **NOT TESTED**.
-
-**Q3.** Are all 83 real GEMM nodes captured as evidence and reproduced
-exactly? Captured: **YES** (83/83). Reproduced: **YES on CPU**
-(dry-run); on GPUs **NOT TESTED**.
-
-**Q4.** Is requantization intermediate int64-safe on all requant
-links? **YES theoretically** — THEORETICAL_REQUANT_INT64_SAFE, worst
-product 55 bits; hardware assertion in place; runtime **NOT TESTED**.
-
-**Q5.** Do the implemented GPU backends contain any float operation in
-the canonical path? **NO by source audit** (FLOAT_OPS_USED = 0,
-`torch._int_mm` integer path only); runtime audit accompanies each GPU
-run and is **NOT TESTED**.
-
-**Q6.** Does A13W10 arithmetic execute bit-identically to the CPU
-oracle on real NVIDIA GPUs? **NOT TESTED** — harness ready; requires
-the two GPU runs.
-
-**Q7.** Do two different GPU models / compute capabilities agree?
-**NOT TESTED** — requires the two GPU runs.
-
-**Q8.** Performance: ≤6× over the weighted 83-node schedule and ≤10×
-on shapes >5% MAC vs native INT8? **NOT TESTED** on GPU. Harness logic
-validated (CPU dry-run ratio 3.31 — not evidence).
-
-**Q9.** Was the full 310-node block executed on GPU? **NO — not
-started**, gated on the GEMM performance PASS per the phase
-specification.
-
-**Q10.** Final verdict? **GPU_BACKEND = NOT TESTED.** CPU-side program
-complete and PASS; the vocabulary is reserved for the two-GPU outcome:
-GPU_FEASIBLE_A13W10 / GPU_CORRECT_BUT_NOT_PRACTICAL /
-GPU_NOT_FEASIBLE / INCONCLUSIVE_NO_SECOND_GPU. No verdict is issued
-without hardware evidence.
+**Q10.** Final verdict? **GPU_CORRECT_BUT_NOT_PRACTICAL.** The exactness
+arm is proven on two architectures; the practicality arm fails the
+predeclared 6×/10× gates for the eager realization. F.5C (protocol
+integration) remains gated on GPU_FEASIBLE_A13W10 and is therefore **not
+started**.
 
 ## Data list
 
+docs/phase-f5b-gpu-results.nvidia_a40.json,
+docs/phase-f5b-gpu-results.nvidia_rtx_4000_ada_generation.json (both
+byte-verified on download), docs/phase-f5b-final-verdict.json,
 docs/phase-f5b-{radix128-proof, gemm-shapes, harness-cpudry}.json,
 docs/phase-f5a-verdict-final.json, testdata/f5b_{wide_gemm_vectors.json,
 gemm_nodes.npz, gemm_nodes_meta.json}, gpu/f5b/f5b_gpu_{backends,runner}.py,
-tools/{f5b_radix128.py, f5b_dump_gemm_nodes.py}, f5b_proof.log, this
-report. Pending (not created): docs/phase-f5b-gpu-results.<gpu>.json ×2
-and docs/phase-f5b-final-verdict.json.
+deploy/runpod_f5b/run_f5b_jupyter.py, tools/{f5b_radix128.py,
+f5b_dump_gemm_nodes.py}, f5b_proof.log, this report.
 
 ## Honest statement
 
-No GPU result is claimed, fabricated, or extrapolated: every GPU field
-above says NOT TESTED and the only executed runs are on CPU, labeled
-as harness validation. The gate constants (6.0 / 10.0 / 0.05), the
-evidence, the frozen F.5A family and the protocol are untouched
-(zero-diff verified against the F.5A branch over chain/compute/proto).
-The pods' results will be pasted verbatim into
-`docs/phase-f5b-gpu-results.<gpu>.json` exactly as the runner writes
-them — no post-editing of numbers.
+Everything above is measured on the stated hardware with the stated
+versions; the per-GPU result files are exactly as the runner wrote them on
+the pods (md5-verified in transit, compare output derived mechanically).
+The failure of the performance gate is reported as a failure with the
+mechanism identified from the data, not softened; the thresholds were not
+moved. Two backends (SIMT, DP2A) could not run on CUDA hardware and are
+explicitly excluded from the GPU verdict with their verbatim platform
+errors preserved. The full-block GPU run and any fusion optimization are
+NOT STARTED by the spec's own gating. No GPU result was fabricated,
+extrapolated, or edited.

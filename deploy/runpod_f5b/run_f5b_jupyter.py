@@ -179,8 +179,8 @@ def pod_pipeline(url: str, name: str, branch: str, outdir: Path) -> dict:
     data = json.loads(body)
     return {
         "name": name, "gpu": gpu_name, "env": env_line, "result_file": dest.name,
-        "vectors_exact": data.get("vectors", {}).get("all_exact"),
-        "nodes_exact": data.get("nodes", {}).get("all_exact"),
+        "vectors_required_exact": data.get("vectors", {}).get("required_cuda_backends_exact"),
+        "nodes_required_exact": data.get("nodes", {}).get("required_cuda_backends_exact"),
         "schedule_ratio": data.get("benchmark", {}).get("weighted_schedule", {}).get("ratio"),
         "performance_pass": data.get("benchmark", {}).get("performance_pass"),
         "float_ops": data.get("float_audit", {}).get("float_primitives_used_for_canonical"),
