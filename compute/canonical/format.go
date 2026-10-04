@@ -102,8 +102,8 @@ func ExpFx(x int32) int32 {
 	if xi >= one*21 {
 		return int32(MaxFx)
 	}
-	k := xi / ln2Fx   // floor division; ln2Fx > 0
-	f := xi - k*ln2Fx // f in [0, ln2Fx)
+	k := xi / ln2Fx   // truncating division (mirrored bit-for-bit by every backend)
+	f := xi - k*ln2Fx // |f| < ln2Fx; the Taylor polynomial covers both signs
 	poly := one + MulFxWide(f, c1Fx+MulFxWide(f, c2Fx+MulFxWide(f, c3Fx+MulFxWide(f, c4Fx, FracBits), FracBits), FracBits), FracBits)
 	if k < 0 {
 		if -k >= 32 {

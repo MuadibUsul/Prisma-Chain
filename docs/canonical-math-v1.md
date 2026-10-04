@@ -40,15 +40,18 @@ Why not the alternatives (measured, see JSON):
 
 - **invsqrt(x)**: normalize x = m·4^e with m∈[1,4); a pinned 16-point table
   of 1/√m (Q12.20, generated once by high-precision math and committed)
-  provides a ≤9% estimate; apply the 4^-e scale to the estimate BEFORE
-  iterating; exactly 3 Newton steps at doubled internal precision (all
-  int64-safe); result saturates, never diverges. Measured relative error ≤ 1e-3
-  at the very top of the Q12.20 range (2047) and ~4e-5 elsewhere;
-  the numeric-design simulation is the measured RMSNorm end-to-end
-  bound in docs/canonical-math-v1-analysis.json.
-- **exp(x)**: 2^(x/ln2) with floor split into integer power and a cubic on
-  f∈[0,ln2) with pinned coefficients (ln2, ln2²/2, ln2³/6 rounded to
-  Q12.20); x ≤ -24 underflows to 0, x ≥ 21 saturates at the Q12.20 max.
+  provides a ≤9% estimate; apply the 4^-e scale AFTER exactly four Newton
+  steps on the normalized domain (all int64-safe); the result saturates and
+  is never zero for x > 0. Measured relative error ≤ 1e-3 at the very top
+  of the Q12.20 range and ~4e-5 elsewhere; the numeric-design simulation is
+  the measured RMSNorm end-to-end bound in
+  docs/canonical-math-v1-analysis.json.
+- **exp(x)**: e^x = 2^k · e^f with the integer split k = trunc(x/ln2) in
+  the Go/Python integer semantics (truncation toward zero, mirrored by
+  every backend), so f = x - k·ln2 always satisfies |f| < ln2, and the
+  four-term pinned Taylor polynomial P(f) = 1 + f + f²/2 + f³/6 + f⁴/24
+  (coefficients rounded to Q12.20) evaluates e^f on both signs of f;
+  x ≤ -24 underflows to 0, x ≥ 21 saturates at the Q12.20 max.
 - **sigmoid(x)** (SiLU): two-branch stable form; 1/(1+e^-x) for x ≥ 0 and
   e^x/(1+e^x) for x < 0, so the exponent is always non-positive.
 - **softmax row**: subtract the row max (mandatory), canonical exp,
