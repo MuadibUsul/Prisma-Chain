@@ -227,12 +227,20 @@ def run_canonical_vectors(device: str) -> dict:
                 got = ext.op_softmax(ins[0])
             elif op == "GEMM_INT8_V1":
                 trans = params.get("transpose_b", 0) == 1
+                m = int(ins[0].shape[0])
                 a = ins[0].to(torch.int16).contiguous()
+                if m < 16:  # fused kernel is M=16-native; zero-pad short rows
+                    a16 = torch.zeros((16, int(ins[0].shape[1])), dtype=torch.int16,
+                                      device=device)
+                    a16[:m] = a
+                    a = a16
                 w = ins[1].to(torch.int64)
                 w_nk = w if trans else w.t().contiguous()
                 N, K = int(w_nk.shape[0]), int(w_nk.shape[1])
                 w0, w1, ws = prepack_w10(w_nk)
                 got = ext.wide_gemm(a, w0, w1, ws, N, K)
+                if m < 16:
+                    got = got[:m]
             else:
                 raise ValueError(f"unknown operator {op}")
             ok = bool(torch.equal(got, expected))
