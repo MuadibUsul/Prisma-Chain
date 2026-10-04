@@ -1,0 +1,172 @@
+{
+ "weights": {
+  "W8": {
+   "logical_bytes": 9961472,
+   "int16_container_bytes": 19922944
+  },
+  "W9": {
+   "logical_bytes": 11206656,
+   "int16_container_bytes": 19922944
+  },
+  "W10": {
+   "logical_bytes": 12451840,
+   "int16_container_bytes": 19922944
+  },
+  "W11": {
+   "logical_bytes": 13697024,
+   "int16_container_bytes": 19922944
+  },
+  "W12": {
+   "logical_bytes": 14942208,
+   "int16_container_bytes": 19922944
+  },
+  "W13": {
+   "logical_bytes": 16187392,
+   "int16_container_bytes": 19922944
+  }
+ },
+ "weight_note": "reusable across tasks; W8 unchanged",
+ "activations_per_case": {
+  "A8": {
+   "logical_bytes": 245760,
+   "int16_container_bytes": 491520
+  },
+  "A9": {
+   "logical_bytes": 276480,
+   "int16_container_bytes": 491520
+  },
+  "A10": {
+   "logical_bytes": 307200,
+   "int16_container_bytes": 491520
+  },
+  "A11": {
+   "logical_bytes": 337920,
+   "int16_container_bytes": 491520
+  },
+  "A12": {
+   "logical_bytes": 368640,
+   "int16_container_bytes": 491520
+  },
+  "A13": {
+   "logical_bytes": 399360,
+   "int16_container_bytes": 491520
+  }
+ },
+ "activation_note": "per task; F.3A persisted element count",
+ "graph": {
+  "nodes": 310,
+  "gemm_nodes": 83,
+  "mac_per_case": 252706816,
+  "freivalds_checks": 83,
+  "manifest_leaves": 310,
+  "unchanged_by_bits": true
+ },
+ "future_micro_step": {
+  "A8W8": {
+   "local_k": 8,
+   "worst_case_acc": 131072,
+   "safe_under_int32": true
+  },
+  "A8W9": {
+   "local_k": 8,
+   "worst_case_acc": 262144,
+   "safe_under_int32": true
+  },
+  "A8W10": {
+   "local_k": 8,
+   "worst_case_acc": 524288,
+   "safe_under_int32": true
+  },
+  "A8W11": {
+   "local_k": 8,
+   "worst_case_acc": 1048576,
+   "safe_under_int32": true
+  },
+  "A8W12": {
+   "local_k": 8,
+   "worst_case_acc": 2097152,
+   "safe_under_int32": true
+  },
+  "A8W13": {
+   "local_k": 8,
+   "worst_case_acc": 4194304,
+   "safe_under_int32": true
+  },
+  "A9W8": {
+   "local_k": 8,
+   "worst_case_acc": 262144,
+   "safe_under_int32": true
+  },
+  "A9W9": {
+   "local_k": 8,
+   "worst_case_acc": 524288,
+   "safe_under_int32": true
+  },
+  "A9W10": {
+   "local_k": 8,
+   "worst_case_acc": 1048576,
+   "safe_under_int32": true
+  },
+  "A9W11": {
+   "local_k": 8,
+   "worst_case_acc": 2097152,
+   "safe_under_int32": true
+  },
+  "A9W12": {
+   "local_k": 8,
+   "worst_case_acc": 4194304,
+   "safe_under_int32": true
+  },
+  "A10W8": {
+   "local_k": 8,
+   "worst_case_acc": 524288,
+   "safe_under_int32": true
+  },
+  "A10W9": {
+   "local_k": 8,
+   "worst_case_acc": 1048576,
+   "safe_under_int32": true
+  },
+  "A10W10": {
+   "local_k": 8,
+   "worst_case_acc": 2097152,
+   "safe_under_int32": true
+  },
+  "A10W11": {
+   "local_k": 8,
+   "worst_case_acc": 4194304,
+   "safe_under_int32": true
+  },
+  "A11W8": {
+   "local_k": 8,
+   "worst_case_acc": 1048576,
+   "safe_under_int32": true
+  },
+  "A11W9": {
+   "local_k": 8,
+   "worst_case_acc": 2097152,
+   "safe_under_int32": true
+  },
+  "A11W10": {
+   "local_k": 8,
+   "worst_case_acc": 4194304,
+   "safe_under_int32": true
+  },
+  "A12W8": {
+   "local_k": 8,
+   "worst_case_acc": 2097152,
+   "safe_under_int32": true
+  },
+  "A12W9": {
+   "local_k": 8,
+   "worst_case_acc": 4194304,
+   "safe_under_int32": true
+  },
+  "A13W8": {
+   "local_k": 8,
+   "worst_case_acc": 4194304,
+   "safe_under_int32": true
+  }
+ },
+ "verification_implications": "Freivalds / single-tile dispute / 512-MAC arbitration are structurally reusable with a versioned wider-integer arithmetic; NOT IMPLEMENTED"
+}
