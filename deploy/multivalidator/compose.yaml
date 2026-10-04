@@ -9,7 +9,7 @@ name: prisma-multivalidator
 
 services:
   init:
-    image: prisma-chain:phase-e
+    image: prisma-chain:phase-f
     pull_policy: never
     entrypoint: ["/bin/sh", "/bootstrap/init.sh"]
     environment:
@@ -20,7 +20,7 @@ services:
       - ./init.sh:/bootstrap/init.sh:ro
 
   validator-a:
-    image: prisma-chain:phase-e
+    image: prisma-chain:phase-f
     pull_policy: never
     entrypoint:
       - sh
@@ -38,7 +38,7 @@ services:
       - "127.0.0.1:26661:26657"
 
   validator-b:
-    image: prisma-chain:phase-e
+    image: prisma-chain:phase-f
     pull_policy: never
     entrypoint:
       - sh
@@ -56,7 +56,7 @@ services:
       - "127.0.0.1:26662:26657"
 
   validator-c:
-    image: prisma-chain:phase-e
+    image: prisma-chain:phase-f
     pull_policy: never
     entrypoint:
       - sh
@@ -74,7 +74,7 @@ services:
       - "127.0.0.1:26663:26657"
 
   validator-d:
-    image: prisma-chain:phase-e
+    image: prisma-chain:phase-f
     pull_policy: never
     entrypoint:
       - sh
