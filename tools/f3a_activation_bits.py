@@ -32,7 +32,13 @@ sys.path.insert(0, str(REPO / "tools"))
 sys.path.insert(0, str(REPO / "compute" / "canonical" / "python"))
 
 import f1_canonical_numpy as N  # noqa: E402
-from convert_qwen3_block import Conformer, instrumented_forward, to_fx, K_HEAD_FACTOR  # noqa: E402
+from convert_qwen3_block import Conformer, instrumented_forward, to_fx  # noqa: E402
+
+# F.3A calibration decision (calibration-set criterion only): the F.1
+# link-level k factor (0.25) was tuned under the buggy scores scale and is
+# pure clipping bias once the scales are correct; the MSE-optimal step
+# (factor 1.0) is the principled calibration choice for every candidate.
+K_HEAD_FACTOR = 1.0
 from f2a_groupwise_search import wscale  # noqa: E402
 
 ONE = 1 << 20
@@ -146,8 +152,10 @@ def run_block_bits(conf: Conformer, hidden: np.ndarray, plan: dict, stats: dict)
         gated(acc, mult, shift)
         return np.clip(N.rshift_round_even(acc.astype(np.int64) * np.int64(mult), shift), MIN_FX, MAX_FX)
 
+    wqmax = int(plan.get("wqmax", 127))   # research diagnostic override only
+
     def wc(w, step):
-        return np.clip(np.rint(w * ONE / step), -127, 127).astype(np.int8)
+        return np.clip(np.rint(w * ONE / step), -wqmax, wqmax)
 
     x = np.rint(hidden * ONE).astype(np.int64)
     h = N.op_rmsnorm(x, np.rint(conf.weights["input_layernorm.weight"] * ONE).astype(np.int64), 1)
