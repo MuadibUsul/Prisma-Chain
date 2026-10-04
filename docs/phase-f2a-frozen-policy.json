@@ -1,0 +1,24 @@
+{
+ "policy_id": "f4d63575269a718f882e6df6d0433e013a47a68511ba40295b21d658c724368d",
+ "policy": {
+  "policy_version": "F2A_RESEARCH_1",
+  "groups": {
+   "q": 32,
+   "hm": 16,
+   "h2": 128
+  },
+  "slice_boundaries": {
+   "q": "per head, contiguous [0:32)[32:64)[64:96)[96:128)",
+   "hm": "contiguous 16-wide over mlp=3072",
+   "h2": "single slice over hidden=1024"
+  },
+  "quant_method": "per-slice static int8 step, MSE-optimal over the F.2A calibration split",
+  "scale_source": "testdata/qwen3_f2a_calibration.json (64 cases, sha256 recorded in meta)",
+  "partial_gemm_structure": "reduction dim partitioned at the finest enabled group; per-partial GEMM_INT8_V1 semantics; weight slice = contiguous K-range slice of the F.1-quantized weight (same step)",
+  "requant_common_scale": "per-partial REQUANTIZE_V1 to the common Q12.20 scale of the logical sum: mult = step_a*step_w (exact) for accum->fx; mult = round(step_q*step_k*attn_scale/2^20) for scores; ADD_FIXED_V1 saturating across partials",
+  "selection_data": "testdata/qwen3_f2a_tuning.json (32 cases; search used the first 8)",
+  "heldout": "testdata/qwen3_f2a_heldout.json (64 cases, untouched at freeze time)"
+ },
+ "expected_verdict": "NOT FEASIBLE (cosine reachable, max_abs floor ~0.24 > 0.05)",
+ "frozen_by": "F.2A search stage; heldout untouched until this file existed"
+}
