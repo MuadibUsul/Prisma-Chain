@@ -17,6 +17,7 @@ const (
 	DomainGraphTrace = "PRISMA_CANONICAL_GRAPH_TRACE_V1\x00"
 	DomainStageState = "PRISMA_CANONICAL_STAGE_STATE_V1\x00"
 	DomainVWR        = "PRISMA_GRAPH_VWR_V1\x00"
+	DomainReceipt    = "PRISMA_GRAPH_RECEIPT_V1\x00"
 	DomainSig        = "PRISMA_CANONICAL_SIG_V1\x00"
 	DomainWorkVector = "PRISMA_CANONICAL_WORK_VECTOR_V1\x00"
 )
