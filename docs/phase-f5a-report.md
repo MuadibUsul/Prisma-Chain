@@ -173,3 +173,14 @@ IMPLEMENTED. The stop rule is met: plain-number-format research ends
 here (highest-weight-bits winner A13W10 at sum 23), and the next round is
 the F.5B wide-integer implementation feasibility question (GPU kernel
 strategy, wide requantization, Freivalds and 512-MAC dispute arithmetic).
+
+## Evidence normalization addendum (added in F.5B)
+
+The frozen `docs/phase-f5a-heldout-results.json` carries a known stale
+field: per-result `max_safe_k64` records the INT32 value (e.g. 1023 for
+A13W10) from the pre-correction classification. The original file is
+preserved unmodified. The canonical, mechanically derived evidence —
+winner, accuracy metrics, MaxSafeK32/K64, and the int64-safety verdicts
+for accumulation, requantization and Freivalds — is now
+**docs/phase-f5a-verdict-final.json** (with source-artifact SHA256s).
+Accuracy data was not modified in any way.
