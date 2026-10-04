@@ -6,6 +6,8 @@ package canonical
 
 import (
 	"bytes"
+	"crypto/ed25519"
+	"crypto/rand"
 	"testing"
 )
 
@@ -216,5 +218,77 @@ func TestGraphReceiptBindings(t *testing.T) {
 	if _, err := BuildVerifiedGraphWorkReceiptV1(fix.graph, nil, nil, workerKey,
 		fix.exec.Outputs, fix.exec.WorkVector, ModeChallengedWorkerWon, 9, nil, bytes.Repeat([]byte{2}, 32)); err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestGraphWorkVectorMatchesExecution(t *testing.T) {
+	for _, cfg := range []BlockConfig{miniBlockConfig(), mediumBlockConfig()} {
+		if cfg.MLPHidden == mediumBlockConfig().MLPHidden && testing.Short() {
+			t.Skip("medium block runs only outside -short")
+		}
+		fix := buildBlockFixture(t, cfg)
+		derived, err := GraphWorkVector(fix.graph)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if len(derived) != len(fix.exec.WorkVector) {
+			t.Fatalf("work vector key count %d != execution %d", len(derived), len(fix.exec.WorkVector))
+		}
+		for _, pair := range fix.exec.WorkVector {
+			if got := derived.Get(pair.Key, -1); got != pair.Value {
+				t.Fatalf("derived work %s = %d, executed %d", pair.Key, got, pair.Value)
+			}
+		}
+	}
+}
+
+func TestGraphResultCommit(t *testing.T) {
+	fix := buildBlockFixture(t, miniBlockConfig())
+	pub, priv, err := ed25519.GenerateKey(rand.Reader)
+	if err != nil {
+		t.Fatal(err)
+	}
+	rc, err := NewGraphResultCommit(fix.graph, []byte("task-1"), []byte("assign-1"), pub, fix.exec.Outputs, 7)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := SignGraphResultCommit(rc, priv); err != nil {
+		t.Fatal(err)
+	}
+	if err := ValidateGraphResultCommit(fix.graph, rc); err != nil {
+		t.Fatal(err)
+	}
+
+	// Tamper: output root bytes.
+	bad := *rc
+	bad.OutputRoots = make([][]byte, len(rc.OutputRoots))
+	for i, raw := range rc.OutputRoots {
+		bad.OutputRoots[i] = append([]byte(nil), raw...)
+	}
+	bad.OutputRoots[0][0] ^= 0x01
+	if err := ValidateGraphResultCommit(fix.graph, &bad); err == nil {
+		t.Fatal("tampered output root accepted")
+	}
+	// Tamper: signature.
+	bad2 := *rc
+	bad2.Signature = append([]byte(nil), rc.Signature...)
+	bad2.Signature[0] ^= 0x01
+	if err := ValidateGraphResultCommit(fix.graph, &bad2); err == nil {
+		t.Fatal("tampered signature accepted")
+	}
+	// Tamper: graph id.
+	bad3 := *rc
+	bad3.GraphID = append([]byte(nil), rc.GraphID...)
+	bad3.GraphID[0] ^= 0x01
+	if err := ValidateGraphResultCommit(fix.graph, &bad3); err == nil {
+		t.Fatal("tampered graph id accepted")
+	}
+	// An unsigned commit must not validate.
+	if err := ValidateGraphResultCommit(fix.graph, &GraphResultCommit{
+		ProtocolVersion: GraphResultCommitVersion,
+		GraphID:         rc.GraphID, TaskRef: rc.TaskRef, AssignmentRef: rc.AssignmentRef,
+		WorkerPubKey: rc.WorkerPubKey, FinalOutputRoot: rc.FinalOutputRoot, OutputRoots: rc.OutputRoots,
+	}); err == nil {
+		t.Fatal("unsigned commit accepted")
 	}
 }
