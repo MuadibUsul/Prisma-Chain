@@ -276,3 +276,35 @@ func depthFor(count uint32) int {
 	}
 	return depth
 }
+
+// MerkleProof is the generic inclusion proof for one leaf (used by the
+// graph trace and state machinery; tensor chunks use VerifyChunk).
+type MerkleProof struct {
+	Index    uint32
+	Count    uint32
+	Siblings []Hash
+}
+
+// VerifyLeafInclusion verifies leaf at proof position against root with
+// the repo's canonical odd-node rule.
+func VerifyLeafInclusion(root Hash, leaf Hash, proof MerkleProof) bool {
+	if proof.Count == 0 || proof.Index >= proof.Count || len(proof.Siblings) != depthFor(proof.Count) {
+		return false
+	}
+	h := leaf
+	idx, cnt := proof.Index, proof.Count
+	for _, sib := range proof.Siblings {
+		if idx%2 == 0 {
+			right := sib
+			if idx+1 >= cnt {
+				right = h
+			}
+			h = hashBytes(h[:], right[:])
+		} else {
+			h = hashBytes(sib[:], h[:])
+		}
+		idx /= 2
+		cnt = (cnt + 1) / 2
+	}
+	return h == root
+}

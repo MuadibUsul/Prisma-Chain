@@ -45,3 +45,39 @@ func canonicalObjectHash(domain string, v any) (Hash, error) {
 func appendUint32BE(dst []byte, v uint32) []byte {
 	return append(dst, byte(v>>24), byte(v>>16), byte(v>>8), byte(v))
 }
+
+// Dispute parties and outcomes (same vocabulary as the rest of the repo).
+type Party uint8
+
+const (
+	Worker Party = iota + 1
+	Challenger
+)
+
+type Outcome uint8
+
+const (
+	Pending Outcome = iota
+	WorkerWins
+	ChallengerWins
+	BothInvalid
+)
+
+func partyIndex(p Party) (int, error) {
+	switch p {
+	case Worker:
+		return 0, nil
+	case Challenger:
+		return 1, nil
+	default:
+		return 0, errorsNewParty(p)
+	}
+}
+
+func errorsNewParty(p Party) error {
+	return &partyError{p}
+}
+
+type partyError struct{ p Party }
+
+func (e *partyError) Error() string { return "canonical: invalid party" }

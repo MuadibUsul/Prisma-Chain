@@ -23,11 +23,16 @@ func (ropeFixed) ValidateParams(p ParamList) error {
 	return nil
 }
 
+// OutputSpec: the node takes the activations plus the pinned sin/cos
+// constant tensor as a second (structural) input.
 func (ropeFixed) OutputSpec(in []TensorDescriptor, p ParamList) (TensorDescriptor, error) {
-	if len(in) != 1 {
-		return TensorDescriptor{}, errors.New("canonical: ROPE needs one input")
+	if len(in) != 2 {
+		return TensorDescriptor{}, errors.New("canonical: ROPE needs activations and the constant table")
 	}
 	if err := requireQ12(in[0]); err != nil {
+		return TensorDescriptor{}, err
+	}
+	if err := requireQ12(in[1]); err != nil {
 		return TensorDescriptor{}, err
 	}
 	if len(in[0].Shape) < 2 {
@@ -51,9 +56,11 @@ type RopeConstants struct {
 	Pairs int
 }
 
-// NewRopeConstants builds from a flat (cos, sin) table.
+// NewRopeConstants builds from a flat (cos, sin) table holding
+// positions x pairs entries: len(table) must be a positive multiple of
+// pairs*2, where pairs is the number of element pairs per row.
 func NewRopeConstants(table []int32, pairs int) (*RopeConstants, error) {
-	if pairs <= 0 || len(table) != pairs*2 {
+	if pairs <= 0 || len(table) == 0 || len(table)%(pairs*2) != 0 {
 		return nil, errors.New("canonical: malformed RoPE table")
 	}
 	return &RopeConstants{Table: table, Pairs: pairs}, nil
@@ -68,7 +75,8 @@ func (ropeFixed) Work(in []Tensor, _ ParamList) WorkVector {
 // the operator uses the constants attached to the graph, which the graph
 // layer resolves and passes here.
 func ExecuteRope(in *Tensor, constants *RopeConstants, p ParamList) (*Tensor, error) {
-	if _, err := (ropeFixed{}).OutputSpec([]TensorDescriptor{in.Desc}, p); err != nil {
+	tableDesc := NewDesc(DtypeQ12_20, int64(len(constants.Table)))
+	if _, err := (ropeFixed{}).OutputSpec([]TensorDescriptor{in.Desc, tableDesc}, p); err != nil {
 		return nil, err
 	}
 	hidden := int(in.Desc.Shape[len(in.Desc.Shape)-1])
