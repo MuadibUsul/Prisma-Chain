@@ -155,6 +155,8 @@ def run_correctness(device: torch.device) -> dict:
                  for name in WIDE_CANDIDATES}
     vec_stat = {name: {"exact": 0, "mismatch": 0, "error": 0, "first_error": None}
                 for name in WIDE_CANDIDATES}
+    stage_a_vs_eager = {"match": 0, "differ": 0, "error": 0, "not_captured": 0}
+    vec_detail: list[dict] = []
     for m in meta:
         nid = m["node_id"]
         expected = torch.tensor(data[f"c_{nid}"], dtype=torch.long).cuda()
@@ -175,6 +177,16 @@ def run_correctness(device: torch.device) -> dict:
                 msg = f"{type(exc).__name__}: {str(exc)[:200]}"
                 node_stat[name]["error"] += 1
                 node_stat[name]["first_error"] = node_stat[name]["first_error"] or msg
+        # Stage A vs eager: direct equality check (both also vs the oracle)
+        sa = cands["STAGE_A_CUDA_GRAPH_K3"]
+        if sa.g is None:
+            stage_a_vs_eager["not_captured"] += 1
+        else:
+            try:
+                eq = bool(torch.equal(cands["F5B_EAGER_KARATSUBA3"].run(a16), sa.run(a16)))
+                stage_a_vs_eager["match" if eq else "differ"] += 1
+            except Exception:  # noqa: BLE001
+                stage_a_vs_eager["error"] += 1
     for v in vectors:
         a16 = torch.tensor(v["a"], dtype=torch.long).reshape(v["a_shape"])
         expected = torch.tensor(v["cpu_direct"], dtype=torch.long).reshape(
@@ -187,16 +199,21 @@ def run_correctness(device: torch.device) -> dict:
             "STAGE_B_5LAUNCH_K3": StageB5Launch(w_nk),
             "STAGE_C_TRUE_FUSED_MMA": StageCFusedMMA(w_nk),
         }
+        detail = {"name": v["name"], "backends": {}}
         for name, cand in cands.items():
             try:
                 got = cand.run(a16.to(torch.int16).cuda())
                 mm = int((got != expected).sum().item())
                 vec_stat[name]["exact" if mm == 0 else "mismatch"] += 1
+                detail["backends"][name] = {"exact": mm == 0, "mismatches": mm}
             except Exception as exc:  # noqa: BLE001
                 msg = f"{type(exc).__name__}: {str(exc)[:200]}"
                 vec_stat[name]["error"] += 1
                 vec_stat[name]["first_error"] = vec_stat[name]["first_error"] or msg
-    return {"nodes": node_stat, "vectors": vec_stat,
+                detail["backends"][name] = {"exact": False, "error": msg}
+        vec_detail.append(detail)
+    return {"nodes": node_stat, "vectors": vec_stat, "vectors_detail": vec_detail,
+            "stage_a_vs_eager_nodes": stage_a_vs_eager,
             "nodes_total": len(meta), "vectors_total": len(vectors)}
 
 

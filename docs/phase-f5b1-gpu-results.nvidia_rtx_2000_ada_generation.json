@@ -1,0 +1,796 @@
+{
+ "phase": "F.5B.1",
+ "environment": {
+  "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "torch": "2.8.0+cu128",
+  "cuda_runtime": "12.8",
+  "cuda_available": true,
+  "device": "cuda",
+  "gpu_name": "NVIDIA RTX 2000 Ada Generation",
+  "compute_capability": "8.9",
+  "sm_count": 22,
+  "total_memory_gb": 15.6,
+  "device_index": null,
+  "nvidia_smi": "NVIDIA RTX 2000 Ada Generation, 580.159.04, 8.9"
+ },
+ "cuda_probe": {
+  "floor_div_int64_ok": true,
+  "int_mm_m_rows_probe": {
+   "16": "RuntimeError: self.size(0) needs to be greater than 16, but got 16",
+   "17": "ok",
+   "24": "ok",
+   "32": "ok"
+  },
+  "padding_rule": "M -> max(32, align16); K -> max(16, align16); N -> max(16, align16)",
+  "padding_rule_justification": "torch._int_mm on CUDA requires left-operand M > 16 (see probe); zero padding is mathematically inert so exactness is preserved"
+ },
+ "full_block_gpu": "NOT STARTED (gated on GEMM performance PASS, spec section 81)",
+ "extension": {
+  "built": true,
+  "build_seconds": 28.4
+ },
+ "selftest": {
+  "cases": [
+   {
+    "name": "split_exact",
+    "ok": true
+   },
+   {
+    "name": "native_exact_16x32",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "native_exact_16x16",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "native_exact_128x16",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "native_exact_64x96",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "native_exact_128x128",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "native_onehot_0_0",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "native_onehot_5_3",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "native_onehot_15_31",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "native_onehot_7_17",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "wide_random_16x32",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "wide_random_128x16",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "wide_random_128x1024",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "wide_random_1024x128",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "wide_all_max_16x32",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "wide_all_max_128x16",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "wide_all_max_128x1024",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "wide_all_max_1024x128",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "wide_all_min_16x32",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "wide_all_min_128x16",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "wide_all_min_128x1024",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "wide_all_min_1024x128",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "wide_mixed_16x32",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "wide_mixed_128x16",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "wide_mixed_128x1024",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "wide_mixed_1024x128",
+    "ok": true,
+    "first_mismatch": null
+   },
+   {
+    "name": "merge_exact",
+    "ok": true
+   }
+  ],
+  "ok": true
+ },
+ "correctness": {
+  "nodes": {
+   "F5B_EAGER_KARATSUBA3": {
+    "exact": 83,
+    "mismatch": 0,
+    "error": 0,
+    "first_error": null
+   },
+   "STAGE_A_CUDA_GRAPH_K3": {
+    "exact": 0,
+    "mismatch": 0,
+    "error": 83,
+    "first_error": "RuntimeError: graph capture failed: AcceleratorError: CUDA error: operation failed due to a previous error during capture\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrac"
+   },
+   "STAGE_B_5LAUNCH_K3": {
+    "exact": 34,
+    "mismatch": 0,
+    "error": 49,
+    "first_error": "RuntimeError: self.size(1) needs to match mat2.size(0) but got 1024 and 128"
+   },
+   "STAGE_C_TRUE_FUSED_MMA": {
+    "exact": 83,
+    "mismatch": 0,
+    "error": 0,
+    "first_error": null
+   }
+  },
+  "vectors": {
+   "F5B_EAGER_KARATSUBA3": {
+    "exact": 5,
+    "mismatch": 0,
+    "error": 0,
+    "first_error": null
+   },
+   "STAGE_A_CUDA_GRAPH_K3": {
+    "exact": 0,
+    "mismatch": 0,
+    "error": 5,
+    "first_error": "RuntimeError: graph capture failed: AcceleratorError: CUDA error: operation failed due to a previous error during capture\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrac"
+   },
+   "STAGE_B_5LAUNCH_K3": {
+    "exact": 0,
+    "mismatch": 0,
+    "error": 5,
+    "first_error": "RuntimeError: The size of tensor a (16) must match the size of tensor b (2) at non-singleton dimension 0"
+   },
+   "STAGE_C_TRUE_FUSED_MMA": {
+    "exact": 0,
+    "mismatch": 1,
+    "error": 4,
+    "first_error": "RuntimeError: The size of tensor a (16) must match the size of tensor b (2) at non-singleton dimension 0"
+   }
+  },
+  "nodes_total": 83,
+  "vectors_total": 5
+ },
+ "launch_profile": {
+  "16x128x1024": {
+   "NATIVE_PADDED_INT8": {
+    "gpu_ops_per_logical_gemm": 6.0,
+    "kernels_per_logical_gemm": 4.0,
+    "runs_profiled": 5
+   },
+   "CUSTOM_NATIVE_INT8_M16": {
+    "gpu_ops_per_logical_gemm": 1.0,
+    "kernels_per_logical_gemm": 1.0,
+    "runs_profiled": 5
+   },
+   "F5B_EAGER_KARATSUBA3": {
+    "gpu_ops_per_logical_gemm": 45.0,
+    "kernels_per_logical_gemm": 37.0,
+    "runs_profiled": 5
+   },
+   "STAGE_A_CUDA_GRAPH_K3": {
+    "error": "RuntimeError: graph capture failed: AcceleratorError: CUDA error: operation failed due to a previous error during capture\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrac"
+   },
+   "STAGE_B_5LAUNCH_K3": {
+    "error": "RuntimeError: self.size(1) needs to match mat2.size(0) but got 1024 and 128"
+   },
+   "STAGE_C_TRUE_FUSED_MMA": {
+    "gpu_ops_per_logical_gemm": 1.0,
+    "kernels_per_logical_gemm": 1.0,
+    "runs_profiled": 5
+   }
+  },
+  "16x3072x1024": {
+   "NATIVE_PADDED_INT8": {
+    "gpu_ops_per_logical_gemm": 6.0,
+    "kernels_per_logical_gemm": 4.0,
+    "runs_profiled": 5
+   },
+   "CUSTOM_NATIVE_INT8_M16": {
+    "gpu_ops_per_logical_gemm": 1.0,
+    "kernels_per_logical_gemm": 1.0,
+    "runs_profiled": 5
+   },
+   "F5B_EAGER_KARATSUBA3": {
+    "gpu_ops_per_logical_gemm": 45.0,
+    "kernels_per_logical_gemm": 37.0,
+    "runs_profiled": 5
+   },
+   "STAGE_A_CUDA_GRAPH_K3": {
+    "error": "RuntimeError: graph capture failed: AssertionError: A1 digit range violated"
+   },
+   "STAGE_B_5LAUNCH_K3": {
+    "gpu_ops_per_logical_gemm": 6.0,
+    "kernels_per_logical_gemm": 5.0,
+    "runs_profiled": 5
+   },
+   "STAGE_C_TRUE_FUSED_MMA": {
+    "gpu_ops_per_logical_gemm": 1.0,
+    "kernels_per_logical_gemm": 1.0,
+    "runs_profiled": 5
+   }
+  }
+ },
+ "benchmark": {
+  "shapes": {
+   "16x128x1024": {
+    "M": 16,
+    "N": 128,
+    "K": 1024,
+    "transpose_b": false,
+    "schedule_frequency": 32,
+    "logical_mac": 2097152,
+    "mac_fraction": 0.26556016597510373,
+    "NATIVE_PADDED_INT8": {
+     "median_ms": 0.1714399978518486,
+     "p50_ms": 0.1714399978518486,
+     "p95_ms": 0.2152000069618225,
+     "min_ms": 0.16636799275875092,
+     "max_ms": 0.338591992855072,
+     "stddev_ms": 0.018624821487417016,
+     "iterations": 500,
+     "warmup": 50,
+     "batched_median_ms": 0.1467561626434326,
+     "batched_output_exact": true
+    },
+    "CUSTOM_NATIVE_INT8_M16": {
+     "median_ms": 0.058368001133203506,
+     "p50_ms": 0.058368001133203506,
+     "p95_ms": 0.08694399893283844,
+     "min_ms": 0.05721599981188774,
+     "max_ms": 0.12489599734544754,
+     "stddev_ms": 0.009990056022236123,
+     "iterations": 500,
+     "warmup": 50,
+     "batched_median_ms": 0.026772799491882323,
+     "batched_output_exact": true
+    },
+    "F5B_EAGER_KARATSUBA3": {
+     "median_ms": 0.9703039824962616,
+     "p50_ms": 0.9703039824962616,
+     "p95_ms": 1.0401599407196045,
+     "min_ms": 0.9407680034637451,
+     "max_ms": 1.1161919832229614,
+     "stddev_ms": 0.03291074871986336,
+     "iterations": 200,
+     "warmup": 50,
+     "batched_median_ms": 0.9693116760253906,
+     "batched_output_exact": true
+    },
+    "STAGE_A_CUDA_GRAPH_K3": {
+     "error": "RuntimeError: graph capture failed: AcceleratorError: CUDA error: operation failed due to a previous error during capture\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\nFor debugging consider"
+    },
+    "STAGE_B_5LAUNCH_K3": {
+     "error": "RuntimeError: self.size(1) needs to match mat2.size(0) but got 1024 and 128"
+    },
+    "STAGE_C_TRUE_FUSED_MMA": {
+     "median_ms": 0.06932799890637398,
+     "p50_ms": 0.06932799890637398,
+     "p95_ms": 0.09689600020647049,
+     "min_ms": 0.06828799843788147,
+     "max_ms": 0.151296004652977,
+     "stddev_ms": 0.010076040117815892,
+     "iterations": 500,
+     "warmup": 50,
+     "batched_median_ms": 0.03679744005203247,
+     "batched_output_exact": true
+    },
+    "native_fastest_median_ms": 0.058368001133203506
+   },
+   "16x16x128T": {
+    "M": 16,
+    "N": 16,
+    "K": 128,
+    "transpose_b": true,
+    "schedule_frequency": 16,
+    "logical_mac": 32768,
+    "mac_fraction": 0.002074688796680498,
+    "NATIVE_PADDED_INT8": {
+     "median_ms": 0.16409599781036377,
+     "p50_ms": 0.16409599781036377,
+     "p95_ms": 0.19142399728298187,
+     "min_ms": 0.16140800714492798,
+     "max_ms": 0.26044800877571106,
+     "stddev_ms": 0.013064519724450628,
+     "iterations": 500,
+     "warmup": 50,
+     "batched_median_ms": 0.13137791633605958,
+     "batched_output_exact": true
+    },
+    "CUSTOM_NATIVE_INT8_M16": {
+     "median_ms": 0.05183999985456467,
+     "p50_ms": 0.05183999985456467,
+     "p95_ms": 0.06207999959588051,
+     "min_ms": 0.050783999264240265,
+     "max_ms": 0.09232000261545181,
+     "stddev_ms": 0.004322982168910983,
+     "iterations": 500,
+     "warmup": 50,
+     "batched_median_ms": 0.024811201095581055,
+     "batched_output_exact": true
+    },
+    "F5B_EAGER_KARATSUBA3": {
+     "median_ms": 1.0147199630737305,
+     "p50_ms": 1.0147199630737305,
+     "p95_ms": 1.1019519567489624,
+     "min_ms": 0.9679999947547913,
+     "max_ms": 1.2308800220489502,
+     "stddev_ms": 0.03604202753766061,
+     "iterations": 200,
+     "warmup": 50,
+     "batched_median_ms": 0.9675676727294922,
+     "batched_output_exact": true
+    },
+    "STAGE_A_CUDA_GRAPH_K3": {
+     "error": "RuntimeError: graph capture failed: AcceleratorError: CUDA error: operation failed due to a previous error during capture\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\nFor debugging consider"
+    },
+    "STAGE_B_5LAUNCH_K3": {
+     "error": "RuntimeError: self.size(1) needs to match mat2.size(0) but got 128 and 16"
+    },
+    "STAGE_C_TRUE_FUSED_MMA": {
+     "median_ms": 0.052671998739242554,
+     "p50_ms": 0.052671998739242554,
+     "p95_ms": 0.06300800293684006,
+     "min_ms": 0.0514880008995533,
+     "max_ms": 0.1420159935951233,
+     "stddev_ms": 0.006729244255373602,
+     "iterations": 500,
+     "warmup": 50,
+     "batched_median_ms": 0.025945279598236084,
+     "batched_output_exact": true
+    },
+    "native_fastest_median_ms": 0.05183999985456467
+   },
+   "16x128x16": {
+    "M": 16,
+    "N": 128,
+    "K": 16,
+    "transpose_b": false,
+    "schedule_frequency": 16,
+    "logical_mac": 32768,
+    "mac_fraction": 0.002074688796680498,
+    "NATIVE_PADDED_INT8": {
+     "median_ms": 0.16627199947834015,
+     "p50_ms": 0.16627199947834015,
+     "p95_ms": 0.2048960030078888,
+     "min_ms": 0.16182400286197662,
+     "max_ms": 0.2672959864139557,
+     "stddev_ms": 0.015453698952531287,
+     "iterations": 500,
+     "warmup": 50,
+     "batched_median_ms": 0.1452387237548828,
+     "batched_output_exact": true
+    },
+    "CUSTOM_NATIVE_INT8_M16": {
+     "median_ms": 0.05252800136804581,
+     "p50_ms": 0.05252800136804581,
+     "p95_ms": 0.0859839990735054,
+     "min_ms": 0.05081599950790405,
+     "max_ms": 0.11680000275373459,
+     "stddev_ms": 0.01227552237876792,
+     "iterations": 500,
+     "warmup": 50,
+     "batched_median_ms": 0.028058879375457764,
+     "batched_output_exact": true
+    },
+    "F5B_EAGER_KARATSUBA3": {
+     "median_ms": 1.0051040053367615,
+     "p50_ms": 1.0051040053367615,
+     "p95_ms": 1.1170239448547363,
+     "min_ms": 0.9549760222434998,
+     "max_ms": 1.1737600564956665,
+     "stddev_ms": 0.04800951432246248,
+     "iterations": 200,
+     "warmup": 50,
+     "batched_median_ms": 0.95683837890625,
+     "batched_output_exact": true
+    },
+    "STAGE_A_CUDA_GRAPH_K3": {
+     "error": "RuntimeError: graph capture failed: AcceleratorError: CUDA error: operation failed due to a previous error during capture\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\nFor debugging consider"
+    },
+    "STAGE_B_5LAUNCH_K3": {
+     "median_ms": 0.16860799491405487,
+     "p50_ms": 0.16860799491405487,
+     "p95_ms": 0.22217600047588348,
+     "min_ms": 0.1621759980916977,
+     "max_ms": 0.25990399718284607,
+     "stddev_ms": 0.019874003706596078,
+     "iterations": 500,
+     "warmup": 50,
+     "batched_median_ms": 0.15172703742980956,
+     "batched_output_exact": true
+    },
+    "STAGE_C_TRUE_FUSED_MMA": {
+     "median_ms": 0.05363199859857559,
+     "p50_ms": 0.05363199859857559,
+     "p95_ms": 0.0854400023818016,
+     "min_ms": 0.05215999856591225,
+     "max_ms": 0.13583999872207642,
+     "stddev_ms": 0.011958692520828386,
+     "iterations": 500,
+     "warmup": 50,
+     "batched_median_ms": 0.02742624044418335,
+     "batched_output_exact": true
+    },
+    "native_fastest_median_ms": 0.05252800136804581
+   },
+   "16x1024x128": {
+    "M": 16,
+    "N": 1024,
+    "K": 128,
+    "transpose_b": false,
+    "schedule_frequency": 16,
+    "logical_mac": 2097152,
+    "mac_fraction": 0.13278008298755187,
+    "NATIVE_PADDED_INT8": {
+     "median_ms": 0.16606400161981583,
+     "p50_ms": 0.16606400161981583,
+     "p95_ms": 0.23017600178718567,
+     "min_ms": 0.16204799711704254,
+     "max_ms": 0.32444798946380615,
+     "stddev_ms": 0.02220972924886985,
+     "iterations": 500,
+     "warmup": 50,
+     "batched_median_ms": 0.1337235164642334,
+     "batched_output_exact": true
+    },
+    "CUSTOM_NATIVE_INT8_M16": {
+     "median_ms": 0.05196800082921982,
+     "p50_ms": 0.05196800082921982,
+     "p95_ms": 0.06143999844789505,
+     "min_ms": 0.050912000238895416,
+     "max_ms": 0.150176003575325,
+     "stddev_ms": 0.006366209028214413,
+     "iterations": 500,
+     "warmup": 50,
+     "batched_median_ms": 0.026038401126861573,
+     "batched_output_exact": true
+    },
+    "F5B_EAGER_KARATSUBA3": {
+     "median_ms": 1.0169599652290344,
+     "p50_ms": 1.0169599652290344,
+     "p95_ms": 1.1319999694824219,
+     "min_ms": 0.9667840003967285,
+     "max_ms": 1.3424639701843262,
+     "stddev_ms": 0.048744774128190005,
+     "iterations": 200,
+     "warmup": 50,
+     "batched_median_ms": 1.0544255828857423,
+     "batched_output_exact": true
+    },
+    "STAGE_A_CUDA_GRAPH_K3": {
+     "error": "RuntimeError: graph capture failed: AssertionError: A1 digit range violated"
+    },
+    "STAGE_B_5LAUNCH_K3": {
+     "median_ms": 0.168783999979496,
+     "p50_ms": 0.168783999979496,
+     "p95_ms": 0.22368000447750092,
+     "min_ms": 0.16448000073432922,
+     "max_ms": 0.266431987285614,
+     "stddev_ms": 0.019436396852671824,
+     "iterations": 500,
+     "warmup": 50,
+     "batched_median_ms": 0.14464608192443848,
+     "batched_output_exact": true
+    },
+    "STAGE_C_TRUE_FUSED_MMA": {
+     "median_ms": 0.05286400020122528,
+     "p50_ms": 0.05286400020122528,
+     "p95_ms": 0.08364800363779068,
+     "min_ms": 0.05164799839258194,
+     "max_ms": 0.10953599959611893,
+     "stddev_ms": 0.009117313520808567,
+     "iterations": 500,
+     "warmup": 50,
+     "batched_median_ms": 0.027627520561218262,
+     "batched_output_exact": true
+    },
+    "native_fastest_median_ms": 0.05196800082921982
+   },
+   "16x3072x1024": {
+    "M": 16,
+    "N": 3072,
+    "K": 1024,
+    "transpose_b": false,
+    "schedule_frequency": 2,
+    "logical_mac": 50331648,
+    "mac_fraction": 0.3983402489626556,
+    "NATIVE_PADDED_INT8": {
+     "median_ms": 0.2824160009622574,
+     "p50_ms": 0.2824160009622574,
+     "p95_ms": 0.30851200222969055,
+     "min_ms": 0.2764799892902374,
+     "max_ms": 0.34784001111984253,
+     "stddev_ms": 0.011584440250089735,
+     "iterations": 500,
+     "warmup": 50,
+     "batched_median_ms": 0.18668447494506835,
+     "batched_output_exact": true
+    },
+    "CUSTOM_NATIVE_INT8_M16": {
+     "median_ms": 0.07011199742555618,
+     "p50_ms": 0.07011199742555618,
+     "p95_ms": 0.07542400062084198,
+     "min_ms": 0.06918399780988693,
+     "max_ms": 0.16275200247764587,
+     "stddev_ms": 0.004603579582957251,
+     "iterations": 500,
+     "warmup": 50,
+     "batched_median_ms": 0.03773407936096192,
+     "batched_output_exact": true
+    },
+    "F5B_EAGER_KARATSUBA3": {
+     "median_ms": 1.1512640118598938,
+     "p50_ms": 1.1512640118598938,
+     "p95_ms": 1.2208640575408936,
+     "min_ms": 1.1291840076446533,
+     "max_ms": 1.3265279531478882,
+     "stddev_ms": 0.030530268731316874,
+     "iterations": 200,
+     "warmup": 50,
+     "batched_median_ms": 1.0098617553710938,
+     "batched_output_exact": true
+    },
+    "STAGE_A_CUDA_GRAPH_K3": {
+     "error": "RuntimeError: graph capture failed: AssertionError: A1 digit range violated"
+    },
+    "STAGE_B_5LAUNCH_K3": {
+     "median_ms": 0.2531520128250122,
+     "p50_ms": 0.2531520128250122,
+     "p95_ms": 0.2762239873409271,
+     "min_ms": 0.249439999461174,
+     "max_ms": 0.29151999950408936,
+     "stddev_ms": 0.008638065219377523,
+     "iterations": 200,
+     "warmup": 50,
+     "batched_median_ms": 0.18108928680419922,
+     "batched_output_exact": true
+    },
+    "STAGE_C_TRUE_FUSED_MMA": {
+     "median_ms": 0.10496000200510025,
+     "p50_ms": 0.10496000200510025,
+     "p95_ms": 0.1181119978427887,
+     "min_ms": 0.10147199779748917,
+     "max_ms": 0.12566399574279785,
+     "stddev_ms": 0.005038221577703978,
+     "iterations": 200,
+     "warmup": 50,
+     "batched_median_ms": 0.06877632141113281,
+     "batched_output_exact": true
+    },
+    "native_fastest_median_ms": 0.07011199742555618
+   },
+   "16x1024x3072": {
+    "M": 16,
+    "N": 1024,
+    "K": 3072,
+    "transpose_b": false,
+    "schedule_frequency": 1,
+    "logical_mac": 50331648,
+    "mac_fraction": 0.1991701244813278,
+    "NATIVE_PADDED_INT8": {
+     "median_ms": 0.29016000032424927,
+     "p50_ms": 0.29016000032424927,
+     "p95_ms": 0.31884801387786865,
+     "min_ms": 0.27856001257896423,
+     "max_ms": 0.34908801317214966,
+     "stddev_ms": 0.010750524235795582,
+     "iterations": 200,
+     "warmup": 50,
+     "batched_median_ms": 0.18776992797851563,
+     "batched_output_exact": true
+    },
+    "CUSTOM_NATIVE_INT8_M16": {
+     "median_ms": 0.10524799674749374,
+     "p50_ms": 0.10524799674749374,
+     "p95_ms": 0.1170239970088005,
+     "min_ms": 0.10416000336408615,
+     "max_ms": 0.13235199451446533,
+     "stddev_ms": 0.004647571300859596,
+     "iterations": 200,
+     "warmup": 50,
+     "batched_median_ms": 0.07286367893218994,
+     "batched_output_exact": true
+    },
+    "F5B_EAGER_KARATSUBA3": {
+     "median_ms": 1.2133280038833618,
+     "p50_ms": 1.2133280038833618,
+     "p95_ms": 1.4323519468307495,
+     "min_ms": 1.1487360000610352,
+     "max_ms": 1.6917120218276978,
+     "stddev_ms": 0.07487532084751837,
+     "iterations": 500,
+     "warmup": 50,
+     "batched_median_ms": 1.0662489318847657,
+     "batched_output_exact": true
+    },
+    "STAGE_A_CUDA_GRAPH_K3": {
+     "error": "RuntimeError: graph capture failed: AssertionError: A1 digit range violated"
+    },
+    "STAGE_B_5LAUNCH_K3": {
+     "error": "RuntimeError: self.size(1) needs to match mat2.size(0) but got 3072 and 1024"
+    },
+    "STAGE_C_TRUE_FUSED_MMA": {
+     "median_ms": 0.1403840035200119,
+     "p50_ms": 0.1403840035200119,
+     "p95_ms": 0.1462080031633377,
+     "min_ms": 0.13967999815940857,
+     "max_ms": 0.1605760008096695,
+     "stddev_ms": 0.002396763294397489,
+     "iterations": 200,
+     "warmup": 50,
+     "batched_median_ms": 0.10759231567382813,
+     "batched_output_exact": true
+    },
+    "native_fastest_median_ms": 0.10524799674749374
+   }
+  },
+  "weighted_schedule": {
+   "F5B_EAGER_KARATSUBA3": {
+    "wide_total_ms": 83.15412640571594,
+    "native_fastest_total_ms": 4.614624060690403,
+    "ratio": 18.019696796985688,
+    "major_shape_ratios": [
+     {
+      "shape": "16x128x1024",
+      "ratio": 16.62390288613618
+     },
+     {
+      "shape": "16x1024x128",
+      "ratio": 19.568964535907888
+     },
+     {
+      "shape": "16x3072x1024",
+      "ratio": 16.420356773921437
+     },
+     {
+      "shape": "16x1024x3072",
+      "ratio": 11.528276464912903
+     }
+    ],
+    "major_ok": false
+   },
+   "STAGE_A_CUDA_GRAPH_K3": {
+    "error": "not all shapes measured"
+   },
+   "STAGE_B_5LAUNCH_K3": {
+    "error": "not all shapes measured"
+   },
+   "STAGE_C_TRUE_FUSED_MMA": {
+    "wide_total_ms": 5.1154879331588745,
+    "native_fastest_total_ms": 4.614624060690403,
+    "ratio": 1.10853839140117,
+    "major_shape_ratios": [
+     {
+      "shape": "16x128x1024",
+      "ratio": 1.1877740810098723
+     },
+     {
+      "shape": "16x1024x128",
+      "ratio": 1.017241366950981
+     },
+     {
+      "shape": "16x3072x1024",
+      "ratio": 1.4970334016877087
+     },
+     {
+      "shape": "16x1024x3072",
+      "ratio": 1.3338401476354451
+     }
+    ],
+    "major_ok": true
+   }
+  },
+  "ladder": {
+   "order": [
+    "STAGE_A_CUDA_GRAPH_K3",
+    "STAGE_B_5LAUNCH_K3",
+    "STAGE_C_TRUE_FUSED_MMA"
+   ],
+   "results": {
+    "STAGE_A_CUDA_GRAPH_K3": {
+     "exact": false,
+     "weighted_ratio": null,
+     "major_ok": false,
+     "ratio_ok": false,
+     "pass": false
+    },
+    "STAGE_B_5LAUNCH_K3": {
+     "exact": false,
+     "weighted_ratio": null,
+     "major_ok": false,
+     "ratio_ok": false,
+     "pass": false
+    },
+    "STAGE_C_TRUE_FUSED_MMA": {
+     "exact": false,
+     "weighted_ratio": 1.10853839140117,
+     "major_ok": true,
+     "ratio_ok": true,
+     "pass": false
+    }
+   },
+   "winner": null
+  },
+  "gates": {
+   "schedule_ratio_max": 6.0,
+   "major_shape_ratio_max": 10.0,
+   "major_shape_fraction": 0.05,
+   "native_denominator_rule": "fastest valid native INT8 per shape (min of the two baselines), spec section 11"
+  },
+  "physical_mac_note": "the wide path performs 3 physical int8 MMA streams per logical MAC; protocol work accounting remains 1x logical (F.5B section 46)"
+ }
+}

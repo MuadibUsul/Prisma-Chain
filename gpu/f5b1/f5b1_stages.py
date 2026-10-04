@@ -30,7 +30,32 @@ sys.path.insert(0, str(REPO / "gpu" / "f5b"))
 sys.path.insert(0, str(HERE))
 
 import f5b1_ext  # noqa: E402
-from f5b_gpu_backends import TcKaratsuba3, pad_role  # noqa: E402
+from f5b_gpu_backends import TcKaratsuba3, pad_role, pad_to_2d, split_radix128  # noqa: E402
+
+
+def _k3_capture_safe(a_i64: torch.Tensor, w: torch.Tensor, packed: dict) -> torch.Tensor:
+    """Arithmetically identical to f5b TcKaratsuba3.run (same split / pad /
+    _int_mm / merge functions and order); debug-only range asserts removed
+    because their device syncs are illegal inside CUDA graph capture."""
+    a0, a1 = split_radix128(a_i64)
+    asum = a0 + a1
+    m = int(a_i64.shape[0])
+    m_pad = max(32, (m + 15) // 16 * 16)
+    a0i = pad_to_2d(a0.to(torch.int8), m_pad, packed["k_pad"])
+    a1i = pad_to_2d(a1.to(torch.int8), m_pad, packed["k_pad"])
+    asi = pad_to_2d(asum.to(torch.int8), m_pad, packed["k_pad"])
+
+    def mm(x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
+        b = y.T if packed["transpose_b"] else y
+        if not b.is_contiguous():
+            b = b.contiguous()
+        return torch._int_mm(x, b).to(torch.int64)
+
+    c00 = mm(a0i, packed["w0"])
+    c11 = mm(a1i, packed["w1"])
+    csum = mm(asi, packed["wsum"])
+    full = c00 + ((csum - c00 - c11) << 7) + (c11 << 14)
+    return full[:m, :packed["n"]]
 
 
 def w_to_nk(w: torch.Tensor, transpose_b: bool, device="cuda") -> torch.Tensor:
@@ -57,28 +82,31 @@ class F5BEagerKaratsuba3:
 
 
 class CudaGraphKaratsuba3:
-    """Stage A: identical arithmetic to the eager F.5B backend, captured as a
-    CUDA graph per shape and replayed (diagnostic: how much of the cost is
-    host/driver launch submission?)."""
+    """Stage A: capture the (arithmetically identical) eager F.5B pipeline as
+    a CUDA graph per shape and replay it.  Diagnostic: how much of the cost
+    is host/driver launch submission?  Debug asserts are removed from the
+    captured body because their device syncs are illegal during capture;
+    bit-exactness vs the eager backend is verified by the runner on all 83
+    nodes (both compared against the CPU oracle)."""
 
     name = "STAGE_A_CUDA_GRAPH_K3"
 
     def __init__(self, a16_example: torch.Tensor, w_nk: torch.Tensor):
-        self.impl = TcKaratsuba3()
         self.w = w_nk
-        self.packed = self.impl.prepack_weights(self.w, transpose_b=True)
-        self.a_static = torch.empty_like(a16_example).cuda()
+        self.packed = TcKaratsuba3().prepack_weights(self.w, transpose_b=True)
+        # zeros (not empty): warmup/capture inputs must be in-range
+        self.a_static = torch.zeros_like(a16_example).cuda()
         self.capture_error: str | None = None
         try:
             side = torch.cuda.Stream()
             side.wait_stream(torch.cuda.current_stream())
             with torch.cuda.stream(side):
                 for _ in range(3):
-                    self.impl.run(self.a_static, self.w, True, self.packed)
+                    _k3_capture_safe(self.a_static.to(torch.int64), self.w, self.packed)
             torch.cuda.current_stream().wait_stream(side)
             self.g = torch.cuda.CUDAGraph()
             with torch.cuda.graph(self.g):
-                self.out = self.impl.run(self.a_static, self.w, True, self.packed)
+                self.out = _k3_capture_safe(self.a_static.to(torch.int64), self.w, self.packed)
         except Exception as exc:  # noqa: BLE001  explicit capture failure
             self.capture_error = f"{type(exc).__name__}: {str(exc)[:300]}"
             self.g = None
@@ -107,10 +135,11 @@ class StageB5Launch:
         self.N, self.K = int(w_nk.shape[0]), int(w_nk.shape[1])
         self.Kpad = max(32, (self.K + 31) // 32 * 32)
         w0, w1, ws = f5b1_ext.prepack_w10(w_nk)
-        # (Kpad, N) contiguous B operands for torch._int_mm
-        self.b0 = w0[:, : self.N].t().contiguous()
-        self.b1 = w1[:, : self.N].t().contiguous()
-        self.bs = ws[:, : self.N].t().contiguous()
+        # (Kpad, N) contiguous B operands for torch._int_mm: drop the padded
+        # N rows of the (Npad, Kpad) prepack, then transpose.
+        self.b0 = w0[: self.N, :].t().contiguous()
+        self.b1 = w1[: self.N, :].t().contiguous()
+        self.bs = ws[: self.N, :].t().contiguous()
         dev = "cuda"
         self.a_pad = torch.zeros((16, self.Kpad), dtype=torch.int16, device=dev)
         self.A0 = torch.zeros((32, self.Kpad), dtype=torch.int8, device=dev)
@@ -118,12 +147,16 @@ class StageB5Launch:
         self.AS = torch.zeros((32, self.Kpad), dtype=torch.int8, device=dev)
 
     def run(self, a16: torch.Tensor) -> torch.Tensor:
-        self.a_pad[:, : self.K].copy_(a16)
+        m = int(a16.shape[0])
+        if m < 16:
+            self.a_pad.zero_()  # clear stale rows from any earlier larger M
+        self.a_pad[:m, : self.K].copy_(a16)
         self.ext.split_a13(self.a_pad, self.A0, self.A1, self.AS)
         c00 = torch._int_mm(self.A0, self.b0)
         c11 = torch._int_mm(self.A1, self.b1)
         cs = torch._int_mm(self.AS, self.bs)
-        return self.ext.merge_k3(c00, c11, cs)
+        out = self.ext.merge_k3(c00, c11, cs)
+        return out[:m] if m < 16 else out
 
 
 class StageCFusedMMA:
@@ -139,7 +172,13 @@ class StageCFusedMMA:
 
     def run(self, a16: torch.Tensor) -> torch.Tensor:
         a16 = a16.contiguous().to(torch.int16)
-        return self.ext.wide_gemm(a16, self.w0, self.w1, self.ws, self.N, self.K)
+        m = int(a16.shape[0])
+        a_in = a16
+        if m < 16:  # the kernel is M=16-native; zero-pad short operand rows
+            a_in = torch.zeros((16, self.K), dtype=torch.int16, device=a16.device)
+            a_in[:m] = a16
+        out = self.ext.wide_gemm(a_in, self.w0, self.w1, self.ws, self.N, self.K)
+        return out[:m] if m < 16 else out
 
 
 class CustomNativeInt8M16:

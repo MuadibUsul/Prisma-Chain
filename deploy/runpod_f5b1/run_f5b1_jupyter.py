@@ -130,15 +130,25 @@ def main() -> None:
 
     out = t.run("nvidia-smi --query-gpu=name,compute_cap,memory.total,driver_version "
                 "--format=csv,noheader")
-    gpu_line = out.strip().splitlines()[0].strip() if out.strip() else "unknown"
+    gpu_line = next((l.strip() for l in out.splitlines()
+                     if l.strip() and "nvidia-smi" not in l and ";" not in l), "unknown")
     print("[pod] GPU:", gpu_line, flush=True)
 
     out = t.run("python3 -c \"import torch,numpy,sys;print('PY',sys.version.split()[0],"
                 "'TORCH',torch.__version__,'CUDA',torch.version.cuda,"
                 "'AVAIL',torch.cuda.is_available(),"
                 "'NVCC',torch.utils.cpp_extension.CUDA_HOME)\"")
-    env_line = next((l.strip() for l in out.splitlines() if l.strip().startswith("PY ")), "")
+    env_line = next((l.strip() for l in out.splitlines()
+                     if l.strip().startswith("PY") and "TORCH" in l), "")
     print("[pod] env:", env_line, flush=True)
+
+    out = t.run("python3 -c 'import ninja' 2>/dev/null && echo NINJA_OK "
+                "|| (python3 -m pip install -q ninja && python3 -c 'import ninja' "
+                "&& echo NINJA_INSTALLED)", timeout=600)
+    ok_ninja = "NINJA_OK" in out or "NINJA_INSTALLED" in out
+    print("[pod] ninja:", "ok" if ok_ninja else f"MISSING ({out[-200:]})", flush=True)
+    if not ok_ninja:
+        raise RuntimeError("ninja unavailable on pod and pip install failed")
 
     out = t.run(f"rm -rf $HOME/f5b1 && git clone -q --depth 1 -b {args.branch} "
                 f"{REPO_URL} $HOME/f5b1 && cd $HOME/f5b1 && echo CLONE_OK", timeout=600)
