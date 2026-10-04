@@ -273,3 +273,83 @@ gates below); DA_REPLICA_V1 is replicated availability with bonded
 attestations, NOT perfect data availability, validator-cartel censorship
 remains possible, and long-run multi-operator public-testnet operation
 is not proven.
+
+## Canonical operator gate
+
+Phase F (docs/canonical-operators-v1.md) adds the canonical operator
+framework. The gate is met only when all of the following hold against
+the real implementation:
+
+1. The frozen numeric contract (CANONICAL_MATH_V1, Q12.20) and the
+   predeclared acceptance thresholds live in docs/canonical-math-v1.md
+   with the numeric-design evidence in
+   docs/canonical-math-v1-analysis.json.
+2. Every operator (GEMM/ADD/MUL/REQUANTIZE/RMSNORM/ROPE/SILU/SOFTMAX)
+   has a Go reference, a Python mirror and cross-language bit-exact
+   vectors covering math primitives, tensor commitments and operator
+   semantics.
+3. GEMM nodes reuse the frozen v0.1.1 arithmetic unchanged, including
+   the `K <= MaxSafeK` admission, with the transpose-B form verified
+   against the naive definition.
+4. Every operator's outputs are committed under descriptor-bound tensor
+   roots, and every operator's work counters are descriptor-derived.
+5. Rounding (ties-to-even), saturation and the zero-libm exp/invsqrt
+   algorithms are frozen and constant-pinned.
+
+Status: items 1-5 pass. Go and Python agree byte for byte on
+`canonical_vectors.json` (math, roots, eleven operator vectors, graph);
+the Go suite is green. GPU backends for operators are NOT TESTED; the
+real-model converter is NOT TESTED.
+
+## Canonical graph gate
+
+Phase F (docs/canonical-graph-v1.md) adds CANONICAL_GRAPH_V1. The gate is
+met only when all of the following hold against the real implementation:
+
+1. Graphs are static and hashable (GraphID binds operators, weight roots,
+   shapes, constants, parameters) with structural validation on chain.
+2. Normal execution commits output roots only; the state trail exists
+   only on demand.
+3. A dispute bisects to the FIRST divergent node and dispatches to the
+   operator-specific bounded arbiter; arbitration never recomputes the
+   block.
+4. The dispute persists across restarts (GDS1) and a restored session
+   continues to the same first-divergent node.
+5. A settlement receipt (VerifiedGraphWorkReceiptV1) is derived by the
+   chain and re-binds every commitment; the frozen gemmv1 VWR is
+   untouched.
+6. Work counters are descriptor-derived and cannot be biased by the
+   worker.
+
+Status: items 1-6 pass in the canonical suite and the chain keeper suite;
+item 3 additionally ran end to end on the devnet (corrupted ADD output
+localized to node 89 in seven bisection rounds, challenger_wins, no
+receipt). Long-horizon multi-operator disputes on chain and graph-task
+query protos remain open.
+
+## Verifiable Transformer block gate
+
+Phase F (docs/transformer-block-v1.md) adds the block macro. The gate is
+met only when all of the following hold:
+
+1. Attention and SwiGLU expand into the canonical operator set with no
+   black-box operator and no second protocol architecture.
+2. Mini and medium blocks build, validate and execute deterministically
+   with descriptor-derived work counters.
+3. Fraud injection at any node localizes to that node; per-operator
+   bounded arbitration returns the correct verdict in both directions.
+4. The chain settles graph tasks with escrow/bond/window/feeSplit and
+   rejects false challenges at admission.
+5. Four validators converge to one app hash across honest, fraud and
+   false-challenge scenarios.
+6. A real pinned open-model block passes the predeclared accuracy gate
+   and cross-GPU bit-exactness.
+
+Status: items 1-5 pass (canonical suite, chain keeper suite, and the
+four-validator devnet E2E in docs/phase-f-e2e-results.json with measured
+gas in docs/phase-f-gas-results.json). Item 6 is NOT TESTED: no real
+model block was converted and no GPU backend exists, so
+`REAL_MODEL_BLOCK = NOT TESTED` and the phase status is PARTIAL by the
+predeclared rule. Protocol relevance ("we verify one canonical quantized
+Transformer block") must not be stated as model verification until item 6
+runs.
