@@ -1,0 +1,69 @@
+{
+ "phase": "F.5B.1",
+ "gpu_a": "NVIDIA RTX 2000 Ada Generation",
+ "gpu_b": "NVIDIA A40",
+ "cross_arch": true,
+ "winner_a": "STAGE_A_CUDA_GRAPH_K3",
+ "winner_b": "STAGE_A_CUDA_GRAPH_K3",
+ "weighted_ratio_a": {
+  "F5B_EAGER_KARATSUBA3": 14.427109939348965,
+  "STAGE_A_CUDA_GRAPH_K3": 2.87023887264452,
+  "STAGE_B_5LAUNCH_K3": 3.358838549309223,
+  "STAGE_C_TRUE_FUSED_MMA": 1.1733218483673842
+ },
+ "weighted_ratio_b": {
+  "F5B_EAGER_KARATSUBA3": 15.71970070408944,
+  "STAGE_A_CUDA_GRAPH_K3": 3.3216560054272053,
+  "STAGE_B_5LAUNCH_K3": 3.5579260128272634,
+  "STAGE_C_TRUE_FUSED_MMA": 1.173180379048318
+ },
+ "ladder_a": {
+  "STAGE_A_CUDA_GRAPH_K3": {
+   "exact": true,
+   "weighted_ratio": 2.87023887264452,
+   "major_ok": true,
+   "ratio_ok": true,
+   "pass": true
+  },
+  "STAGE_B_5LAUNCH_K3": {
+   "exact": true,
+   "weighted_ratio": 3.358838549309223,
+   "major_ok": true,
+   "ratio_ok": true,
+   "pass": true
+  },
+  "STAGE_C_TRUE_FUSED_MMA": {
+   "exact": true,
+   "weighted_ratio": 1.1733218483673842,
+   "major_ok": true,
+   "ratio_ok": true,
+   "pass": true
+  }
+ },
+ "ladder_b": {
+  "STAGE_A_CUDA_GRAPH_K3": {
+   "exact": true,
+   "weighted_ratio": 3.3216560054272053,
+   "major_ok": true,
+   "ratio_ok": true,
+   "pass": true
+  },
+  "STAGE_B_5LAUNCH_K3": {
+   "exact": true,
+   "weighted_ratio": 3.5579260128272634,
+   "major_ok": true,
+   "ratio_ok": true,
+   "pass": true
+  },
+  "STAGE_C_TRUE_FUSED_MMA": {
+   "exact": true,
+   "weighted_ratio": 1.173180379048318,
+   "major_ok": true,
+   "ratio_ok": true,
+   "pass": true
+  }
+ },
+ "native_denominator_rule": "per-shape fastest valid native INT8 baseline (old padded torch baseline vs custom M=16 native)",
+ "final": "FUSED_GPU_FEASIBLE_A13W10 if the full 310-node block also runs bit-exact on both GPUs (docs/phase-f5b1-real-block-gpu.json); until then: FUSION_GEMM_PASS_BLOCK_PENDING",
+ "gemm_pass_both": true
+}
