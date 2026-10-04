@@ -53,6 +53,10 @@ class GpuBlockExecutor:
             self.gemm_packs[key] = f5b2_ext.prepack_w10(w_nk)
         return self.gemm_packs[key]
 
+    def _pack_dynamic(self, w: torch.Tensor, transpose_b: bool) -> tuple:
+        w_nk = (w.contiguous() if transpose_b else w.t().contiguous())
+        return f5b2_ext.prepack_w10(w_nk)
+
     def run(self) -> tuple[list[torch.Tensor], dict]:
         tensors: list[torch.Tensor | None] = [None] * len(self.program["nodes"])
         t_total = time.perf_counter()
@@ -68,9 +72,16 @@ class GpuBlockExecutor:
                 a = ins[0].to(torch.int16).contiguous()
                 assert int(a.min()) >= -4096 and int(a.max()) <= 4095, \
                     f"node {n['seq']}: A13 container range violated"
-                w0, w1, ws = self._gemm_pack(n["inputs"][1]["index"], trans)
-                N, K = int(self.consts[n["inputs"][1]["index"]].shape[1] if not trans
-                           else self.consts[n["inputs"][1]["index"]].shape[0]), int(a.shape[1])
+                b_ref = n["inputs"][1]
+                if b_ref["kind"] == "const":
+                    w0, w1, ws = self._gemm_pack(b_ref["index"], trans)
+                    w_full = self.consts[b_ref["index"]]
+                else:
+                    w_full = tensors[b_ref["index"]]
+                    w0, w1, ws = self._pack_dynamic(w_full, trans)
+                # non-transpose B is (K, N); transpose B is (N, K)
+                N = int(w_full.shape[1]) if not trans else int(w_full.shape[0])
+                K = int(a.shape[1])
                 out = self.ext.wide_gemm(a, w0, w1, ws, N, K)
                 gemm_ms += (time.perf_counter() - t0) * 1e3
             elif op == "REQUANTIZE":
