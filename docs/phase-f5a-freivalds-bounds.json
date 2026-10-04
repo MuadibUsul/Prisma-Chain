@@ -1,0 +1,127 @@
+{
+ "r_domain": "{0,1}^N",
+ "K_upper": 3072,
+ "N_upper": 3072,
+ "candidates": {
+  "A9W13": {
+   "x_bits": 24,
+   "y_bits": 44,
+   "z_bits": 44,
+   "required_signed_bits": 45,
+   "int64_safe": true,
+   "verdict": "FREIVALDS_INT64_SAFE"
+  },
+  "A10W12": {
+   "x_bits": 23,
+   "y_bits": 44,
+   "z_bits": 44,
+   "required_signed_bits": 45,
+   "int64_safe": true,
+   "verdict": "FREIVALDS_INT64_SAFE"
+  },
+  "A10W13": {
+   "x_bits": 24,
+   "y_bits": 45,
+   "z_bits": 45,
+   "required_signed_bits": 46,
+   "int64_safe": true,
+   "verdict": "FREIVALDS_INT64_SAFE"
+  },
+  "A11W11": {
+   "x_bits": 22,
+   "y_bits": 44,
+   "z_bits": 44,
+   "required_signed_bits": 45,
+   "int64_safe": true,
+   "verdict": "FREIVALDS_INT64_SAFE"
+  },
+  "A11W12": {
+   "x_bits": 23,
+   "y_bits": 45,
+   "z_bits": 45,
+   "required_signed_bits": 46,
+   "int64_safe": true,
+   "verdict": "FREIVALDS_INT64_SAFE"
+  },
+  "A11W13": {
+   "x_bits": 24,
+   "y_bits": 46,
+   "z_bits": 46,
+   "required_signed_bits": 47,
+   "int64_safe": true,
+   "verdict": "FREIVALDS_INT64_SAFE"
+  },
+  "A12W10": {
+   "x_bits": 21,
+   "y_bits": 44,
+   "z_bits": 44,
+   "required_signed_bits": 45,
+   "int64_safe": true,
+   "verdict": "FREIVALDS_INT64_SAFE"
+  },
+  "A12W11": {
+   "x_bits": 22,
+   "y_bits": 45,
+   "z_bits": 45,
+   "required_signed_bits": 46,
+   "int64_safe": true,
+   "verdict": "FREIVALDS_INT64_SAFE"
+  },
+  "A12W12": {
+   "x_bits": 23,
+   "y_bits": 46,
+   "z_bits": 46,
+   "required_signed_bits": 47,
+   "int64_safe": true,
+   "verdict": "FREIVALDS_INT64_SAFE"
+  },
+  "A12W13": {
+   "x_bits": 24,
+   "y_bits": 47,
+   "z_bits": 47,
+   "required_signed_bits": 48,
+   "int64_safe": true,
+   "verdict": "FREIVALDS_INT64_SAFE"
+  },
+  "A13W9": {
+   "x_bits": 20,
+   "y_bits": 44,
+   "z_bits": 44,
+   "required_signed_bits": 45,
+   "int64_safe": true,
+   "verdict": "FREIVALDS_INT64_SAFE"
+  },
+  "A13W10": {
+   "x_bits": 21,
+   "y_bits": 45,
+   "z_bits": 45,
+   "required_signed_bits": 46,
+   "int64_safe": true,
+   "verdict": "FREIVALDS_INT64_SAFE"
+  },
+  "A13W11": {
+   "x_bits": 22,
+   "y_bits": 46,
+   "z_bits": 46,
+   "required_signed_bits": 47,
+   "int64_safe": true,
+   "verdict": "FREIVALDS_INT64_SAFE"
+  },
+  "A13W12": {
+   "x_bits": 23,
+   "y_bits": 47,
+   "z_bits": 47,
+   "required_signed_bits": 48,
+   "int64_safe": true,
+   "verdict": "FREIVALDS_INT64_SAFE"
+  },
+  "A13W13": {
+   "x_bits": 24,
+   "y_bits": 48,
+   "z_bits": 48,
+   "required_signed_bits": 49,
+   "int64_safe": true,
+   "verdict": "FREIVALDS_INT64_SAFE"
+  }
+ }
+}
