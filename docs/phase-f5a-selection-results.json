@@ -22,7 +22,7 @@
   "policy_id": "0880ebfe4677c41ad3ef5d1ed9109877b32ffc10bfec8887f30de22278b81106",
   "max_safe_k64": 2047,
   "acc_abs_max_observed": 15960276,
-  "requant_product_bits_max": 44
+  "requant_product_bits_max": 47
  },
  "A12W10": {
   "worst_cosine": 0.9996508975512204,
@@ -47,7 +47,7 @@
   "policy_id": "2b7e118de5612500cc9fd74ee0016de022150907cf1f36486b288f2f9475bff0",
   "max_safe_k64": 2047,
   "acc_abs_max_observed": 6078400,
-  "requant_product_bits_max": 44
+  "requant_product_bits_max": 47
  },
  "A11W11": {
   "worst_cosine": 0.9994376866951336,
@@ -72,7 +72,7 @@
   "policy_id": "f798a9c34d3d907462d457755600935575262b69a8bc043800eceb73d2fdb00e",
   "max_safe_k64": 2047,
   "acc_abs_max_observed": 6080820,
-  "requant_product_bits_max": 44
+  "requant_product_bits_max": 47
  },
  "A10W12": {
   "worst_cosine": 0.9971249782965803,
@@ -97,7 +97,7 @@
   "policy_id": "5b922f78e2bfd07d05cbd1f529f56abb14f698aacdeaa22b33e9c3caf6acca5d",
   "max_safe_k64": 2047,
   "acc_abs_max_observed": 6028648,
-  "requant_product_bits_max": 44
+  "requant_product_bits_max": 47
  },
  "A9W13": {
   "worst_cosine": 0.987316793428668,
@@ -122,7 +122,7 @@
   "policy_id": "2e1607aef6cc7206be0e96844938558de37b257c416121aec51d14ecab2cfa84",
   "max_safe_k64": 2047,
   "acc_abs_max_observed": 6028479,
-  "requant_product_bits_max": 44
+  "requant_product_bits_max": 47
  },
  "A13W10": {
   "worst_cosine": 0.9997377982319173,
@@ -147,7 +147,7 @@
   "policy_id": "eb9a9fef403c95cd0ab876893acf14e02928245306f1d1cc6e12f4d99c5eb7a0",
   "max_safe_k64": 1023,
   "acc_abs_max_observed": 15955953,
-  "requant_product_bits_max": 44
+  "requant_product_bits_max": 47
  },
  "A12W11": {
   "worst_cosine": 0.9996735094941361,
@@ -172,7 +172,7 @@
   "policy_id": "5e7a441d58252bc5116cb0398fc29cd495910310607e2853c4df16d0dae1f914",
   "max_safe_k64": 1023,
   "acc_abs_max_observed": 12155784,
-  "requant_product_bits_max": 44
+  "requant_product_bits_max": 47
  },
  "A11W12": {
   "worst_cosine": 0.9995013650668956,
@@ -197,7 +197,7 @@
   "policy_id": "4e754c7718531292355f5a7b749a882c56dbfe4e4a9c74110550982ca6925c0f",
   "max_safe_k64": 1023,
   "acc_abs_max_observed": 12065107,
-  "requant_product_bits_max": 44
+  "requant_product_bits_max": 47
  },
  "A10W13": {
   "worst_cosine": 0.9970940937061501,
@@ -222,7 +222,7 @@
   "policy_id": "754f2aa9117359eb0cc95e758d95c2e93b5796bb452a6bbb496cee990f281cea",
   "max_safe_k64": 1023,
   "acc_abs_max_observed": 12055732,
-  "requant_product_bits_max": 44
+  "requant_product_bits_max": 47
  },
  "A13W11": {
   "worst_cosine": 0.9997710057609444,
@@ -247,7 +247,7 @@
   "policy_id": "299ab27945da6d418f65591bcaf88114b49edd005080ab3e6594edc48b0fb474",
   "max_safe_k64": 511,
   "acc_abs_max_observed": 24326155,
-  "requant_product_bits_max": 44
+  "requant_product_bits_max": 47
  },
  "A12W12": {
   "worst_cosine": 0.9996812731625202,
@@ -272,7 +272,7 @@
   "policy_id": "f9b99b14a3fae1faeee86ccc2fbfacb222d59e11eb7a339e53ff9a5531afe067",
   "max_safe_k64": 511,
   "acc_abs_max_observed": 24118594,
-  "requant_product_bits_max": 44
+  "requant_product_bits_max": 47
  },
  "A11W13": {
   "worst_cosine": 0.9994629286564107,
@@ -297,7 +297,7 @@
   "policy_id": "2ac816b39434699b30a7ef819a1671cf59fd50da2751537779596d1a90d42412",
   "max_safe_k64": 511,
   "acc_abs_max_observed": 24127098,
-  "requant_product_bits_max": 44
+  "requant_product_bits_max": 47
  },
  "A13W12": {
   "worst_cosine": 0.9997702671345365,
@@ -322,7 +322,7 @@
   "policy_id": "178de6d30e53824d5743f1af22dcc5e2b2d330a6d6f0f90104bac13c2dc73378",
   "max_safe_k64": 255,
   "acc_abs_max_observed": 48266139,
-  "requant_product_bits_max": 44
+  "requant_product_bits_max": 47
  },
  "A12W13": {
   "worst_cosine": 0.9996738583117613,
@@ -347,7 +347,7 @@
   "policy_id": "244ab3b11c536956cae50f6160fd2b449f31e05b86a7d9c3b7028ff7be6a807a",
   "max_safe_k64": 255,
   "acc_abs_max_observed": 48230958,
-  "requant_product_bits_max": 44
+  "requant_product_bits_max": 47
  },
  "A13W13": {
   "worst_cosine": 0.9997608196828413,
@@ -372,6 +372,6 @@
   "policy_id": "183595f6cabedda4f3eb5345ceb4d42db47c3facd6d140328870f7049731171a",
   "max_safe_k64": 127,
   "acc_abs_max_observed": 96519816,
-  "requant_product_bits_max": 44
+  "requant_product_bits_max": 47
  }
 }

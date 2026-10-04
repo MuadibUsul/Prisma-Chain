@@ -1,0 +1,149 @@
+{
+ "weights": {
+  "W8": {
+   "logical_bytes": 9961472,
+   "int16_container_bytes": 19922944
+  },
+  "W9": {
+   "logical_bytes": 11206656,
+   "int16_container_bytes": 19922944
+  },
+  "W10": {
+   "logical_bytes": 12451840,
+   "int16_container_bytes": 19922944
+  },
+  "W11": {
+   "logical_bytes": 13697024,
+   "int16_container_bytes": 19922944
+  },
+  "W12": {
+   "logical_bytes": 14942208,
+   "int16_container_bytes": 19922944
+  },
+  "W13": {
+   "logical_bytes": 16187392,
+   "int16_container_bytes": 19922944
+  }
+ },
+ "weight_note": "reusable across tasks; W8 unchanged",
+ "activations_per_case": {
+  "A8": {
+   "logical_bytes": 245760,
+   "int16_container_bytes": 491520
+  },
+  "A9": {
+   "logical_bytes": 276480,
+   "int16_container_bytes": 491520
+  },
+  "A10": {
+   "logical_bytes": 307200,
+   "int16_container_bytes": 491520
+  },
+  "A11": {
+   "logical_bytes": 337920,
+   "int16_container_bytes": 491520
+  },
+  "A12": {
+   "logical_bytes": 368640,
+   "int16_container_bytes": 491520
+  },
+  "A13": {
+   "logical_bytes": 399360,
+   "int16_container_bytes": 491520
+  }
+ },
+ "activation_note": "per task; F.3A persisted element count",
+ "graph": {
+  "nodes": 310,
+  "gemm_nodes": 83,
+  "mac_per_case": 252706816,
+  "freivalds_checks": 83,
+  "manifest_leaves": 310,
+  "unchanged_by_bits": true
+ },
+ "future_micro_step": {
+  "A9W13": {
+   "local_k": 8,
+   "worst_case_acc": 8388608,
+   "safe_under_int32": true
+  },
+  "A10W12": {
+   "local_k": 8,
+   "worst_case_acc": 8388608,
+   "safe_under_int32": true
+  },
+  "A10W13": {
+   "local_k": 8,
+   "worst_case_acc": 16777216,
+   "safe_under_int32": true
+  },
+  "A11W11": {
+   "local_k": 8,
+   "worst_case_acc": 8388608,
+   "safe_under_int32": true
+  },
+  "A11W12": {
+   "local_k": 8,
+   "worst_case_acc": 16777216,
+   "safe_under_int32": true
+  },
+  "A11W13": {
+   "local_k": 8,
+   "worst_case_acc": 33554432,
+   "safe_under_int32": true
+  },
+  "A12W10": {
+   "local_k": 8,
+   "worst_case_acc": 8388608,
+   "safe_under_int32": true
+  },
+  "A12W11": {
+   "local_k": 8,
+   "worst_case_acc": 16777216,
+   "safe_under_int32": true
+  },
+  "A12W12": {
+   "local_k": 8,
+   "worst_case_acc": 33554432,
+   "safe_under_int32": true
+  },
+  "A12W13": {
+   "local_k": 8,
+   "worst_case_acc": 67108864,
+   "safe_under_int32": true
+  },
+  "A13W9": {
+   "local_k": 8,
+   "worst_case_acc": 8388608,
+   "safe_under_int32": true
+  },
+  "A13W10": {
+   "local_k": 8,
+   "worst_case_acc": 16777216,
+   "safe_under_int32": true
+  },
+  "A13W11": {
+   "local_k": 8,
+   "worst_case_acc": 33554432,
+   "safe_under_int32": true
+  },
+  "A13W12": {
+   "local_k": 8,
+   "worst_case_acc": 67108864,
+   "safe_under_int32": true
+  },
+  "A13W13": {
+   "local_k": 8,
+   "worst_case_acc": 134217728,
+   "safe_under_int32": true
+  }
+ },
+ "verification_implications": "Freivalds / single-tile dispute / 512-MAC arbitration are structurally reusable with a versioned wider-integer arithmetic; NOT IMPLEMENTED",
+ "accumulator": {
+  "persistent_bytes": 0,
+  "note": "the int64 accumulator lives only inside the GEMM kernel and is requantized to Q12.20 before any tensor is stored (section 63)",
+  "materialized_tensor_bytes_worst_gemm": 393216,
+  "streaming_vs_materialized": "streaming accumulators cost registers, not DA bytes; a materialized [16,3072] int64 tile would be 393 KB of temporary bandwidth"
+ },
+ "gpu_backend": "NOT TESTED"
+}

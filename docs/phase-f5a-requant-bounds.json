@@ -2,124 +2,124 @@
  "note": "observed accumulator magnitudes and requant multiplier products over the F5A selection split; classification per section 21",
  "cumulative": {
   "A13W9": {
-   "max_acc_bits": 23,
-   "largest_multiplier": 4419429,
-   "max_product_bits": 44,
+   "max_acc_bits": 24,
+   "largest_multiplier": 68503840,
+   "max_product_bits": 47,
    "int64_safe": true,
    "classification": "REQUANT_INT64_SAFE",
-   "links": 2752
+   "links": 8064
   },
   "A12W10": {
    "max_acc_bits": 23,
-   "largest_multiplier": 4411260,
-   "max_product_bits": 44,
+   "largest_multiplier": 272938074,
+   "max_product_bits": 47,
    "int64_safe": true,
    "classification": "REQUANT_INT64_SAFE",
-   "links": 2752
+   "links": 8064
   },
   "A11W11": {
    "max_acc_bits": 23,
-   "largest_multiplier": 4413285,
-   "max_product_bits": 44,
+   "largest_multiplier": 1092764755,
+   "max_product_bits": 47,
    "int64_safe": true,
    "classification": "REQUANT_INT64_SAFE",
-   "links": 2752
+   "links": 8064
   },
   "A10W12": {
    "max_acc_bits": 23,
-   "largest_multiplier": 4428242,
-   "max_product_bits": 44,
+   "largest_multiplier": 4300615233,
+   "max_product_bits": 47,
    "int64_safe": true,
    "classification": "REQUANT_INT64_SAFE",
-   "links": 2752
+   "links": 8064
   },
   "A9W13": {
    "max_acc_bits": 23,
-   "largest_multiplier": 4458726,
-   "max_product_bits": 44,
+   "largest_multiplier": 17269940518,
+   "max_product_bits": 47,
    "int64_safe": true,
    "classification": "REQUANT_INT64_SAFE",
-   "links": 2752
+   "links": 8064
   },
   "A13W10": {
    "max_acc_bits": 24,
-   "largest_multiplier": 2205630,
-   "max_product_bits": 44,
+   "largest_multiplier": 68503840,
+   "max_product_bits": 47,
    "int64_safe": true,
    "classification": "REQUANT_INT64_SAFE",
-   "links": 2752
+   "links": 8064
   },
   "A12W11": {
    "max_acc_bits": 24,
-   "largest_multiplier": 2205630,
-   "max_product_bits": 44,
+   "largest_multiplier": 272938074,
+   "max_product_bits": 47,
    "int64_safe": true,
    "classification": "REQUANT_INT64_SAFE",
-   "links": 2752
+   "links": 8064
   },
   "A11W12": {
    "max_acc_bits": 24,
-   "largest_multiplier": 2212091,
-   "max_product_bits": 44,
+   "largest_multiplier": 1092764755,
+   "max_product_bits": 47,
    "int64_safe": true,
    "classification": "REQUANT_INT64_SAFE",
-   "links": 2752
+   "links": 8064
   },
   "A10W13": {
    "max_acc_bits": 24,
-   "largest_multiplier": 2225028,
-   "max_product_bits": 44,
+   "largest_multiplier": 4300615233,
+   "max_product_bits": 47,
    "int64_safe": true,
    "classification": "REQUANT_INT64_SAFE",
-   "links": 2752
+   "links": 8064
   },
   "A13W11": {
    "max_acc_bits": 25,
-   "largest_multiplier": 1102815,
-   "max_product_bits": 44,
+   "largest_multiplier": 68503840,
+   "max_product_bits": 47,
    "int64_safe": true,
    "classification": "REQUANT_INT64_SAFE",
-   "links": 2752
+   "links": 8064
   },
   "A12W12": {
    "max_acc_bits": 25,
-   "largest_multiplier": 1105538,
-   "max_product_bits": 44,
+   "largest_multiplier": 272938074,
+   "max_product_bits": 47,
    "int64_safe": true,
    "classification": "REQUANT_INT64_SAFE",
-   "links": 2752
+   "links": 8064
   },
   "A11W13": {
    "max_acc_bits": 25,
-   "largest_multiplier": 1111494,
-   "max_product_bits": 44,
+   "largest_multiplier": 1092764755,
+   "max_product_bits": 47,
    "int64_safe": true,
    "classification": "REQUANT_INT64_SAFE",
-   "links": 2752
+   "links": 8064
   },
   "A13W12": {
    "max_acc_bits": 26,
-   "largest_multiplier": 552769,
-   "max_product_bits": 44,
+   "largest_multiplier": 68503840,
+   "max_product_bits": 47,
    "int64_safe": true,
    "classification": "REQUANT_INT64_SAFE",
-   "links": 2752
+   "links": 8064
   },
   "A12W13": {
    "max_acc_bits": 26,
-   "largest_multiplier": 555492,
-   "max_product_bits": 44,
+   "largest_multiplier": 272938074,
+   "max_product_bits": 47,
    "int64_safe": true,
    "classification": "REQUANT_INT64_SAFE",
-   "links": 2752
+   "links": 8064
   },
   "A13W13": {
    "max_acc_bits": 27,
-   "largest_multiplier": 277746,
-   "max_product_bits": 44,
+   "largest_multiplier": 68503840,
+   "max_product_bits": 47,
    "int64_safe": true,
    "classification": "REQUANT_INT64_SAFE",
-   "links": 2752
+   "links": 8064
   }
  }
 }
