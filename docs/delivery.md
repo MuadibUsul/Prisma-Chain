@@ -376,7 +376,12 @@ commitment:
    suites green); the real-block devnet run is NOT TESTED.
 
 Status: item 4 fails on the measured numbers, so `REAL_MODEL_BLOCK =
-FAIL` and Phase F remains PARTIAL. Per the Phase F.1 rules the
+FAIL` and Phase F remains PARTIAL. The bundle-level watcher on the real
+block passes (manifest committed before randomness; Freivalds for all 83
+GEMM nodes with `full_gemm_calls = 0`; exact recompute for the cheap
+operators; injected GEMM and ROPE frauds localized to exactly their
+nodes; restart reproducible: docs/phase-f1-watcher-results.json). The
+chain/DA-integrated watcher path is NOT TESTED. Per the Phase F.1 rules the
 predeclared thresholds were NOT adjusted and the frozen canonical
 arithmetic was NOT touched; the unblocking protocol extension
 (per-slice/per-block static steps, or a canonical slice op) is proposed

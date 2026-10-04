@@ -530,7 +530,9 @@ def build_converted_graph(conf: Conformer, seq: int, scales: dict):
         "Inputs": go_inputs,
         "Nodes": [{
             "NodeID": n["node_id"], "OperatorID": n["operator_id"], "Version": n["operator_version"],
-            "Inputs": n["inputs"], "Output": n["output"],
+            "Inputs": n["inputs"],
+            "Output": {"Dtype": n["output"]["dtype"], "Layout": 1,
+                       "Shape": list(n["output"]["shape"])},
             "Params": [{"Key": k, "Value": v} for k, v in n["params"]],
         } for n in nodes],
         "Outputs": [{"Kind": 1, "Index": y["Index"]}],

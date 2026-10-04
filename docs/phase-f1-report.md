@@ -16,7 +16,8 @@ REAL_MODEL_BLOCK accuracy gate                FAIL  (worst cosine 0.957 vs 0.995
                                                       worst max_abs 1.91 vs 0.05)
 V2 commitment + manifest (protocol)           PASS  (canonical + chain + tests)
 GPU_BACKEND                                   NOT TESTED (no GPU pods available)
-GRAPH_WATCHER_E2E                             NOT TESTED (offline pieces exist)
+GRAPH_WATCHER (bundle-level, real block)      PASS  (docs/phase-f1-watcher-results.json)
+GRAPH_WATCHER (chain/DA-integrated)           NOT TESTED
 GRAPH_DA_INTEGRATION                          NOT TESTED
 GRAPH->GEMM 512-MAC bridge                    NOT TESTED
 4-validator real-block E2E                    NOT TESTED
@@ -64,6 +65,20 @@ operator added, no result dressed up.
    cosine 0.957, max_abs 1.91 (thresholds 0.995 / 0.05, predeclared and
    untouched). Full per-case numbers:
    `docs/phase-f1-real-model-accuracy.json`.
+
+5. **Permissionless watcher on the real block (bundle-level).** With the
+   node-output manifest committed FIRST, an independent watcher process
+   reads ONLY a `GraphVerificationBundleV1` (graph, inputs, every node
+   output, proofs; no worker filesystem) and verifies the honest block to
+   PASS in ~1 s with `full_gemm_calls = 0`: 83 GEMM nodes by Freivalds
+   (2 rounds each, randomness derived from the committed manifest root)
+   and every cheap operator by exact canonical recompute (33 ADD, 126
+   REQUANTIZE, 26 RMSNORM, 24 ROPE, 16 SOFTMAX, 1 MUL, 1 SILU). Two
+   injected frauds — a committed GEMM output corrupted at node 96 and a
+   ROPE output corrupted at node 20, each with the manifest committed
+   OVER the corrupted outputs — are detected and localized to exactly
+   the injected node (`docs/phase-f1-watcher-results.json`), and a fresh
+   watcher process reproduces the same verdicts (restart-equivalence).
 
 ## Where the error comes from (located, as required)
 

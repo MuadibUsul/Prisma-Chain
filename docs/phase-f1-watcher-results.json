@@ -1,0 +1,59 @@
+{
+  "phase": "F.1",
+  "block": "Qwen3-0.6B-Base layer 0, seq 16",
+  "note": "watcher runs read ONLY the bundle; each run is a fresh process (restart-equivalent)",
+  "runs": {
+    "honest": {
+      "first": {
+        "status": "PASS",
+        "commitment_seconds": 0.0269775390625,
+        "verification_seconds": 0.48645830154418945,
+        "full_gemm_calls": 0,
+        "stats": {
+          "nodes": 310,
+          "gemm_nodes": 83,
+          "freivalds_rounds": 166,
+          "exact_add": 33,
+          "exact_mul": 1,
+          "exact_requantize": 126,
+          "exact_rmsnorm": 26,
+          "exact_rope": 24,
+          "exact_silu": 1,
+          "exact_softmax": 16
+        },
+        "graph_id": "8b6de09ebecbe8681c71133ea124c0a9d38a5a8d17777f0b18c368968546529e",
+        "manifest_root": "de3a58a157b5e2942c1758ff405876ba18db882fb5dca81c92c99e43a381cbef",
+        "wall_seconds": 0.6431126594543457,
+        "wall_seconds_process": 0.9828610420227051
+      },
+      "restart_reproduced": true,
+      "second_status": "PASS"
+    },
+    "gemm_fraud": {
+      "first": {
+        "status": "FRAUD_DETECTED",
+        "first_suspected_node": 96,
+        "operator_id": "",
+        "bad_chunk_index": null,
+        "reason": "freivalds mismatch",
+        "wall_seconds": 0.2400493621826172,
+        "wall_seconds_process": 0.4974856376647949
+      },
+      "restart_reproduced": true,
+      "second_status": "FRAUD_DETECTED"
+    },
+    "rope_fraud": {
+      "first": {
+        "status": "FRAUD_DETECTED",
+        "first_suspected_node": 20,
+        "operator_id": "ROPE_FIXED_V1",
+        "bad_chunk_index": 0,
+        "reason": "exact mismatch on node 20 (ROPE_FIXED_V1)",
+        "wall_seconds": 0.18262267112731934,
+        "wall_seconds_process": 0.44042110443115234
+      },
+      "restart_reproduced": true,
+      "second_status": "FRAUD_DETECTED"
+    }
+  }
+}

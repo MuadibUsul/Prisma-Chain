@@ -83,9 +83,12 @@ def freivalds_check(a: np.ndarray, b: np.ndarray, c: np.ndarray, transpose_b: bo
     rounds = 0
     for round_index in range(FREIVALDS_ROUNDS):
         r = csprng_vector(manifest_root, node_id, round_index, n)
-        # u = B^T r  (transpose_b: B is [N,K]; else B is [K,N])
-        u = ((b.astype(np.int64) * r[:, None]) % FREIVALDS_PRIME).sum(axis=0) % FREIVALDS_PRIME \
-            if transpose_b else (b.astype(np.int64).T @ r) % FREIVALDS_PRIME
+        # C = A B^T (transpose_b: B is [N,K]): u = B^T r ;
+        # C = A B   (else: B is [K,N]):            u = B r.
+        if transpose_b:
+            u = ((b.astype(np.int64) * r[:, None]) % FREIVALDS_PRIME).sum(axis=0) % FREIVALDS_PRIME
+        else:
+            u = (b.astype(np.int64) @ r) % FREIVALDS_PRIME
         v = (a.astype(np.int64) @ u) % FREIVALDS_PRIME
         w = (c.astype(np.int64) @ r) % FREIVALDS_PRIME
         if not np.array_equal(v, w):
