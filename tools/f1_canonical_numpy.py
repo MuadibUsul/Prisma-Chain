@@ -261,12 +261,38 @@ def chunk_bytes_np(desc: dict, data: np.ndarray, index: int) -> bytes:
 
 
 def tensor_merkle_root_np(desc: dict, data: np.ndarray) -> bytes:
+    """Fast canonical chunk-merkle root (bit-identical to the scalar path).
+
+    One contiguous big-endian blob is built once; every chunk leaf reuses
+    a cached SHA-256 state after (domain || descriptor) and only appends
+    the chunk index and bytes.
+    """
+    import hashlib
     import canonical_ref as R
     desc_bytes = R.encode_canonical(desc)
-    elems = int(np.prod(desc["shape"]))
-    count = max(1, (elems + 63) // 64)
-    leaves = [R.tensor_leaf(desc_bytes, i, chunk_bytes_np(desc, data, i)) for i in range(count)]
-    return R.build_levels(leaves)[-1][0]
+    flat = np.asarray(data, dtype=np.int32).reshape(-1)
+    count = max(1, (flat.size + 63) // 64)
+    padded = np.zeros(count * 64, dtype=">i4")
+    padded[:flat.size] = flat
+    blob = padded.tobytes()
+    base = hashlib.sha256()
+    base.update(R.DOMAIN_TENSOR)
+    base.update(desc_bytes)
+    leaves = []
+    for i in range(count):
+        h = base.copy()
+        h.update(i.to_bytes(4, "big"))
+        h.update(blob[i * 256:(i + 1) * 256])
+        leaves.append(h.digest())
+    level = leaves
+    while len(level) > 1:
+        nxt = []
+        for i in range(0, len(level), 2):
+            left = level[i]
+            right = level[i + 1] if i + 1 < len(level) else left
+            nxt.append(hashlib.sha256(left + right).digest())
+        level = nxt
+    return level[0]
 
 
 def tensor_root_np(desc: dict, data: np.ndarray) -> bytes:

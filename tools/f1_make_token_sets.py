@@ -57,9 +57,10 @@ EVAL_TEXTS = [
 ]
 
 
-def tokenize(texts, tokenizer):
+def tokenize(texts, tokenizer, suffix):
     encoded = []
-    for text in texts:
+    for base in texts:
+        text = base + suffix
         ids = tokenizer(text, add_special_tokens=False)["input_ids"]
         if len(ids) < SEQ_LEN:
             raise ValueError(f"text too short for seq {SEQ_LEN}: {text!r} ({len(ids)})")
@@ -73,24 +74,30 @@ def main() -> None:
     tokenizer = AutoTokenizer.from_pretrained(str(MODEL_DIR), local_files_only=True)
     import hashlib
 
-    def pack(texts):
-        cases = tokenize(texts, tokenizer)
+    def pack(texts, suffix):
+        full = [t + suffix for t in texts]
+        cases = tokenize(texts, tokenizer, suffix)
         return {
             "seq_len": SEQ_LEN,
             "cases": [
                 {
                     "token_ids": case["token_ids"],
                     "position_ids": list(range(SEQ_LEN)),
-                    "text_sha256": hashlib.sha256(texts[i].encode()).hexdigest(),
+                    "text_sha256": hashlib.sha256(full[i].encode()).hexdigest(),
                 }
                 for i, case in enumerate(cases)
             ],
         }
 
     TESTDATA.mkdir(parents=True, exist_ok=True)
-    for name, texts in (("qwen3_f1_calibration", CALIBRATION_TEXTS), ("qwen3_f1_eval", EVAL_TEXTS)):
+    for name, texts, suffix in (
+        ("qwen3_f1_calibration", CALIBRATION_TEXTS,
+         " It continues with several more carefully chosen words here."),
+        ("qwen3_f1_eval", EVAL_TEXTS,
+         " The passage goes on with additional distinct vocabulary afterwards now."),
+    ):
         path = TESTDATA / f"{name}.json"
-        path.write_text(json.dumps(pack(texts), indent=1) + "\n", encoding="utf-8")
+        path.write_text(json.dumps(pack(texts, suffix), indent=1) + "\n", encoding="utf-8")
         print("written:", path)
 
 

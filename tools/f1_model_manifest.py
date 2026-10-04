@@ -75,9 +75,13 @@ def main() -> None:
 
     manifest_files = {}
     if not args.probe_only:
-        snapshot_download(REPO_ID, revision=REVISION, local_dir=MODEL_DIR,
-                          allow_patterns=["*.json", "*.safetensors", "*.txt", "*.md"],
-                          max_workers=4)
+        # Files already on disk (e.g. a checkpoint fetched with curl and
+        # hash-verified against the pinned blob etag) are trusted as-is;
+        # only missing files are fetched.
+        missing = [name for name, _size in files if not (MODEL_DIR / name).exists()]
+        if missing:
+            snapshot_download(REPO_ID, revision=REVISION, local_dir=MODEL_DIR,
+                              allow_patterns=missing, max_workers=4)
         for root, _dirs, names in os.walk(MODEL_DIR):
             for name in sorted(names):
                 path = Path(root) / name

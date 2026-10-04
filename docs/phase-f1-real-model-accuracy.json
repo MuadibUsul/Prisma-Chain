@@ -1,0 +1,133 @@
+{
+  "model": "Qwen/Qwen3-0.6B-Base",
+  "revision": "57ca99e94acb83175495aa2c6b6b0cc498170924",
+  "layer": 0,
+  "sequence_length": 16,
+  "calibration_set": "testdata/qwen3_f1_calibration.json",
+  "eval_set": "testdata/qwen3_f1_eval.json",
+  "graph_id": "6ad46fdef3b4f94797f7546618a20c075f1e6fc1bf405c8eab58e05019ced0a0",
+  "thresholds": {
+    "worst_cosine": 0.995,
+    "worst_max_abs": 0.05
+  },
+  "per_case": [
+    {
+      "case": 0,
+      "cosine": 0.9654768619326011,
+      "max_abs": 1.3201193205227266,
+      "mean_abs": 0.06089648895087508
+    },
+    {
+      "case": 1,
+      "cosine": 0.9698536071287318,
+      "max_abs": 0.6802844149156808,
+      "mean_abs": 0.054436854452617346
+    },
+    {
+      "case": 2,
+      "cosine": 0.9644346644948328,
+      "max_abs": 0.7962850185594119,
+      "mean_abs": 0.0564932689592822
+    },
+    {
+      "case": 3,
+      "cosine": 0.9678825914893789,
+      "max_abs": 0.9509548825020493,
+      "mean_abs": 0.05771185885368289
+    },
+    {
+      "case": 4,
+      "cosine": 0.9642271081473537,
+      "max_abs": 1.7519575771807463,
+      "mean_abs": 0.0581063600503154
+    },
+    {
+      "case": 5,
+      "cosine": 0.9634303104024998,
+      "max_abs": 0.9942974557566413,
+      "mean_abs": 0.05914014021189025
+    },
+    {
+      "case": 6,
+      "cosine": 0.9658299969736069,
+      "max_abs": 1.9099632307564463,
+      "mean_abs": 0.060055894340171695
+    },
+    {
+      "case": 7,
+      "cosine": 0.9578165808678744,
+      "max_abs": 0.9303056360414605,
+      "mean_abs": 0.0635699132239129
+    },
+    {
+      "case": 8,
+      "cosine": 0.9678177469924609,
+      "max_abs": 0.9696331580267561,
+      "mean_abs": 0.05709848784488196
+    },
+    {
+      "case": 9,
+      "cosine": 0.9643275520521727,
+      "max_abs": 0.9951554554590203,
+      "mean_abs": 0.05800361607521947
+    },
+    {
+      "case": 10,
+      "cosine": 0.964270186758377,
+      "max_abs": 1.2711991387650579,
+      "mean_abs": 0.058439374460391366
+    },
+    {
+      "case": 11,
+      "cosine": 0.9704900335211526,
+      "max_abs": 0.49821674554339723,
+      "mean_abs": 0.05596259924443023
+    },
+    {
+      "case": 12,
+      "cosine": 0.9572892855845117,
+      "max_abs": 1.4241843671688148,
+      "mean_abs": 0.06473925379410088
+    },
+    {
+      "case": 13,
+      "cosine": 0.9673554035032217,
+      "max_abs": 0.9290580986044255,
+      "mean_abs": 0.05711064557732211
+    },
+    {
+      "case": 14,
+      "cosine": 0.9577115841323978,
+      "max_abs": 1.5565053639758135,
+      "mean_abs": 0.06193704281741291
+    },
+    {
+      "case": 15,
+      "cosine": 0.9706717087603045,
+      "max_abs": 0.7685959092968346,
+      "mean_abs": 0.058842037686774554
+    }
+  ],
+  "worst_cosine": 0.9572892855845117,
+  "worst_max_abs": 1.9099632307564463,
+  "verdict": "FAIL",
+  "attribution": {
+    "method": "per-site sensitivity: one site's int8 step scaled at a time in the REAL converted graph (params-only edit; shapes and roots unchanged), evaluated on held-out cases; plus operand-balancing and weight-MSE experiments",
+    "dominant_sources": {
+      "k_path": "k is by far the most sensitive site (4x step -> cosine 0.64); its tail comes from the pinned k_norm weight (max ~96.5). Best measured k tuning (per-head MSE step x0.25) lifts the gate from 0.951 to 0.964",
+      "distributed_activation_error": "h, h2, ctx, gate, up, down, hm and o_proj each cost roughly 0.89-0.93 cosine at 2x step; no single site dominates after the k tuning",
+      "not_the_bottleneck": "weight quantization (MSE-optimal weight scales change the gate by <0.001) and the canonical arithmetic itself (Go/Python bit-exact; op-level mirror matches the real graph bit-for-bit)"
+    },
+    "expressivity_limit": "one static scale per tensor: with single-scale int8 activations the heavy-tailed channels (k_norm up to 96.5, q_norm up to 11.8) force a step that destroys the many small-magnitude channels; operand balancing (exact per-channel MUL constants q*t vs k/t) measured WORSE (0.83 at full balance), and per-channel/per-block activation scales are not expressible with the frozen operator set (the RMSNorm couples the full head before quantization)",
+    "proposed_extension_not_implemented": "per the Phase F.1 rules a protocol extension is only PROPOSED here, never applied: a versioned REQUANTIZE form with per-slice steps, or an explicit canonical slice/view tensor op, would let the tail channels take their own step",
+    "variants_measured": {
+      "max_based_steps": 0.925,
+      "mse_optimal_steps": 0.9518,
+      "mse_plus_per_head_k_x0.25": 0.9644,
+      "full_eval_gate_tuned": 0.9573,
+      "operand_balance_gamma_1.0": 0.722,
+      "weight_mse": 0.9638
+    }
+  },
+  "verdict_reason": "predeclared thresholds (worst cosine >= 0.995, worst max_abs <= 0.05) are not reachable for this real layer under the frozen single-scale static W8A8 scheme; thresholds are NOT adjusted (Phase F.1 section 28) and REAL_MODEL_BLOCK is reported FAIL with the error sources located"
+}

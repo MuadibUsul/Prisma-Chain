@@ -44,11 +44,24 @@ def load_qwen3_block_config():
     }
 
 
+_TORCH_TENSORS = None
+
+
+def _load_all():
+    """Torch tensors of the whole checkpoint (bfloat16 -> float32 exact)."""
+    global _TORCH_TENSORS
+    if _TORCH_TENSORS is None:
+        import torch
+        from safetensors.torch import load_file
+        _TORCH_TENSORS = load_file(str(MODEL_DIR / "model.safetensors"))
+    return _TORCH_TENSORS
+
+
 def load_layer_weights(layer: int = 0):
     """Load float32 numpy weights of one layer from the raw safetensors."""
-    from safetensors.numpy import load_file
+    import torch
 
-    tensors = load_file(str(MODEL_DIR / "model.safetensors"))
+    tensors = {k: v.to(torch.float32).numpy() for k, v in _load_all().items()}
     prefix = f"model.layers.{layer}."
     wanted = {}
     for key, value in tensors.items():
@@ -148,10 +161,11 @@ def block_forward(hidden: np.ndarray, weights, cfg, *, dtype=np.float64,
     kn = weights["self_attn.k_norm.weight"].astype(dtype)
     if permute_qk:
         perm = qwen_rope_permutation(head_dim)
-        wq_p = wq[:, perm]
-        wk_p = wk[:, perm]
-        q = (h @ wq_p.T).reshape(seq, heads, head_dim)
-        k = (h @ wk_p.T).reshape(seq, kv_heads, head_dim)
+        # Permute head coordinates WITHIN each head block of rows.
+        q_idx = np.concatenate([h * head_dim + perm for h in range(heads)])
+        k_idx = np.concatenate([h * head_dim + perm for h in range(kv_heads)])
+        q = (h @ wq[q_idx, :].T).reshape(seq, heads, head_dim)
+        k = (h @ wk[k_idx, :].T).reshape(seq, kv_heads, head_dim)
         qn = qn[perm]
         kn = kn[perm]
 
@@ -203,7 +217,7 @@ def official_block_output(hidden_states: np.ndarray, layer: int = 0):
         local_files_only=True
     )
     model.eval()
+    batch = torch.from_numpy(np.asarray(hidden_states, dtype=np.float32))[None, :, :]
     with torch.no_grad():
-        out = model(inputs_embeds=torch.from_numpy(hidden_states.astype(np.float32)),
-                    output_hidden_states=True, use_cache=False)
-    return out.hidden_states[layer + 1].numpy().astype(np.float64)
+        out = model(inputs_embeds=batch, output_hidden_states=True, use_cache=False)
+    return out.hidden_states[layer + 1][0].numpy().astype(np.float64)
