@@ -469,7 +469,12 @@ def build_converted_graph(conf: Conformer, seq: int, scales: dict):
     for qh in range(heads):
         kvh = qh // group
         sacc = node(R.OP_GEMM, [q_chains[qh], k_chains[kvh]], [["transpose_b", 1]], desc_acc((seq, seq)))
-        mult_scores = max(1, int(round(qa["q"] * qa["k"] * attn_scale / (1 << 20))))
+        # Scores dequant MUST use the ACTUAL per-head quantization steps of
+        # this head pair: the operands were quantized at qa[q_h]/qa[k_h],
+        # so the multiplier is q_h_steps * k_h_steps * attn_scale / 2^20.
+        q_step_h = qa.get(f"q_h{qh}", qa["q"])
+        k_step_h = qa.get(f"k_h{kvh}", qa["k"])
+        mult_scores = max(1, int(round(q_step_h * k_step_h * attn_scale / (1 << 20))))
         sfx = req_node(sacc, req_params(mult_scores, 20, R.MIN_FX, R.MAX_FX),
                        desc_fx((seq, seq)), "scores")
         masked = node(R.OP_ADD, [sfx, inref(mask_idx)], [], desc_fx((seq, seq)))
