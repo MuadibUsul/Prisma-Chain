@@ -12,6 +12,7 @@ path (UNSUPPORTED_GPU_OPERATOR aborts instead).
 from __future__ import annotations
 
 import json
+import sys
 import time
 from pathlib import Path
 
@@ -20,9 +21,8 @@ import torch
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
-sys_path = str(HERE)
-if sys_path not in __import__("sys").path:
-    __import__("sys").path.insert(0, sys_path)
+if str(HERE) not in sys.path:
+    sys.path.insert(0, str(HERE))
 
 import f5b2_ext  # noqa: E402
 
