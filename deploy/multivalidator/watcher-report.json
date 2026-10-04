@@ -1,0 +1,21 @@
+{
+  "task_id": 1,
+  "providers": [
+    "http://127.0.0.1:8401",
+    "http://127.0.0.1:8402",
+    "http://127.0.0.1:8403"
+  ],
+  "bulk_download_seconds": 2.039,
+  "output_bytes": 1024,
+  "root_verification_seconds": 0.0,
+  "root_verified": true,
+  "freivalds_seconds": 0.0,
+  "freivalds_passed": false,
+  "bad_row": 0,
+  "bad_tile": [
+    0,
+    0
+  ],
+  "challenge_txhash": "4341635205137E125C864FDA5DF84E7EC5586B3F1FE625CF7D0A8B9A63C24E4C",
+  "outcome": "challenge_opened"
+}
