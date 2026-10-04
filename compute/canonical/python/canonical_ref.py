@@ -883,3 +883,174 @@ def graph_result_commit_v2_preimage(commit: dict) -> bytes:
     unsigned = dict(commit)
     unsigned["signature"] = b""
     return DOMAIN_SIG + encode_canonical(unsigned)
+
+
+# =============================================================================
+# Phase F.5C — CANONICAL_TENSOR_V2 / GEMM_A13W10_I64_V1 / REQUANTIZE_WIDE_V1.
+# Additive version space: every V2 hash is domain-separated from V1; the V1
+# objects above are untouched.  Logical width != storage width (A13 = 13
+# logical bits in a 16-bit BE container; W10 = 10 in 16; INT64_ACCUM in 64).
+# =============================================================================
+
+DOMAIN_TENSOR_V2 = b"PRISMA_CANONICAL_TENSOR_V2\x00"
+DOMAIN_TENSOR_ROOT_V2 = b"PRISMA_CANONICAL_TENSOR_ROOT_V2\x00"
+DOMAIN_GRAPH_V2 = b"PRISMA_CANONICAL_GRAPH_V2\x00"
+DOMAIN_GRAPH_STATE_V2 = b"PRISMA_CANONICAL_GRAPH_STATE_V2\x00"
+DOMAIN_GRAPH_TRACE_V2 = b"PRISMA_CANONICAL_GRAPH_TRACE_V2\x00"
+DOMAIN_MANIFEST_V2 = b"PRISMA_GRAPH_NODE_MANIFEST_V2\x00"
+DOMAIN_COMMIT_V3 = b"PRISMA_GRAPH_RESULT_COMMIT_V3\x00"
+DOMAIN_RECEIPT_V3 = b"PRISMA_GRAPH_RECEIPT_V3\x00"
+DOMAIN_WIDE_GEMM_DISPUTE = b"PRISMA_WIDE_GEMM_DISPUTE_V1\x00"
+DOMAIN_WIDE_TRACE = b"PRISMA_WIDE_GEMM_TRACE_V1\x00"
+
+PROTOCOL_VERSION_TENSOR_V2 = "CANONICAL_TENSOR_V2/1.0.0"
+PROTOCOL_VERSION_GRAPH_V2 = "CANONICAL_GRAPH_V2/1.0.0"
+OP_GEMM_VERSION_WIDE = "GEMM_A13W10_I64_V1/1.0.0"
+OP_REQUANT_VERSION_WIDE = "REQUANTIZE_WIDE_V1/1.0.0"
+ARITHMETIC_PROFILE_A13W10 = "A13W10_I64_PROFILE_V1"
+FREIVALDS_WIDE_VERSION = "FREIVALDS_A13W10_I64_V1/1.0.0"
+POLICY_ID_A13W10 = ("eb9a9fef403c95cd0ab876893acf14e02928245306f1d1cc6e12f4d99c5eb7a0")
+
+DTYPE_V2_Q12_20 = 1
+DTYPE_V2_A13 = 129
+DTYPE_V2_W10 = 130
+DTYPE_V2_INT64_ACCUM = 131
+
+A13_MIN, A13_MAX = -4096, 4095
+W10_MIN, W10_MAX = -512, 511
+
+_CHUNK_ELEMS = 64
+
+
+def arithmetic_profile_a13w10() -> dict:
+    return {"id": ARITHMETIC_PROFILE_A13W10, "a_bits": 13, "w_bits": 10,
+            "accum": "int64", "rounding": "ties_to_even", "policy_id": POLICY_ID_A13W10}
+
+
+def _dtype_v2_range(dtype: int):
+    if dtype == DTYPE_V2_Q12_20:
+        return MIN_FX, MAX_FX
+    if dtype == DTYPE_V2_A13:
+        return A13_MIN, A13_MAX
+    if dtype == DTYPE_V2_W10:
+        return W10_MIN, W10_MAX
+    if dtype == DTYPE_V2_INT64_ACCUM:
+        return None, None
+    raise ValueError(f"canonical/v2: unknown dtype {dtype}")
+
+
+def _dtype_v2_width(dtype: int) -> int:
+    if dtype == DTYPE_V2_Q12_20:
+        return 4
+    if dtype in (DTYPE_V2_A13, DTYPE_V2_W10):
+        return 2
+    if dtype == DTYPE_V2_INT64_ACCUM:
+        return 8
+    raise ValueError(f"canonical/v2: unknown dtype {dtype}")
+
+
+def tensor_desc_v2(dtype: int, shape) -> dict:
+    return {"dtype": int(dtype), "layout": 1, "shape": [int(d) for d in shape]}
+
+
+def validate_values_v2(desc: dict, data) -> None:
+    lo, hi = _dtype_v2_range(int(desc["dtype"]))
+    if lo is None:
+        return
+    for i, v in enumerate(data):
+        if v < lo or v > hi:
+            raise ValueError(
+                f"canonical/v2: element {i} value {v} outside logical range [{lo},{hi}]")
+
+
+def _enc_be(v: int, width: int) -> bytes:
+    return (v & ((1 << (8 * width)) - 1)).to_bytes(width, "big")
+
+
+def tensor_v2_chunk_bytes(desc: dict, data, index: int) -> bytes:
+    """64 logical elements at the dtype width, zero-padded (all-zero bytes
+    are the canonical zero of every V2 dtype)."""
+    width = _dtype_v2_width(int(desc["dtype"]))
+    flat = list(data)
+    base = index * _CHUNK_ELEMS
+    if base >= len(flat) or index < 0:
+        raise ValueError("canonical/v2: chunk index out of range")
+    buf = bytearray(_CHUNK_ELEMS * width)
+    for i in range(_CHUNK_ELEMS):
+        if base + i >= len(flat):
+            break
+        buf[i * width:(i + 1) * width] = _enc_be(int(flat[base + i]), width)
+    return bytes(buf)
+
+
+def tensor_v2_leaf(desc_bytes: bytes, index: int, chunk: bytes) -> bytes:
+    return hash_bytes(DOMAIN_TENSOR_V2, desc_bytes, _u32be(index), chunk)
+
+
+def tensor_merkle_root_v2(desc: dict, data) -> bytes:
+    desc_bytes = encode_canonical(desc)
+    count = max(1, (len(data) + _CHUNK_ELEMS - 1) // _CHUNK_ELEMS)
+    leaves = []
+    for i in range(count):
+        leaves.append(tensor_v2_leaf(desc_bytes, i,
+                                     tensor_v2_chunk_bytes(desc, data, i)))
+    level = leaves
+    while len(level) > 1:
+        level = [hash_bytes(level[i] + (level[i + 1] if i + 1 < len(level) else level[i]))
+                 for i in range(0, len(level), 2)]
+    return level[0]
+
+
+def tensor_root_v2(desc: dict, data) -> bytes:
+    validate_values_v2(desc, data)
+    desc_bytes = encode_canonical(desc)
+    return hash_bytes(DOMAIN_TENSOR_ROOT_V2, desc_bytes,
+                      tensor_merkle_root_v2(desc, data))
+
+
+def rshift_round_even64(v: int, s: int) -> int:
+    if s == 0:
+        return v
+    q = v >> s
+    r = v & ((1 << s) - 1)
+    half = 1 << (s - 1)
+    if r > half or (r == half and (q & 1) == 1):
+        return q + 1
+    return q
+
+
+def reference_wide_gemm(a, w, m: int, n: int, k: int, transpose_b: bool = False):
+    """GEMM_A13W10_I64_V1 reference: C = sum_k A13 * W10, exact int64."""
+    max_safe_k64 = (2**63 - 1) // (2**12 * 2**9)
+    if k > max_safe_k64:
+        raise ValueError("canonical/v2: K exceeds MaxSafeK64")
+    validate_values_v2(tensor_desc_v2(DTYPE_V2_A13, (m, k)), a)
+    w_desc = tensor_desc_v2(DTYPE_V2_W10, (n, k) if transpose_b else (k, n))
+    validate_values_v2(w_desc, w)
+    out = [0] * (m * n)
+    for i in range(m):
+        for j in range(n):
+            acc = 0
+            for d in range(k):
+                wv = w[j * k + d] if transpose_b else w[d * n + j]
+                acc += int(a[i * k + d]) * int(wv)
+            out[i * n + j] = acc
+    return out
+
+
+def requant_wide(inp, mult: int, shift: int, lo: int, hi: int, target_dtype: int):
+    """REQUANTIZE_WIDE_V1: v = clamp(round_ties_even(x * mult >> shift), lo, hi)."""
+    if mult == 0 or mult > (1 << 62):
+        raise ValueError("canonical/v2: requant multiplier outside admission bounds")
+    out = []
+    for v in inp:
+        prod = int(v) * mult
+        if prod > 2**63 - 1 or prod < -(2**63):
+            raise ValueError("canonical/v2: requant intermediate overflow")
+        out.append(max(lo, min(hi, rshift_round_even64(prod, shift))))
+    validate_values_v2(tensor_desc_v2(target_dtype, (len(out),)), out)
+    return out
+
+
+def max_safe_k64(a_bits: int, w_bits: int) -> int:
+    return (2**63 - 1) // (2**(a_bits - 1) * 2**(w_bits - 1))
