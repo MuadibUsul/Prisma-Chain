@@ -30,3 +30,4 @@ runtime/
 tmp/
 .proto-out/
 models/
+testdata/f5c_v2_inputs/
