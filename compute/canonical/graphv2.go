@@ -956,3 +956,79 @@ func (g *GraphDescriptorV2) inputDescOfV2(ref TensorRef) TensorDescriptorV2 {
 	}
 	return g.Nodes[ref.Index].Output
 }
+
+// --- A1-02/A1-03: GraphStateRootV2 + TrailRootV2 ------------------------------
+
+// GraphStateRootV2FromRoots computes the V2 graph state root from the live
+// tensor roots alone (kind/index/TensorRootV2 leaves under the V2 state
+// domain, ids sorted; identical rule to the executor's internal root).
+func GraphStateRootV2FromRoots(live map[TensorRef]Hash) (Hash, error) {
+	if len(live) == 0 {
+		return Hash{}, errors.New("canonical/v2: empty state")
+	}
+	leaves := make([]Hash, 0, len(live))
+	ids := make([]uint64, 0, len(live))
+	byID := map[uint64]TensorRef{}
+	for ref := range live {
+		id := uint64(ref.Kind)<<32 | uint64(ref.Index)
+		ids = append(ids, id)
+		byID[id] = ref
+	}
+	sortUint64s(ids)
+	for _, id := range ids {
+		leaves = append(leaves, StateLeafV2(uint8(id>>32), uint32(id), live[byID[id]]))
+	}
+	return MerkleRootOf(leaves)
+}
+
+// TrailLeafV2 = SHA256(DomainGraphTraceV2 || graphID || u32(step) || stateRoot).
+// Own domain: a V1 trail proof can never verify here.
+func TrailLeafV2(graphID Hash, step uint32, stateRoot Hash) Hash {
+	return hashBytes([]byte(DomainGraphTraceV2), graphID[:], appendUint32BE(nil, step), stateRoot[:])
+}
+
+// TrailLevelsV2 builds the merkle levels over a full trail (one state root
+// per step, len = nodes+1).
+func TrailLevelsV2(graphID Hash, trail []Hash) ([][]Hash, error) {
+	if len(trail) == 0 {
+		return nil, errors.New("canonical/v2: empty trail")
+	}
+	leaves := make([]Hash, len(trail))
+	for i, sr := range trail {
+		leaves[i] = TrailLeafV2(graphID, uint32(i), sr)
+	}
+	levels, err := buildLevels(leaves)
+	if err != nil {
+		return nil, err
+	}
+	return levels, nil
+}
+
+// TrailRootV2 returns the merkle root of the V2 trail.
+func TrailRootV2(graphID Hash, trail []Hash) (Hash, error) {
+	levels, err := TrailLevelsV2(graphID, trail)
+	if err != nil {
+		return Hash{}, err
+	}
+	return levels[len(levels)-1][0], nil
+}
+
+// TrailProofV2 proves one trail step against the trail root.
+func TrailProofV2(graphID Hash, trail []Hash, index uint32) ([]Hash, error) {
+	levels, err := TrailLevelsV2(graphID, trail)
+	if err != nil {
+		return nil, err
+	}
+	if int(index) >= len(trail) {
+		return nil, errors.New("canonical/v2: trail index out of range")
+	}
+	return proveLeaf(levels, int(index))
+}
+
+// VerifyTrailProofV2 verifies one V2 trail step inclusion proof.
+func VerifyTrailProofV2(root, graphID Hash, step uint32, count uint32, stateRoot Hash,
+	siblings []Hash) bool {
+	leaf := TrailLeafV2(graphID, step, stateRoot)
+	proof := MerkleProof{Index: step, Count: count, Siblings: siblings}
+	return VerifyLeafInclusion(root, leaf, proof)
+}

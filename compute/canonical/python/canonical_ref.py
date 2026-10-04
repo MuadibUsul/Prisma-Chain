@@ -1059,3 +1059,64 @@ def requant_wide(inp, mult: int, shift: int, lo: int, hi: int, target_dtype: int
 
 def max_safe_k64(a_bits: int, w_bits: int) -> int:
     return (2**63 - 1) // (2**(a_bits - 1) * 2**(w_bits - 1))
+
+
+# --- A1-02/A1-03: GraphStateRootV2 + TrailRootV2 (Python mirror) -------------
+
+def graph_state_root_v2(tensors: dict) -> bytes:
+    """tensors: {(kind, index): TensorRootV2 bytes}; ids sorted."""
+    ids = sorted((int(kind) << 32) | int(index) for (kind, index) in tensors)
+    leaves = [hash_bytes(DOMAIN_GRAPH_STATE_V2, _u32be(tid >> 32),
+                         _u32be(tid & 0xFFFFFFFF), tensors[(tid >> 32, tid & 0xFFFFFFFF)])
+              for tid in ids]
+    level = leaves
+    while len(level) > 1:
+        level = [hash_bytes(level[i] + (level[i + 1] if i + 1 < len(level) else level[i]))
+                 for i in range(0, len(level), 2)]
+    return level[0]
+
+
+def trail_leaf_v2(graph_id: bytes, step: int, state_root: bytes) -> bytes:
+    return hash_bytes(DOMAIN_GRAPH_TRACE_V2, graph_id, _u32be(step), state_root)
+
+
+def _trail_levels_v2(graph_id: bytes, trail) -> list:
+    level = [trail_leaf_v2(graph_id, i, sr) for i, sr in enumerate(trail)]
+    levels = [level]
+    while len(level) > 1:
+        level = [hash_bytes(level[i] + (level[i + 1] if i + 1 < len(level) else level[i]))
+                 for i in range(0, len(level), 2)]
+        levels.append(level)
+    return levels
+
+
+def trail_root_v2(graph_id: bytes, trail) -> bytes:
+    return _trail_levels_v2(graph_id, trail)[-1][0]
+
+
+def trail_proof_v2(graph_id: bytes, trail, index: int) -> list:
+    levels = _trail_levels_v2(graph_id, trail)
+    siblings = []
+    idx = index
+    for level in levels[:-1]:
+        sib = idx ^ 1
+        siblings.append(level[sib] if sib < len(level) else level[idx])
+        idx //= 2
+    return siblings
+
+
+def verify_trail_proof_v2(root: bytes, graph_id: bytes, step: int, count: int,
+                          state_root: bytes, siblings) -> bool:
+    if count == 0 or step >= count:
+        return False
+    h = trail_leaf_v2(graph_id, step, state_root)
+    idx, cnt = step, count
+    for sib in siblings:
+        if idx % 2 == 0:
+            right = sib if idx + 1 < cnt else h
+            h = hash_bytes(h + right)
+        else:
+            h = hash_bytes(sib + h)
+        idx //= 2
+        cnt = (cnt + 1) // 2
+    return h == root
