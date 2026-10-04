@@ -6,8 +6,8 @@
       "aggregate_worst_of_seeds": {
         "rmsnorm": {
           "max_abs_error": 0.03513374219259324,
-          "mean_abs_error": 0.001758943257129707,
-          "min_cosine_similarity": 0.9999999999596615,
+          "mean_abs_error": 0.0017530007852506575,
+          "min_cosine_similarity": 0.9999999999632404,
           "max_squares_sum_bits": 61
         },
         "silu": {
@@ -37,7 +37,7 @@
       "aggregate_worst_of_seeds": {
         "rmsnorm": {
           "max_abs_error": 0.0008243549855619925,
-          "mean_abs_error": 6.159339642313145e-05,
+          "mean_abs_error": 6.100344484246808e-05,
           "min_cosine_similarity": 0.9999999999998695,
           "max_squares_sum_bits": 69
         },
@@ -67,8 +67,8 @@
       "fractional_bits": 24,
       "aggregate_worst_of_seeds": {
         "rmsnorm": {
-          "max_abs_error": 1.1466840115215149e-05,
-          "mean_abs_error": 4.907188300891807e-07,
+          "max_abs_error": 2.4558042710509653e-07,
+          "mean_abs_error": 4.397432879277775e-08,
           "min_cosine_similarity": 0.9999999999999994,
           "max_squares_sum_bits": 69
         },

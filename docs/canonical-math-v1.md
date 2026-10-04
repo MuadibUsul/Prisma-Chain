@@ -42,8 +42,10 @@ Why not the alternatives (measured, see JSON):
   of 1/√m (Q12.20, generated once by high-precision math and committed)
   provides a ≤9% estimate; apply the 4^-e scale to the estimate BEFORE
   iterating; exactly 3 Newton steps at doubled internal precision (all
-  int64-safe); result saturates, never diverges. Error ≤ ~1e-6 relative
-  (RMSNorm end-to-end max abs 8.2e-4 measured).
+  int64-safe); result saturates, never diverges. Measured relative error ≤ 1e-3
+  at the very top of the Q12.20 range (2047) and ~4e-5 elsewhere;
+  the numeric-design simulation is the measured RMSNorm end-to-end
+  bound in docs/canonical-math-v1-analysis.json.
 - **exp(x)**: 2^(x/ln2) with floor split into integer power and a cubic on
   f∈[0,ln2) with pinned coefficients (ln2, ln2²/2, ln2³/6 rounded to
   Q12.20); x ≤ -24 underflows to 0, x ≥ 21 saturates at the Q12.20 max.

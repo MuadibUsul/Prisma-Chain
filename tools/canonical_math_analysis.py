@@ -73,62 +73,45 @@ INVSQRT_TABLE_POINTS = 16  # m in [1,4), step 3/16, canonical constants
 
 
 def invsqrt_table_entry(index: int, frac: int) -> int:
-    """Precomputed 1/sqrt(1 + index*3/16) in Qf. This table is a canonical
-    constant: it is generated once with high-precision math and pinned."""
-    m = 1.0 + index * 3.0 / 16.0
-    return int(round((1.0 / math.sqrt(m)) * (1 << frac)))
+    """Precomputed 1/sqrt(1 + index*3/16) in Qf, generated with exact
+    integer square roots (math.isqrt) and floor division, identical to the
+    Go generator BuildInvSqrtTable."""
+    num = (1 << (2 * frac)) + index * 3 * (1 << (2 * frac - 4))  # m in Q2f
+    root = math.isqrt(num)
+    return (1 << (2 * frac)) // root
 
 
 def fx_sqrt_inv(x: int, frac: int) -> int:
-    """Deterministic integer 1/sqrt(x) in Qf.
-
-    Algorithm (frozen as CanonicalMathV1): normalize x into [1,4) with an
-    even power of four, look up the canonical 16-point table for the
-    normalized mantissa, run exactly two Newton steps with 64-bit-safe
-    intermediate products, then scale back by 2^-e. No unbounded
-    intermediates and no libm calls are involved."""
+    """Deterministic integer 1/sqrt(x) in Qf, mirroring Go exactly:
+    normalize to [1,4), pinned table, four Newton steps IN THE NORMALIZED
+    DOMAIN (int64-safe, no Qf underflow), then the 2^-e scale."""
     if x <= 0:
         raise ValueError("invsqrt domain")
     one = 1 << frac
-    # normalize: x = m * 4^e with m in [1,4]; m is a Qf value, so its bit
-    # length target is frac + 2 (Qf representation of [1,4) spans
-    # [2^frac, 2^(frac+2))).
     b = x.bit_length()
     target = frac + 2
     if b >= target:
-        shift = b - target
-        e = (shift + 1) // 2
+        e = ((b - target) + 1) // 2
         m = x >> (2 * e)
     else:
         e = -((target - b + 1) // 2)
         m = x << (-2 * e)
-    # fold the m == 4 boundary back into [1,4)
     if m >= (one << 2):
         m >>= 2
         e += 1
-    # m is now Qf in [1,4); table lookup
     idx = ((m - one) * INVSQRT_TABLE_POINTS) // (one * 3)
     idx = max(0, min(INVSQRT_TABLE_POINTS - 1, idx))
     y = invsqrt_table_entry(idx, frac)
-    # Apply the 4^-e scaling to the estimate BEFORE iterating: Newton's
-    # method for 1/sqrt(x) converges only from y^2*x < 3, so the initial
-    # guess must already reflect the true magnitude of x.
+    for _ in range(4):
+        y2 = (y * y) >> frac
+        my2 = (m * y2) >> frac
+        corr = (3 << (frac - 1)) - (my2 >> 1)
+        y = (y * corr) >> frac
     if e > 0:
         y >>= e
-        y = max(1, y)
     elif e < 0:
         y <<= -e
-    # three Newton steps at Q2f internal precision (int64-safe); the
-    # table estimate is within ~9% and each step cubes the error.
-    X = x << frac
-    Y = y << frac
-    for _ in range(3):
-        Y2 = (Y * Y) >> (2 * frac)
-        XY2 = (X * Y2) >> (2 * frac)
-        corr = (3 << (2 * frac - 1)) - (XY2 >> 1)
-        Y = (Y * corr) >> (2 * frac)
-    result = Y >> frac
-    return max(1, result)
+    return max(1, min((1 << 31) - 1, y))
 
 
 def canonical_exp(x: int, frac: int) -> int:
@@ -219,8 +202,11 @@ def simulate_format(frac: int, seed: int) -> dict:
     for vec in vecs:
         fv = [to_fx(v, frac) for v in vec]
         fw = [to_fx(w, frac) for w in weight]
-        sq = sum(v * v for v in fv) >> frac          # Q(2f) -> Q(f)
-        max_ssum = max(max_ssum, sum(v * v for v in fv))
+        # Mirror the Go reference exactly: each squared term is truncated
+        # to Qf before accumulation (the per-chunk reduction shape).
+        terms = list(fv)
+        sq = sum((v * v) >> frac for v in terms)
+        max_ssum = max(max_ssum, sum((v * v) for v in terms))
         mean = sq // len(fv)
         ms = mean + to_fx(eps, frac)
         inv = fx_sqrt_inv(ms, frac)
