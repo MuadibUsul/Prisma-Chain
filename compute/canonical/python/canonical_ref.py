@@ -834,3 +834,52 @@ def graph_result_commit_preimage(commit: dict) -> bytes:
     unsigned = dict(commit)
     unsigned["signature"] = b""
     return DOMAIN_SIG + encode_canonical(unsigned)
+
+
+# --- node-output manifest (Phase F.1) ---------------------------------------
+
+
+DOMAIN_NODE_OUTPUT = b"PRISMA_NODE_OUTPUT_V1\x00"
+
+
+def node_output_leaf(graph_id: bytes, node: dict) -> bytes:
+    """One node's output commitment (descriptor-bound)."""
+    desc_bytes = encode_canonical(_desc_from_json(node["output"]))
+    return hash_bytes(DOMAIN_NODE_OUTPUT, graph_id, _u32be(node["node_id"]),
+                      node["operator_id"].encode(), desc_bytes)
+
+
+def build_node_output_manifest(graph_id: bytes, nodes, node_roots):
+    """Merkle root over every node's (leaf, output TensorRoot) combined."""
+    leaves = [hash_bytes(node_output_leaf(graph_id, node), root)
+              for node, root in zip(nodes, node_roots)]
+    return build_levels(leaves)[-1][0], leaves
+
+
+def node_output_manifest_proof(graph_id: bytes, nodes, node_roots, index: int):
+    _, leaves = build_node_output_manifest(graph_id, nodes, node_roots)
+    return index, len(leaves), prove(build_levels(leaves), index)
+
+
+def graph_result_commit_v2(graph_id: bytes, task_ref: bytes, assignment_ref: bytes,
+                           worker_pubkey: bytes, manifest_root: bytes, outputs,
+                           completed_epoch: int) -> dict:
+    roots = [bytes(o) for o in outputs]
+    return {
+        "protocol_version": "2.0.0",
+        "graph_id": graph_id,
+        "task_ref": task_ref,
+        "assignment_ref": assignment_ref,
+        "worker_pubkey": worker_pubkey,
+        "node_output_manifest_root": manifest_root,
+        "final_output_root": final_output_root(roots),
+        "output_roots": roots,
+        "completed_epoch": completed_epoch,
+        "signature": b"",
+    }
+
+
+def graph_result_commit_v2_preimage(commit: dict) -> bytes:
+    unsigned = dict(commit)
+    unsigned["signature"] = b""
+    return DOMAIN_SIG + encode_canonical(unsigned)

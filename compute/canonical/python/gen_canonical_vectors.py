@@ -256,6 +256,8 @@ def graph_vector():
         "outputs": [{"kind": 1, "index": 9}],
     }
     execution = ref.execute_graph(descriptor, data)
+    node_roots = [execution["roots"][(1, i)] for i in range(len(nodes))]
+    manifest_root, _ = ref.build_node_output_manifest(ref.graph_id(descriptor), nodes, node_roots)
     return {
         "descriptor": descriptor,
         "inputs": inputs,
@@ -263,6 +265,8 @@ def graph_vector():
         "trail": execution["trail"],
         "outputs": execution["outputs"],
         "work": execution["work"],
+        "node_roots": node_roots,
+        "node_output_manifest_root": manifest_root,
     }
 
 

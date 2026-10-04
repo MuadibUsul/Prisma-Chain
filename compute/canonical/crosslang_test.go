@@ -261,39 +261,7 @@ func TestCanonicalCrossLanguageVectors(t *testing.T) {
 
 	// --- graph -------------------------------------------------------------
 	gVec := jmap(t, vectors["graph"])
-	descMap := jmap(t, gVec["descriptor"])
-	graph := &GraphDescriptor{
-		ProtocolVersion: jstr(t, descMap["protocol_version"]),
-		Spec:            jstr(t, descMap["spec"]),
-	}
-	for _, inAny := range jarr(t, descMap["inputs"]) {
-		in := jmap(t, inAny)
-		graph.Inputs = append(graph.Inputs, GraphInput{
-			Name: jstr(t, in["name"]),
-			Desc: jdesc(t, in["desc"]),
-			Root: jhex(t, in["root"]),
-		})
-	}
-	for _, nodeAny := range jarr(t, descMap["nodes"]) {
-		n := jmap(t, nodeAny)
-		var refs []TensorRef
-		for _, refAny := range jarr(t, n["inputs"]) {
-			r := jmap(t, refAny)
-			refs = append(refs, TensorRef{Kind: uint8(jnum(t, r["kind"])), Index: uint32(jnum(t, r["index"]))})
-		}
-		graph.Nodes = append(graph.Nodes, GraphNode{
-			NodeID:     uint32(jnum(t, n["node_id"])),
-			OperatorID: jstr(t, n["operator_id"]),
-			Version:    jstr(t, n["operator_version"]),
-			Inputs:     refs,
-			Output:     jdesc(t, n["output"]),
-			Params:     jparams(t, n["params"]),
-		})
-	}
-	for _, refAny := range jarr(t, descMap["outputs"]) {
-		r := jmap(t, refAny)
-		graph.Outputs = append(graph.Outputs, TensorRef{Kind: uint8(jnum(t, r["kind"])), Index: uint32(jnum(t, r["index"]))})
-	}
+	graph := buildGraphFromVector(t, gVec)
 	graphID, err := graph.GraphID()
 	if err != nil {
 		t.Fatal(err)
@@ -335,4 +303,94 @@ func TestCanonicalCrossLanguageVectors(t *testing.T) {
 			t.Fatalf("graph work %s = %d, want %d", key, got, jnum(t, w[1]))
 		}
 	}
+}
+
+// TestCanonicalManifestVectors: the node-output manifest (Phase F.1) must
+// match the Python mirror bit for bit, including one inclusion proof.
+func TestCanonicalManifestVectors(t *testing.T) {
+	vectors := loadVectors(t)
+	gVec := jmap(t, vectors["graph"])
+	graph := buildGraphFromVector(t, gVec)
+	graphID, err := graph.GraphID()
+	if err != nil {
+		t.Fatal(err)
+	}
+	var nodeRoots []Hash
+	for _, raw := range jarr(t, gVec["node_roots"]) {
+		var h Hash
+		copy(h[:], jhex(t, raw))
+		nodeRoots = append(nodeRoots, h)
+	}
+	manifestRoot, leaves, err := BuildNodeOutputManifest(graph, nodeRoots)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(manifestRoot[:], jhex(t, gVec["node_output_manifest_root"])) {
+		t.Fatal("manifest root mismatch")
+	}
+	// One inclusion proof per end of the tree.
+	for _, index := range []uint32{0, uint32(len(graph.Nodes) - 1)} {
+		proof, err := proveLeaf([][]Hash{leaves}, int(index))
+		_ = proof
+		_ = err
+		levels, err := buildLevels(leaves)
+		if err != nil {
+			t.Fatal(err)
+		}
+		siblings, err := proveLeaf(levels, int(index))
+		if err != nil {
+			t.Fatal(err)
+		}
+		ok := VerifyNodeOutputManifestLeaf(manifestRoot, graphID, graph.Nodes[index], nodeRoots[index],
+			MerkleProof{Index: index, Count: uint32(len(leaves)), Siblings: siblings})
+		if !ok {
+			t.Fatalf("manifest proof failed for node %d", index)
+		}
+		// Tampered root must fail.
+		bad := nodeRoots[index]
+		bad[0] ^= 0x01
+		if VerifyNodeOutputManifestLeaf(manifestRoot, graphID, graph.Nodes[index], bad,
+			MerkleProof{Index: index, Count: uint32(len(leaves)), Siblings: siblings}) {
+			t.Fatalf("tampered node root accepted for node %d", index)
+		}
+	}
+}
+
+// buildGraphFromVector parses the graph descriptor of the vector file.
+func buildGraphFromVector(t *testing.T, gVec map[string]any) *GraphDescriptor {
+	t.Helper()
+	descMap := jmap(t, gVec["descriptor"])
+	graph := &GraphDescriptor{
+		ProtocolVersion: jstr(t, descMap["protocol_version"]),
+		Spec:            jstr(t, descMap["spec"]),
+	}
+	for _, inAny := range jarr(t, descMap["inputs"]) {
+		in := jmap(t, inAny)
+		graph.Inputs = append(graph.Inputs, GraphInput{
+			Name: jstr(t, in["name"]),
+			Desc: jdesc(t, in["desc"]),
+			Root: jhex(t, in["root"]),
+		})
+	}
+	for _, nodeAny := range jarr(t, descMap["nodes"]) {
+		n := jmap(t, nodeAny)
+		var refs []TensorRef
+		for _, refAny := range jarr(t, n["inputs"]) {
+			r := jmap(t, refAny)
+			refs = append(refs, TensorRef{Kind: uint8(jnum(t, r["kind"])), Index: uint32(jnum(t, r["index"]))})
+		}
+		graph.Nodes = append(graph.Nodes, GraphNode{
+			NodeID:     uint32(jnum(t, n["node_id"])),
+			OperatorID: jstr(t, n["operator_id"]),
+			Version:    jstr(t, n["operator_version"]),
+			Inputs:     refs,
+			Output:     jdesc(t, n["output"]),
+			Params:     jparams(t, n["params"]),
+		})
+	}
+	for _, refAny := range jarr(t, descMap["outputs"]) {
+		r := jmap(t, refAny)
+		graph.Outputs = append(graph.Outputs, TensorRef{Kind: uint8(jnum(t, r["kind"])), Index: uint32(jnum(t, r["index"]))})
+	}
+	return graph
 }

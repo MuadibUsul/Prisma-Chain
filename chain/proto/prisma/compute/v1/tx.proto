@@ -37,6 +37,7 @@ service Msg {
   rpc PostGraphTask(MsgPostGraphTask) returns (MsgPostGraphTaskResponse);
   rpc AcceptGraphTask(MsgAcceptGraphTask) returns (MsgAcceptGraphTaskResponse);
   rpc SubmitGraphResult(MsgSubmitGraphResult) returns (MsgSubmitGraphResultResponse);
+  rpc SubmitGraphResultV2(MsgSubmitGraphResultV2) returns (MsgSubmitGraphResultV2Response);
   rpc OpenGraphChallenge(MsgOpenGraphChallenge) returns (MsgOpenGraphChallengeResponse);
   rpc GraphTrailClaim(MsgGraphTrailClaim) returns (MsgGraphTrailClaimResponse);
   rpc GraphMidPoint(MsgGraphMidPoint) returns (MsgGraphMidPointResponse);
@@ -397,6 +398,20 @@ message MsgSubmitGraphResult {
   bytes worker_signature = 6;
 }
 message MsgSubmitGraphResultResponse { uint64 challenge_end = 1; }
+
+message MsgSubmitGraphResultV2 {
+  option (cosmos.msg.v1.signer) = "worker";
+  string worker = 1;
+  uint64 graph_task_id = 2;
+  // Compact commitment to every node's output TensorRoot (Phase F.1
+  // manifest); locked before any verification randomness.
+  bytes node_output_manifest_root = 3;
+  repeated bytes output_roots = 4;
+  bytes final_output_root = 5;
+  uint64 completed_epoch = 6;
+  bytes worker_signature = 7;
+}
+message MsgSubmitGraphResultV2Response { uint64 challenge_end = 1; }
 
 message MsgOpenGraphChallenge {
   option (cosmos.msg.v1.signer) = "challenger";

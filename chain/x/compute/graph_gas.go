@@ -23,11 +23,14 @@ const (
 	// Descriptor decode + validate per node/input.
 	GasGraphNodeDecode  uint64 = 4_000
 	GasGraphInputDecode uint64 = 2_000
-	// Per canonical work-vector unit above the free allowance. Fusion
-	// pricing stays an open economic question (no universal CWU), so the
-	// task fee is the agreed flat fee; gas only bounds execution.
-	GasGraphWorkUnit      uint64 = 1
-	GasGraphFreeWorkUnits uint64 = 200_000
+	// F.1 policy: the chain never executes the graph, so gas prices
+	// decode/validate/store (per node/input/hash) and NOT the modeled
+	// work vector — a real model block carries 2.5e8 modeled units and
+	// charging them would make posting impossible while adding no
+	// security (execution happens off chain and is verified by disputes).
+	// The work vector still feeds the receipt and the flat-fee policy.
+	GasGraphWorkUnit      uint64 = 0
+	GasGraphFreeWorkUnits uint64 = 1 << 62
 	// Hashing and proof verification.
 	GasGraphHash         uint64 = 1_000
 	GasGraphProofSibling uint64 = 400
@@ -63,18 +66,18 @@ func graphWorkGas(work canonical.WorkVector) uint64 {
 // GraphGasScheduleJSON renders the frozen schedule for artifacts and docs.
 func GraphGasScheduleJSON() map[string]any {
 	return map[string]any{
-		"version":            GraphGasScheduleVersion,
-		"tx_base":            GasGraphTxBase,
-		"node_decode":        GasGraphNodeDecode,
-		"input_decode":       GasGraphInputDecode,
-		"work_unit":          GasGraphWorkUnit,
-		"free_work_units":    GasGraphFreeWorkUnits,
-		"hash":               GasGraphHash,
-		"proof_sibling":      GasGraphProofSibling,
-		"evidence_chunk":     GasGraphEvidence,
-		"state_leaf":         GasGraphStateLeaf,
-		"arbiter_unit":       GasGraphArbiterUnit,
-		"receipt":            GasGraphReceipt,
-		"store":              GasGraphStore,
+		"version":         GraphGasScheduleVersion,
+		"tx_base":         GasGraphTxBase,
+		"node_decode":     GasGraphNodeDecode,
+		"input_decode":    GasGraphInputDecode,
+		"work_unit":       GasGraphWorkUnit,
+		"free_work_units": GasGraphFreeWorkUnits,
+		"hash":            GasGraphHash,
+		"proof_sibling":   GasGraphProofSibling,
+		"evidence_chunk":  GasGraphEvidence,
+		"state_leaf":      GasGraphStateLeaf,
+		"arbiter_unit":    GasGraphArbiterUnit,
+		"receipt":         GasGraphReceipt,
+		"store":           GasGraphStore,
 	}
 }

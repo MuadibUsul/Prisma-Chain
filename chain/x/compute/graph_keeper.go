@@ -78,6 +78,8 @@ func (s msgServer) PostGraphTask(ctx context.Context, msg *types.MsgPostGraphTas
 	if err != nil {
 		return nil, err
 	}
+	// F.1: decode/validate/store gas only; the derived work vector is not
+	// priced on chain (see graph_gas.go).
 	s.consumeGraphGas(ctx, "graph work", graphWorkGas(work))
 	graphID, err := graph.GraphID()
 	if err != nil {
@@ -780,15 +782,39 @@ func (s msgServer) finalizeGraphOptimistic(ctx context.Context, task *GraphTask)
 	}
 	var taskRef [8]byte
 	binary.BigEndian.PutUint64(taskRef[:], task.ID)
-	receipt, err := canonical.BuildVerifiedGraphWorkReceiptV1(graph,
-		taskRef[:], task.AssignmentRef, task.WorkerProtocolPubKey, outputs, work,
-		mode, height, []byte("graph:"+fmt.Sprint(task.ID)), task.DisputeTranscriptDigest)
-	if err != nil {
-		return nil, err
-	}
-	receiptID, err := receipt.ReceiptID()
-	if err != nil {
-		return nil, err
+	var receiptID canonical.Hash
+	var receiptJSON []byte
+	if task.CommitVersion == "2" {
+		receipt, err := canonical.BuildVerifiedGraphWorkReceiptV2(graph,
+			taskRef[:], task.AssignmentRef, task.WorkerProtocolPubKey, outputs, work,
+			task.NodeOutputManifestRoot, mode, height,
+			[]byte("graph:"+fmt.Sprint(task.ID)), task.DisputeTranscriptDigest)
+		if err != nil {
+			return nil, err
+		}
+		receiptID, err = receipt.ReceiptID()
+		if err != nil {
+			return nil, err
+		}
+		receiptJSON, err = json.Marshal(receipt)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		receipt, err := canonical.BuildVerifiedGraphWorkReceiptV1(graph,
+			taskRef[:], task.AssignmentRef, task.WorkerProtocolPubKey, outputs, work,
+			mode, height, []byte("graph:"+fmt.Sprint(task.ID)), task.DisputeTranscriptDigest)
+		if err != nil {
+			return nil, err
+		}
+		receiptID, err = receipt.ReceiptID()
+		if err != nil {
+			return nil, err
+		}
+		receiptJSON, err = json.Marshal(receipt)
+		if err != nil {
+			return nil, err
+		}
 	}
 	if len(s.store(ctx).Get(graphReceiptKey(receiptID[:]))) != 0 {
 		return nil, errors.New("graph receipt already exists")
@@ -803,10 +829,6 @@ func (s msgServer) finalizeGraphOptimistic(ctx context.Context, task *GraphTask)
 		return nil, err
 	}
 	if err := s.releaseGraphReservation(ctx, task); err != nil {
-		return nil, err
-	}
-	receiptJSON, err := json.Marshal(receipt)
-	if err != nil {
 		return nil, err
 	}
 	s.store(ctx).Set(graphReceiptKey(receiptID[:]), receiptJSON)
@@ -930,4 +952,66 @@ func toCanonicalClaim(claim GraphTrailClaimData) canonical.TrailClaim {
 		Root: root, InitialRoot: initial, InitialProof: initialProof,
 		FinalRoot: final, FinalProof: finalProof,
 	}
+}
+
+// SubmitGraphResultV2 validates a GraphResultCommitV2: the V1 checks plus
+// the compact node-output manifest root, which is locked here BEFORE any
+// verification randomness exists. The chain never recomputes the graph;
+// manifest correspondence is checked by the watcher/DA bundle and refuted
+// through the dispute path.
+func (s msgServer) SubmitGraphResultV2(ctx context.Context, msg *types.MsgSubmitGraphResultV2) (*types.MsgSubmitGraphResultV2Response, error) {
+	s.consumeGraphGas(ctx, "submit v2 base", GasGraphTxBase)
+	task, err := s.GetGraphTask(ctx, msg.GraphTaskId)
+	if err != nil {
+		return nil, err
+	}
+	height := uint64(sdk.UnwrapSDKContext(ctx).BlockHeight())
+	if task.Status != GraphStatusAssigned {
+		return nil, errGraphWrongPhase
+	}
+	if msg.Worker != task.Worker {
+		return nil, errors.New("graph result is not from the assigned worker")
+	}
+	graph, err := graphDescriptor(&task)
+	if err != nil {
+		return nil, err
+	}
+	if len(msg.NodeOutputManifestRoot) != 32 {
+		return nil, errors.New("graph result manifest root must be 32 bytes")
+	}
+	if len(msg.OutputRoots) != len(graph.Outputs) || len(msg.WorkerSignature) != ed25519.SignatureSize {
+		return nil, errors.New("graph result commitment shape is invalid")
+	}
+	var taskRef [8]byte
+	binary.BigEndian.PutUint64(taskRef[:], task.ID)
+	rc := &canonical.GraphResultCommitV2{
+		ProtocolVersion:        canonical.GraphResultCommitV2Version,
+		GraphID:                append([]byte(nil), task.GraphID...),
+		TaskRef:                taskRef[:],
+		AssignmentRef:          append([]byte(nil), task.AssignmentRef...),
+		WorkerPubKey:           append([]byte(nil), task.WorkerProtocolPubKey...),
+		NodeOutputManifestRoot: append([]byte(nil), msg.NodeOutputManifestRoot...),
+		FinalOutputRoot:        append([]byte(nil), msg.FinalOutputRoot...),
+		OutputRoots:            cloneBytes2D(msg.OutputRoots),
+		CompletedEpoch:         msg.CompletedEpoch,
+		Signature:              append([]byte(nil), msg.WorkerSignature...),
+	}
+	s.consumeGraphGas(ctx, "result hashing", GasGraphHash*uint64(len(graph.Outputs)+len(msg.OutputRoots)+2))
+	if err := canonical.ValidateGraphResultCommitV2(graph, rc, nil); err != nil {
+		return nil, err
+	}
+	task.CommitVersion = "2"
+	task.NodeOutputManifestRoot = append([]byte(nil), rc.NodeOutputManifestRoot...)
+	task.FinalOutputRoot = append([]byte(nil), rc.FinalOutputRoot...)
+	task.OutputRoots = cloneBytes2D(rc.OutputRoots)
+	task.ResultSignature = append([]byte(nil), rc.Signature...)
+	task.CompletedEpoch = msg.CompletedEpoch
+	task.ResultSubmittedHeight = height
+	task.ChallengeEnd = height + task.ChallengeWindow
+	task.Status = GraphStatusResultSubmitted
+	if err := s.setGraphTask(ctx, task); err != nil {
+		return nil, err
+	}
+	s.consumeGraphGas(ctx, "graph store", GasGraphStore+GasGraphHash*uint64(len(task.GraphJSON)/256+1))
+	return &types.MsgSubmitGraphResultV2Response{ChallengeEnd: task.ChallengeEnd}, nil
 }

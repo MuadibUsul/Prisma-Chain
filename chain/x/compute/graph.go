@@ -28,9 +28,11 @@ const GraphRequesterKeyBindingDomain = "prisma:graph-requester-key-binding:v1\n"
 // Admission bounds (DoS): a graph task is a small static block, never an
 // arbitrary program.
 const (
-	MaxGraphJSONBytes      = 65536
-	MaxGraphNodes          = 256
-	MaxGraphInputs         = 128
+	// Bounds raised for the Phase F.1 real model block (Qwen3 layer 0 is a
+	// 308-node static graph); they are DoS policy, not protocol semail.
+	MaxGraphJSONBytes      = 1 << 20
+	MaxGraphNodes          = 512
+	MaxGraphInputs         = 256
 	MaxGraphEvidenceChunks = 512
 	MaxGraphOutputs        = 64
 	// One active challenge per task (the Phase E one-open-challenge bound);
@@ -90,6 +92,11 @@ type GraphTask struct {
 	AcceptedHeight       uint64 `json:"accepted_height,omitempty"`
 	ReservedBond         uint64 `json:"reserved_bond,omitempty"`
 
+	// CommitVersion selects the settlement receipt: "" / "1" = V1,
+	// "2" = GraphResultCommitV2 (node-output manifest).
+	CommitVersion          string `json:"commit_version,omitempty"`
+	NodeOutputManifestRoot []byte `json:"node_output_manifest_root,omitempty"`
+
 	FinalOutputRoot       []byte   `json:"final_output_root,omitempty"`
 	OutputRoots           [][]byte `json:"output_roots,omitempty"`
 	ResultSignature       []byte   `json:"result_signature,omitempty"`
@@ -108,18 +115,18 @@ type GraphTask struct {
 // core lives in the canonical GDS1 snapshot; everything around it is chain
 // identity and economics.
 type GraphDisputeRecord struct {
-	TaskID            uint64 `json:"task_id"`
-	Challenger        string `json:"challenger"`
-	ChallengerPubKey  []byte `json:"challenger_pub_key"`
-	Bond              uint64 `json:"bond"`
-	ChallengerOutputs [][]byte `json:"challenger_outputs"`
+	TaskID            uint64              `json:"task_id"`
+	Challenger        string              `json:"challenger"`
+	ChallengerPubKey  []byte              `json:"challenger_pub_key"`
+	Bond              uint64              `json:"bond"`
+	ChallengerOutputs [][]byte            `json:"challenger_outputs"`
 	WorkerClaim       GraphTrailClaimData `json:"worker_claim,omitempty"`
 	ChallengerClaim   GraphTrailClaimData `json:"challenger_claim,omitempty"`
-	Snapshot          []byte `json:"snapshot,omitempty"`
-	ClaimDeadline     uint64 `json:"claim_deadline"`
-	Status            string `json:"status"`
-	Outcome           string `json:"outcome,omitempty"`
-	TranscriptDigest  []byte `json:"transcript_digest"`
+	Snapshot          []byte              `json:"snapshot,omitempty"`
+	ClaimDeadline     uint64              `json:"claim_deadline"`
+	Status            string              `json:"status"`
+	Outcome           string              `json:"outcome,omitempty"`
+	TranscriptDigest  []byte              `json:"transcript_digest"`
 }
 
 func graphTaskKey(id uint64) []byte {

@@ -9,6 +9,7 @@ package compute
 import (
 	"bytes"
 	"crypto/ed25519"
+	"encoding/base64"
 	"encoding/binary"
 	"encoding/json"
 	"testing"
@@ -747,11 +748,15 @@ func TestGraphGasScheduleFrozen(t *testing.T) {
 	if schedule["version"] != GraphGasScheduleVersion {
 		t.Fatal("gas schedule version drifted")
 	}
+	// F.1 policy: the derived work vector is not priced on chain (the
+	// chain never executes the graph); any vector costs zero gas.
 	work := canonical.WorkVector{{Key: "GEMM_MAC", Value: 1_000_000}, {Key: "ADD_ELEMENT", Value: 10}}
-	gas := graphWorkGas(work)
-	want := (uint64(1_000_010) - GasGraphFreeWorkUnits) * GasGraphWorkUnit
-	if gas != want {
-		t.Fatalf("work gas = %d, want %d", gas, want)
+	if gas := graphWorkGas(work); gas != 0 {
+		t.Fatalf("work gas = %d, want 0 under the F.1 policy", gas)
+	}
+	big := canonical.WorkVector{{Key: "GEMM_MAC", Value: 1 << 40}}
+	if gas := graphWorkGas(big); gas != 0 {
+		t.Fatalf("large work vector gas = %d, want 0", gas)
 	}
 }
 
@@ -764,5 +769,104 @@ func TestGraphAssignmentRefDeterministic(t *testing.T) {
 	c := graphAssignmentRef([]byte("g"), "worker", []byte("nonce"), 8)
 	if bytes.Equal(a, c) {
 		t.Fatal("assignment ref ignores the height")
+	}
+}
+
+// TestGraphV2ManifestFlow: a V2 commitment locks the node-output manifest
+// and settles with the V2 receipt; malformed manifest commitments are
+// refused and V1 tasks keep settling with V1 receipts.
+func TestGraphV2ManifestFlow(t *testing.T) {
+	h := newGemmHarness(t, 100)
+	fx := buildChainGraphFixture(t)
+	taskID, _ := h.postGraph(t, fx)
+	assignmentRef := h.acceptGraph(t, taskID)
+
+	nodeRoots, err := canonical.NodeOutputRootsFromExecution(&fx.graph, fx.exec)
+	if err != nil {
+		t.Fatal(err)
+	}
+	manifestRoot, _, err := canonical.BuildNodeOutputManifest(&fx.graph, nodeRoots)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var taskRef [8]byte
+	binary.BigEndian.PutUint64(taskRef[:], taskID)
+	rc, err := canonical.NewGraphResultCommitV2(&fx.graph, taskRef[:], assignmentRef,
+		h.workKeys.networkPub, fx.exec, 42)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := canonical.SignGraphResultCommitV2(rc, h.workKeys.networkPriv); err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(rc.NodeOutputManifestRoot, manifestRoot[:]) {
+		t.Fatal("manifest root mismatch before submission")
+	}
+
+	// A manifest of the wrong size must be refused.
+	bad := &types.MsgSubmitGraphResultV2{
+		Worker: h.worker, GraphTaskId: taskID,
+		NodeOutputManifestRoot: rc.NodeOutputManifestRoot[:16],
+		OutputRoots:            rc.OutputRoots, FinalOutputRoot: rc.FinalOutputRoot,
+		CompletedEpoch: 42, WorkerSignature: rc.Signature,
+	}
+	if _, err := h.msg.SubmitGraphResultV2(h.ctx, bad); err == nil {
+		t.Fatal("short manifest root accepted")
+	}
+	// A tampered signature must be refused.
+	tampered := *rc
+	tampered.Signature = append([]byte(nil), rc.Signature...)
+	tampered.Signature[0] ^= 0x01
+	if _, err := h.msg.SubmitGraphResultV2(h.ctx, &types.MsgSubmitGraphResultV2{
+		Worker: h.worker, GraphTaskId: taskID,
+		NodeOutputManifestRoot: tampered.NodeOutputManifestRoot,
+		OutputRoots:            tampered.OutputRoots, FinalOutputRoot: tampered.FinalOutputRoot,
+		CompletedEpoch: 42, WorkerSignature: tampered.Signature,
+	}); err == nil {
+		t.Fatal("tampered V2 signature accepted")
+	}
+
+	if _, err := h.msg.SubmitGraphResultV2(h.ctx, &types.MsgSubmitGraphResultV2{
+		Worker: h.worker, GraphTaskId: taskID,
+		NodeOutputManifestRoot: rc.NodeOutputManifestRoot,
+		OutputRoots:            rc.OutputRoots, FinalOutputRoot: rc.FinalOutputRoot,
+		CompletedEpoch: 42, WorkerSignature: rc.Signature,
+	}); err != nil {
+		t.Fatal(err)
+	}
+	task, err := h.keeper.GetGraphTask(h.ctx, taskID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if task.CommitVersion != "2" || !bytes.Equal(task.NodeOutputManifestRoot, rc.NodeOutputManifestRoot) {
+		t.Fatal("V2 commitment not recorded")
+	}
+	h.advance(task.ChallengeEnd + 1)
+	res, err := h.msg.FinalizeGraphTask(h.ctx, &types.MsgFinalizeGraphTask{Actor: h.requester, GraphTaskId: taskID})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(res.ReceiptId) != 32 {
+		t.Fatal("no V2 receipt id")
+	}
+	// The V2 receipt must live under its own id and carry the manifest.
+	stored := h.keeper.store(h.ctx).Get(graphReceiptKey(res.ReceiptId))
+	if len(stored) == 0 {
+		t.Fatal("V2 receipt not stored")
+	}
+	var receipt map[string]any
+	if err := json.Unmarshal(stored, &receipt); err != nil {
+		t.Fatal(err)
+	}
+	rawManifest, ok := receipt["NodeOutputManifestRoot"].(string)
+	if !ok {
+		t.Fatal("V2 receipt has no manifest field")
+	}
+	decoded, err := base64.StdEncoding.DecodeString(rawManifest)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(decoded, task.NodeOutputManifestRoot) {
+		t.Fatal("V2 receipt manifest root mismatch")
 	}
 }

@@ -1,0 +1,49 @@
+{
+  "repository": "Qwen/Qwen3-0.6B-Base",
+  "revision": "57ca99e94acb83175495aa2c6b6b0cc498170924",
+  "revision_source": "explicit pin (never main/latest/floating tags)",
+  "license": "apache-2.0",
+  "trust_remote_code": false,
+  "files": {},
+  "huggingface_hub": "1.33.0",
+  "transformers": "NOT INSTALLED",
+  "torch": "NOT INSTALLED",
+  "repo_file_list": [
+    {
+      "name": ".gitattributes",
+      "bytes": 1519
+    },
+    {
+      "name": "README.md",
+      "bytes": 2856
+    },
+    {
+      "name": "config.json",
+      "bytes": 727
+    },
+    {
+      "name": "generation_config.json",
+      "bytes": 138
+    },
+    {
+      "name": "merges.txt",
+      "bytes": 1671853
+    },
+    {
+      "name": "model.safetensors",
+      "bytes": 1192135096
+    },
+    {
+      "name": "tokenizer.json",
+      "bytes": 7031645
+    },
+    {
+      "name": "tokenizer_config.json",
+      "bytes": 9675
+    },
+    {
+      "name": "vocab.json",
+      "bytes": 2776833
+    }
+  ]
+}
