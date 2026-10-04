@@ -267,4 +267,9 @@ Status: items 1-7 and 9 pass on the CPU path (`docs/gemm-v0.1.2-report.md`);
 the 4096^3 CPU ladder is published (`docs/gemm-v0.1.2-benchmark-results.json`,
 detection ratio 0.0080 at 8 rounds, total fraud-path ratio 0.0692 at 40
 rounds including the exact 8-row tile build). The GPU fast-verification benchmark remains NOT TESTED until two
-pods are available again. Phase D chain integration is still open.
+pods are available again. Single-validator chain settlement,
+multi-validator operation and DA_REPLICA_V1 have since landed (see the
+gates below); DA_REPLICA_V1 is replicated availability with bonded
+attestations, NOT perfect data availability, validator-cartel censorship
+remains possible, and long-run multi-operator public-testnet operation
+is not proven.

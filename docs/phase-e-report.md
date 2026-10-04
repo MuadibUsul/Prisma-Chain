@@ -43,10 +43,14 @@ omission only; the transaction stays valid for every validator):
   proposed by the censoring validator and omitted the challenge it held;
   block 27 (validator-b) included it; the dispute completed to
   ChallengerWins with no receipt.
-- Combined run (`docs/phase-e-da-results.json`): challenge broadcast at
-  the window before validator-a's slot (height 749 window, broadcast
-  750); **block 750 omitted it (censored_by=[750])**; block 751 by
-  validator-b included it (delay 1 block); full dispute completed.
+- Combined run (authoritative data in `docs/phase-e-da-results.json`,
+  rerun on a fresh four-validator chain): the challenge was broadcast at
+  the window before validator-a's slot; **the censoring proposer's own
+  block omitted it (`censored_by=[40]`)**; the next block (41) by
+  validator-b included it one block after broadcast; the full dispute
+  completed. Other runs observed the same pattern at different heights
+  (e.g. block 26 omitted / 27 included in the standalone run); the JSON
+  artifact for each suite is the source of truth for exact heights.
 
 ## E2 — DA_REPLICA_V1
 
@@ -76,8 +80,11 @@ broadcast -> **censoring proposer omits it (block 750)** -> next honest
 proposer includes it (751) -> single-tile traces -> 1 bisection round ->
 512-MAC arbitration at step 1 -> **ChallengerWins** -> requester
 refunded, worker balance unchanged and **no Verified Work Receipt** ->
-**all four validators converged to the same app hash**
-(`70F7C5CE98…` at height 644 in that run).
+**all four validators converged to the same app hash**. Exact final
+heights and hashes for the authoritative run live in
+`docs/phase-e-da-results.json`; a rerun on a fresh chain always yields a
+different height and hash, so the artifact is the source of truth and
+prose never hardcodes them.
 
 ## DA gas (docs/phase-e-da-gas-results.json)
 
