@@ -22,7 +22,7 @@ sys.path.insert(0, str(REPO / "tools"))
 sys.path.insert(0, str(REPO / "compute" / "canonical" / "python"))
 
 import canonical_ref as R  # noqa: E402
-from f5c_bundle_v2 import build_bundle  # noqa: E402
+from f5c_bundle_v2 import build_bundle, graph_id_v2_of  # noqa: E402
 from f5c_exec_v2 import execute_v2, load_inputs_from_bundle  # noqa: E402
 
 
@@ -32,7 +32,7 @@ def task_meta(graph_doc: dict, outputs: dict, case: str) -> dict:
     nodes = graph_doc["nodes"]
     return {
         "case": case,
-        "graph_id_v2": R.hash_bytes(R.DOMAIN_GRAPH_V2, R.encode_canonical(graph_doc)).hex(),
+        "graph_id_v2": graph_id_v2_of(graph_doc).hex(),
         "policy_id": graph_doc["arithmetic"]["policy_id"],
         "task_ref": "f5c-e2e-task",
     }

@@ -52,6 +52,21 @@ _WIDTH = {R.DTYPE_V2_Q12_20: 4, R.DTYPE_V2_A13: 2, R.DTYPE_V2_W10: 2,
 _BE = {4: ">i4", 2: ">i2", 8: ">i8"}
 
 
+def canon_graph_doc(doc: dict) -> dict:
+    """The canonical-encoding view of a wire GraphDescriptorV2: []byte
+    fields (input roots) as raw bytes.  All local GraphIDV2 / manifest
+    computations MUST use this view; the wire form (base64) is only for
+    transport and display."""
+    out = json.loads(json.dumps(doc))  # deep copy of the pure-JSON form
+    for entry in out["inputs"]:
+        entry["root"] = base64.b64decode(entry["root"])
+    return out
+
+
+def graph_id_v2_of(doc: dict) -> bytes:
+    return R.hash_bytes(R.DOMAIN_GRAPH_V2, R.encode_canonical(canon_graph_doc(doc)))
+
+
 def tensor_bytes(desc: dict, data) -> bytes:
     width = _WIDTH[int(desc["dtype"])]
     flat = np.asarray(data, dtype=np.int64).reshape(-1)
@@ -63,8 +78,7 @@ def build_bundle(graph_doc: dict, inputs: list, node_outputs: list) -> bytes:
     header = {
         "version": BUNDLE_VERSION,
         "graph_json": graph_doc,
-        "graph_id_v2": R.hash_bytes(R.DOMAIN_GRAPH_V2,
-                                    R.encode_canonical(graph_doc)).hex(),
+        "graph_id_v2": graph_id_v2_of(graph_doc).hex(),
         "policy_id": graph_doc["arithmetic"]["policy_id"],
         "manifest_root_v2": None,
         "final_output_root": None,

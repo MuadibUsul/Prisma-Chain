@@ -64,7 +64,7 @@ def sign_attestation(att: dict, priv_hex: str) -> dict:
 
 
 def attest(bundle_path: Path, task_path: Path, provider: str, priv_hex: str,
-           until: int, out_path: Path) -> dict:
+           until: int, out_path: Path, attested_height: int = 1) -> dict:
     task = json.loads(task_path.read_text(encoding="utf-8"))
     raw = bundle_path.read_bytes()
     # pre-attestation verification (A4-02): the provider will not attest to
@@ -85,7 +85,7 @@ def attest(bundle_path: Path, task_path: Path, provider: str, priv_hex: str,
         "provider_pub_key": base64.b64encode(pub).decode(),
         "bundle_bytes": len(raw),
         "available_until_height": int(until),
-        "attested_height": int(task.get("attested_height", 1)),
+        "attested_height": int(attested_height),
     }
     att = sign_attestation(att, priv_hex)
     out_path.write_text(json.dumps(att, indent=1) + "\n", encoding="utf-8")

@@ -96,7 +96,8 @@ class WatcherV2:
         ok = header.get("version") == "GRAPH_VERIFICATION_BUNDLE_V2/1.0.0"
         checks.append({"check": "version", "ok": ok})
         graph_doc = header["graph_json"]
-        graph_id = R.hash_bytes(R.DOMAIN_GRAPH_V2, R.encode_canonical(graph_doc)).hex()
+        from f5c_bundle_v2 import graph_id_v2_of
+        graph_id = graph_id_v2_of(graph_doc).hex()
         checks.append({"check": "graph_id_v2",
                        "ok": graph_id == header["graph_id_v2"] == self.task["graph_id_v2"]})
         checks.append({"check": "policy_id",

@@ -685,23 +685,23 @@ const GraphResultCommitV3Version = "3.0.0"
 
 // GraphResultCommitV3 is the signed wide-graph result commitment.
 type GraphResultCommitV3 struct {
-	ProtocolVersion string `gemm:"protocol_version"`
+	ProtocolVersion string `gemm:"protocol_version" json:"protocol_version"`
 
-	GraphID       []byte `gemm:"graph_id"`
-	ArithmeticID  string `gemm:"arithmetic_id"`
-	PolicyID      string `gemm:"policy_id"`
-	TaskRef       []byte `gemm:"task_ref"`
-	AssignmentRef []byte `gemm:"assignment_ref"`
-	WorkerPubKey  []byte `gemm:"worker_pubkey"`
+	GraphID       []byte `gemm:"graph_id" json:"graph_id"`
+	ArithmeticID  string `gemm:"arithmetic_id" json:"arithmetic_id"`
+	PolicyID      string `gemm:"policy_id" json:"policy_id"`
+	TaskRef       []byte `gemm:"task_ref" json:"task_ref"`
+	AssignmentRef []byte `gemm:"assignment_ref" json:"assignment_ref"`
+	WorkerPubKey  []byte `gemm:"worker_pubkey" json:"worker_pubkey"`
 
-	NodeOutputManifestRootV2 []byte `gemm:"node_output_manifest_root_v2"`
+	NodeOutputManifestRootV2 []byte `gemm:"node_output_manifest_root_v2" json:"node_output_manifest_root_v2"`
 
-	FinalOutputRoot []byte   `gemm:"final_output_root"`
-	OutputRoots     [][]byte `gemm:"output_roots"`
+	FinalOutputRoot []byte   `gemm:"final_output_root" json:"final_output_root"`
+	OutputRoots     [][]byte `gemm:"output_roots" json:"output_roots"`
 
-	CompletedEpoch uint64 `gemm:"completed_epoch"`
+	CompletedEpoch uint64 `gemm:"completed_epoch" json:"completed_epoch"`
 
-	Signature []byte `gemm:"signature"`
+	Signature []byte `gemm:"signature" json:"signature"`
 }
 
 func NewGraphResultCommitV3(g *GraphDescriptorV2, taskRef, assignmentRef, workerPubKey []byte,
@@ -831,31 +831,31 @@ func ValidateGraphResultCommitV3(g *GraphDescriptorV2, rc *GraphResultCommitV3,
 // --- VerifiedGraphWorkReceiptV3 -------------------------------------------------
 
 type VerifiedGraphWorkReceiptV3 struct {
-	ProtocolVersion string `gemm:"protocol_version"`
+	ProtocolVersion string `gemm:"protocol_version" json:"protocol_version"`
 
-	GraphID      []byte `gemm:"graph_id"`
-	Spec         string `gemm:"spec"`
-	ArithmeticID string `gemm:"arithmetic_id"`
-	PolicyID     string `gemm:"policy_id"`
+	GraphID      []byte `gemm:"graph_id" json:"graph_id"`
+	Spec         string `gemm:"spec" json:"spec"`
+	ArithmeticID string `gemm:"arithmetic_id" json:"arithmetic_id"`
+	PolicyID     string `gemm:"policy_id" json:"policy_id"`
 
-	TaskRef       []byte `gemm:"task_ref"`
-	AssignmentRef []byte `gemm:"assignment_ref"`
-	WorkerPubKey  []byte `gemm:"worker_pubkey"`
+	TaskRef       []byte `gemm:"task_ref" json:"task_ref"`
+	AssignmentRef []byte `gemm:"assignment_ref" json:"assignment_ref"`
+	WorkerPubKey  []byte `gemm:"worker_pubkey" json:"worker_pubkey"`
 
-	NodeOutputManifestRootV2 []byte `gemm:"node_output_manifest_root_v2"`
+	NodeOutputManifestRootV2 []byte `gemm:"node_output_manifest_root_v2" json:"node_output_manifest_root_v2"`
 
-	FinalOutputRoot []byte   `gemm:"final_output_root"`
-	OutputRoots     [][]byte `gemm:"output_roots"`
+	FinalOutputRoot []byte   `gemm:"final_output_root" json:"final_output_root"`
+	OutputRoots     [][]byte `gemm:"output_roots" json:"output_roots"`
 
-	WorkVector WorkVector `gemm:"work_vector"`
+	WorkVector WorkVector `gemm:"work_vector" json:"work_vector"`
 
-	VerificationMode string `gemm:"verification_mode"`
+	VerificationMode string `gemm:"verification_mode" json:"verification_mode"`
 
-	FinalizedEpoch uint64 `gemm:"finalized_epoch"`
+	FinalizedEpoch uint64 `gemm:"finalized_epoch" json:"finalized_epoch"`
 
-	SettlementReference     []byte `gemm:"settlement_reference"`
-	DAReference             []byte `gemm:"da_reference"`
-	DisputeTranscriptDigest []byte `gemm:"dispute_transcript_digest"`
+	SettlementReference     []byte `gemm:"settlement_reference" json:"settlement_reference"`
+	DAReference             []byte `gemm:"da_reference" json:"da_reference"`
+	DisputeTranscriptDigest []byte `gemm:"dispute_transcript_digest" json:"dispute_transcript_digest"`
 }
 
 func BuildVerifiedGraphWorkReceiptV3(g *GraphDescriptorV2, taskRef, assignmentRef, workerPubKey []byte,

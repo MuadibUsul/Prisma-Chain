@@ -1,10 +1,10 @@
 {
  "honest": {
-  "root_phase_seconds": 2.6363649999839254,
-  "math_seconds": 4.34859010000946,
-  "freivalds_seconds": 1.1279381998174358,
-  "cheap_ops_seconds": 3.216562399727991,
-  "total_wall_seconds": 7.0108670000045095,
+  "root_phase_seconds": 3.4601313000021037,
+  "math_seconds": 5.599038399988785,
+  "freivalds_seconds": 1.455033500038553,
+  "cheap_ops_seconds": 4.137491799541749,
+  "total_wall_seconds": 9.093086200009566,
   "bundle_bytes": 39648960,
   "peak_mem_mb": 214.9
  },
