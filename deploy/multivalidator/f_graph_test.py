@@ -150,7 +150,7 @@ def send_tx_big(msg: str, frm: str, **flags):
     for key, value in flags.items():
         if isinstance(value, list):
             for item in value:
-                args += [f"--{key.replace('_', '-')}", item]
+                args += [f"--{key.replace('_', '-')}", str(item)]
         else:
             args += [f"--{key.replace('_', '-')}", str(value)]
     out = cli_big(args)
