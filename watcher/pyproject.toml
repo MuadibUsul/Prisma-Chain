@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prisma-watcher"
+version = "0.1.0"
+description = "Prisma Chain permissionless watcher daemon (Phase B productization)"
+requires-python = ">=3.10"
+dependencies = ["cryptography>=41", "prisma-network", "prisma-worker"]
+
+[project.scripts]
+prisma-watcher = "prisma_watcher.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["prisma_watcher*"]
