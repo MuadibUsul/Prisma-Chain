@@ -1,0 +1,44 @@
+{
+ "scenario": "honest",
+ "chain_id": "prisma-mv-1",
+ "graph_id_v2": "0c81f15182616503a860202aead6725229c2610c7ce0046def5f9b6af0ae3567",
+ "bundle_bytes": 2146,
+ "start_height": 192,
+ "task_id": 6,
+ "result_submitted_height": 195,
+ "challenge_end": 225,
+ "da_attestations": [
+  "B3fA3QOk2/+nfxINTo97iMKgJLogNMSAnjprW/IQVxA5UrmzvcGIskR4Ah8blyNTsUD6uCHjOsB//ySaDQzoBA==",
+  "9w6kdWfomqKauwHqKGzTwaGocOH6XQfje+tROJKUcF461cThkG/dsDIPDNvRFSGRsIgQyatRZIx9KEet6OC9DA=="
+ ],
+ "receipt_id": "QPgoZaEHRkDSGbNcUmSVBSgv36q69J/MZ0chq90w2hY=",
+ "final_status": "finalized",
+ "watcher_verdict": "pass",
+ "watcher_instrumentation": {
+  "full_gemm_calls": 0,
+  "row_recomputes": 0,
+  "freivalds_rounds": 40,
+  "randomness_source": "test_seed(TEST ONLY)",
+  "peak_mem_mb": 0.0
+ },
+ "four_validators": {
+  "validator-a": {
+   "height": 227,
+   "app_hash": "5E4198FF215F414CAF6DBF98719455CF66DC940A45480C531B61C83A3F715559"
+  },
+  "validator-b": {
+   "height": 227,
+   "app_hash": "5E4198FF215F414CAF6DBF98719455CF66DC940A45480C531B61C83A3F715559"
+  },
+  "validator-c": {
+   "height": 227,
+   "app_hash": "5E4198FF215F414CAF6DBF98719455CF66DC940A45480C531B61C83A3F715559"
+  },
+  "validator-d": {
+   "height": 227,
+   "app_hash": "5E4198FF215F414CAF6DBF98719455CF66DC940A45480C531B61C83A3F715559"
+  }
+ },
+ "four_validators_converged": true,
+ "status": "PASS"
+}
