@@ -25,6 +25,7 @@ from prisma_worker.redact import install as install_redaction
 from prisma_worker.redact import register_secret
 
 from .chain_scan import PrismadTaskScan
+from .challenge import DecisionPolicy, DisputeDriver
 from .config import ChainConfig, DaemonConfig
 from .daemon import WatcherDaemon
 from .frozen import FrozenLibraryMissing
@@ -133,6 +134,47 @@ def cmd_verify(args: argparse.Namespace) -> int:
     return 0 if result["verdict"] == "clean" else 2
 
 
+def cmd_challenge(args: argparse.Namespace) -> int:
+    """Open the evidence-gated challenge for one task (B3-02)."""
+    config = _load_config(args.config)
+    identity = worker_keystore.load(pathlib.Path(config.keystore), _passphrase(args))
+    for secret in identity.secret_material():
+        register_secret(secret)
+    journal = config.resolved_journal_dir()
+    entry = None
+    for path in sorted(journal.glob("task-*.json")):
+        candidate = json.loads(path.read_text(encoding="utf-8"))
+        if int(candidate.get("task_id", 0)) == args.task_id and candidate.get("verdict"):
+            entry = candidate
+    if entry is None:
+        raise CliError(f"task {args.task_id} has no verified journal entry; run first")
+    verification = {"verdict": entry["verdict"]}
+    if entry.get("detail"):
+        try:
+            verification["report"] = json.loads(entry["detail"])
+        except json.JSONDecodeError:
+            verification["report"] = {"detail": entry["detail"]}
+    ops = _dispute_ops(config, identity)
+    driver = DisputeDriver(ops, config.account, policy=DecisionPolicy(bond_uprsm=args.bond))
+    task = {"id": args.task_id, "challenge_end": args.deadline}
+    try:
+        result = driver.challenge(task, verification, record_dir=journal)
+    except Exception as exc:  # noqa: BLE001 - challenge refusals are user-facing
+        print(f"prisma-watcher: {exc}", file=sys.stderr)
+        return 1
+    print(json.dumps(result, indent=1) if args.json else
+          f"task {args.task_id}: challenge {'opened (tx ' + result['txhash'] + ')' if result.get('challenge') else 'refused: ' + result.get('reason', '')}")
+    return 0
+
+
+def _dispute_ops(config, identity):
+    from .chain_dispute import PrismadDisputeOps
+
+    return PrismadDisputeOps(account=config.account, account_scalar_hex=identity.account_scalar.hex(),
+                             prismad=config.chain.prismad, chain_id=config.chain.chain_id,
+                             rpc_urls=config.chain.rpc_urls)
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="prisma-watcher", description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -163,6 +205,14 @@ def build_parser() -> argparse.ArgumentParser:
     status = sub.add_parser("status", help="journal summary")
     common(status)
     status.set_defaults(func=cmd_status)
+
+    challenge_cmd = sub.add_parser("challenge", help="open an evidence-gated challenge")
+    common(challenge_cmd)
+    challenge_cmd.add_argument("--task-id", type=int, required=True)
+    challenge_cmd.add_argument("--deadline", type=int, default=0,
+                               help="the task's challenge-window end height (0 = no window check)")
+    challenge_cmd.add_argument("--bond", type=int, default=10_000, help="challenger bond in uprsm")
+    challenge_cmd.set_defaults(func=cmd_challenge)
 
     verify = sub.add_parser("verify", help="verify one bundle (one-off)")
     verify.add_argument("--bundle", required=True)
