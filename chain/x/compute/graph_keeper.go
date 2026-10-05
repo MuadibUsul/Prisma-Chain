@@ -261,11 +261,21 @@ func (s msgServer) OpenGraphChallenge(ctx context.Context, msg *types.MsgOpenGra
 	if msg.ChallengeBond < MinBond || msg.ChallengeBond > MaxGraphChallengeBondMultiple*MinBond {
 		return nil, errors.New("graph challenge bond out of bounds")
 	}
-	graph, err := graphDescriptor(&task)
-	if err != nil {
-		return nil, err
+	expectedOutputs := 0
+	if graphTaskProtocolV2(&task) {
+		graph2, err := graphDescriptorV2(&task)
+		if err != nil {
+			return nil, err
+		}
+		expectedOutputs = len(graph2.Outputs)
+	} else {
+		graph, err := graphDescriptor(&task)
+		if err != nil {
+			return nil, err
+		}
+		expectedOutputs = len(graph.Outputs)
 	}
-	if len(msg.ChallengerOutputRoots) != len(graph.Outputs) {
+	if len(msg.ChallengerOutputRoots) != expectedOutputs {
 		return nil, errors.New("challenger output root count mismatch")
 	}
 	outputs := make([]canonical.Hash, len(msg.ChallengerOutputRoots))
@@ -335,6 +345,17 @@ func (s msgServer) GraphTrailClaim(ctx context.Context, msg *types.MsgGraphTrail
 	}
 	if msg.Party != task.Worker && msg.Party != record.Challenger {
 		return nil, errors.New("only the assigned worker or the challenger may claim")
+	}
+	if graphTaskProtocolV2(&task) {
+		graph2, err := graphDescriptorV2(&task)
+		if err != nil {
+			return nil, err
+		}
+		claim, err := s.buildTrailClaimV2(graph2, &task, msg)
+		if err != nil {
+			return nil, err
+		}
+		return s.lockTrailClaimV2(ctx, &task, graph2, &record, msg, claim, height)
 	}
 	graph, err := graphDescriptor(&task)
 	if err != nil {
@@ -476,6 +497,9 @@ func (s msgServer) GraphMidPoint(ctx context.Context, msg *types.MsgGraphMidPoin
 	// distant future, and the canonical layer enforces the round window.
 	if msg.Epoch > height+2 {
 		return nil, errors.New("midpoint epoch is ahead of the chain clock")
+	}
+	if graphTaskProtocolV2(&task) {
+		return s.graphMidPointV2(ctx, &task, &record, msg, height)
 	}
 	graph, err := graphDescriptor(&task)
 	if err != nil {

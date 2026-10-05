@@ -174,3 +174,180 @@ func buildAndValidateV3(task *GraphTask, graph *canonical.GraphDescriptorV2,
 	}
 	return rc, nil
 }
+
+// --- A1-04/A1-05: V2 trail claim + midpoint ----------------------------------
+
+// graphV2InitialStateRootV2 derives the V2 state root of the committed
+// graph inputs (kind=0 leaves over the descriptor's input roots).
+func graphV2InitialStateRootV2(g *canonical.GraphDescriptorV2) (canonical.Hash, error) {
+	live := map[canonical.TensorRef]canonical.Hash{}
+	for i, in := range g.Inputs {
+		var h canonical.Hash
+		if len(in.Root) != 32 {
+			return canonical.Hash{}, errors.New("graph V2 input root malformed")
+		}
+		copy(h[:], in.Root)
+		live[canonical.TensorRef{Kind: 0, Index: uint32(i)}] = h
+	}
+	return canonical.GraphStateRootV2FromRoots(live)
+}
+
+// buildTrailClaimV2 mirrors buildTrailClaim over the V2 trail domain: the
+// claimed initial state must equal the descriptor-derived input state and
+// both endpoint proofs must verify under VerifyTrailProofV2.
+func (s msgServer) buildTrailClaimV2(graph *canonical.GraphDescriptorV2, task *GraphTask,
+	msg *types.MsgGraphTrailClaim) (GraphTrailClaimData, error) {
+	graphID, err := root32Of(task.GraphID)
+	if err != nil {
+		return GraphTrailClaimData{}, err
+	}
+	expectedInitial, err := graphV2InitialStateRootV2(graph)
+	if err != nil {
+		return GraphTrailClaimData{}, err
+	}
+	initialRoot, err := root32Of(msg.InitialRoot)
+	if err != nil {
+		return GraphTrailClaimData{}, err
+	}
+	if initialRoot != expectedInitial {
+		return GraphTrailClaimData{}, errors.New("claimed initial state is not the committed input state")
+	}
+	finalRoot, err := root32Of(msg.FinalRoot)
+	if err != nil {
+		return GraphTrailClaimData{}, err
+	}
+	trailRoot, err := root32Of(msg.TrailRoot)
+	if err != nil {
+		return GraphTrailClaimData{}, err
+	}
+	count := uint32(len(graph.Nodes) + 1)
+	initialProof, err := hashesFrom(msg.InitialProof)
+	if err != nil {
+		return GraphTrailClaimData{}, err
+	}
+	finalProof, err := hashesFrom(msg.FinalProof)
+	if err != nil {
+		return GraphTrailClaimData{}, err
+	}
+	if !canonical.VerifyTrailProofV2(trailRoot, graphID, 0, count, initialRoot, initialProof) {
+		return GraphTrailClaimData{}, errors.New("initial state proof does not match the claimed trail root")
+	}
+	if !canonical.VerifyTrailProofV2(trailRoot, graphID, count-1, count, finalRoot, finalProof) {
+		return GraphTrailClaimData{}, errors.New("final state proof does not match the claimed trail root")
+	}
+	return GraphTrailClaimData{
+		Root: trailRoot[:], InitialRoot: initialRoot[:], InitialProof: cloneBytes2D(msg.InitialProof),
+		FinalRoot: finalRoot[:], FinalProof: cloneBytes2D(msg.FinalProof),
+	}, nil
+}
+
+// lockTrailClaimV2 stores one party's claim and, once both are locked,
+// opens the V2 bisection (or short-circuits when the endpoints agree).
+func (s msgServer) lockTrailClaimV2(ctx context.Context, task *GraphTask,
+	graph *canonical.GraphDescriptorV2, record *GraphDisputeRecord,
+	msg *types.MsgGraphTrailClaim, claim GraphTrailClaimData, height uint64) (*types.MsgGraphTrailClaimResponse, error) {
+	worker := msg.Party == task.Worker
+	if worker {
+		if len(record.WorkerClaim.Root) != 0 {
+			return nil, errors.New("worker trail already claimed")
+		}
+		record.WorkerClaim = claim
+	} else {
+		if len(record.ChallengerClaim.Root) != 0 {
+			return nil, errors.New("challenger trail already claimed")
+		}
+		record.ChallengerClaim = claim
+	}
+	if len(record.WorkerClaim.Root) != 0 && len(record.ChallengerClaim.Root) != 0 {
+		if equalBytes32(record.WorkerClaim.FinalRoot, record.ChallengerClaim.FinalRoot) {
+			if err := s.bank.BurnCoins(ctx, ModuleName, amount(record.Bond)); err != nil {
+				return nil, err
+			}
+			task.SurvivedChallenge = true
+			task.Status = GraphStatusResultSubmitted
+			task.ChallengeEnd = height + task.ChallengeWindow
+			task.DisputeTranscriptDigest = record.TranscriptDigest
+			s.deleteGraphDispute(ctx, task.ID)
+			if err := s.setGraphTask(ctx, *task); err != nil {
+				return nil, err
+			}
+			return &types.MsgGraphTrailClaimResponse{}, nil
+		}
+		graphID, err := root32Of(task.GraphID)
+		if err != nil {
+			return nil, err
+		}
+		dispute, err := canonical.NewGraphDisputeV2(canonical.GraphDisputeConfigV2{
+			Graph: graph, GraphID: graphID, RoundPeriod: ChallengeRoundBlocks,
+		}, toCanonicalClaim(record.WorkerClaim), toCanonicalClaim(record.ChallengerClaim), height)
+		if err != nil {
+			return nil, err
+		}
+		snapshot, err := dispute.SnapshotV2()
+		if err != nil {
+			return nil, err
+		}
+		record.Snapshot = snapshot
+		record.Status = GraphDisputeBisection
+		record.TranscriptDigest, err = graphTranscriptStep(record.TranscriptDigest, "claims_locked_v2",
+			map[string]any{"worker_root": fmt.Sprintf("%x", record.WorkerClaim.Root),
+				"challenger_root": fmt.Sprintf("%x", record.ChallengerClaim.Root)})
+		if err != nil {
+			return nil, err
+		}
+	}
+	if err := s.setGraphDispute(ctx, *record); err != nil {
+		return nil, err
+	}
+	s.consumeGraphGas(ctx, "claim hashing",
+		GasGraphHash*uint64(len(claim.InitialProof)+len(claim.FinalProof)+4))
+	return &types.MsgGraphTrailClaimResponse{}, nil
+}
+
+// graphMidPointV2 mirrors GraphMidPoint over the restored V2 dispute.
+func (s msgServer) graphMidPointV2(ctx context.Context, task *GraphTask,
+	record *GraphDisputeRecord, msg *types.MsgGraphMidPoint, height uint64) (*types.MsgGraphMidPointResponse, error) {
+	graph, err := graphDescriptorV2(task)
+	if err != nil {
+		return nil, err
+	}
+	var party canonical.Party
+	switch msg.Party {
+	case task.Worker:
+		party = canonical.Worker
+	case record.Challenger:
+		party = canonical.Challenger
+	default:
+		return nil, errors.New("only the assigned worker or the challenger may submit midpoints")
+	}
+	dispute, err := canonical.RestoreGraphDisputeV2(record.Snapshot, graph, ChallengeRoundBlocks)
+	if err != nil {
+		return nil, err
+	}
+	stateRoot, err := root32Of(msg.StateRoot)
+	if err != nil {
+		return nil, err
+	}
+	proof, err := hashesFrom(msg.ProofSiblings)
+	if err != nil {
+		return nil, err
+	}
+	s.consumeGraphGas(ctx, "midpoint proofs",
+		GasGraphProofSibling*uint64(len(proof))+GasGraphHash)
+	if _, err := dispute.SubmitMid(party, stateRoot, proof, msg.Epoch); err != nil {
+		return nil, err
+	}
+	snapshot, err := dispute.SnapshotV2()
+	if err != nil {
+		return nil, err
+	}
+	record.Snapshot = snapshot
+	if dispute.ArbReady() {
+		record.Status = GraphDisputeArbReady
+	}
+	if err := s.setGraphDispute(ctx, *record); err != nil {
+		return nil, err
+	}
+	s.consumeGraphGas(ctx, "dispute store", GasGraphStore+GasGraphHash*uint64(len(snapshot)/256+1))
+	return &types.MsgGraphMidPointResponse{}, nil
+}

@@ -218,3 +218,148 @@ func TestGraphV2RejectsV1SignatureOnV3(t *testing.T) {
 		t.Fatal("wrong-domain signature accepted for V3")
 	}
 }
+
+// TestGraphV2DisputeBisection drives the full V2 challenge path through
+// the message server: challenge open (V2 dispatch), both trail claims
+// (V2 trail domain), bisection midpoints until arb_ready, and the
+// canonical layer localizes the injected first-divergent node.
+func TestGraphV2DisputeBisection(t *testing.T) {
+	h := newGemmHarness(t, 100)
+	fx := buildChainGraphV2Fixture(t)
+	taskID, _ := h.postGraphV2(t, fx)
+	assignmentRef := h.acceptGraph(t, taskID)
+
+	// honest V3 submission
+	var taskRef [8]byte
+	binary.BigEndian.PutUint64(taskRef[:], taskID)
+	rc, err := canonical.NewGraphResultCommitV3(fx.graph, taskRef[:], assignmentRef,
+		h.workKeys.networkPub, fx.exec, 42)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := canonical.SignGraphResultCommitV3(rc, h.workKeys.networkPriv); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := h.msg.SubmitGraphResultV2(h.ctx, &types.MsgSubmitGraphResultV2{
+		Worker: h.worker, GraphTaskId: taskID,
+		NodeOutputManifestRoot: rc.NodeOutputManifestRootV2,
+		OutputRoots:            rc.OutputRoots, FinalOutputRoot: rc.FinalOutputRoot,
+		CompletedEpoch: rc.CompletedEpoch, WorkerSignature: rc.Signature,
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	// challenge with a different final root (V2 output count dispatch)
+	h.bondWorker(h.challenger, h.chalKeys)
+	fakeFinal := make([]byte, 32)
+	for i := range fakeFinal {
+		fakeFinal[i] = 0xAA
+	}
+	if _, err := h.msg.OpenGraphChallenge(h.ctx, &types.MsgOpenGraphChallenge{
+		Challenger: h.challenger, GraphTaskId: taskID,
+		ChallengerOutputRoots: [][]byte{fakeFinal}, ChallengeBond: MinBond,
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	// both parties lock V2 trails; the challenger's trail diverges from
+	// node 0 onward while sharing the committed initial state
+	graphID, err := fx.graph.GraphIDV2()
+	if err != nil {
+		t.Fatal(err)
+	}
+	honest := fx.exec.Trail
+	bad := append([]canonical.Hash(nil), honest...)
+	bad[1] = canonical.Hash{0xF1}
+	bad[2] = canonical.Hash{0xF2}
+	lock := func(party string, trail []canonical.Hash) {
+		pi, err := canonical.TrailProofV2(graphID, trail, 0)
+		if err != nil {
+			t.Fatal(err)
+		}
+		pf, err := canonical.TrailProofV2(graphID, trail, uint32(len(trail)-1))
+		if err != nil {
+			t.Fatal(err)
+		}
+		root, err := canonical.TrailRootV2(graphID, trail)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if _, err := h.msg.GraphTrailClaim(h.ctx, &types.MsgGraphTrailClaim{
+			Party: party, GraphTaskId: taskID,
+			TrailRoot: root[:], InitialRoot: trail[0][:], InitialProof: siblingsOfV2(pi),
+			FinalRoot: trail[len(trail)-1][:], FinalProof: siblingsOfV2(pf),
+		}); err != nil {
+			t.Fatal(err)
+		}
+	}
+	// a claim whose initial root is not the committed input state is
+	// refused before anything is stored
+	if _, err := h.msg.GraphTrailClaim(h.ctx, &types.MsgGraphTrailClaim{
+		Party: h.worker, GraphTaskId: taskID,
+		TrailRoot: make([]byte, 32), InitialRoot: make([]byte, 32),
+		InitialProof: [][]byte{}, FinalRoot: make([]byte, 32), FinalProof: [][]byte{},
+	}); err == nil {
+		t.Fatal("wrong initial state accepted")
+	}
+	lock(h.worker, honest)
+	lock(h.challenger, bad)
+
+	// bisection
+	for rounds := 0; rounds < 8; rounds++ {
+		record, err := h.keeper.GetGraphDispute(h.ctx, taskID)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if record.Status == GraphDisputeArbReady {
+			break
+		}
+		dispute, err := canonical.RestoreGraphDisputeV2(record.Snapshot, fx.graph, ChallengeRoundBlocks)
+		if err != nil {
+			t.Fatal(err)
+		}
+		low, high := dispute.Interval()
+		mid := low + (high-low)/2
+		submitMid := func(party string, trail []canonical.Hash) {
+			proof, err := canonical.TrailProofV2(graphID, trail, mid)
+			if err != nil {
+				t.Fatal(err)
+			}
+			h.advance(h.currentHeight() + 1)
+			if _, err := h.msg.GraphMidPoint(h.ctx, &types.MsgGraphMidPoint{
+				Party: party, GraphTaskId: taskID,
+				StateRoot: trail[mid][:], ProofSiblings: siblingsOfV2(proof), Epoch: h.currentHeight(),
+			}); err != nil {
+				t.Fatal(err)
+			}
+		}
+		submitMid(h.worker, honest)
+		submitMid(h.challenger, bad)
+	}
+	record, err := h.keeper.GetGraphDispute(h.ctx, taskID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if record.Status != GraphDisputeArbReady {
+		t.Fatalf("dispute status %s, want arb_ready", record.Status)
+	}
+	restored, err := canonical.RestoreGraphDisputeV2(record.Snapshot, fx.graph, ChallengeRoundBlocks)
+	if err != nil {
+		t.Fatal(err)
+	}
+	node, err := restored.FirstDivergentNode()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if node != 0 {
+		t.Fatalf("first divergent node %d, want 0 (the injected GEMM node)", node)
+	}
+}
+
+func siblingsOfV2(sibs []canonical.Hash) [][]byte {
+	out := make([][]byte, len(sibs))
+	for i, s := range sibs {
+		out[i] = append([]byte(nil), s[:]...)
+	}
+	return out
+}
