@@ -191,8 +191,10 @@ def build_small_bundle() -> bytes:
         "protocol_version": R.PROTOCOL_VERSION_GRAPH_V2,
         "spec": "TEST_SMALL_BUNDLE_V1",
         "arithmetic": R.arithmetic_profile_a13w10(),
-        "inputs": [{"name": "a", "desc": a_desc, "root": a_root.hex()},
-                   {"name": "b", "desc": b_desc, "root": b_root.hex()}],
+        "inputs": [{"name": "a", "desc": a_desc,
+                    "root": base64.b64encode(a_root).decode()},
+                   {"name": "b", "desc": b_desc,
+                    "root": base64.b64encode(b_root).decode()}],
         "nodes": [add, req],
         "outputs": [{"kind": 1, "index": 1}],
     }
