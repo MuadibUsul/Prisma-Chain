@@ -1,42 +1,55 @@
 {
- "scenario": "honest",
+ "scenario": "real_honest",
  "chain_id": "prisma-mv-1",
- "graph_id_v2": "0c81f15182616503a860202aead6725229c2610c7ce0046def5f9b6af0ae3567",
- "bundle_bytes": 2146,
- "start_height": 192,
- "task_id": 6,
- "result_submitted_height": 195,
- "challenge_end": 225,
- "da_attestations": [
-  "B3fA3QOk2/+nfxINTo97iMKgJLogNMSAnjprW/IQVxA5UrmzvcGIskR4Ah8blyNTsUD6uCHjOsB//ySaDQzoBA==",
-  "9w6kdWfomqKauwHqKGzTwaGocOH6XQfje+tROJKUcF461cThkG/dsDIPDNvRFSGRsIgQyatRZIx9KEet6OC9DA=="
- ],
- "receipt_id": "QPgoZaEHRkDSGbNcUmSVBSgv36q69J/MZ0chq90w2hY=",
- "final_status": "finalized",
- "watcher_verdict": "pass",
- "watcher_instrumentation": {
-  "full_gemm_calls": 0,
-  "row_recomputes": 0,
-  "freivalds_rounds": 40,
-  "randomness_source": "test_seed(TEST ONLY)",
-  "peak_mem_mb": 0.0
+ "graph": "f5c_qwen3_block_v2.json",
+ "graph_id_v2": "8fb86087697e277602bb4b2088ba48eb4172c21d9c4f83914582f2cbf00d4def",
+ "nodes": 310,
+ "requester_balance_before": 60000000,
+ "worker_balance_before": 55000000,
+ "task_id": 20,
+ "da_providers_registered": 3,
+ "da_offline_providers": 1,
+ "da_attestations": 2,
+ "bundle_bytes": 39648960,
+ "task_meta": {
+  "graph_id_v2": "8fb86087697e277602bb4b2088ba48eb4172c21d9c4f83914582f2cbf00d4def",
+  "manifest_root_v2": "e9f1ba677212cc463ca612fe0aaf5d71ef2ccb47b4c0834eaf1d2c10f536275c",
+  "final_output_root": "7b29113e712085ae506da2f85e8798fd6cad200f99563f4f44e068145c10fce1",
+  "policy_id": "eb9a9fef403c95cd0ab876893acf14e02928245306f1d1cc6e12f4d99c5eb7a0",
+  "graph_task_id": 20
  },
+ "final_status": "finalized",
+ "receipt_id": "fk7JvIrf10d4NlR00CUeM9pIpxRBX9lv0GpfMcQviig=",
+ "exactly_one_vwr": true,
+ "fee_split": {
+  "burn": 800000,
+  "per_monitor": 200000,
+  "worker": 2800000
+ },
+ "requester_balance_after": 56000000,
+ "worker_balance_after": 57800000,
+ "requester_paid_escrow": true,
+ "worker_paid_share": true,
+ "watcher_verdict": "pass",
+ "watcher_seconds": 7.3,
+ "watcher_gemm_mismatches": [],
+ "watcher_cheap_mismatches": [],
  "four_validators": {
   "validator-a": {
-   "height": 227,
-   "app_hash": "5E4198FF215F414CAF6DBF98719455CF66DC940A45480C531B61C83A3F715559"
+   "height": 1030,
+   "app_hash": "86EBBCA6A5115C0822FEE74E4A09196ADEB402CBBAC06A5689FF45287C8B882D"
   },
   "validator-b": {
-   "height": 227,
-   "app_hash": "5E4198FF215F414CAF6DBF98719455CF66DC940A45480C531B61C83A3F715559"
+   "height": 1030,
+   "app_hash": "86EBBCA6A5115C0822FEE74E4A09196ADEB402CBBAC06A5689FF45287C8B882D"
   },
   "validator-c": {
-   "height": 227,
-   "app_hash": "5E4198FF215F414CAF6DBF98719455CF66DC940A45480C531B61C83A3F715559"
+   "height": 1030,
+   "app_hash": "86EBBCA6A5115C0822FEE74E4A09196ADEB402CBBAC06A5689FF45287C8B882D"
   },
   "validator-d": {
-   "height": 227,
-   "app_hash": "5E4198FF215F414CAF6DBF98719455CF66DC940A45480C531B61C83A3F715559"
+   "height": 1030,
+   "app_hash": "86EBBCA6A5115C0822FEE74E4A09196ADEB402CBBAC06A5689FF45287C8B882D"
   }
  },
  "four_validators_converged": true,

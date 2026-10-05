@@ -144,6 +144,37 @@ def cli_big(args) -> str:
 GAS_REPORT = {}
 
 
+def send_tx_big_file(msg: str, frm: str, file_bytes: dict, **flags):
+    """send_tx_big for byte flags too large for argv (Linux MAX_ARG_STRLEN):
+    the value travels as a file inside the container and the flag receives
+    its path (the autocli binary flag reads a valid path as the value)."""
+    import tempfile
+    container = f"prisma-multivalidator-{G.SERVICE}-1"
+    args = ["tx", "compute", msg, "--from", frm, "-b", "sync", "-y", "-o", "json",
+            "--chain-id", G.CHAIN_ID, "--fees", "0uprsm", "--gas", GAS, *G.KEYRING_FLAGS]
+    for key, value in flags.items():
+        if isinstance(value, list):
+            for item in value:
+                args += [f"--{key.replace('_', '-')}", str(item)]
+        else:
+            args += [f"--{key.replace('_', '-')}", str(value)]
+    tmpdir = Path(tempfile.gettempdir())
+    for key, blob in file_bytes.items():
+        local = tmpdir / f"prisma_flag_{key}.bin"
+        local.write_bytes(blob)
+        remote = f"/tmp/prisma_flag_{key}.bin"
+        subprocess.run(["docker", "cp", str(local), f"{container}:{remote}"],
+                       check=True, capture_output=True, timeout=180)
+        args += [f"--{key.replace('_', '-')}", remote]
+    out = cli_big(args)
+    payload = json.loads(out[out.index("{"):])
+    if int(payload.get("code", 1)) != 0:
+        raise RuntimeError(f"{msg} rejected: code={payload.get('code')} log={payload.get('raw_log')}")
+    included = G.wait_inclusion(payload["txhash"])
+    GAS_REPORT.setdefault(msg, []).append(int(included.get("gas_used", 0)))
+    return included
+
+
 def send_tx_big(msg: str, frm: str, **flags):
     args = ["tx", "compute", msg, "--from", frm, "-b", "sync", "-y", "-o", "json",
             "--chain-id", G.CHAIN_ID, "--fees", "0uprsm", "--gas", GAS, *G.KEYRING_FLAGS]

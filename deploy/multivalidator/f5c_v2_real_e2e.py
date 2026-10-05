@@ -155,24 +155,25 @@ def post_accept_commit(doc, gid, req, wk, outputs, report, tmp_tag):
     key_proof = F.requester_key_proof_graph(req_addr, req_seed,
                                             F.requester_pub_bytes(req_seed), nonce)
     graph_json = json.dumps(doc, separators=(",", ":")).encode()
-    F.send_tx_big("post-graph-task", req_name,
-                  requester_protocol_pubkey=F.hexb(F.requester_pub_bytes(req_seed)),
-                  requester_key_proof=F.hexb(key_proof), requester_nonce=F.hexb(nonce),
-                  graph_json=F.hexb(graph_json),
-                  input_data_ref=f"dev://f5c-real-{tmp_tag}", challenge_window=F.CHALLENGE_WINDOW,
-                  max_price_per_cwu=1000, max_fee=4_000_000)
+    # the 186KB descriptor exceeds Linux MAX_ARG_STRLEN: travel as a file
+    F.send_tx_big_file("post-graph-task", req_name, {"graph_json": graph_json},
+                       requester_protocol_pubkey=F.hexb(F.requester_pub_bytes(req_seed)),
+                       requester_key_proof=F.hexb(key_proof), requester_nonce=F.hexb(nonce),
+                       input_data_ref=f"dev://f5c-real-{tmp_tag}",
+                       challenge_window=F.CHALLENGE_WINDOW,
+                       max_price_per_cwu=1000, max_fee=4_000_000)
     task_id = F.latest_task_id(report)
     report["task_id"] = task_id
     F.send_tx_big("accept-graph-task", wk_name, graph_task_id=task_id,
                   assignment_nonce=F.hexb(os.urandom(16)))
     task = F.wait_graph_task(task_id, "assigned")
     assignment_ref_hex = base64.b64decode(task["assignment_ref"]).hex()
-    roots = node_roots(doc, outputs)
+    roots_hex = [r.hex() for r in node_roots(doc, outputs)]
     commit, _, manifest, final_root = build_signed_commit_v3(
-        doc, task_id, assignment_ref_hex, wk_pub, roots, 42, wk_priv)
+        doc, task_id, assignment_ref_hex, wk_pub, roots_hex, 42, wk_priv)
     F.send_tx_big("submit-graph-result-v2", wk_name, graph_task_id=task_id,
                   node_output_manifest_root=F.hexb(manifest),
-                  output_roots=F.hexb(bytes.fromhex(roots[-1])),
+                  output_roots=roots_hex[-1],
                   final_output_root=F.hexb(final_root),
                   completed_epoch=42,
                   worker_signature=F.hexb(base64.b64decode(commit["signature"])))
@@ -266,7 +267,9 @@ def scenario_honest(report: dict) -> None:
     req, wk, ch, provs = setup_actors("rh")
     _ = ch
     req_balance_before = G.balance(req[1])
+    wk_balance_before = G.balance(wk[1])
     report["requester_balance_before"] = req_balance_before
+    report["worker_balance_before"] = wk_balance_before
     honest = execute_v2(doc, inputs)
     task_id = post_accept_commit(doc, gid, req, wk, honest, report, "real_honest")
     bundle_path = attest_bundle(doc, inputs, honest, provs, task_id, "real_honest", report)
@@ -277,11 +280,22 @@ def scenario_honest(report: dict) -> None:
     report["final_status"] = final.get("status")
     report["receipt_id"] = final.get("receipt_id") or ""
     report["exactly_one_vwr"] = bool(final.get("receipt_id"))
-    report["requester_refunded"] = G.balance(req[1]) == req_balance_before
+    # economics: the requester escrow is spent (burn 20% / monitors 2x5% /
+    # worker 70%), the worker receives its share, nothing is refunded
+    max_fee = 4_000_000
+    burn = max_fee // 5
+    per_monitor = max_fee // 20
+    worker_share = max_fee - burn - 2 * per_monitor
+    report["fee_split"] = {"burn": burn, "per_monitor": per_monitor, "worker": worker_share}
+    report["requester_balance_after"] = G.balance(req[1])
+    report["worker_balance_after"] = G.balance(wk[1])
+    report["requester_paid_escrow"] = (req_balance_before - report["requester_balance_after"]) == max_fee
+    report["worker_paid_share"] = (report["worker_balance_after"] - wk_balance_before) == worker_share
     run_watcher(bundle_path, report["task_meta"], report)
     converge_report(report)
     report["status"] = ("PASS" if report["final_status"] == "finalized"
-                        and report["exactly_one_vwr"] and report["requester_refunded"]
+                        and report["exactly_one_vwr"] and report["requester_paid_escrow"]
+                        and report["worker_paid_share"]
                         and report["watcher_verdict"] == "pass"
                         and report["four_validators_converged"] else "FAIL")
 
