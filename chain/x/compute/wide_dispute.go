@@ -460,13 +460,19 @@ func (s msgServer) ArbitrateWide512(ctx context.Context, msg *types.MsgArbitrate
 	inputStateRoot := graphDispute.LowStateRoot()
 	aRef := node.Inputs[0]
 	wRef := node.Inputs[1]
-	aDesc := graph.Inputs[aRef.Index].Desc
+	// The operand kinds decide which descriptor table is legal to index:
+	// a real-block GEMM reads its activations from an upstream node output
+	// (kind 1), so never touch graph.Inputs with that index.
+	var aDesc, wDesc canonical.TensorDescriptorV2
 	if aRef.Kind == 1 {
 		aDesc = graph.Nodes[aRef.Index].Output
+	} else {
+		aDesc = graph.Inputs[aRef.Index].Desc
 	}
-	wDesc := graph.Inputs[wRef.Index].Desc
 	if wRef.Kind == 1 {
 		wDesc = graph.Nodes[wRef.Index].Output
+	} else {
+		wDesc = graph.Inputs[wRef.Index].Desc
 	}
 	decodeRows := func(ref canonical.TensorRef, desc canonical.TensorDescriptorV2,
 		rows []*types.GraphChunkEvidence, rowElems int, rowStart int) (canonical.WideTileState, error) {

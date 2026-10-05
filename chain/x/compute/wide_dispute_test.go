@@ -349,3 +349,298 @@ func TestWideGEMMDisputeE2E(t *testing.T) {
 		t.Fatal("fraud task produced a receipt")
 	}
 }
+
+// buildChainGraphV2NodeOperandFixture is a three-node V2 block whose final
+// GEMM reads its activations from an upstream NODE OUTPUT (kind 1) — the
+// shape the real 310-node block uses (A = node 144 output).  The two-node
+// fixtures only ever used input operands, which hid a descriptor-indexing
+// panic in the wide arbitration for kind-1 A operands.
+func buildChainGraphV2NodeOperandFixture(t *testing.T) *chainGraphV2Fixture {
+	t.Helper()
+	mk := func(desc canonical.TensorDescriptorV2, data []int64) *canonical.TensorV2 {
+		tensor, err := canonical.NewTensorV2(desc, data)
+		if err != nil {
+			t.Fatal(err)
+		}
+		return tensor
+	}
+	a := mk(canonical.NewDescV2(canonical.DtypeV2A13, 2, 8),
+		[]int64{1, -2, 3, -4, 5, -6, 7, -8, 4095, -4096, 100, -100, 5, 6, -7, 8})
+	wData := make([]int64, 64)
+	for i := range wData {
+		wData[i] = int64(i%17) - 8
+	}
+	w := mk(canonical.NewDescV2(canonical.DtypeV2W10, 8, 8), wData)
+	aroot, _ := a.TensorRootV2()
+	wroot, _ := w.TensorRootV2()
+	requantParams := canonical.ParamList{
+		{Key: "clamp_hi", Value: canonical.A13Max},
+		{Key: "clamp_lo", Value: canonical.A13Min},
+		{Key: "mult", Value: 1 << 20},
+		{Key: "out_dtype", Value: int64(canonical.DtypeV2A13)},
+		{Key: "shift", Value: 20},
+	}
+	g := &canonical.GraphDescriptorV2{
+		ProtocolVersion: canonical.ProtocolVersionGraphV2,
+		Spec:            "TEST_WIDE_NODE_OPERAND_V1",
+		Arithmetic:      canonical.A13W10I64Profile(),
+		Inputs: []canonical.GraphInputV2{
+			{Name: "a", Desc: a.Desc, Root: aroot[:]},
+			{Name: "w", Desc: w.Desc, Root: wroot[:]},
+		},
+		Nodes: []canonical.GraphNodeV2{
+			{NodeID: 0, OperatorID: canonical.OpGEMMWideA13W10, Version: canonical.OpGEMMVersionWide,
+				Inputs: []canonical.TensorRef{{Kind: 0, Index: 0}, {Kind: 0, Index: 1}},
+				Output: canonical.NewDescV2(canonical.DtypeV2Int64Accum, 2, 8),
+				Params: canonical.ParamList{}},
+			{NodeID: 1, OperatorID: canonical.OpRequantizeWideV1, Version: canonical.OpRequantVersionWide,
+				Inputs: []canonical.TensorRef{{Kind: 1, Index: 0}},
+				Output: canonical.NewDescV2(canonical.DtypeV2A13, 2, 8), Params: requantParams},
+			{NodeID: 2, OperatorID: canonical.OpGEMMWideA13W10, Version: canonical.OpGEMMVersionWide,
+				Inputs: []canonical.TensorRef{{Kind: 1, Index: 1}, {Kind: 0, Index: 1}},
+				Output: canonical.NewDescV2(canonical.DtypeV2Int64Accum, 2, 8),
+				Params: canonical.ParamList{}},
+			{NodeID: 3, OperatorID: canonical.OpRequantizeWideV1, Version: canonical.OpRequantVersionWide,
+				Inputs: []canonical.TensorRef{{Kind: 1, Index: 2}},
+				Output: canonical.NewDescV2(canonical.DtypeV2A13, 2, 8), Params: requantParams},
+			{NodeID: 4, OperatorID: canonical.OpGEMMWideA13W10, Version: canonical.OpGEMMVersionWide,
+				Inputs: []canonical.TensorRef{{Kind: 1, Index: 3}, {Kind: 0, Index: 1}},
+				Output: canonical.NewDescV2(canonical.DtypeV2Int64Accum, 2, 8),
+				Params: canonical.ParamList{}},
+		},
+		Outputs: []canonical.TensorRef{{Kind: 1, Index: 4}},
+	}
+	exec, err := canonical.ExecuteGraphV2(g, map[uint32]*canonical.TensorV2{0: a, 1: w})
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw, err := json.Marshal(g)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return &chainGraphV2Fixture{graph: g, graphJSON: raw,
+		inputs: map[uint32]*canonical.TensorV2{0: a, 1: w}, exec: exec}
+}
+
+// TestWideGEMMDisputeNodeOperandArbitration drives the wide dispute on a
+// GEMM whose A operand is a NODE OUTPUT (kind 1).  Regression: the wide
+// arbitration used to index graph.Inputs with a node index and panicked.
+func TestWideGEMMDisputeNodeOperandArbitration(t *testing.T) {
+	h := newGemmHarness(t, 100)
+	fx := buildChainGraphV2NodeOperandFixture(t)
+	taskID, _ := h.postGraphV2(t, fx)
+	assignmentRef := h.acceptGraph(t, taskID)
+
+	var taskRef [8]byte
+	binary.BigEndian.PutUint64(taskRef[:], taskID)
+	rc, err := canonical.NewGraphResultCommitV3(fx.graph, taskRef[:], assignmentRef,
+		h.workKeys.networkPub, fx.exec, 42)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := canonical.SignGraphResultCommitV3(rc, h.workKeys.networkPriv); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := h.msg.SubmitGraphResultV2(h.ctx, &types.MsgSubmitGraphResultV2{
+		Worker: h.worker, GraphTaskId: taskID,
+		NodeOutputManifestRoot: rc.NodeOutputManifestRootV2,
+		OutputRoots:            rc.OutputRoots, FinalOutputRoot: rc.FinalOutputRoot,
+		CompletedEpoch: rc.CompletedEpoch, WorkerSignature: rc.Signature,
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	h.bondWorker(h.challenger, h.chalKeys)
+	fakeFinal := make([]byte, 32)
+	for i := range fakeFinal {
+		fakeFinal[i] = 0xAA
+	}
+	if _, err := h.msg.OpenGraphChallenge(h.ctx, &types.MsgOpenGraphChallenge{
+		Challenger: h.challenger, GraphTaskId: taskID,
+		ChallengerOutputRoots: [][]byte{fakeFinal}, ChallengeBond: MinBond,
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	graphID, err := fx.graph.GraphIDV2()
+	if err != nil {
+		t.Fatal(err)
+	}
+	honest := fx.exec.Trail
+	bad := append([]canonical.Hash(nil), honest...)
+	bad[len(bad)-1] = canonical.Hash{0xF3}
+	lock := func(party string, trail []canonical.Hash) {
+		pi, err := canonical.TrailProofV2(graphID, trail, 0)
+		if err != nil {
+			t.Fatal(err)
+		}
+		pf, err := canonical.TrailProofV2(graphID, trail, uint32(len(trail)-1))
+		if err != nil {
+			t.Fatal(err)
+		}
+		root, err := canonical.TrailRootV2(graphID, trail)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if _, err := h.msg.GraphTrailClaim(h.ctx, &types.MsgGraphTrailClaim{
+			Party: party, GraphTaskId: taskID,
+			TrailRoot: root[:], InitialRoot: trail[0][:], InitialProof: siblingsOfV2(pi),
+			FinalRoot: trail[len(trail)-1][:], FinalProof: siblingsOfV2(pf),
+		}); err != nil {
+			t.Fatal(err)
+		}
+	}
+	lock(h.worker, honest)
+	lock(h.challenger, bad)
+
+	for rounds := 0; rounds < 8; rounds++ {
+		record, err := h.keeper.GetGraphDispute(h.ctx, taskID)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if record.Status == GraphDisputeArbReady {
+			break
+		}
+		dispute, err := canonical.RestoreGraphDisputeV2(record.Snapshot, fx.graph, ChallengeRoundBlocks)
+		if err != nil {
+			t.Fatal(err)
+		}
+		low, high := dispute.Interval()
+		mid := low + (high-low)/2
+		submitMid := func(party string, trail []canonical.Hash) {
+			proof, err := canonical.TrailProofV2(graphID, trail, mid)
+			if err != nil {
+				t.Fatal(err)
+			}
+			h.advance(h.currentHeight() + 1)
+			if _, err := h.msg.GraphMidPoint(h.ctx, &types.MsgGraphMidPoint{
+				Party: party, GraphTaskId: taskID,
+				StateRoot: trail[mid][:], ProofSiblings: siblingsOfV2(proof), Epoch: h.currentHeight(),
+			}); err != nil {
+				t.Fatal(err)
+			}
+		}
+		submitMid(h.worker, honest)
+		submitMid(h.challenger, bad)
+	}
+	record, err := h.keeper.GetGraphDispute(h.ctx, taskID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if record.Status != GraphDisputeArbReady {
+		t.Fatalf("dispute status %s, want arb_ready", record.Status)
+	}
+	dispute, err := canonical.RestoreGraphDisputeV2(record.Snapshot, fx.graph, ChallengeRoundBlocks)
+	if err != nil {
+		t.Fatal(err)
+	}
+	nodeID, err := dispute.FirstDivergentNode()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if nodeID != 4 {
+		t.Fatalf("first divergent node %d, want 4 (the node-operand GEMM)", nodeID)
+	}
+
+	if _, err := h.msg.OpenWideGEMMDispute(h.ctx, &types.MsgOpenWideGEMMDispute{
+		Challenger: h.challenger, GraphTaskId: taskID, NodeId: 4,
+		TileI: 0, TileJ: 0, ChallengeBond: MinBond,
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	aTensor := fx.exec.Tensors[canonical.TensorRef{Kind: 1, Index: 3}]
+	wTensor := fx.exec.Tensors[canonical.TensorRef{Kind: 0, Index: 1}]
+	aTile, err := canonical.WideATile(aTensor.Data, 2, 8, 0, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	wTile, err := canonical.WideWTile(wTensor.Data, 8, 8, 0, 0, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	honestS1 := canonical.WideTileStep(canonical.WideTileState{}, aTile, wTile)
+	fraudS1 := honestS1
+	fraudS1[0]++
+	claimTrace := func(party string, s1 canonical.WideTileState) {
+		states := []canonical.WideTileState{{}, s1}
+		root, err := canonical.WideTraceRootV1(0, 0, states)
+		if err != nil {
+			t.Fatal(err)
+		}
+		p0, _ := canonical.WideTraceProofV1(0, 0, states, 0)
+		p1, _ := canonical.WideTraceProofV1(0, 0, states, 1)
+		if _, err := h.msg.WideTraceClaim(h.ctx, &types.MsgWideTraceClaim{
+			Party: party, GraphTaskId: taskID,
+			TraceRoot: root[:], InitialState: states[0].Bytes(), InitialProof: siblingsOfV2(p0),
+			FinalState: states[1].Bytes(), FinalProof: siblingsOfV2(p1),
+		}); err != nil {
+			t.Fatal(err)
+		}
+	}
+	claimTrace(h.worker, fraudS1)
+	claimTrace(h.challenger, honestS1)
+
+	aRoot := mustRootV2Chain(t, aTensor)
+	wRoot := mustRootV2Chain(t, wTensor)
+	live := map[canonical.TensorRef]canonical.Hash{}
+	for i := range fx.graph.Inputs {
+		live[canonical.TensorRef{Kind: 0, Index: uint32(i)}] = mustRootV2Chain(t, fx.inputs[uint32(i)])
+	}
+	for i := 0; i < 4; i++ {
+		live[canonical.TensorRef{Kind: 1, Index: uint32(i)}] =
+			mustRootV2Chain(t, fx.exec.Tensors[canonical.TensorRef{Kind: 1, Index: uint32(i)}])
+	}
+	_ = aRoot
+	mkEvidence := func(ref canonical.TensorRef, tensor *canonical.TensorV2,
+		root canonical.Hash, chunkIndex uint32) *types.GraphChunkEvidence {
+		descJSON, _ := json.Marshal(tensor.Desc)
+		chunk, proof, err := tensor.ChunkProofV2(int(chunkIndex))
+		if err != nil {
+			t.Fatal(err)
+		}
+		_, _, _, stateSiblings, err := canonical.StateProofV2(live, ref)
+		if err != nil {
+			t.Fatal(err)
+		}
+		return &types.GraphChunkEvidence{
+			DescJson: descJSON, RefKind: uint32(ref.Kind), RefIndex: ref.Index, Root: root[:],
+			ChunkIndex: chunkIndex, Count: uint32(tensor.ChunkCount()),
+			Chunk: chunk, Proof: siblingsOfV2(proof), StateProof: siblingsOfV2(stateSiblings),
+		}
+	}
+	evidence := make([]*types.GraphChunkEvidence, 0, 10)
+	for i := 0; i < 2; i++ {
+		evidence = append(evidence, mkEvidence(canonical.TensorRef{Kind: 1, Index: 3},
+			aTensor, aRoot, uint32((i*8)/canonical.ChunkElems)))
+	}
+	for d := 0; d < 8; d++ {
+		evidence = append(evidence, mkEvidence(canonical.TensorRef{Kind: 0, Index: 1},
+			wTensor, wRoot, uint32((d*8)/canonical.ChunkElems)))
+	}
+	statesW := []canonical.WideTileState{{}, fraudS1}
+	workerHighProof, _ := canonical.WideTraceProofV1(0, 0, statesW, 1)
+	statesC := []canonical.WideTileState{{}, honestS1}
+	challengerHighProof, _ := canonical.WideTraceProofV1(0, 0, statesC, 1)
+	res, err := h.msg.ArbitrateWide512(h.ctx, &types.MsgArbitrateWide512{
+		Actor: h.challenger, GraphTaskId: taskID,
+		WorkerNextState:     fraudS1.Bytes(),
+		WorkerNextProof:     siblingsOfV2(workerHighProof),
+		ChallengerNextState: honestS1.Bytes(),
+		ChallengerNextProof: siblingsOfV2(challengerHighProof),
+		Evidence:            evidence,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if res.Outcome != "challenger_wins" {
+		t.Fatalf("outcome %q, want challenger_wins", res.Outcome)
+	}
+	task, err := h.keeper.GetGraphTask(h.ctx, taskID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if task.Status != GraphStatusFraud {
+		t.Fatalf("task status %s, want fraud (zero VWR)", task.Status)
+	}
+}

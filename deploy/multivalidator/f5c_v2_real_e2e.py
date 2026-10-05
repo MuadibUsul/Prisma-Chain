@@ -318,6 +318,8 @@ def scenario_fraud(report: dict, kind: str) -> None:
     honest_roots_in = input_roots(doc)
     honest_roots = node_roots(doc, honest)
     fraud_roots = node_roots(doc, fraud)
+    honest_roots_hex = [r.hex() for r in honest_roots]
+    fraud_roots_hex = [r.hex() for r in fraud_roots]
     report["divergent_nodes"] = [i for i, (a, b) in enumerate(zip(honest_roots, fraud_roots)) if a != b][:5]
 
     task_id = post_accept_commit(doc, gid, req, wk, fraud, report, f"real_{kind}")
@@ -328,7 +330,7 @@ def scenario_fraud(report: dict, kind: str) -> None:
     addresses = validator_addresses()
     ready = wait_for_predecessor_of("validator-a", addresses)
     txhash = send_tx_observe("open-graph-challenge", ch[0], graph_task_id=task_id,
-                             challenger_output_roots=F.hexb(bytes.fromhex(honest_roots[-1])),
+                             challenger_output_roots=honest_roots_hex[-1],
                              challenge_bond=F.MIN_BOND)
     observation = observe_inclusion(txhash, ready["height"], addresses)
     report["challenge_inclusion"] = observation
@@ -422,7 +424,7 @@ def scenario_wide(doc, inputs, honest, report, task_id, wk, ch, node_id):
     # evidence: live state at the graph dispute's low boundary (inputs + nodes < node_id)
     live = {(0, i): r for i, r in enumerate(input_roots(doc))}
     for i in range(node_id):
-        live[(1, i)] = bytes.fromhex(node_roots(doc, honest)[i])
+        live[(1, i)] = node_roots(doc, honest)[i]
     evidence = []
     a_root = live[(int(a_ref["kind"]), int(a_ref["index"]))]
     w_root = live[(int(w_ref["kind"]), int(w_ref["index"]))]
@@ -471,13 +473,15 @@ def scenario_rope(doc, inputs, honest, fraud, report, task_id, wk, ch, node_id):
     w_honest_chunk, w_honest_proof, _ = chunk_of(node["output"], honest[node_id].reshape(-1), 0)
     w_fraud_chunk, w_fraud_proof, _ = chunk_of(node["output"], fraud[node_id].reshape(-1), 0)
     evidence = [evidence_entry(doc, live, a_ref, a_data, a_root, 0)]
+    honest_roots_hex = [r.hex() for r in honest_roots]
+    fraud_roots_hex = [r.hex() for r in node_roots(doc, fraud)]
     ch_balance_before = G.balance(ch[1])
     F.send_tx_big("arbitrate-graph-node", ch[0], graph_task_id=task_id,
-                  worker_out_root=node_roots(doc, fraud)[node_id],
+                  worker_out_root=fraud_roots_hex[node_id],
                   worker_chunk_index=0,
                   worker_chunk=F.hexb(w_fraud_chunk),
                   worker_chunk_proof=[F.hexb(bytes.fromhex(s)) for s in w_fraud_proof],
-                  challenger_out_root=honest_roots[node_id],
+                  challenger_out_root=honest_roots_hex[node_id],
                   challenger_chunk_index=0,
                   challenger_chunk=F.hexb(w_honest_chunk),
                   challenger_chunk_proof=[F.hexb(bytes.fromhex(s)) for s in w_honest_proof],
