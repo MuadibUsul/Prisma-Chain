@@ -18,7 +18,7 @@ import json
 import pathlib
 import sys
 
-from . import chain, commit as commit_mod, gpu, jobs, keystore, model
+from . import chain, commit as commit_mod, gpu, jobs, keystore, model, recovery
 from .identity import WorkerIdentity
 from .join import JoinConfig, JoinError, join as run_join, heartbeat as run_heartbeat
 from .redact import install as install_redaction
@@ -331,6 +331,43 @@ def cmd_jobs_commit(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_recover(args: argparse.Namespace) -> int:
+    """Classify and reconcile every journalled task (B2-09). Read-only on chain."""
+    install_redaction()
+    identity = keystore.load(args.keystore, _passphrase(args))
+    _register(identity)
+    journal = _journal(args)
+    client = chain.ChainClient(_chain_config(args))
+    if args.dry_run:
+        try:
+            client.validate_chain_id()
+        except chain.ChainError as exc:
+            print(f"prisma-worker: {exc}", file=sys.stderr)
+            return 1
+        decisions = [recovery.classify(journal.read(int(e.get("task_id", 0))),
+                                       chain_task=client.task(int(e.get("task_id", 0))),
+                                       account_address=identity.account_address)
+                     for e in journal.entries()]
+    else:
+        try:
+            client.validate_chain_id()
+            decisions = recovery.recover_all(client, journal,
+                                             account_address=identity.account_address)
+        except chain.ChainError as exc:
+            print(f"prisma-worker: {exc}", file=sys.stderr)
+            return 1
+    report = recovery.summary(decisions)
+    if args.json:
+        print(json.dumps(report, indent=1))
+    else:
+        print(f"recovered {report['tasks']} task(s): " +
+              ", ".join(f"{action}={count}" for action, count in sorted(report["by_action"].items())))
+        for decision in report["decisions"]:
+            print(f"  task {decision['task_id']}: {decision['phase']} -> {decision['action']}"
+                  f" ({decision['reason']})")
+    return 0
+
+
 def cmd_gpu_probe(args: argparse.Namespace) -> int:
     try:
         report = gpu.probe(nvidia_smi=args.nvidia_smi)
@@ -470,6 +507,15 @@ def build_parser() -> argparse.ArgumentParser:
     check.add_argument("--dir", required=True)
     check.add_argument("--json", action="store_true")
     check.set_defaults(func=cmd_model_check)
+
+    recover_cmd = sub.add_parser("recover", help="classify and reconcile journalled tasks")
+    recover_cmd.add_argument("--keystore", default=str(keystore.default_path()))
+    recover_cmd.add_argument("--passphrase-stdin", action="store_true")
+    chain_flags(recover_cmd)
+    recover_cmd.add_argument("--journal", default="")
+    recover_cmd.add_argument("--dry-run", action="store_true", help="classify without touching the journal")
+    recover_cmd.add_argument("--json", action="store_true")
+    recover_cmd.set_defaults(func=cmd_recover)
 
     gpu_cmd = sub.add_parser("gpu", help="GPU capability probe")
     gpu_actions = gpu_cmd.add_subparsers(dest="action", required=True)

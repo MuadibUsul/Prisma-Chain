@@ -35,8 +35,13 @@ PHASE_ACCEPTING = "accepting"
 PHASE_ACCEPTED = "accepted"
 PHASE_ACCEPT_FAILED = "accept_failed"
 PHASE_EXECUTING = "executing"
-PHASE_SUBMITTED = "submitted"
+PHASE_EXECUTED = "executed"          # outputs exist locally, no commit yet
+PHASE_SUBMITTED = "submitted"        # CommitV3 signed and sent
+PHASE_DA_PENDING = "da_pending"      # upload started, quorum not reached yet
+PHASE_DA_QUORUM = "da_quorum"        # verified quorum recorded
 PHASE_TERMINAL = "terminal"
+PHASE_ABANDONED = "abandoned"        # must not be resumed (chain disagrees)
+PHASE_DISCOVERED = "discovered"
 
 # The frozen canonical profile this release executes (canonical graph v2 with
 # the A13W10 policy). Overridable, but only explicitly.
