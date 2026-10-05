@@ -363,3 +363,194 @@ func siblingsOfV2(sibs []canonical.Hash) [][]byte {
 	}
 	return out
 }
+
+// TestGraphV2RequantArbitration drives the complete V2 fraud settlement:
+// a self-consistent fraudulent result (one requant output element altered,
+// final output recomputed downstream), the honest challenger's trail, the
+// bisection to node 1 (the requant), and the typed 512-element-window
+// arbitration -> ChallengerWins -> fraud status -> zero VWR.
+func TestGraphV2RequantArbitration(t *testing.T) {
+	h := newGemmHarness(t, 100)
+	fx := buildChainGraphV2Fixture(t)
+	taskID, _ := h.postGraphV2(t, fx)
+	assignmentRef := h.acceptGraph(t, taskID)
+
+	node1 := fx.graph.Nodes[1]
+	honestNode1 := fx.exec.Tensors[canonical.TensorRef{Kind: 1, Index: 1}]
+	honestRoot1, _ := honestNode1.TensorRootV2()
+	honestChunk, honestProof, err := honestNode1.ChunkProofV2(0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// fraudulent output: one element changed in range; the final output is
+	// recomputed from it, so every commitment is self-consistent
+	fraudData := append([]int64(nil), honestNode1.Data...)
+	fraudData[0]--
+	fraudTensor, err := canonical.NewTensorV2(node1.Output, fraudData)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fraudRoot1, _ := fraudTensor.TensorRootV2()
+	fraudChunk, fraudProof, _ := fraudTensor.ChunkProofV2(0)
+	fraudTensors := map[canonical.TensorRef]*canonical.TensorV2{}
+	for k, v := range fx.exec.Tensors {
+		fraudTensors[k] = v
+	}
+	fraudTensors[canonical.TensorRef{Kind: 1, Index: 1}] = fraudTensor
+	fraudRootFinal, err := fraudTensor.TensorRootV2()
+	if err != nil {
+		t.Fatal(err)
+	}
+	fraudExec := &canonical.GraphExecutionV2{Tensors: fraudTensors,
+		Outputs: []canonical.Hash{fraudRootFinal}}
+
+	// worker submits the fraudulent V3 result
+	var taskRef [8]byte
+	binary.BigEndian.PutUint64(taskRef[:], taskID)
+	rc, err := canonical.NewGraphResultCommitV3(fx.graph, taskRef[:], assignmentRef,
+		h.workKeys.networkPub, fraudExec, 42)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := canonical.SignGraphResultCommitV3(rc, h.workKeys.networkPriv); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := h.msg.SubmitGraphResultV2(h.ctx, &types.MsgSubmitGraphResultV2{
+		Worker: h.worker, GraphTaskId: taskID,
+		NodeOutputManifestRoot: rc.NodeOutputManifestRootV2,
+		OutputRoots:            rc.OutputRoots, FinalOutputRoot: rc.FinalOutputRoot,
+		CompletedEpoch: rc.CompletedEpoch, WorkerSignature: rc.Signature,
+	}); err != nil {
+		t.Fatal(err)
+	}
+	// the honest challenger counter-claims the honest final root
+	h.bondWorker(h.challenger, h.chalKeys)
+	if _, err := h.msg.OpenGraphChallenge(h.ctx, &types.MsgOpenGraphChallenge{
+		Challenger: h.challenger, GraphTaskId: taskID,
+		ChallengerOutputRoots: [][]byte{fx.exec.Outputs[0][:]},
+		ChallengeBond:         MinBond,
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	// trails: shared through node 0, divergent from node 1
+	graphID, _ := fx.graph.GraphIDV2()
+	honestTrail := fx.exec.Trail
+	liveFraud := map[canonical.TensorRef]canonical.Hash{}
+	for ref, tensor := range fraudTensors {
+		root, err := tensor.TensorRootV2()
+		if err != nil {
+			t.Fatal(err)
+		}
+		liveFraud[ref] = root
+	}
+	fraudStateRoot, err := canonical.GraphStateRootV2FromRoots(liveFraud)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fraudTrail := []canonical.Hash{honestTrail[0], honestTrail[1], fraudStateRoot}
+	lock := func(party string, trail []canonical.Hash) {
+		pi, _ := canonical.TrailProofV2(graphID, trail, 0)
+		pf, _ := canonical.TrailProofV2(graphID, trail, uint32(len(trail)-1))
+		root, _ := canonical.TrailRootV2(graphID, trail)
+		if _, err := h.msg.GraphTrailClaim(h.ctx, &types.MsgGraphTrailClaim{
+			Party: party, GraphTaskId: taskID,
+			TrailRoot: root[:], InitialRoot: trail[0][:], InitialProof: siblingsOfV2(pi),
+			FinalRoot: trail[len(trail)-1][:], FinalProof: siblingsOfV2(pf),
+		}); err != nil {
+			t.Fatal(err)
+		}
+	}
+	lock(h.worker, fraudTrail)
+	lock(h.challenger, honestTrail)
+
+	// bisection to the requant node
+	for rounds := 0; rounds < 8; rounds++ {
+		record, err := h.keeper.GetGraphDispute(h.ctx, taskID)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if record.Status == GraphDisputeArbReady {
+			break
+		}
+		dispute, err := canonical.RestoreGraphDisputeV2(record.Snapshot, fx.graph, ChallengeRoundBlocks)
+		if err != nil {
+			t.Fatal(err)
+		}
+		low, high := dispute.Interval()
+		mid := low + (high-low)/2
+		submitMid := func(party string, trail []canonical.Hash) {
+			proof, _ := canonical.TrailProofV2(graphID, trail, mid)
+			h.advance(h.currentHeight() + 1)
+			if _, err := h.msg.GraphMidPoint(h.ctx, &types.MsgGraphMidPoint{
+				Party: party, GraphTaskId: taskID,
+				StateRoot: trail[mid][:], ProofSiblings: siblingsOfV2(proof), Epoch: h.currentHeight(),
+			}); err != nil {
+				t.Fatal(err)
+			}
+		}
+		submitMid(h.worker, fraudTrail)
+		submitMid(h.challenger, honestTrail)
+	}
+	record, err := h.keeper.GetGraphDispute(h.ctx, taskID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if record.Status != GraphDisputeArbReady {
+		t.Fatalf("dispute status %s, want arb_ready", record.Status)
+	}
+
+	// evidence: node 1's input (node 0's INT64_ACCUM output) with a state
+	// membership proof against the agreed low state (after node 0)
+	node0 := fx.exec.Tensors[canonical.TensorRef{Kind: 1, Index: 0}]
+	node0Root, _ := node0.TensorRootV2()
+	liveLow := map[canonical.TensorRef]canonical.Hash{}
+	for i, in := range fx.graph.Inputs {
+		var hh canonical.Hash
+		copy(hh[:], in.Root)
+		liveLow[canonical.TensorRef{Kind: 0, Index: uint32(i)}] = hh
+	}
+	liveLow[canonical.TensorRef{Kind: 1, Index: 0}] = node0Root
+	_, _, _, siblings, err := canonical.StateProofV2(liveLow, canonical.TensorRef{Kind: 1, Index: 0})
+	if err != nil {
+		t.Fatal(err)
+	}
+	inChunk, inProof, err := node0.ChunkProofV2(0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	descJSON, _ := json.Marshal(node0.Desc)
+	evidence := []*types.GraphChunkEvidence{{
+		DescJson: descJSON, RefKind: 1, RefIndex: 0, Root: node0Root[:],
+		StateProof: siblingsOfV2(siblings), ChunkIndex: 0, Count: 1,
+		Chunk: inChunk, Proof: siblingsOfV2(inProof),
+	}}
+	res, err := h.msg.ArbitrateGraphNode(h.ctx, &types.MsgArbitrateGraphNode{
+		Actor: h.challenger, GraphTaskId: taskID,
+		WorkerOutRoot:        fraudRoot1[:],
+		WorkerChunkIndex:     0,
+		WorkerChunk:          fraudChunk,
+		WorkerChunkProof:     siblingsOfV2(fraudProof),
+		ChallengerOutRoot:    honestRoot1[:],
+		ChallengerChunkIndex: 0,
+		ChallengerChunk:      honestChunk,
+		ChallengerChunkProof: siblingsOfV2(honestProof),
+		Evidence:             evidence,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if res.Outcome != "challenger_wins" {
+		t.Fatalf("outcome %q, want challenger_wins", res.Outcome)
+	}
+	task, err := h.keeper.GetGraphTask(h.ctx, taskID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if task.Status != GraphStatusFraud {
+		t.Fatalf("task status %s, want fraud (zero VWR)", task.Status)
+	}
+	if len(task.ReceiptID) != 0 {
+		t.Fatal("fraud task produced a receipt")
+	}
+}

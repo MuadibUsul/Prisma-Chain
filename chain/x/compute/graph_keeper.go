@@ -563,6 +563,9 @@ func (s msgServer) ArbitrateGraphNode(ctx context.Context, msg *types.MsgArbitra
 	if record.Status != GraphDisputeArbReady || len(record.Snapshot) == 0 {
 		return nil, errGraphWrongPhase
 	}
+	if graphTaskProtocolV2(&task) {
+		return s.arbitrateGraphNodeV2(ctx, &task, &record, msg)
+	}
 	graph, err := graphDescriptor(&task)
 	if err != nil {
 		return nil, err

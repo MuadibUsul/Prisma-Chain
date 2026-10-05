@@ -351,3 +351,162 @@ func (s msgServer) graphMidPointV2(ctx context.Context, task *GraphTask,
 	s.consumeGraphGas(ctx, "dispute store", GasGraphStore+GasGraphHash*uint64(len(snapshot)/256+1))
 	return &types.MsgGraphMidPointResponse{}, nil
 }
+
+// --- A1-06/A1-07: V2 node arbitration (cheap ops; wide GEMM -> A2) -----------
+
+// graphStateGeometryV2 mirrors graphStateGeometry over the V2 descriptor.
+func graphStateGeometryV2(g *canonical.GraphDescriptorV2, beforeNode uint32,
+	ref canonical.TensorRef) (index, count uint32, err error) {
+	k := uint32(len(g.Inputs))
+	if ref.Kind == 0 {
+		if ref.Index >= k {
+			return 0, 0, errors.New("evidence references an unknown input")
+		}
+		return ref.Index, k + beforeNode, nil
+	}
+	if ref.Kind == 1 {
+		if ref.Index >= beforeNode {
+			return 0, 0, errors.New("evidence references a tensor that does not exist in the committed state")
+		}
+		return k + ref.Index, k + beforeNode, nil
+	}
+	return 0, 0, errors.New("unknown tensor ref kind")
+}
+
+// verifyGraphEvidenceV2State checks one evidence tensor root against the
+// committed V2 state tree (V2 leaf domain).
+func verifyGraphEvidenceV2State(g *canonical.GraphDescriptorV2, beforeNode uint32,
+	stateRoot canonical.Hash, ref canonical.TensorRef, root canonical.Hash,
+	stateProof [][]byte) error {
+	index, count, err := graphStateGeometryV2(g, beforeNode, ref)
+	if err != nil {
+		return err
+	}
+	siblings := make([]canonical.Hash, len(stateProof))
+	for i, raw := range stateProof {
+		h, err := root32Of(raw)
+		if err != nil {
+			return err
+		}
+		siblings[i] = h
+	}
+	leaf := canonical.StateLeafV2(ref.Kind, ref.Index, root)
+	if !canonical.VerifyLeafInclusion(stateRoot, leaf, canonical.MerkleProof{Index: index, Count: count, Siblings: siblings}) {
+		return errors.New("evidence tensor is not part of the committed input state")
+	}
+	return nil
+}
+
+// arbitrateGraphNodeV2 adjudicates the first divergent node of a V2
+// dispute with typed evidence.  Wide GEMM nodes are refused here and must
+// use the wide dispute path (A2).
+func (s msgServer) arbitrateGraphNodeV2(ctx context.Context, task *GraphTask,
+	record *GraphDisputeRecord, msg *types.MsgArbitrateGraphNode) (*types.MsgArbitrateGraphNodeResponse, error) {
+	graph, err := graphDescriptorV2(task)
+	if err != nil {
+		return nil, err
+	}
+	dispute, err := canonical.RestoreGraphDisputeV2(record.Snapshot, graph, ChallengeRoundBlocks)
+	if err != nil {
+		return nil, err
+	}
+	nodeID, err := dispute.FirstDivergentNode()
+	if err != nil {
+		return nil, err
+	}
+	node := graph.Nodes[nodeID]
+	if node.OperatorID == canonical.OpGEMMWideA13W10 {
+		return nil, errors.New("wide GEMM nodes are adjudicated by the wide dispute path (A2)")
+	}
+	if len(msg.Evidence) == 0 || len(msg.Evidence) > MaxGraphEvidenceChunks {
+		return nil, errors.New("graph evidence count out of bounds")
+	}
+	s.consumeGraphGas(ctx, "arbitration evidence", GasGraphEvidence*uint64(len(msg.Evidence)))
+	evidence := make([]canonical.ChunkEvidenceV2, 0, len(msg.Evidence))
+	inputStateRoot := dispute.LowStateRoot()
+	for _, ev := range msg.Evidence {
+		var desc canonical.TensorDescriptorV2
+		if err := json.Unmarshal(ev.DescJson, &desc); err != nil {
+			return nil, errors.New("malformed evidence descriptor")
+		}
+		root, err := root32Of(ev.Root)
+		if err != nil {
+			return nil, err
+		}
+		proof, err := hashesFrom(ev.Proof)
+		if err != nil {
+			return nil, err
+		}
+		ref := canonical.TensorRef{Kind: uint8(ev.RefKind), Index: ev.RefIndex}
+		if err := verifyGraphEvidenceV2State(graph, nodeID, inputStateRoot, ref, root, ev.StateProof); err != nil {
+			return nil, err
+		}
+		s.consumeGraphGas(ctx, "evidence state leaf", GasGraphStateLeaf+GasGraphProofSibling*uint64(len(ev.StateProof)))
+		evidence = append(evidence, canonical.ChunkEvidenceV2{
+			Ref: ref, Desc: desc, Root: root,
+			ChunkIndex: ev.ChunkIndex, Count: ev.Count, Bytes: ev.Chunk, Proof: proof,
+		})
+	}
+	var ropeTable *canonical.RopeConstants
+	if node.OperatorID == canonical.OpRoPEFixedV1 {
+		tableRef := node.Inputs[len(node.Inputs)-1]
+		if len(msg.RopeTable) == 0 {
+			return nil, errors.New("rope node arbitration requires the pinned table")
+		}
+		table := make([]int32, len(msg.RopeTable))
+		for i, v := range msg.RopeTable {
+			table[i] = int32(v)
+		}
+		tableDesc := canonical.NewDescV2(canonical.DtypeV2Q12_20, int64(len(table)))
+		tableData := make([]int64, len(table))
+		for i, v := range table {
+			tableData[i] = int64(v)
+		}
+		tableRoot, err := canonical.TensorRootV2Of(tableDesc, tableData)
+		if err != nil {
+			return nil, err
+		}
+		if int(tableRef.Index) >= len(graph.Inputs) || !equalBytes32(tableRoot[:], graph.Inputs[tableRef.Index].Root) {
+			return nil, errors.New("rope table does not match the committed input")
+		}
+		pairs := int(node.Output.Shape[len(node.Output.Shape)-1]) / 2
+		ropeTable, err = canonical.NewRopeConstants(table, pairs)
+		if err != nil {
+			return nil, err
+		}
+	}
+	workerRoot, err := root32Of(msg.WorkerOutRoot)
+	if err != nil {
+		return nil, err
+	}
+	workerProof, err := hashesFrom(msg.WorkerChunkProof)
+	if err != nil {
+		return nil, err
+	}
+	challengerRoot, err := root32Of(msg.ChallengerOutRoot)
+	if err != nil {
+		return nil, err
+	}
+	challengerProof, err := hashesFrom(msg.ChallengerChunkProof)
+	if err != nil {
+		return nil, err
+	}
+	outcome, err := canonical.ArbitrateNodeChunkV2(graph, node, inputStateRoot,
+		canonical.NodeChunkClaim{OutRoot: workerRoot, ChunkIndex: msg.WorkerChunkIndex,
+			ChunkBytes: msg.WorkerChunk, Proof: workerProof},
+		canonical.NodeChunkClaim{OutRoot: challengerRoot, ChunkIndex: msg.ChallengerChunkIndex,
+			ChunkBytes: msg.ChallengerChunk, Proof: challengerProof},
+		evidence, ropeTable)
+	if err != nil {
+		return nil, err
+	}
+	record.TranscriptDigest, err = graphTranscriptStep(record.TranscriptDigest, "node_arbitration_v2",
+		map[string]any{"node": nodeID, "operator": node.OperatorID, "outcome": uint64(outcome)})
+	if err != nil {
+		return nil, err
+	}
+	if _, err := s.resolveGraphOutcome(ctx, task, record, outcome); err != nil {
+		return nil, err
+	}
+	return &types.MsgArbitrateGraphNodeResponse{Outcome: canonicalOutcomeName(outcome)}, nil
+}
