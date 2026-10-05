@@ -46,8 +46,10 @@
     "single-node V2 dispute never promoted to arb_ready (fix + TestGraphV2SingleNodeDisputeArbitration)",
     "wide arbitration panicked on node-output (kind 1) A operands (fix + TestWideGEMMDisputeNodeOperandArbitration)"
    ]
-  }
+  },
+  "fresh_checkout_regression": "fresh clone of the tag tree: go test ./compute/... (canonical+gemmv1) green, cd chain && go test ./... green, tools build green, GraphIDV2 recomputed from the tag tree == 8fb86087697e277602bb4b2088ba48eb4172c21d9c4f83914582f2cbf00d4def"
  },
  "freeze_tag": "transformer-phase-f-wide-integer",
- "next": "Phase B productization (roadmap B1+: release build, CLI polish, packaging); no protocol change after this tag."
+ "next": "Phase B productization (roadmap B1+: release build, CLI polish, packaging); no protocol change after this tag.",
+ "freeze_tag_commit": "89547fa97b62d72a4cd336a5dfd3b000b03eac60"
 }
