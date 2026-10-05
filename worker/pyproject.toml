@@ -11,6 +11,12 @@ requires-python = ">=3.10"
 # both together:  pip install -e ./network -e ./worker
 dependencies = ["cryptography>=41", "prisma-network"]
 
+[project.optional-dependencies]
+# numpy is required by the frozen libraries the cross-check tests import
+# (compute/canonical/python, tools/f5c_bundle_v2.py); the Go cross-language
+# gate also runs in CI, so these gates stay on in CI.
+test = ["pytest>=8", "numpy"]
+
 [project.scripts]
 prisma-worker = "prisma_worker.cli:main"
 

@@ -214,7 +214,9 @@ class FusedMMA13W10Backend:
         return torch
 
     def load(self, graph_document: dict, *, weights_dir: Optional[pathlib.Path] = None) -> None:
-        torch = self._torch()
+        # Static checks first: the error must not depend on the environment
+        # (torch present or not) — a worker without the shipped kernels cannot
+        # execute, full stop.
         sources = [self.frozen_gpu_path / "f5b1" / "f5b1_kernels.cu",
                    self.frozen_gpu_path / "f5b2" / "f5b2_kernels.cu"]
         missing = [str(p) for p in sources if not p.exists()]
@@ -222,6 +224,7 @@ class FusedMMA13W10Backend:
             raise BackendUnavailable(
                 "frozen kernel sources are not present: " + ", ".join(missing) +
                 " — the release ships them; a worker without them cannot execute")
+        torch = self._torch()
         from torch.utils.cpp_extension import load_inline  # type: ignore
 
         cuda_sources = "\n".join(p.read_text(encoding="utf-8") for p in sources)
