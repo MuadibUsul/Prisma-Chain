@@ -9,7 +9,7 @@ requires-python = ">=3.10"
 dependencies = ["cryptography>=41", "fastapi>=0.110", "httpx>=0.27", "pydantic>=2", "uvicorn>=0.29"]
 
 [project.optional-dependencies]
-test = ["pytest>=8"]
+test = ["pytest>=8", "tokenizers>=0.20,<1"]
 chain = ["grpcio>=1.60"]
 model = ["tokenizers>=0.20,<1"]
 
