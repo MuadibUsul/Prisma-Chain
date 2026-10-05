@@ -66,5 +66,5 @@ jobs:
       - uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
-      - run: python -m pip install -e './network[test]' -e ./worker -e ./da -e ./watcher
-      - run: python -m pytest -q worker/tests da/tests watcher/tests
+      - run: python -m pip install -e './network[test]' -e ./worker -e ./da -e ./watcher -e ./api -e ./cli
+      - run: python -m pytest -q worker/tests da/tests watcher/tests api/tests cli/tests
