@@ -121,7 +121,7 @@ func NewRootCmd() *cobra.Command {
 		panic(err)
 	}
 	prismaVersion := NewVersionCmd()
-	root.AddCommand(prismaVersion, NewHealthCmd())
+	root.AddCommand(prismaVersion, NewHealthCmd(), NewRPCProxyCmd())
 	// The SDK registers a generic `version` command; replace it so that
 	// `prismad version` reports the Prisma build and frozen-protocol
 	// identity (B1-01b) instead of the SDK's build info.

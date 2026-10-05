@@ -40,6 +40,30 @@ func setTomlInSection(content, section, key, value string) (string, error) {
 	return strings.Join(lines, "\n"), nil
 }
 
+// setTomlRawInSection is setTomlInSection for non-string TOML values
+// (booleans, numbers): the value is written verbatim, without quotes.
+func setTomlRawInSection(content, section, key, rawValue string) (string, error) {
+	lines := strings.Split(content, "\n")
+	current := ""
+	found := false
+	keyRe := regexp.MustCompile(`^\s*` + regexp.QuoteMeta(key) + `\s*=`)
+	sectionRe := regexp.MustCompile(`^\s*\[([^\]]+)\]\s*$`)
+	for i, line := range lines {
+		if m := sectionRe.FindStringSubmatch(line); m != nil {
+			current = m[1]
+			continue
+		}
+		if current == section && keyRe.MatchString(line) {
+			lines[i] = fmt.Sprintf("%s = %s", key, rawValue)
+			found = true
+		}
+	}
+	if !found {
+		return "", fmt.Errorf("config key %q not found in section [%s]", key, section)
+	}
+	return strings.Join(lines, "\n"), nil
+}
+
 // applyNodeConfig applies the network config policy to a node home: the
 // given listen addresses, the node's external address and its peers.
 // No 0.0.0.0 RPC wildcard, explicit p2p laddr, no localhost peers.

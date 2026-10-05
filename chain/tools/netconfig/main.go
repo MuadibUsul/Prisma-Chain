@@ -56,6 +56,8 @@ func main() {
 		err = cmdVerify(os.Args[2:])
 	case "provision":
 		err = cmdProvision(os.Args[2:])
+	case "profile":
+		err = cmdProfile(os.Args[2:])
 	case "-h", "--help", "help":
 		usage()
 		return
