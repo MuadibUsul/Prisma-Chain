@@ -52,7 +52,8 @@ def wait_for_inclusion(rpc_url: str, txhash: str, *, timeout: float = 90.0) -> d
 
 
 @contextmanager
-def provider_keyring(account_scalar_hex: str, *, prismad: str, chain_id: str, rpc_url: str):
+def provider_keyring(account_scalar_hex: str, *, prismad: str, chain_id: str, rpc_url: str,
+                     runner: Optional[Callable[..., subprocess.CompletedProcess]] = None):
     root = pathlib.Path(tempfile.mkdtemp(prefix="prisma-da-tx-"))
     try:
         (root / "config").mkdir(mode=0o700)
@@ -60,9 +61,12 @@ def provider_keyring(account_scalar_hex: str, *, prismad: str, chain_id: str, rp
             f'chain-id = "{chain_id}"\nkeyring-backend = "test"\n'
             f'keyring-dir = "{root.as_posix()}"\nnode = "{rpc_url}"\n'
             'output = "json"\nbroadcast-mode = "sync"\n', encoding="utf-8")
-        subprocess.run([prismad, "keys", "import-hex", "provider", account_scalar_hex,
-                        "--keyring-backend", "test", "--keyring-dir", str(root),
-                        "--home", str(root)], check=True, capture_output=True, text=True)
+        command = [prismad, "keys", "import-hex", "provider", account_scalar_hex,
+                   "--keyring-backend", "test", "--keyring-dir", str(root), "--home", str(root)]
+        run = runner or (lambda cmd, **kw: subprocess.run(cmd, capture_output=True, text=True, **kw))
+        proc = run(command, timeout=60)
+        if proc.returncode != 0:
+            raise ChainTxError(f"keyring import failed: {(proc.stderr or '').strip()}")
         yield root
     finally:
         for path in root.rglob("*"):
@@ -78,7 +82,8 @@ def provider_keyring(account_scalar_hex: str, *, prismad: str, chain_id: str, rp
 
 def run_tx(keyring: pathlib.Path, args: list[str], *, prismad: str, chain_id: str,
            rpc_url: str, fees: str = "0uprsm", gas: str = "2000000",
-           runner: Optional[Callable[..., subprocess.CompletedProcess]] = None) -> str:
+           runner: Optional[Callable[..., subprocess.CompletedProcess]] = None,
+           waiter: Optional[Callable[[str, str], dict]] = None) -> str:
     """Submit a transaction from the temporary provider keyring; returns the tx hash."""
     command = [prismad, "tx", *args, "--from", "provider", "--chain-id", chain_id,
                "--node", rpc_url, "--keyring-backend", "test", "--keyring-dir", str(keyring),
@@ -91,5 +96,8 @@ def run_tx(keyring: pathlib.Path, args: list[str], *, prismad: str, chain_id: st
     if int(payload.get("code", 1)) != 0 or not payload.get("txhash"):
         raise ChainTxError(f"transaction rejected: {payload}")
     txhash = payload["txhash"]
-    wait_for_inclusion(rpc_url, txhash)
+    if waiter is not None:
+        waiter(rpc_url, txhash)
+    else:
+        wait_for_inclusion(rpc_url, txhash)
     return txhash

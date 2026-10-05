@@ -27,7 +27,9 @@ from prisma_worker.redact import register_secret
 from .chain_tx import ChainTxError, provider_keyring, run_tx
 from .config import ChainConfig, DaemonConfig
 from .daemon import Daemon
+from .chain_ops import PrismadChainOps
 from .policy import RetentionPolicy, gc as run_gc, integrity_scan
+from .responder import ChallengeResponder
 from .storage import ArtifactIndex
 
 
@@ -149,6 +151,32 @@ def cmd_gc(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_responder(args: argparse.Namespace) -> int:
+    """Answer on-chain chunk challenges inside their deadlines (B4-03)."""
+    config = _load_config(args)
+    identity = worker_keystore.load(pathlib.Path(config.keystore), _passphrase(args))
+    for secret in identity.secret_material():
+        register_secret(secret)
+    index = ArtifactIndex(config.resolved_data_dir())
+    index.rescan()
+    ops = PrismadChainOps(account=config.account, account_scalar_hex=identity.account_scalar.hex(),
+                          prismad=config.chain.prismad, chain_id=config.chain.chain_id,
+                          rpc_urls=config.chain.rpc_urls, storage=index, max_scan=args.max_scan)
+    responder = ChallengeResponder(ops, index, config.account,
+                                   safety_margin_blocks=args.safety_margin)
+    metrics = responder.run(interval_seconds=args.interval,
+                            max_iterations=1 if args.once else None)
+    if args.json:
+        print(json.dumps({"metrics": metrics.to_dict(), "losses": responder.losses}, indent=1))
+    else:
+        report = metrics.to_dict()
+        print(f"responder: discovered={report['discovered']} answered={report['answered']} "
+              f"too_late={report['too_late']} lost={report['lost']} failed={report['failed']}")
+        for loss in responder.losses:
+            print(f"  after-loss: task {loss['task_id']}: {loss['reason']}")
+    return 0
+
+
 def cmd_scan(args: argparse.Namespace) -> int:
     config = _load_config(args)
     index = ArtifactIndex(config.resolved_data_dir())
@@ -199,6 +227,16 @@ def build_parser() -> argparse.ArgumentParser:
                         help="task id with a live challenge (never deleted); repeatable")
     gc_cmd.add_argument("--dry-run", action="store_true")
     gc_cmd.set_defaults(func=cmd_gc)
+
+    responder = sub.add_parser("responder", help="answer on-chain chunk challenges in time")
+    common(responder)
+    responder.add_argument("--interval", type=float, default=10.0,
+                           help="seconds between challenge polls")
+    responder.add_argument("--once", action="store_true", help="one poll and exit (tests/CI)")
+    responder.add_argument("--safety-margin", type=int, default=5,
+                           help="refuse to start a response within this many blocks of the deadline")
+    responder.add_argument("--max-scan", type=int, default=512, help="task scan bound")
+    responder.set_defaults(func=cmd_responder)
 
     scan = sub.add_parser("scan", help="full integrity scan (quarantine mismatches)")
     common(scan)
