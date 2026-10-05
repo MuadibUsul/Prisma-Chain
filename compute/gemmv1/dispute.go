@@ -51,7 +51,11 @@ type GEMMDispute struct {
 	lastEpoch    uint64
 	outcome      Outcome
 	arbReady     bool
-	transcript   []byte
+	// LastRoundKeptLow records the direction of the last completed
+	// bisection round for the consensus transcript; it is persisted in the
+	// snapshot.
+	LastRoundKeptLow bool
+	transcript       []byte
 }
 
 // NewGEMMDispute opens a dispute from a validated ChallengeOpen context and
@@ -179,9 +183,11 @@ func (d *GEMMDispute) SubmitMid(party Party, state []byte, proof MerkleProof, ep
 	if workerMid == challengerMid {
 		d.low = mid
 		d.lowState = workerMid
+		d.LastRoundKeptLow = true
 	} else {
 		d.high = mid
 		d.highStates = [2]State{workerMid, challengerMid}
+		d.LastRoundKeptLow = false
 	}
 	d.medians = [2]*State{}
 	if d.high-d.low == 1 {
@@ -340,4 +346,30 @@ type arbitrationTranscript struct {
 
 type timeoutTranscript struct {
 	Outcome uint64 `gemm:"outcome"`
+}
+
+// Exported accessors for consensus persistence and transcript events. The
+// chain state machine must read dispute internals without touching them
+// directly.
+
+// LowState returns a copy of the agreed state at the low step.
+func (d *GEMMDispute) LowState() State { return d.lowState }
+
+// HighState returns a copy of the party's state at the high step.
+func (d *GEMMDispute) HighState(party Party) State {
+	idx := 0
+	if party == Challenger {
+		idx = 1
+	}
+	return d.highStates[idx]
+}
+
+// TileI and TileJ return the disputed tile coordinates.
+func (d *GEMMDispute) TileI() uint32 { return d.cfg.TileI }
+func (d *GEMMDispute) TileJ() uint32 { return d.cfg.TileJ }
+
+// ExpectedArbitrationState recomputes the arbiter's expected state for the
+// final disputed transition: exactly one 512-MAC micro-step.
+func (d *GEMMDispute) ExpectedArbitrationState(aTile, bTile [int8TileSize]int8) State {
+	return MicroStep(&d.lowState, aTile, bTile)
 }

@@ -1,0 +1,55 @@
+{
+  "blocks": [
+    {
+      "name": "mini",
+      "config": {
+        "d_model": 128,
+        "head_dim": 32,
+        "heads": 4,
+        "mlp_hidden": 256,
+        "seq": 16
+      },
+      "nodes": 90,
+      "gemm_macs": 2686976,
+      "runs": 4,
+      "seconds_avg": 0.408095125,
+      "macs_per_second": 6584190.389434326
+    },
+    {
+      "name": "medium",
+      "config": {
+        "d_model": 512,
+        "head_dim": 64,
+        "heads": 8,
+        "mlp_hidden": 2048,
+        "seq": 64
+      },
+      "nodes": 166,
+      "gemm_macs": 272629760,
+      "runs": 3,
+      "seconds_avg": 12.968545933333333,
+      "macs_per_second": 21022384.575841602
+    }
+  ],
+  "date": "2026-10-04",
+  "environment": {
+    "arch": "amd64",
+    "cpu_count": 12,
+    "go": "go1.24.1",
+    "note": "single-threaded scalar reference path (the protocol reference; no GPU, no threads)",
+    "os": "windows"
+  },
+  "gpu": {
+    "reason": "no GPU backend is part of CANONICAL_GRAPH_V1 v1; the Python/Go references define bit-exactness and a GPU backend must reproduce them before it can be admitted",
+    "status": "NOT TESTED"
+  },
+  "phase": "F",
+  "real_model_block": {
+    "reason": "no pinned open-model block was converted; see docs/transformer-block-v1.md for the conversion plan",
+    "status": "NOT TESTED"
+  },
+  "watcher": {
+    "reason": "graph watcher fast-verification used the Phase E GEMM watcher path only; the block-level watcher E2E (Phase F DoD) was not run in this milestone",
+    "status": "NOT TESTED"
+  }
+}

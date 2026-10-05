@@ -1,0 +1,130 @@
+{
+  "repository": "Qwen/Qwen3-0.6B-Base",
+  "revision": "57ca99e94acb83175495aa2c6b6b0cc498170924",
+  "revision_source": "explicit pin (never main/latest/floating tags)",
+  "license": "apache-2.0",
+  "trust_remote_code": false,
+  "files": {
+    "README.md": {
+      "bytes": 2856,
+      "sha256": "f9e5172e7588b339f3ade2d9308ef07eae7ef2e079dad7a3466c97f5a0b8d81a"
+    },
+    "config.json": {
+      "bytes": 727,
+      "sha256": "504a6b58c4271583724e66584b6b7698aea18450209df6b2f7582df0e89cee59"
+    },
+    "generation_config.json": {
+      "bytes": 138,
+      "sha256": "8c970692323e3ea0e9b8b0a4dca79388d31226e41f83c9fd6014804280ebf6e8"
+    },
+    "merges.txt": {
+      "bytes": 1671853,
+      "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+    },
+    "model.safetensors": {
+      "bytes": 1192135096,
+      "sha256": "cd2a512003e2f9f3cd3c32a9c3573f820bb28c940f73c57b1ddaa983d9223eba"
+    },
+    "tokenizer.json": {
+      "bytes": 7031645,
+      "sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539"
+    },
+    "tokenizer_config.json": {
+      "bytes": 9675,
+      "sha256": "5a7303fcb1a27ede63134a2cbd61d5282c247ca6d769ce4746d4ffa124aedd63"
+    },
+    "vocab.json": {
+      "bytes": 2776833,
+      "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+    },
+    ".cache/huggingface/CACHEDIR.TAG": {
+      "bytes": 195,
+      "sha256": "e8893e2dcb3f4545ef67a0a5b7b769113d38eef1aa61c7c7ba14659b02af955f"
+    },
+    ".cache/huggingface/download/README.md.metadata": {
+      "bytes": 104,
+      "sha256": "31cb18acb18b2af970fdddef1ca22e9363f79c359dc14c2ed560f3e48f0251c4"
+    },
+    ".cache/huggingface/download/config.json.metadata": {
+      "bytes": 104,
+      "sha256": "0dadb0aa455c0c92040bb967ec71ce82a9473786acbae40def2c96f27d8e5a0a"
+    },
+    ".cache/huggingface/download/generation_config.json.metadata": {
+      "bytes": 104,
+      "sha256": "44c85a63754847e9b4912c26122581a6850f3ec822fffa9dbd77ee3e744d537a"
+    },
+    ".cache/huggingface/download/merges.txt.metadata": {
+      "bytes": 104,
+      "sha256": "10b6f1435ed1561a2772d26fcdcc4a0df7c62efb872b5ff343ccf2fb4d7773b8"
+    },
+    ".cache/huggingface/download/model.safetensors.lock": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    ".cache/huggingface/download/tokenizer.json.metadata": {
+      "bytes": 104,
+      "sha256": "83c963ecdd2b714fc6aeada80069f0e39bc87f3898c3375a83c046f1594a9c9a"
+    },
+    ".cache/huggingface/download/tokenizer_config.json.metadata": {
+      "bytes": 104,
+      "sha256": "73e205ac2b0298996510e8e841d60222a7027192437c3df9f783c9f7fd5b58a7"
+    },
+    ".cache/huggingface/download/vocab.json.metadata": {
+      "bytes": 104,
+      "sha256": "38c2ef83e12112c88dbe954d016b2d151e36ecbb13f0e6f9dce82fb1b34fa61c"
+    },
+    ".cache/huggingface/download/xGOKKLRSlIhH692hSVvI1-gpoa8=.cd2a512003e2f9f3cd3c32a9c3573f820bb28c940f73c57b1ddaa983d9223eba.11ae8731.incomplete": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    ".cache/huggingface/download/xGOKKLRSlIhH692hSVvI1-gpoa8=.cd2a512003e2f9f3cd3c32a9c3573f820bb28c940f73c57b1ddaa983d9223eba.288a1dcf.incomplete": {
+      "bytes": 411866740,
+      "sha256": "62dbaeb002a32e18e50eb9653f18ed831a6b57f55e2278e3fcccd91aff418707"
+    },
+    ".cache/huggingface/trees/57ca99e94acb83175495aa2c6b6b0cc498170924.json": {
+      "bytes": 1201,
+      "sha256": "ce7d6a8c931521e3034422db236a11b64e11e5990161288cb2c15cef00802460"
+    }
+  },
+  "huggingface_hub": "1.33.0",
+  "transformers": "5.18.0",
+  "torch": "2.14.1+cpu",
+  "repo_file_list": [
+    {
+      "name": ".gitattributes",
+      "bytes": 1519
+    },
+    {
+      "name": "README.md",
+      "bytes": 2856
+    },
+    {
+      "name": "config.json",
+      "bytes": 727
+    },
+    {
+      "name": "generation_config.json",
+      "bytes": 138
+    },
+    {
+      "name": "merges.txt",
+      "bytes": 1671853
+    },
+    {
+      "name": "model.safetensors",
+      "bytes": 1192135096
+    },
+    {
+      "name": "tokenizer.json",
+      "bytes": 7031645
+    },
+    {
+      "name": "tokenizer_config.json",
+      "bytes": 9675
+    },
+    {
+      "name": "vocab.json",
+      "bytes": 2776833
+    }
+  ]
+}

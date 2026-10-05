@@ -1,0 +1,115 @@
+{
+  "model": "Qwen/Qwen3-0.6B-Base",
+  "revision": "57ca99e94acb83175495aa2c6b6b0cc498170924",
+  "layer": 0,
+  "sequence_length": 16,
+  "calibration_set": "testdata/qwen3_f1_calibration.json",
+  "eval_set": "testdata/qwen3_f1_eval.json",
+  "graph_id": "89f300d87da38e85d6cfc7e8e74ea2d14b604a29a90a90658be0ca82b1431bf5",
+  "thresholds": {
+    "worst_cosine": 0.995,
+    "worst_max_abs": 0.05
+  },
+  "per_case": [
+    {
+      "case": 0,
+      "cosine": 0.9942158409118079,
+      "max_abs": 0.33355373061794147,
+      "mean_abs": 0.0236845234739604
+    },
+    {
+      "case": 1,
+      "cosine": 0.9951364839735383,
+      "max_abs": 0.2975281817003488,
+      "mean_abs": 0.021699977982856444
+    },
+    {
+      "case": 2,
+      "cosine": 0.9954346931963974,
+      "max_abs": 0.1741345974168338,
+      "mean_abs": 0.02008208865717779
+    },
+    {
+      "case": 3,
+      "cosine": 0.9950417614224479,
+      "max_abs": 0.23275219924764023,
+      "mean_abs": 0.02265392054464724
+    },
+    {
+      "case": 4,
+      "cosine": 0.9937063948840468,
+      "max_abs": 0.19169048712938874,
+      "mean_abs": 0.023859968581288336
+    },
+    {
+      "case": 5,
+      "cosine": 0.9936344937049869,
+      "max_abs": 0.22330458807997,
+      "mean_abs": 0.02356909964437635
+    },
+    {
+      "case": 6,
+      "cosine": 0.9954922094287904,
+      "max_abs": 0.22864113297812594,
+      "mean_abs": 0.021424412456038683
+    },
+    {
+      "case": 7,
+      "cosine": 0.9942712547579234,
+      "max_abs": 0.14870144540844965,
+      "mean_abs": 0.023287953527033643
+    },
+    {
+      "case": 8,
+      "cosine": 0.9953604798818232,
+      "max_abs": 0.28244596320253734,
+      "mean_abs": 0.021064487221193345
+    },
+    {
+      "case": 9,
+      "cosine": 0.9942154392149198,
+      "max_abs": 0.2744718797107133,
+      "mean_abs": 0.02254521595141226
+    },
+    {
+      "case": 10,
+      "cosine": 0.994093754221988,
+      "max_abs": 0.2744702416703313,
+      "mean_abs": 0.023279700902452224
+    },
+    {
+      "case": 11,
+      "cosine": 0.9950691499871825,
+      "max_abs": 0.4232528783302132,
+      "mean_abs": 0.022510081471300576
+    },
+    {
+      "case": 12,
+      "cosine": 0.994196878873371,
+      "max_abs": 0.21107248972740855,
+      "mean_abs": 0.023552602381608456
+    },
+    {
+      "case": 13,
+      "cosine": 0.9948423286778736,
+      "max_abs": 0.18636221540689846,
+      "mean_abs": 0.022388177635151107
+    },
+    {
+      "case": 14,
+      "cosine": 0.993290245769499,
+      "max_abs": 0.23772827962522747,
+      "mean_abs": 0.024177664130092275
+    },
+    {
+      "case": 15,
+      "cosine": 0.9950835466418269,
+      "max_abs": 0.36811237301438204,
+      "mean_abs": 0.02307243643014298
+    }
+  ],
+  "worst_cosine": 0.993290245769499,
+  "worst_max_abs": 0.4232528783302132,
+  "verdict": "FAIL",
+  "f2a_note": "these numbers are the CORRECTED F.1-policy measurement from the F.2A round: the F.1 converter's scores dequant used global q/k steps while the operands were quantized with per-head steps (logits scaled by the step ratio). The historical (buggy) measurement 0.957/1.91 remains on the F.1 branch; the corrected values here are 0.9933/0.423."
+}

@@ -1,0 +1,339 @@
+{
+ "phase": "F.5B.2",
+ "environment": {
+  "platform": "Linux-6.8.0-49-generic-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "torch": "2.8.0+cu128",
+  "cuda_runtime": "12.8",
+  "cuda_available": true,
+  "device": "cuda",
+  "gpu_name": "NVIDIA A40",
+  "compute_capability": "8.6",
+  "sm_count": 84,
+  "total_memory_gb": 44.4,
+  "device_index": null,
+  "nvidia_smi": "NVIDIA A40, 570.211.01, 8.6"
+ },
+ "cuda_probe": {
+  "floor_div_int64_ok": true,
+  "int_mm_m_rows_probe": {
+   "16": "RuntimeError: self.size(0) needs to be greater than 16, but got 16",
+   "17": "ok",
+   "24": "ok",
+   "32": "ok"
+  },
+  "padding_rule": "M -> max(32, align16); K -> max(16, align16); N -> max(16, align16)",
+  "padding_rule_justification": "torch._int_mm on CUDA requires left-operand M > 16 (see probe); zero padding is mathematically inert so exactness is preserved"
+ },
+ "float_audit": {
+  "files": {
+   "gpu/f5b2/f5b2_kernels.cu": {},
+   "gpu/f5b1/f5b1_kernels.cu": {},
+   "gpu/f5b2/f5b2_ext.py": {},
+   "gpu/f5b2/f5b2_block.py": {}
+  },
+  "total_hits": {
+   "float(": 0,
+   "float32": 0,
+   "float64": 0,
+   "half(": 0,
+   "bfloat16": 0,
+   ".to(torch.float": 0,
+   "expf": 0,
+   "sqrtf": 0,
+   "rsqrtf": 0,
+   " sin(": 0,
+   " cos(": 0
+  },
+  "canonical_float_ops": 0,
+  "note": "hits are listed verbatim; the canonical path contains no floating-point arithmetic (integer kernels + int8 tensor-core MMA only)"
+ },
+ "canonical_vectors": {
+  "results": [
+   {
+    "op": "ADD_FIXED_V1",
+    "name": "add_fixed_basic",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "ADD_FIXED_V1",
+    "name": "add_fixed_saturating",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "MUL_FIXED_V1",
+    "name": "mul_fixed_basic",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "REQUANTIZE_V1",
+    "name": "requantize_int8",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "REQUANTIZE_V1",
+    "name": "requantize_fx",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "RMSNORM_FIXED_V1",
+    "name": "rmsnorm_rows",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "SILU_FIXED_V1",
+    "name": "silu_range",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "SOFTMAX_FIXED_V1",
+    "name": "softmax_rows",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "ROPE_FIXED_V1",
+    "name": "rope_pairs",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "GEMM_INT8_V1",
+    "name": "gemm_plain",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "GEMM_INT8_V1",
+    "name": "gemm_transpose_b",
+    "ok": true,
+    "mismatches": 0
+   }
+  ],
+  "all_exact": true,
+  "source": "canonical_vectors.json"
+ },
+ "adversarial_vectors": {
+  "results": [
+   {
+    "op": "RMSNORM",
+    "name": "rmsnorm_all_equal",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "RMSNORM",
+    "name": "rmsnorm_min_int32",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "RMSNORM",
+    "name": "rmsnorm_max_int32",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "RMSNORM",
+    "name": "rmsnorm_mixed_extremes",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "RMSNORM",
+    "name": "rmsnorm_zeros_row",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "REQUANTIZE",
+    "name": "requant_ties_shift20",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "REQUANTIZE",
+    "name": "requant_ties_shift30",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "REQUANTIZE",
+    "name": "requant_clamp_saturation",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "SOFTMAX",
+    "name": "softmax_one_dominant",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "SOFTMAX",
+    "name": "softmax_all_equal",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "SOFTMAX",
+    "name": "softmax_very_negative",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "SOFTMAX",
+    "name": "softmax_min_int32",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "SOFTMAX",
+    "name": "softmax_mixed",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "SILU",
+    "name": "silu_branches",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "MUL",
+    "name": "mul_ties",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "ADD",
+    "name": "add_saturation",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "op": "ADD",
+    "name": "add_neg_saturation",
+    "ok": true,
+    "mismatches": 0
+   }
+  ],
+  "all_exact": true,
+  "source": "f5b2_adversarial_vectors.json"
+ },
+ "wide_gemm_vectors": {
+  "results": [
+   {
+    "name": "boundary_all_max",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "name": "boundary_all_min",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "name": "small_random",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "name": "transpose_b",
+    "ok": true,
+    "mismatches": 0
+   },
+   {
+    "name": "k1",
+    "ok": true,
+    "mismatches": 0
+   }
+  ],
+  "all_exact": true,
+  "source": "f5b_wide_gemm_vectors.json (A13W10 GEMM gate)"
+ },
+ "operator_gate_pass": true,
+ "gemm_regression": {
+  "nodes": 83,
+  "exact": 83,
+  "all_exact": true,
+  "bad": []
+ },
+ "full_block": {
+  "nodes_total": 310,
+  "nodes_exact": 310,
+  "roots_exact": 310,
+  "final_exact": true,
+  "final_root_ok": true,
+  "per_operator": {
+   "RMSNORM": {
+    "nodes": 26,
+    "exact": 26,
+    "mismatch": 0,
+    "root_mismatch": 0
+   },
+   "REQUANTIZE": {
+    "nodes": 126,
+    "exact": 126,
+    "mismatch": 0,
+    "root_mismatch": 0
+   },
+   "GEMM": {
+    "nodes": 83,
+    "exact": 83,
+    "mismatch": 0,
+    "root_mismatch": 0
+   },
+   "ROPE": {
+    "nodes": 24,
+    "exact": 24,
+    "mismatch": 0,
+    "root_mismatch": 0
+   },
+   "ADD": {
+    "nodes": 33,
+    "exact": 33,
+    "mismatch": 0,
+    "root_mismatch": 0
+   },
+   "SOFTMAX": {
+    "nodes": 16,
+    "exact": 16,
+    "mismatch": 0,
+    "root_mismatch": 0
+   },
+   "SILU": {
+    "nodes": 1,
+    "exact": 1,
+    "mismatch": 0,
+    "root_mismatch": 0
+   },
+   "MUL": {
+    "nodes": 1,
+    "exact": 1,
+    "mismatch": 0,
+    "root_mismatch": 0
+   }
+  },
+  "all_exact": true,
+  "graph_id": "cdad39513b76ab3dac07aed9014bcd6bd794af7f54cee5a17da0d3a62547bfb0",
+  "policy_id": "eb9a9fef403c95cd0ab876893acf14e02928245306f1d1cc6e12f4d99c5eb7a0",
+  "audit": {
+   "gpu_nodes_executed": 310,
+   "cpu_arithmetic_nodes": 0,
+   "unsupported_nodes": 0,
+   "wall_total_ms": 52.721,
+   "wall_gemm_ms": 46.269,
+   "wall_non_gemm_ms": 4.38,
+   "note": "wall-clock host timings include dispatch; recorded per spec section 55/88 with no acceptance gate"
+  },
+  "first_bad_nodes": []
+ }
+}

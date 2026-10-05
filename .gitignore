@@ -22,3 +22,14 @@ Thumbs.db
 .idea/
 .vscode/
 deploy/runpod_gemm/gemmv1.tgz
+
+# Phase E/F runtime artifacts (never commit blobs or logs)
+da-data/
+*.log
+runtime/
+tmp/
+.proto-out/
+models/
+testdata/f5c_v2_inputs/
+testdata/f5c_bundle_v2_real.bin
+testdata/f5c_tmp/

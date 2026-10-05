@@ -1,0 +1,42 @@
+{
+ "note": "V1 values must reproduce byte-for-byte on every future tree; V2 values freeze the wide-integer family at its introduction.",
+ "v1": {
+  "commit_preimage": "9180555b23671d46533b7a9bd1eb2a2f0ed6d7271b0c05baf2a463a4508073c5",
+  "commit_version": "1.0.0",
+  "graph_id": "f1ba2ebb09f54fd37cf779db7d802380de0effa31a0b1e58047cc1d563c43315",
+  "receipt_domain": "PRISMA_GRAPH_RECEIPT_V1\\x00",
+  "receipt_id": "51f0a41440b749069dcb66b8163d57f21ec6613909c383c3d2a2474bd9cae971",
+  "signature_domain": "PRISMA_CANONICAL_SIG_V1\\x00",
+  "tensor_roots": [
+   {
+    "name": "q12_20_multi_chunk",
+    "root": "c369246176de438465292c5df19dd97a41cf32e15e772ad09ef1f8ebb9a2158e"
+   },
+   {
+    "name": "int8_odd",
+    "root": "91fd6c2529a8acc75faa72e958cbe00550d3198963bf90b741dcadf73cad29dc"
+   },
+   {
+    "name": "accum_single",
+    "root": "32c2f10d3817727abad811f2292b517d63579d2caddf805845e12f81d8b87a93"
+   },
+   {
+    "name": "int8_exact_chunk",
+    "root": "41688eb5f303e4d4170ef0e8d1ec83b10bb75fad223391615c9ef0dde9cb4a4c"
+   },
+   {
+    "name": "q12_20_three_chunks",
+    "root": "4dba5a115858c26504650fec21c89e50d628cbefff4b6a01ed353fc7f475ff07"
+   }
+  ]
+ },
+ "v2": {
+  "a13_probe_root": "3408eed9c7a00e8e8ae60a36745b5a74d8ad9d4cbb534d665100fb0dfeed553f",
+  "commit_preimage": "4967fb8b51e9b18d47758890d4f5d46ad5e84906d84d3a6e8b74f3354a1dd00c",
+  "commit_version": "3.0.0",
+  "graph_id_v2": "8fb86087697e277602bb4b2088ba48eb4172c21d9c4f83914582f2cbf00d4def",
+  "policy_id": "eb9a9fef403c95cd0ab876893acf14e02928245306f1d1cc6e12f4d99c5eb7a0",
+  "signature_domain": "PRISMA_CANONICAL_SIG_V3\\x00"
+ },
+ "version": "f5c-legacy-golden-v1"
+}

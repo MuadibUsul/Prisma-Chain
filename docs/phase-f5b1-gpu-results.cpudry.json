@@ -1,0 +1,28 @@
+{
+ "phase": "F.5B.1",
+ "environment": {
+  "platform": "Windows-10-10.0.22000-SP0",
+  "python": "3.10.6",
+  "torch": "2.14.1+cpu",
+  "cuda_runtime": null,
+  "cuda_available": false,
+  "device": "cpu"
+ },
+ "cuda_probe": {
+  "note": "CPU dry-run; CUDA probes skipped"
+ },
+ "full_block_gpu": "NOT STARTED (gated on GEMM performance PASS, spec section 81)",
+ "extension": {
+  "built": false,
+  "note": "CPU dry-run: kernel extension and GPU candidates are NOT TESTED"
+ },
+ "correctness": {
+  "note": "NOT TESTED on CPU"
+ },
+ "launch_profile": {
+  "note": "NOT TESTED on CPU"
+ },
+ "benchmark": {
+  "note": "NOT TESTED on CPU"
+ }
+}

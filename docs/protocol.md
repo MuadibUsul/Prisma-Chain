@@ -113,3 +113,15 @@ Base-engine issuance and genesis locked-reserve release use distinct ledgers.
 Tests must assert the supply equation after every transition:
 
 `end_supply = start_supply + newly_minted - burned`.
+
+
+## Phase E: permissionless verification
+
+Verification rights are open: any account with a valid key and bond can
+register as a DA provider, run a watcher, open a challenge, answer a
+sampling challenge or progress a dispute; no project-owned allowlist
+exists in consensus. DA_REPLICA_V1 reuses the GEMM `output_root` as its
+only commitment (no second Merkle root) and defines canonical
+`DAAttestation` objects plus a chain-derived sampling-tile challenge with
+an objective deadline timeout. A devnet-only proposer omission harness
+exists to test challenge inclusion and is off by default.

@@ -1,0 +1,58 @@
+{
+  "chain_id": "prisma-mv-1",
+  "validators": {
+    "validator-a": {
+      "node_id": "3b3ce3d66c048f5e979babaa9fe4c315c921cab1",
+      "rpc": "http://127.0.0.1:26661",
+      "validator_address": "1955DAF0F336F70A320512A1B004E49CBD7D252F",
+      "voting_power": [
+        "1",
+        "1",
+        "1",
+        "1"
+      ],
+      "height": 772,
+      "app_hash": "27D001D57F83B0F305870125A69CEE254C9254455D791FB24FB7FAFEF7872CCB"
+    },
+    "validator-b": {
+      "node_id": "97ea5b07619cb04309e5e8d3ef4c90e5097f289d",
+      "rpc": "http://127.0.0.1:26662",
+      "validator_address": "D39BCF23EB9C0130B3D915DEB51AB66F84889B2E",
+      "voting_power": [
+        "1",
+        "1",
+        "1",
+        "1"
+      ],
+      "height": 772,
+      "app_hash": "27D001D57F83B0F305870125A69CEE254C9254455D791FB24FB7FAFEF7872CCB"
+    },
+    "validator-c": {
+      "node_id": "dec014d92f91eb3644d7d8db3a46022afabc9bf5",
+      "rpc": "http://127.0.0.1:26663",
+      "validator_address": "10E09ADFD7C8FD1BAC87B6ED79D35E00621F9A62",
+      "voting_power": [
+        "1",
+        "1",
+        "1",
+        "1"
+      ],
+      "height": 772,
+      "app_hash": "27D001D57F83B0F305870125A69CEE254C9254455D791FB24FB7FAFEF7872CCB"
+    },
+    "validator-d": {
+      "node_id": "c1413f2279cb1c33164f5bc6e1cb7742e307da87",
+      "rpc": "http://127.0.0.1:26664",
+      "validator_address": "FB2C2AA4A517BB9D69E20222905ED23E9A8902FB",
+      "voting_power": [
+        "1",
+        "1",
+        "1",
+        "1"
+      ],
+      "height": 772,
+      "app_hash": "27D001D57F83B0F305870125A69CEE254C9254455D791FB24FB7FAFEF7872CCB"
+    }
+  },
+  "converged": true
+}

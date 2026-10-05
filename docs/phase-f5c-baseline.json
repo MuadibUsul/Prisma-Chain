@@ -1,0 +1,34 @@
+{
+ "phase": "F.5C",
+ "task": "A0-01",
+ "generated_at": "2026-10-04T20:08:37.800571+00:00",
+ "branch": "protocol/transformer-phase-f5c-wide-integer",
+ "head": "fdd92d467a76d45ed97ef1a70664c9b4a85d5f35",
+ "working_tree_clean": false,
+ "uncommitted_entries": [
+  "?? compute/canonical/legacy_golden_test.go",
+  "?? testdata/f5c_legacy_golden.json",
+  "?? tools/f5c_genlegacy/"
+ ],
+ "toolchain": {
+  "go": "go version go1.24.1 windows/amd64",
+  "python": "Python 3.10.6",
+  "protoc": "29.3 (E:/tools/protoc29)"
+ },
+ "tests": {
+  "root_module": {
+   "cmd": "go test ./...",
+   "summary": "?   \tprismachain/cmd/prisma-gemm\t[no test files]\nok  \tprismachain/cmd/prisma-vm\t(cached)\nok  \tprismachain/compute/canonical\t38.111s\nok  \tprismachain/compute/gemmv1\t(cached)\nok  \tprismachain/compute/gemmv1/verify\t(cached)\n?   \tprismachain/tools/f5c_canondump\t[no test files]\n?   \tprismachain/tools/f5c_genlegacy\t[no test files]\n?   \tprismachain/tools/f5c_replay\t[no test files]\n?   \tprismachain/tools/gen_invsqrt_table\t[no test files]\nok  \tprismachain/vm\t(cached)"
+  },
+  "chain_module": {
+   "cmd": "cd chain && go test ./...",
+   "summary": "?   \tprismachain/chain/app\t[no test files]\n?   \tprismachain/chain/cmd/prismad\t[no test files]\n?   \tprismachain/chain/cmd/prismad/cmd\t[no test files]\nok  \tprismachain/chain/x/compute\t(cached)\n?   \tprismachain/chain/x/compute/types\t[no test files]"
+  },
+  "python_canonical": {
+   "cmd": "python compute/canonical/python/test_canonical_ref.py",
+   "summary": "OK"
+  }
+ },
+ "all_green": true,
+ "note": "Baseline for F.5C A0/A1/A2 work. Any future failure compares against this snapshot."
+}

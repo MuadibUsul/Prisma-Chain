@@ -1,0 +1,31 @@
+{
+ "generation_seed": 20261006,
+ "seq_len": 16,
+ "overlap_checks": {
+  "qwen3_f1_calibration": 0,
+  "qwen3_f1_eval": 0,
+  "qwen3_f2a_calibration": 0,
+  "qwen3_f2a_tuning": 0,
+  "qwen3_f2a_heldout": 0,
+  "qwen3_f3a_calibration": 0,
+  "qwen3_f3a_selection": 0,
+  "qwen3_f3a_heldout": 0
+ },
+ "files": {
+  "qwen3_f4a_calibration.json": {
+   "sha256": "df2150dea6f5f564209d14c43905fc4757d88e09c4a0c81a3d230a07ac2d425e",
+   "count": 64,
+   "seq_len": 16
+  },
+  "qwen3_f4a_selection.json": {
+   "sha256": "7131609259298ef85ecfd8cd0a88341b70a87b28edcd4756c9b24ea3ad2715fa",
+   "count": 64,
+   "seq_len": 16
+  },
+  "qwen3_f4a_heldout.json": {
+   "sha256": "7020db833dddb0a611a4d230de004cde3d0acafbab28f9fd5cd21679fcf52bb0",
+   "count": 64,
+   "seq_len": 16
+  }
+ }
+}

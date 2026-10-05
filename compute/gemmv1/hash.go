@@ -98,3 +98,17 @@ func checkHashField(field string, b []byte) error {
 	}
 	return nil
 }
+
+// signProtocolObject signs a canonical protocol object with its signature
+// field left empty, then stores the Ed25519 signature.
+func signProtocolObject(v any, sigField *[]byte, key ed25519.PrivateKey) error {
+	*sigField = nil
+	sigBytes, err := SignedBytes(v)
+	if err != nil {
+		return err
+	}
+	*sigField = SignObject(key, sigBytes)
+	return nil
+}
+
+const ed25519SigSize = ed25519.SignatureSize

@@ -1,0 +1,677 @@
+{
+ "gemm_nodes": 83,
+ "nodes": [
+  {
+   "node_id": 2,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 7,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 12,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 17,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 22,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 27,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 32,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 37,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 42,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 47,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 52,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 57,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 62,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 67,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 72,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 77,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 82,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 87,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 89,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 94,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 96,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 101,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 103,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 108,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 110,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 115,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 117,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 122,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 124,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 129,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 131,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 136,
+   "M": 16,
+   "N": 128,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 138,
+   "M": 16,
+   "N": 16,
+   "K": 128,
+   "transpose_b": true,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 143,
+   "M": 16,
+   "N": 128,
+   "K": 16,
+   "transpose_b": false,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 145,
+   "M": 16,
+   "N": 1024,
+   "K": 128,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 147,
+   "M": 16,
+   "N": 16,
+   "K": 128,
+   "transpose_b": true,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 152,
+   "M": 16,
+   "N": 128,
+   "K": 16,
+   "transpose_b": false,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 154,
+   "M": 16,
+   "N": 1024,
+   "K": 128,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 156,
+   "M": 16,
+   "N": 16,
+   "K": 128,
+   "transpose_b": true,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 161,
+   "M": 16,
+   "N": 128,
+   "K": 16,
+   "transpose_b": false,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 163,
+   "M": 16,
+   "N": 1024,
+   "K": 128,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 165,
+   "M": 16,
+   "N": 16,
+   "K": 128,
+   "transpose_b": true,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 170,
+   "M": 16,
+   "N": 128,
+   "K": 16,
+   "transpose_b": false,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 172,
+   "M": 16,
+   "N": 1024,
+   "K": 128,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 174,
+   "M": 16,
+   "N": 16,
+   "K": 128,
+   "transpose_b": true,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 179,
+   "M": 16,
+   "N": 128,
+   "K": 16,
+   "transpose_b": false,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 181,
+   "M": 16,
+   "N": 1024,
+   "K": 128,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 183,
+   "M": 16,
+   "N": 16,
+   "K": 128,
+   "transpose_b": true,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 188,
+   "M": 16,
+   "N": 128,
+   "K": 16,
+   "transpose_b": false,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 190,
+   "M": 16,
+   "N": 1024,
+   "K": 128,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 192,
+   "M": 16,
+   "N": 16,
+   "K": 128,
+   "transpose_b": true,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 197,
+   "M": 16,
+   "N": 128,
+   "K": 16,
+   "transpose_b": false,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 199,
+   "M": 16,
+   "N": 1024,
+   "K": 128,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 201,
+   "M": 16,
+   "N": 16,
+   "K": 128,
+   "transpose_b": true,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 206,
+   "M": 16,
+   "N": 128,
+   "K": 16,
+   "transpose_b": false,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 208,
+   "M": 16,
+   "N": 1024,
+   "K": 128,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 210,
+   "M": 16,
+   "N": 16,
+   "K": 128,
+   "transpose_b": true,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 215,
+   "M": 16,
+   "N": 128,
+   "K": 16,
+   "transpose_b": false,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 217,
+   "M": 16,
+   "N": 1024,
+   "K": 128,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 219,
+   "M": 16,
+   "N": 16,
+   "K": 128,
+   "transpose_b": true,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 224,
+   "M": 16,
+   "N": 128,
+   "K": 16,
+   "transpose_b": false,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 226,
+   "M": 16,
+   "N": 1024,
+   "K": 128,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 228,
+   "M": 16,
+   "N": 16,
+   "K": 128,
+   "transpose_b": true,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 233,
+   "M": 16,
+   "N": 128,
+   "K": 16,
+   "transpose_b": false,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 235,
+   "M": 16,
+   "N": 1024,
+   "K": 128,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 237,
+   "M": 16,
+   "N": 16,
+   "K": 128,
+   "transpose_b": true,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 242,
+   "M": 16,
+   "N": 128,
+   "K": 16,
+   "transpose_b": false,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 244,
+   "M": 16,
+   "N": 1024,
+   "K": 128,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 246,
+   "M": 16,
+   "N": 16,
+   "K": 128,
+   "transpose_b": true,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 251,
+   "M": 16,
+   "N": 128,
+   "K": 16,
+   "transpose_b": false,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 253,
+   "M": 16,
+   "N": 1024,
+   "K": 128,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 255,
+   "M": 16,
+   "N": 16,
+   "K": 128,
+   "transpose_b": true,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 260,
+   "M": 16,
+   "N": 128,
+   "K": 16,
+   "transpose_b": false,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 262,
+   "M": 16,
+   "N": 1024,
+   "K": 128,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 264,
+   "M": 16,
+   "N": 16,
+   "K": 128,
+   "transpose_b": true,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 269,
+   "M": 16,
+   "N": 128,
+   "K": 16,
+   "transpose_b": false,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 271,
+   "M": 16,
+   "N": 1024,
+   "K": 128,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 273,
+   "M": 16,
+   "N": 16,
+   "K": 128,
+   "transpose_b": true,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 278,
+   "M": 16,
+   "N": 128,
+   "K": 16,
+   "transpose_b": false,
+   "logical_mac": 32768
+  },
+  {
+   "node_id": 280,
+   "M": 16,
+   "N": 1024,
+   "K": 128,
+   "transpose_b": false,
+   "logical_mac": 2097152
+  },
+  {
+   "node_id": 300,
+   "M": 16,
+   "N": 3072,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 50331648
+  },
+  {
+   "node_id": 303,
+   "M": 16,
+   "N": 3072,
+   "K": 1024,
+   "transpose_b": false,
+   "logical_mac": 50331648
+  },
+  {
+   "node_id": 307,
+   "M": 16,
+   "N": 1024,
+   "K": 3072,
+   "transpose_b": false,
+   "logical_mac": 50331648
+  }
+ ],
+ "deduplicated_shapes": [
+  "16x1024x128",
+  "16x1024x3072",
+  "16x128x1024",
+  "16x128x16",
+  "16x16x128T",
+  "16x3072x1024"
+ ]
+}

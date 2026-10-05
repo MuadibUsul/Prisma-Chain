@@ -1,0 +1,103 @@
+{
+  "protocol": "CANONICAL_MATH_V1",
+  "candidates": {
+    "Q16.16": {
+      "fractional_bits": 16,
+      "aggregate_worst_of_seeds": {
+        "rmsnorm": {
+          "max_abs_error": 0.03513374219259324,
+          "mean_abs_error": 0.0017530007852506575,
+          "min_cosine_similarity": 0.9999999999632404,
+          "max_squares_sum_bits": 61
+        },
+        "silu": {
+          "max_abs_error": 0.044153428385245275,
+          "mean_abs_error": 0.005876323788320463,
+          "min_cosine_similarity": 0.9999969906465719
+        },
+        "softmax": {
+          "max_abs_error": 0.03596589686683538,
+          "mean_abs_error": 0.0011299991664928855,
+          "min_cosine_similarity": 0.997103898191555
+        },
+        "rope": {
+          "max_abs_error": 6.0409002180072946e-05,
+          "mean_abs_error": 1.5983653275034704e-05,
+          "min_cosine_similarity": 0.9999999999190703
+        },
+        "range": {
+          "min": -32768.0,
+          "max": 32767.99998474121,
+          "resolution": 1.52587890625e-05
+        }
+      }
+    },
+    "Q12.20": {
+      "fractional_bits": 20,
+      "aggregate_worst_of_seeds": {
+        "rmsnorm": {
+          "max_abs_error": 0.0008243549855619925,
+          "mean_abs_error": 6.100344484246808e-05,
+          "min_cosine_similarity": 0.9999999999998695,
+          "max_squares_sum_bits": 69
+        },
+        "silu": {
+          "max_abs_error": 0.044142937967764806,
+          "mean_abs_error": 0.005874013260952283,
+          "min_cosine_similarity": 0.9999969904204707
+        },
+        "softmax": {
+          "max_abs_error": 0.03595826747230413,
+          "mean_abs_error": 0.0011293880835788676,
+          "min_cosine_similarity": 0.9971048524205667
+        },
+        "rope": {
+          "max_abs_error": 4.73918296695075e-06,
+          "mean_abs_error": 9.90826039108979e-07,
+          "min_cosine_similarity": 0.9999999999980392
+        },
+        "range": {
+          "min": -2048.0,
+          "max": 2047.9999990463257,
+          "resolution": 9.5367431640625e-07
+        }
+      }
+    },
+    "Q8.24": {
+      "fractional_bits": 24,
+      "aggregate_worst_of_seeds": {
+        "rmsnorm": {
+          "max_abs_error": 2.4558042710509653e-07,
+          "mean_abs_error": 4.397432879277775e-08,
+          "min_cosine_similarity": 0.9999999999999994,
+          "max_squares_sum_bits": 69
+        },
+        "silu": {
+          "max_abs_error": 0.044141924688803624,
+          "mean_abs_error": 0.005874087202394015,
+          "min_cosine_similarity": 0.9999969905039565
+        },
+        "softmax": {
+          "max_abs_error": 0.9090909361839294,
+          "mean_abs_error": 0.028919309904249856,
+          "min_cosine_similarity": 0.30151134457776363
+        },
+        "rope": {
+          "max_abs_error": 3.0004416018414304e-07,
+          "mean_abs_error": 6.441563441923874e-08,
+          "min_cosine_similarity": 0.9999999999999971
+        },
+        "range": {
+          "min": -128.0,
+          "max": 127.99999994039536,
+          "resolution": 5.960464477539063e-08
+        }
+      }
+    }
+  },
+  "seeds": [
+    7,
+    11,
+    13
+  ]
+}

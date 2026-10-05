@@ -1,0 +1,27 @@
+{
+ "phase": "F.5B.2",
+ "rmsnorm": {
+  "reduction": "per-row sum of (x_i * x_i) >> 20 in ascending index order (int64), sequential per thread; mean = sum // H; frozen invsqrt (16-entry table, exactly 4 Newton steps); MulFx(x, inv) then MulFx(., w)",
+  "canonical_chunk_param_note": "the vectors' 'chunk: 16' metadata does not change the arithmetic: integer addition is associative, and the GPU index-order sum matches the numpy reference bit-for-bit",
+  "atomics_used": false,
+  "deterministic_by_construction": true
+ },
+ "softmax": {
+  "reduction": "per-row max (order-free), saturating sub, frozen exp per element, sum in ascending index order (int64), ties-even division by the total",
+  "atomics_used": false,
+  "deterministic_by_construction": true
+ },
+ "sm86_result": {
+  "gpu": "A40",
+  "rmsnorm_nodes": 26,
+  "softmax_nodes": 16,
+  "all_exact": true
+ },
+ "sm89_result": {
+  "gpu": "RTX 2000 Ada",
+  "rmsnorm_nodes": 26,
+  "softmax_nodes": 16,
+  "all_exact": true
+ },
+ "cross_arch_exact": true
+}

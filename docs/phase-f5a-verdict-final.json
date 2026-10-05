@@ -1,0 +1,23 @@
+{
+ "derived_from": {
+  "phase-f5a-heldout-results.json": "39abe886823a9e1f64f0d8b13f5f35436c92355d43075a73c4d71ba0602a38a0",
+  "phase-f5a-accumulator-safety.json": "2874df81579baa38939ce773e96aba46cef8aff352ba2e432af6ccc86b25fc33",
+  "phase-f5a-requant-bounds.json": "4de326ad912bcd21c6d307719215ad96d63f170834e32e1cd79514dd5f832bc1",
+  "phase-f5a-freivalds-bounds.json": "225d17eba07515d42bcd696ad053a46a3299f50958a43277581c13d7da03f750"
+ },
+ "derivation": "mechanical: no heldout re-run, no PolicyID/scale/clamp/bit/accuracy change",
+ "winner": "A13W10",
+ "worst_cosine": 0.9999123540730438,
+ "worst_max_abs": 0.038933493885028536,
+ "count_gt_005": 0,
+ "max_safe_k32": 1023,
+ "max_safe_k64": 4398046511103,
+ "int64_acc_safe": true,
+ "requant_int64_safe": true,
+ "requant_max_product_bits": 47,
+ "freivalds_int64_safe": true,
+ "freivalds_required_signed_bits": 46,
+ "policy_id": "eb9a9fef403c95cd0ab876893acf14e02928245306f1d1cc6e12f4d99c5eb7a0",
+ "final_verdict": "PASS",
+ "note": "the per-result max_safe_k64 field inside the frozen heldout JSON carries the INT32 value (1023) from the pre-correction classification; this artifact is the canonical evidence and supersedes that field without rewriting the original file"
+}

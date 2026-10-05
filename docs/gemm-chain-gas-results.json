@@ -1,0 +1,76 @@
+{
+  "arbitration_mac": 512,
+  "fraud_flow": [
+    {
+      "phase": "PostGEMMTask",
+      "gas_units": 32417,
+      "wall_ms": 2.999
+    },
+    {
+      "phase": "AcceptGEMMTask",
+      "gas_units": 68706,
+      "wall_ms": 0
+    },
+    {
+      "phase": "SubmitGEMMResult",
+      "gas_units": 55545,
+      "wall_ms": 0
+    },
+    {
+      "phase": "OpenGEMMChallenge",
+      "gas_units": 114890,
+      "wall_ms": 0
+    },
+    {
+      "phase": "CommitGEMMTrace(worker)",
+      "gas_units": 119486,
+      "wall_ms": 0.999
+    },
+    {
+      "phase": "CommitGEMMTrace(challenger)",
+      "gas_units": 248494,
+      "wall_ms": 0
+    },
+    {
+      "phase": "BisectionRounds",
+      "gas_units": 1914373,
+      "wall_ms": 0.999
+    },
+    {
+      "phase": "ArbitrateGEMM",
+      "gas_units": 145797,
+      "wall_ms": 1.002,
+      "proof_depth": 4,
+      "witness_bytes": 384
+    }
+  ],
+  "honest_flow": [
+    {
+      "phase": "PostGEMMTask",
+      "gas_units": 32417,
+      "wall_ms": 1.996
+    },
+    {
+      "phase": "AcceptAndSubmit",
+      "gas_units": 124251,
+      "wall_ms": 0
+    },
+    {
+      "phase": "Attestx2",
+      "gas_units": 154918,
+      "wall_ms": 1
+    },
+    {
+      "phase": "FinalizeGEMM",
+      "gas_units": 87035,
+      "wall_ms": 0
+    }
+  ],
+  "note": "gas units are consensus resource accounting under GEMMGasV1, not CPU nanoseconds; wall_ms is reported separately",
+  "schedule": "GEMMGasV1",
+  "shape": {
+    "k": 64,
+    "m": 64,
+    "n": 64
+  }
+}

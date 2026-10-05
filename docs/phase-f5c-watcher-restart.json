@@ -1,0 +1,5 @@
+{
+ "same_localization_across_runs": true,
+ "same_verdict_fresh_process_randomness": true,
+ "fresh_randomness_source": "csprng+context+nonce"
+}

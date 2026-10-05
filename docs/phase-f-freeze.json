@@ -1,0 +1,26 @@
+{
+ "phase": "F",
+ "decision": "PARTIAL",
+ "freeze_tag_created": false,
+ "reason": "The 4-validator devnet E2E scenarios (including block-level honest/fraud runs) are NOT TESTED; the phase's own rule forbids a pass tag in this state.",
+ "recorded": {
+  "branch": "protocol/transformer-phase-f5c-wide-integer",
+  "graph_id_v2": "8fb86087697e277602bb4b2088ba48eb4172c21d9c4f83914582f2cbf00d4def",
+  "policy_id": "eb9a9fef403c95cd0ab876893acf14e02928245306f1d1cc6e12f4d99c5eb7a0",
+  "protocol_versions": {
+   "tensor_v2": "CANONICAL_TENSOR_V2/1.0.0",
+   "graph_v2": "CANONICAL_GRAPH_V2/1.0.0",
+   "gemm_wide": "GEMM_A13W10_I64_V1/1.0.0",
+   "requant_wide": "REQUANTIZE_WIDE_V1/1.0.0",
+   "commit_v3": "3.0.0",
+   "receipt_v3": "3.0.0",
+   "freivalds_wide": "FREIVALDS_A13W10_I64_V1/1.0.0",
+   "graph_da_attestation": "GRAPH_DA_ATTESTATION_V2/1.0.0",
+   "bundle_v2": "GRAPH_VERIFICATION_BUNDLE_V2/1.0.0"
+  },
+  "v1_frozen": {"graph_id_v1": "f1ba2ebb09f54fd37cf779db7d802380de0effa31a0b1e58047cc1d563c43315",
+                "legacy_golden": "testdata/f5c_legacy_golden.json"},
+  "gpu_evidence": "F.5B.2 (FUSED_GPU_FEASIBLE_A13W10) on A40 + RTX 2000 Ada",
+  "next": "A6 devnet E2E, then freeze tag per docs/phase-f-final-report.md"
+ }
+}

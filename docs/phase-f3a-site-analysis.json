@@ -1,0 +1,280 @@
+{
+ "per_site": {
+  "h": {
+   "A8": {
+    "step_fx": 22645,
+    "step_real": 0.02159595489501953,
+    "mse": 4.947011112843841e-05,
+    "clipping_fraction": 7.62939453125e-05
+   },
+   "A9": {
+    "step_fx": 14547,
+    "step_real": 0.013873100280761719,
+    "mse": 1.620418957600849e-05,
+    "clipping_fraction": 0.0
+   },
+   "A10": {
+    "step_fx": 7259,
+    "step_real": 0.006922721862792969,
+    "mse": 3.9690376195791366e-06,
+    "clipping_fraction": 0.0
+   },
+   "A11": {
+    "step_fx": 3626,
+    "step_real": 0.0034580230712890625,
+    "mse": 9.96930061893733e-07,
+    "clipping_fraction": 0.0
+   },
+   "A12": {
+    "step_fx": 1813,
+    "step_real": 0.0017290115356445312,
+    "mse": 2.5079948093713196e-07,
+    "clipping_fraction": 0.0
+   },
+   "A13": {
+    "step_fx": 906,
+    "step_real": 0.0008640289306640625,
+    "mse": 6.157800105972787e-08,
+    "clipping_fraction": 0.0
+   }
+  },
+  "q": {
+   "A8": {
+    "step_fx": 245299,
+    "step_real": 0.23393535614013672,
+    "mse": 0.004861638587035477,
+    "clipping_fraction": 7.915496826171875e-05
+   },
+   "A9": {
+    "step_fx": 122169,
+    "step_real": 0.11650943756103516,
+    "mse": 0.0014438803013013945,
+    "clipping_fraction": 7.915496826171875e-05
+   },
+   "A10": {
+    "step_fx": 76672,
+    "step_real": 0.0731201171875,
+    "mse": 0.0004397543351833871,
+    "clipping_fraction": 0.0
+   },
+   "A11": {
+    "step_fx": 38299,
+    "step_real": 0.03652477264404297,
+    "mse": 0.00011037006423455,
+    "clipping_fraction": 0.0
+   },
+   "A12": {
+    "step_fx": 19140,
+    "step_real": 0.018253326416015625,
+    "mse": 2.785467927941093e-05,
+    "clipping_fraction": 0.0
+   },
+   "A13": {
+    "step_fx": 9568,
+    "step_real": 0.009124755859375,
+    "mse": 6.910747404696496e-06,
+    "clipping_fraction": 0.0
+   }
+  },
+  "k": {
+   "A8": {
+    "step_fx": 3719229,
+    "step_real": 3.546933174133301,
+    "mse": 0.7953056814066232,
+    "clipping_fraction": 5.7220458984375e-06
+   },
+   "A9": {
+    "step_fx": 1852322,
+    "step_real": 1.7665119171142578,
+    "mse": 0.23993527436291878,
+    "clipping_fraction": 5.7220458984375e-06
+   },
+   "A10": {
+    "step_fx": 924349,
+    "step_real": 0.8815279006958008,
+    "mse": 0.06387086566304366,
+    "clipping_fraction": 5.7220458984375e-06
+   },
+   "A11": {
+    "step_fx": 461723,
+    "step_real": 0.44033336639404297,
+    "mse": 0.016584426832797757,
+    "clipping_fraction": 5.7220458984375e-06
+   },
+   "A12": {
+    "step_fx": 239706,
+    "step_real": 0.22860145568847656,
+    "mse": 0.004323261839634577,
+    "clipping_fraction": 0.0
+   },
+   "A13": {
+    "step_fx": 119824,
+    "step_real": 0.1142730712890625,
+    "mse": 0.0010797260165413892,
+    "clipping_fraction": 0.0
+   }
+  },
+  "v": {
+   "A8": {
+    "step_fx": 20752,
+    "step_real": 0.0197906494140625,
+    "mse": 3.2636326883182534e-05,
+    "clipping_fraction": 0.0
+   },
+   "A9": {
+    "step_fx": 10335,
+    "step_real": 0.009856224060058594,
+    "mse": 8.129788370693893e-06,
+    "clipping_fraction": 0.0
+   },
+   "A10": {
+    "step_fx": 5158,
+    "step_real": 0.0049190521240234375,
+    "mse": 1.9981875196246207e-06,
+    "clipping_fraction": 0.0
+   },
+   "A11": {
+    "step_fx": 2577,
+    "step_real": 0.0024576187133789062,
+    "mse": 5.043781744321168e-07,
+    "clipping_fraction": 0.0
+   },
+   "A12": {
+    "step_fx": 1288,
+    "step_real": 0.00122833251953125,
+    "mse": 1.256202539534963e-07,
+    "clipping_fraction": 0.0
+   },
+   "A13": {
+    "step_fx": 644,
+    "step_real": 0.000614166259765625,
+    "mse": 3.143831272407416e-08,
+    "clipping_fraction": 0.0
+   }
+  },
+  "ctx": {
+   "A8": {
+    "step_fx": 15778,
+    "step_real": 0.015047073364257812,
+    "mse": 2.6325195029438643e-05,
+    "clipping_fraction": 5.626678466796875e-05
+   },
+   "A9": {
+    "step_fx": 10080,
+    "step_real": 0.009613037109375,
+    "mse": 7.731865357410384e-06,
+    "clipping_fraction": 0.0
+   },
+   "A10": {
+    "step_fx": 5031,
+    "step_real": 0.004797935485839844,
+    "mse": 1.917951851997054e-06,
+    "clipping_fraction": 0.0
+   },
+   "A11": {
+    "step_fx": 2513,
+    "step_real": 0.0023965835571289062,
+    "mse": 4.792261631488851e-07,
+    "clipping_fraction": 0.0
+   },
+   "A12": {
+    "step_fx": 1256,
+    "step_real": 0.00119781494140625,
+    "mse": 1.19102146449225e-07,
+    "clipping_fraction": 0.0
+   },
+   "A13": {
+    "step_fx": 628,
+    "step_real": 0.000598907470703125,
+    "mse": 2.984782437069996e-08,
+    "clipping_fraction": 0.0
+   }
+  },
+  "h2": {
+   "A8": {
+    "step_fx": 70307,
+    "step_real": 0.06704998016357422,
+    "mse": 0.0005071538966522927,
+    "clipping_fraction": 8.106231689453125e-05
+   },
+   "A9": {
+    "step_fx": 43713,
+    "step_real": 0.041687965393066406,
+    "mse": 0.000142857730879329,
+    "clipping_fraction": 0.0
+   },
+   "A10": {
+    "step_fx": 21814,
+    "step_real": 0.020803451538085938,
+    "mse": 3.587390321731072e-05,
+    "clipping_fraction": 0.0
+   },
+   "A11": {
+    "step_fx": 10897,
+    "step_real": 0.010392189025878906,
+    "mse": 8.93219869174871e-06,
+    "clipping_fraction": 0.0
+   },
+   "A12": {
+    "step_fx": 5446,
+    "step_real": 0.0051937103271484375,
+    "mse": 2.25357314429684e-06,
+    "clipping_fraction": 0.0
+   },
+   "A13": {
+    "step_fx": 2723,
+    "step_real": 0.0025968551635742188,
+    "mse": 5.607331412173374e-07,
+    "clipping_fraction": 0.0
+   }
+  },
+  "hm": {
+   "A8": {
+    "step_fx": 37805,
+    "step_real": 0.03605365753173828,
+    "mse": 0.00010182206082670531,
+    "clipping_fraction": 0.0
+   },
+   "A9": {
+    "step_fx": 18828,
+    "step_real": 0.017955780029296875,
+    "mse": 2.6174840620433814e-05,
+    "clipping_fraction": 0.0
+   },
+   "A10": {
+    "step_fx": 9396,
+    "step_real": 0.008960723876953125,
+    "mse": 6.585432149584956e-06,
+    "clipping_fraction": 0.0
+   },
+   "A11": {
+    "step_fx": 4694,
+    "step_real": 0.0044765472412109375,
+    "mse": 1.6543425586685104e-06,
+    "clipping_fraction": 0.0
+   },
+   "A12": {
+    "step_fx": 2346,
+    "step_real": 0.0022373199462890625,
+    "mse": 4.152507315989224e-07,
+    "clipping_fraction": 0.0
+   },
+   "A13": {
+    "step_fx": 1173,
+    "step_real": 0.0011186599731445312,
+    "mse": 1.0398180637159281e-07,
+    "clipping_fraction": 0.0
+   }
+  }
+ },
+ "sites": [
+  "h",
+  "q",
+  "k",
+  "v",
+  "ctx",
+  "h2",
+  "hm"
+ ],
+ "mixed_precision_note": "recorded as opportunity only, not a policy: the max_abs floor at A12/A13 is weight-limited, so no per-site activation bits would change the verdict"
+}

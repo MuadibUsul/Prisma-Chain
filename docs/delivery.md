@@ -162,10 +162,83 @@ Phases A and B (library, CLI, local two-process E2E) and the two-GPU
 RunPod E2E of item 7 have passed: two pods with different GPU models
 (RTX 4000 Ada, RTX 2000 Ada) both pass the `torch._int_mm` bit-exactness
 gate, and the honest and fraud scenarios complete across them
-(`docs/gemm-e2e-results.json`). The GPU benchmark ladder and the Phase D
-chain integration (GEMM task spec, dispute state and VWR settlement in the
-compute module) remain open; the gate is not fully met until Phase D lands
-and the measured GPU ladder is published.
+(`docs/gemm-e2e-results.json`). The chain integration (GEMM task spec,
+dispute state and VWR settlement) has since landed and is covered by the
+on-chain settlement gate below; the GPU benchmark ladder on a dedicated
+metered run remains the only open item of this gate.
+
+## Multi-validator challenge inclusion gate
+
+Phase E (docs/phase-e-report.md) proves that one censoring proposer
+cannot permanently suppress a valid challenge. The gate is met only when:
+
+1. Four equal-power (25%) validators with independent keys run one chain.
+2. One offline validator keeps finalization alive; two offline halt it
+   (expected behavior); a restarted validator catches up from its own
+   data to an identical app hash.
+3. A single proposer can omit a challenge from its own proposal while
+   every validator still considers it valid.
+4. A later honest proposer includes the same challenge and the fraud
+   dispute completes with the wrong worker receiving no receipt.
+5. All validators converge to identical final state.
+
+Status: items 1-5 pass on the local four-validator devnet
+(docs/phase-e-validator-results.json, phase-e-censorship-results.json,
+phase-e-da-results.json). Single-proposer scope only: a validator cartel
+can still censor, and propagation plus challenge-window length remain
+assumptions. NOT proven: multi-operator economic drills, validator
+churn at scale, long-run liveness.
+
+## DA_REPLICA_V1 gate
+
+Replicated output availability with bonded providers and objective
+on-chain sampling challenges (docs/phase-e-permissionless-verification.md).
+The gate is met only when:
+
+1. Three independent bonded providers register permissionlessly.
+2. Each provider verifies output_root from the received blob BEFORE
+   storing or attesting; mismatched blobs are refused.
+3. A 2-of-3 quorum gates finalization; quorum loss blocks finalize;
+   replacement restores it; expiry routes to availability_failed with a
+   requester refund and no receipt.
+4. A watcher obtains C only through the DA layer and rebuilds
+   output_root before Freivalds.
+5. A provider can be challenged on chain for a specific derived tile and
+   answers with a 256-byte tile plus a proof against the committed root;
+   a missed deadline is an objective slashing fact.
+6. DoS bounds hold (one open challenge per provider, bounded proofs,
+   duplicate rejection) and the gas schedule is measured.
+
+Status: items 1-6 pass in keeper tests, DA gas measurement
+(docs/phase-e-da-gas-results.json) and the combined four-validator devnet
+run. This proves replicated availability with bonded attestations, NOT
+perfect data availability; erasure coding, DAS, KZG and dedicated DA
+networks remain future work.
+
+## On-chain GEMM settlement gate
+
+Phase D (docs/gemm-phase-d-report.md) connects the verified GEMM path to
+chain state and settlement. The gate is met only when the following hold
+against the real implementation:
+
+1. A GEMM task posts with escrow and a bonded worker accepts it.
+2. The canonical ResultCommit signature verifies on chain under the
+   bonded network key, with a chain-derived canonical MAC count.
+3. No challenge settles exactly once and mints exactly one canonical VWR.
+4. A challenged task locks traces for the disputed tile only, persists
+   bisection across restarts and adjudicates with one 512-MAC micro-step.
+5. A false challenger cannot defeat a correct worker; the worker still
+   settles (challenged_worker_won).
+6. Replay, queue griefing, oversized proofs and duplicate settlement are
+   rejected; escrow/bond/burn invariants hold.
+7. The bounded-VM and lightweight suites remain green.
+
+Status: items 1-7 pass in the keeper integration suite and in the local
+devnet E2E (`deploy/gemm_chain_smoke.py`, honest / fraud /
+false-challenge; evidence in docs/gemm-phase-d-report.md). Multi-validator
+economic drills, permissionless data availability and receipt light-proofs
+remain open; the gate is met only for the single-validator devnet scope it
+was tested at and must not be described beyond it.
 
 ## Cheap verification gate
 
@@ -194,4 +267,123 @@ Status: items 1-7 and 9 pass on the CPU path (`docs/gemm-v0.1.2-report.md`);
 the 4096^3 CPU ladder is published (`docs/gemm-v0.1.2-benchmark-results.json`,
 detection ratio 0.0080 at 8 rounds, total fraud-path ratio 0.0692 at 40
 rounds including the exact 8-row tile build). The GPU fast-verification benchmark remains NOT TESTED until two
-pods are available again. Phase D chain integration is still open.
+pods are available again. Single-validator chain settlement,
+multi-validator operation and DA_REPLICA_V1 have since landed (see the
+gates below); DA_REPLICA_V1 is replicated availability with bonded
+attestations, NOT perfect data availability, validator-cartel censorship
+remains possible, and long-run multi-operator public-testnet operation
+is not proven.
+
+## Canonical operator gate
+
+Phase F (docs/canonical-operators-v1.md) adds the canonical operator
+framework. The gate is met only when all of the following hold against
+the real implementation:
+
+1. The frozen numeric contract (CANONICAL_MATH_V1, Q12.20) and the
+   predeclared acceptance thresholds live in docs/canonical-math-v1.md
+   with the numeric-design evidence in
+   docs/canonical-math-v1-analysis.json.
+2. Every operator (GEMM/ADD/MUL/REQUANTIZE/RMSNORM/ROPE/SILU/SOFTMAX)
+   has a Go reference, a Python mirror and cross-language bit-exact
+   vectors covering math primitives, tensor commitments and operator
+   semantics.
+3. GEMM nodes reuse the frozen v0.1.1 arithmetic unchanged, including
+   the `K <= MaxSafeK` admission, with the transpose-B form verified
+   against the naive definition.
+4. Every operator's outputs are committed under descriptor-bound tensor
+   roots, and every operator's work counters are descriptor-derived.
+5. Rounding (ties-to-even), saturation and the zero-libm exp/invsqrt
+   algorithms are frozen and constant-pinned.
+
+Status: items 1-5 pass. Go and Python agree byte for byte on
+`canonical_vectors.json` (math, roots, eleven operator vectors, graph);
+the Go suite is green. GPU backends for operators are NOT TESTED; the
+real-model converter is NOT TESTED.
+
+## Canonical graph gate
+
+Phase F (docs/canonical-graph-v1.md) adds CANONICAL_GRAPH_V1. The gate is
+met only when all of the following hold against the real implementation:
+
+1. Graphs are static and hashable (GraphID binds operators, weight roots,
+   shapes, constants, parameters) with structural validation on chain.
+2. Normal execution commits output roots only; the state trail exists
+   only on demand.
+3. A dispute bisects to the FIRST divergent node and dispatches to the
+   operator-specific bounded arbiter; arbitration never recomputes the
+   block.
+4. The dispute persists across restarts (GDS1) and a restored session
+   continues to the same first-divergent node.
+5. A settlement receipt (VerifiedGraphWorkReceiptV1) is derived by the
+   chain and re-binds every commitment; the frozen gemmv1 VWR is
+   untouched.
+6. Work counters are descriptor-derived and cannot be biased by the
+   worker.
+
+Status: items 1-6 pass in the canonical suite and the chain keeper suite;
+item 3 additionally ran end to end on the devnet (corrupted ADD output
+localized to node 89 in seven bisection rounds, challenger_wins, no
+receipt). Long-horizon multi-operator disputes on chain and graph-task
+query protos remain open.
+
+## Verifiable Transformer block gate
+
+Phase F (docs/transformer-block-v1.md) adds the block macro. The gate is
+met only when all of the following hold:
+
+1. Attention and SwiGLU expand into the canonical operator set with no
+   black-box operator and no second protocol architecture.
+2. Mini and medium blocks build, validate and execute deterministically
+   with descriptor-derived work counters.
+3. Fraud injection at any node localizes to that node; per-operator
+   bounded arbitration returns the correct verdict in both directions.
+4. The chain settles graph tasks with escrow/bond/window/feeSplit and
+   rejects false challenges at admission.
+5. Four validators converge to one app hash across honest, fraud and
+   false-challenge scenarios.
+6. A real pinned open-model block passes the predeclared accuracy gate
+   and cross-GPU bit-exactness.
+
+Status: items 1-5 pass (canonical suite, chain keeper suite, and the
+four-validator devnet E2E in docs/phase-f-e2e-results.json with measured
+gas in docs/phase-f-gas-results.json). Item 6 is NOT TESTED: no real
+model block was converted and no GPU backend exists, so
+`REAL_MODEL_BLOCK = NOT TESTED` and the phase status is PARTIAL by the
+predeclared rule. Protocol relevance ("we verify one canonical quantized
+Transformer block") must not be stated as model verification until item 6
+runs.
+
+## Verifiable Transformer block gate (Phase F.1 real-model closure)
+
+Phase F.1 converts one exact pinned real model block and applies the
+predeclared accuracy gate. The REAL_MODEL_BLOCK item is met only when the
+holdout gate passes AND the block is settled on chain with the manifest
+commitment:
+
+1. Exact pinned checkpoint with a full hash manifest — PASS.
+2. Exact layer identity and weight conversion, q/k norm, GQA and causal
+   mask expressed with existing operators only — PASS.
+3. Manual float reference validated against the official model BEFORE
+   quantization — PASS (cosine 1.00000000, max_abs 1.6e-6).
+4. Predeclared accuracy gate on a held-out evaluation set — FAIL (worst
+   cosine 0.957 vs 0.995, worst max_abs 1.91 vs 0.05); error sources are
+   located in docs/phase-f1-real-model-accuracy.json (k path dominated by
+   the k_norm weight tail; distributed activation quantization;
+   single-static-scale-per-tensor expressivity limit).
+5. GraphResultCommitV2 with the node-output manifest, V2 receipt and
+   chain settlement — PASS at the protocol level (canonical and chain
+   suites green); the real-block devnet run is NOT TESTED.
+
+Status: item 4 fails on the measured numbers, so `REAL_MODEL_BLOCK =
+FAIL` and Phase F remains PARTIAL. The bundle-level watcher on the real
+block passes (manifest committed before randomness; Freivalds for all 83
+GEMM nodes with `full_gemm_calls = 0`; exact recompute for the cheap
+operators; injected GEMM and ROPE frauds localized to exactly their
+nodes; restart reproducible: docs/phase-f1-watcher-results.json). The
+chain/DA-integrated watcher path is NOT TESTED. Per the Phase F.1 rules the
+predeclared thresholds were NOT adjusted and the frozen canonical
+arithmetic was NOT touched; the unblocking protocol extension
+(per-slice/per-block static steps, or a canonical slice op) is proposed
+in docs/phase-f1-report.md and NOT implemented. GPU_BACKEND, GRAPH_DA
+and the graph-to-GEMM 512-MAC bridge remain NOT TESTED in this branch.

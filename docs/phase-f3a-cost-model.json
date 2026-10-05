@@ -1,0 +1,63 @@
+{
+ "activation_element_counts": {
+  "h": 16384,
+  "q": 32768,
+  "k": 16384,
+  "v": 16384,
+  "ctx": 32768,
+  "h2": 16384,
+  "p": 4096,
+  "gate": 49152,
+  "up": 49152,
+  "hm": 49152,
+  "down": 16384
+ },
+ "persisted_activation_elements": 245760,
+ "scenarios": {
+  "A8": {
+   "logical_packed_bytes": 245760.0,
+   "int16_container_bytes": 491520,
+   "ratio_vs_A8_logical": 1.0,
+   "ratio_vs_A8_int16": 1.0
+  },
+  "A9": {
+   "logical_packed_bytes": 276480.0,
+   "int16_container_bytes": 491520,
+   "ratio_vs_A8_logical": 1.125,
+   "ratio_vs_A8_int16": 1.0
+  },
+  "A10": {
+   "logical_packed_bytes": 307200.0,
+   "int16_container_bytes": 491520,
+   "ratio_vs_A8_logical": 1.25,
+   "ratio_vs_A8_int16": 1.0
+  },
+  "A11": {
+   "logical_packed_bytes": 337920.0,
+   "int16_container_bytes": 491520,
+   "ratio_vs_A8_logical": 1.375,
+   "ratio_vs_A8_int16": 1.0
+  },
+  "A12": {
+   "logical_packed_bytes": 368640.0,
+   "int16_container_bytes": 491520,
+   "ratio_vs_A8_logical": 1.5,
+   "ratio_vs_A8_int16": 1.0
+  },
+  "A13": {
+   "logical_packed_bytes": 399360.0,
+   "int16_container_bytes": 491520,
+   "ratio_vs_A8_logical": 1.625,
+   "ratio_vs_A8_int16": 1.0
+  }
+ },
+ "weight_bytes_note": "W8 weights unchanged (7 matrices; not scaled by activation bits)",
+ "bundle_note": "GraphVerificationBundle grows only by persisted activation tensors; weights unchanged; node/GEMM counts unchanged (310/83); MAC unchanged (252,706,816 asserted)",
+ "graph": {
+  "nodes": 310,
+  "gemm_nodes": 83,
+  "mac_per_case": 252706816,
+  "freivalds_checks": 83,
+  "manifest_leaves": 310
+ }
+}

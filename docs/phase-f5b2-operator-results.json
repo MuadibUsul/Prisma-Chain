@@ -1,0 +1,118 @@
+{
+ "phase": "F.5B.2",
+ "per_operator": {
+  "RMSNORM": {
+   "a40": {
+    "nodes": 26,
+    "exact": 26,
+    "mismatch": 0,
+    "root_mismatch": 0
+   },
+   "rtx2000_ada": {
+    "nodes": 26,
+    "exact": 26,
+    "mismatch": 0,
+    "root_mismatch": 0
+   }
+  },
+  "REQUANTIZE": {
+   "a40": {
+    "nodes": 126,
+    "exact": 126,
+    "mismatch": 0,
+    "root_mismatch": 0
+   },
+   "rtx2000_ada": {
+    "nodes": 126,
+    "exact": 126,
+    "mismatch": 0,
+    "root_mismatch": 0
+   }
+  },
+  "GEMM": {
+   "a40": {
+    "nodes": 83,
+    "exact": 83,
+    "mismatch": 0,
+    "root_mismatch": 0
+   },
+   "rtx2000_ada": {
+    "nodes": 83,
+    "exact": 83,
+    "mismatch": 0,
+    "root_mismatch": 0
+   }
+  },
+  "ROPE": {
+   "a40": {
+    "nodes": 24,
+    "exact": 24,
+    "mismatch": 0,
+    "root_mismatch": 0
+   },
+   "rtx2000_ada": {
+    "nodes": 24,
+    "exact": 24,
+    "mismatch": 0,
+    "root_mismatch": 0
+   }
+  },
+  "ADD": {
+   "a40": {
+    "nodes": 33,
+    "exact": 33,
+    "mismatch": 0,
+    "root_mismatch": 0
+   },
+   "rtx2000_ada": {
+    "nodes": 33,
+    "exact": 33,
+    "mismatch": 0,
+    "root_mismatch": 0
+   }
+  },
+  "SOFTMAX": {
+   "a40": {
+    "nodes": 16,
+    "exact": 16,
+    "mismatch": 0,
+    "root_mismatch": 0
+   },
+   "rtx2000_ada": {
+    "nodes": 16,
+    "exact": 16,
+    "mismatch": 0,
+    "root_mismatch": 0
+   }
+  },
+  "SILU": {
+   "a40": {
+    "nodes": 1,
+    "exact": 1,
+    "mismatch": 0,
+    "root_mismatch": 0
+   },
+   "rtx2000_ada": {
+    "nodes": 1,
+    "exact": 1,
+    "mismatch": 0,
+    "root_mismatch": 0
+   }
+  },
+  "MUL": {
+   "a40": {
+    "nodes": 1,
+    "exact": 1,
+    "mismatch": 0,
+    "root_mismatch": 0
+   },
+   "rtx2000_ada": {
+    "nodes": 1,
+    "exact": 1,
+    "mismatch": 0,
+    "root_mismatch": 0
+   }
+  }
+ },
+ "note": "exact = byte-equal vs the frozen CPU manifest AND identical wide root"
+}

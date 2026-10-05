@@ -1,0 +1,98 @@
+{
+ "A13W8": {
+  "candidate": "A13W8",
+  "a_bits": 13,
+  "w_bits": 8,
+  "note": "stage maxima on the first cases of F4A_SELECTION; full-block metrics come from the frozen heldout run",
+  "stages": {
+   "case0": {
+    "input_norm": 0.00236193447408084,
+    "QKV_proj_head0": 99.75436486252951
+   },
+   "case1": {
+    "input_norm": 0.0024463891655335246,
+    "QKV_proj_head0": 106.57650230730003
+   },
+   "case2": {
+    "input_norm": 0.002667312490033158,
+    "QKV_proj_head0": 110.61423437238597
+   },
+   "case3": {
+    "input_norm": 0.00236193447408084,
+    "QKV_proj_head0": 125.95777247501586
+   }
+  }
+ },
+ "A12W9": {
+  "candidate": "A12W9",
+  "a_bits": 12,
+  "w_bits": 9,
+  "note": "stage maxima on the first cases of F4A_SELECTION; full-block metrics come from the frozen heldout run",
+  "stages": {
+   "case0": {
+    "input_norm": 0.002561926901955225,
+    "QKV_proj_head0": 208.18120917477245
+   },
+   "case1": {
+    "input_norm": 0.0030672311455139933,
+    "QKV_proj_head0": 246.114196284656
+   },
+   "case2": {
+    "input_norm": 0.0031966017356386267,
+    "QKV_proj_head0": 221.7303652012434
+   },
+   "case3": {
+    "input_norm": 0.002549582177169274,
+    "QKV_proj_head0": 268.6552841479895
+   }
+  }
+ },
+ "A11W10": {
+  "candidate": "A11W10",
+  "a_bits": 11,
+  "w_bits": 10,
+  "note": "stage maxima on the first cases of F4A_SELECTION; full-block metrics come from the frozen heldout run",
+  "stages": {
+   "case0": {
+    "input_norm": 0.0031847047014768037,
+    "QKV_proj_head0": 465.45322775409386
+   },
+   "case1": {
+    "input_norm": 0.0031847047014768037,
+    "QKV_proj_head0": 522.6562218507571
+   },
+   "case2": {
+    "input_norm": 0.0031847047014768037,
+    "QKV_proj_head0": 486.99864999891184
+   },
+   "case3": {
+    "input_norm": 0.0031847047014768037,
+    "QKV_proj_head0": 428.5991079623816
+   }
+  }
+ },
+ "A10W11": {
+  "candidate": "A10W11",
+  "a_bits": 10,
+  "w_bits": 11,
+  "note": "stage maxima on the first cases of F4A_SELECTION; full-block metrics come from the frozen heldout run",
+  "stages": {
+   "case0": {
+    "input_norm": 0.005442302516073028,
+    "QKV_proj_head0": 910.8963351693917
+   },
+   "case1": {
+    "input_norm": 0.005442302516073028,
+    "QKV_proj_head0": 910.8963351693917
+   },
+   "case2": {
+    "input_norm": 0.005442302516073028,
+    "QKV_proj_head0": 910.8963351693917
+   },
+   "case3": {
+    "input_norm": 0.005442302516073028,
+    "QKV_proj_head0": 1100.6704294498084
+   }
+  }
+ }
+}

@@ -1,0 +1,240 @@
+{
+ "family": [
+  "A9W13",
+  "A10W12",
+  "A10W13",
+  "A11W11",
+  "A11W12",
+  "A11W13",
+  "A12W10",
+  "A12W11",
+  "A12W12",
+  "A12W13",
+  "A13W9",
+  "A13W10",
+  "A13W11",
+  "A13W12",
+  "A13W13"
+ ],
+ "ranking": [
+  "minimize a_bits + w_bits",
+  "then minimize W_bits",
+  "then minimize A_bits"
+ ],
+ "accumulator_width": 64,
+ "candidates": {
+  "A9W13": {
+   "a_bits": 9,
+   "w_bits": 13,
+   "policy_id": "2e1607aef6cc7206be0e96844938558de37b257c416121aec51d14ecab2cfa84",
+   "max_safe_k64": 8796093022207,
+   "safe": true,
+   "requant": "REQUANT_INT64_SAFE",
+   "selection": {
+    "worst_cosine": 0.987316793428668,
+    "worst_max_abs": 0.49034571624224244,
+    "verdict": "FAIL"
+   },
+   "safety_formula": "int64: floor((2^63-1)/2^(a+w-2))"
+  },
+  "A10W12": {
+   "a_bits": 10,
+   "w_bits": 12,
+   "policy_id": "5b922f78e2bfd07d05cbd1f529f56abb14f698aacdeaa22b33e9c3caf6acca5d",
+   "max_safe_k64": 8796093022207,
+   "safe": true,
+   "requant": "REQUANT_INT64_SAFE",
+   "selection": {
+    "worst_cosine": 0.9971249782965803,
+    "worst_max_abs": 0.41324676732898,
+    "verdict": "FAIL"
+   },
+   "safety_formula": "int64: floor((2^63-1)/2^(a+w-2))"
+  },
+  "A10W13": {
+   "a_bits": 10,
+   "w_bits": 13,
+   "policy_id": "754f2aa9117359eb0cc95e758d95c2e93b5796bb452a6bbb496cee990f281cea",
+   "max_safe_k64": 4398046511103,
+   "safe": true,
+   "requant": "REQUANT_INT64_SAFE",
+   "selection": {
+    "worst_cosine": 0.9970940937061501,
+    "worst_max_abs": 0.4067083762156988,
+    "verdict": "FAIL"
+   },
+   "safety_formula": "int64: floor((2^63-1)/2^(a+w-2))"
+  },
+  "A11W11": {
+   "a_bits": 11,
+   "w_bits": 11,
+   "policy_id": "f798a9c34d3d907462d457755600935575262b69a8bc043800eceb73d2fdb00e",
+   "max_safe_k64": 8796093022207,
+   "safe": true,
+   "requant": "REQUANT_INT64_SAFE",
+   "selection": {
+    "worst_cosine": 0.9994376866951336,
+    "worst_max_abs": 0.12729010572095412,
+    "verdict": "FAIL"
+   },
+   "safety_formula": "int64: floor((2^63-1)/2^(a+w-2))"
+  },
+  "A11W12": {
+   "a_bits": 11,
+   "w_bits": 12,
+   "policy_id": "4e754c7718531292355f5a7b749a882c56dbfe4e4a9c74110550982ca6925c0f",
+   "max_safe_k64": 4398046511103,
+   "safe": true,
+   "requant": "REQUANT_INT64_SAFE",
+   "selection": {
+    "worst_cosine": 0.9995013650668956,
+    "worst_max_abs": 0.12697313453989345,
+    "verdict": "FAIL"
+   },
+   "safety_formula": "int64: floor((2^63-1)/2^(a+w-2))"
+  },
+  "A11W13": {
+   "a_bits": 11,
+   "w_bits": 13,
+   "policy_id": "2ac816b39434699b30a7ef819a1671cf59fd50da2751537779596d1a90d42412",
+   "max_safe_k64": 2199023255551,
+   "safe": true,
+   "requant": "REQUANT_INT64_SAFE",
+   "selection": {
+    "worst_cosine": 0.9994629286564107,
+    "worst_max_abs": 0.14580629494028408,
+    "verdict": "FAIL"
+   },
+   "safety_formula": "int64: floor((2^63-1)/2^(a+w-2))"
+  },
+  "A12W10": {
+   "a_bits": 12,
+   "w_bits": 10,
+   "policy_id": "2b7e118de5612500cc9fd74ee0016de022150907cf1f36486b288f2f9475bff0",
+   "max_safe_k64": 8796093022207,
+   "safe": true,
+   "requant": "REQUANT_INT64_SAFE",
+   "selection": {
+    "worst_cosine": 0.9996508975512204,
+    "worst_max_abs": 0.07994127198858703,
+    "verdict": "FAIL"
+   },
+   "safety_formula": "int64: floor((2^63-1)/2^(a+w-2))"
+  },
+  "A12W11": {
+   "a_bits": 12,
+   "w_bits": 11,
+   "policy_id": "5e7a441d58252bc5116cb0398fc29cd495910310607e2853c4df16d0dae1f914",
+   "max_safe_k64": 4398046511103,
+   "safe": true,
+   "requant": "REQUANT_INT64_SAFE",
+   "selection": {
+    "worst_cosine": 0.9996735094941361,
+    "worst_max_abs": 0.07957161466468876,
+    "verdict": "FAIL"
+   },
+   "safety_formula": "int64: floor((2^63-1)/2^(a+w-2))"
+  },
+  "A12W12": {
+   "a_bits": 12,
+   "w_bits": 12,
+   "policy_id": "f9b99b14a3fae1faeee86ccc2fbfacb222d59e11eb7a339e53ff9a5531afe067",
+   "max_safe_k64": 2199023255551,
+   "safe": true,
+   "requant": "REQUANT_INT64_SAFE",
+   "selection": {
+    "worst_cosine": 0.9996812731625202,
+    "worst_max_abs": 0.07838047544349735,
+    "verdict": "FAIL"
+   },
+   "safety_formula": "int64: floor((2^63-1)/2^(a+w-2))"
+  },
+  "A12W13": {
+   "a_bits": 12,
+   "w_bits": 13,
+   "policy_id": "244ab3b11c536956cae50f6160fd2b449f31e05b86a7d9c3b7028ff7be6a807a",
+   "max_safe_k64": 1099511627775,
+   "safe": true,
+   "requant": "REQUANT_INT64_SAFE",
+   "selection": {
+    "worst_cosine": 0.9996738583117613,
+    "worst_max_abs": 0.1129386487155033,
+    "verdict": "FAIL"
+   },
+   "safety_formula": "int64: floor((2^63-1)/2^(a+w-2))"
+  },
+  "A13W9": {
+   "a_bits": 13,
+   "w_bits": 9,
+   "policy_id": "0880ebfe4677c41ad3ef5d1ed9109877b32ffc10bfec8887f30de22278b81106",
+   "max_safe_k64": 8796093022207,
+   "safe": true,
+   "requant": "REQUANT_INT64_SAFE",
+   "selection": {
+    "worst_cosine": 0.9996635614176042,
+    "worst_max_abs": 0.07838236137448729,
+    "verdict": "FAIL"
+   },
+   "safety_formula": "int64: floor((2^63-1)/2^(a+w-2))"
+  },
+  "A13W10": {
+   "a_bits": 13,
+   "w_bits": 10,
+   "policy_id": "eb9a9fef403c95cd0ab876893acf14e02928245306f1d1cc6e12f4d99c5eb7a0",
+   "max_safe_k64": 4398046511103,
+   "safe": true,
+   "requant": "REQUANT_INT64_SAFE",
+   "selection": {
+    "worst_cosine": 0.9997377982319173,
+    "worst_max_abs": 0.07857693235267704,
+    "verdict": "FAIL"
+   },
+   "safety_formula": "int64: floor((2^63-1)/2^(a+w-2))"
+  },
+  "A13W11": {
+   "a_bits": 13,
+   "w_bits": 11,
+   "policy_id": "299ab27945da6d418f65591bcaf88114b49edd005080ab3e6594edc48b0fb474",
+   "max_safe_k64": 2199023255551,
+   "safe": true,
+   "requant": "REQUANT_INT64_SAFE",
+   "selection": {
+    "worst_cosine": 0.9997710057609444,
+    "worst_max_abs": 0.07701767484535282,
+    "verdict": "FAIL"
+   },
+   "safety_formula": "int64: floor((2^63-1)/2^(a+w-2))"
+  },
+  "A13W12": {
+   "a_bits": 13,
+   "w_bits": 12,
+   "policy_id": "178de6d30e53824d5743f1af22dcc5e2b2d330a6d6f0f90104bac13c2dc73378",
+   "max_safe_k64": 1099511627775,
+   "safe": true,
+   "requant": "REQUANT_INT64_SAFE",
+   "selection": {
+    "worst_cosine": 0.9997702671345365,
+    "worst_max_abs": 0.07551182309974735,
+    "verdict": "FAIL"
+   },
+   "safety_formula": "int64: floor((2^63-1)/2^(a+w-2))"
+  },
+  "A13W13": {
+   "a_bits": 13,
+   "w_bits": 13,
+   "policy_id": "183595f6cabedda4f3eb5345ceb4d42db47c3facd6d140328870f7049731171a",
+   "max_safe_k64": 549755813887,
+   "safe": true,
+   "requant": "REQUANT_INT64_SAFE",
+   "selection": {
+    "worst_cosine": 0.9997608196828413,
+    "worst_max_abs": 0.07723797361244267,
+    "verdict": "FAIL"
+   },
+   "safety_formula": "int64: floor((2^63-1)/2^(a+w-2))"
+  }
+ },
+ "family_sha256": "4b0ab6d5e0c694023c0db143adf4be33feeb012f760341df38031e83371e467e",
+ "family_sha256_int64": "32fd5024964b8b20632344034eeb9132cc079fe2e0ee6ffdbe846561f21c8c9d",
+ "correction_note": "the initial freeze recorded `safe` with the INT32 formula (a bug in the verdict field only); no PolicyID, scale, clamp or bit width changed, so the fresh heldout run remains valid for all 15 candidates"
+}

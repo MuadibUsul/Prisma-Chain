@@ -315,6 +315,662 @@ func (m *QueryWorkerResponse) GetReservedUprsm() uint64 {
 	return 0
 }
 
+type QueryGEMMTaskRequest struct {
+	GemmTaskId uint64 `protobuf:"varint,1,opt,name=gemm_task_id,json=gemmTaskId,proto3" json:"gemm_task_id,omitempty"`
+}
+
+func (m *QueryGEMMTaskRequest) Reset()         { *m = QueryGEMMTaskRequest{} }
+func (m *QueryGEMMTaskRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryGEMMTaskRequest) ProtoMessage()    {}
+func (*QueryGEMMTaskRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3af1350e5f65f967, []int{6}
+}
+func (m *QueryGEMMTaskRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGEMMTaskRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGEMMTaskRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGEMMTaskRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGEMMTaskRequest.Merge(m, src)
+}
+func (m *QueryGEMMTaskRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGEMMTaskRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGEMMTaskRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGEMMTaskRequest proto.InternalMessageInfo
+
+func (m *QueryGEMMTaskRequest) GetGemmTaskId() uint64 {
+	if m != nil {
+		return m.GemmTaskId
+	}
+	return 0
+}
+
+type QueryGEMMTaskResponse struct {
+	TaskJson    []byte `protobuf:"bytes,1,opt,name=task_json,json=taskJson,proto3" json:"task_json,omitempty"`
+	DisputeJson []byte `protobuf:"bytes,2,opt,name=dispute_json,json=disputeJson,proto3" json:"dispute_json,omitempty"`
+}
+
+func (m *QueryGEMMTaskResponse) Reset()         { *m = QueryGEMMTaskResponse{} }
+func (m *QueryGEMMTaskResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryGEMMTaskResponse) ProtoMessage()    {}
+func (*QueryGEMMTaskResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3af1350e5f65f967, []int{7}
+}
+func (m *QueryGEMMTaskResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGEMMTaskResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGEMMTaskResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGEMMTaskResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGEMMTaskResponse.Merge(m, src)
+}
+func (m *QueryGEMMTaskResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGEMMTaskResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGEMMTaskResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGEMMTaskResponse proto.InternalMessageInfo
+
+func (m *QueryGEMMTaskResponse) GetTaskJson() []byte {
+	if m != nil {
+		return m.TaskJson
+	}
+	return nil
+}
+
+func (m *QueryGEMMTaskResponse) GetDisputeJson() []byte {
+	if m != nil {
+		return m.DisputeJson
+	}
+	return nil
+}
+
+type QueryGEMMDisputeRequest struct {
+	GemmTaskId uint64 `protobuf:"varint,1,opt,name=gemm_task_id,json=gemmTaskId,proto3" json:"gemm_task_id,omitempty"`
+}
+
+func (m *QueryGEMMDisputeRequest) Reset()         { *m = QueryGEMMDisputeRequest{} }
+func (m *QueryGEMMDisputeRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryGEMMDisputeRequest) ProtoMessage()    {}
+func (*QueryGEMMDisputeRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3af1350e5f65f967, []int{8}
+}
+func (m *QueryGEMMDisputeRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGEMMDisputeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGEMMDisputeRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGEMMDisputeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGEMMDisputeRequest.Merge(m, src)
+}
+func (m *QueryGEMMDisputeRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGEMMDisputeRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGEMMDisputeRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGEMMDisputeRequest proto.InternalMessageInfo
+
+func (m *QueryGEMMDisputeRequest) GetGemmTaskId() uint64 {
+	if m != nil {
+		return m.GemmTaskId
+	}
+	return 0
+}
+
+type QueryGEMMDisputeResponse struct {
+	DisputeJson []byte `protobuf:"bytes,1,opt,name=dispute_json,json=disputeJson,proto3" json:"dispute_json,omitempty"`
+}
+
+func (m *QueryGEMMDisputeResponse) Reset()         { *m = QueryGEMMDisputeResponse{} }
+func (m *QueryGEMMDisputeResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryGEMMDisputeResponse) ProtoMessage()    {}
+func (*QueryGEMMDisputeResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3af1350e5f65f967, []int{9}
+}
+func (m *QueryGEMMDisputeResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGEMMDisputeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGEMMDisputeResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGEMMDisputeResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGEMMDisputeResponse.Merge(m, src)
+}
+func (m *QueryGEMMDisputeResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGEMMDisputeResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGEMMDisputeResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGEMMDisputeResponse proto.InternalMessageInfo
+
+func (m *QueryGEMMDisputeResponse) GetDisputeJson() []byte {
+	if m != nil {
+		return m.DisputeJson
+	}
+	return nil
+}
+
+type QueryGEMMReceiptRequest struct {
+	ReceiptId []byte `protobuf:"bytes,1,opt,name=receipt_id,json=receiptId,proto3" json:"receipt_id,omitempty"`
+}
+
+func (m *QueryGEMMReceiptRequest) Reset()         { *m = QueryGEMMReceiptRequest{} }
+func (m *QueryGEMMReceiptRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryGEMMReceiptRequest) ProtoMessage()    {}
+func (*QueryGEMMReceiptRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3af1350e5f65f967, []int{10}
+}
+func (m *QueryGEMMReceiptRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGEMMReceiptRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGEMMReceiptRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGEMMReceiptRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGEMMReceiptRequest.Merge(m, src)
+}
+func (m *QueryGEMMReceiptRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGEMMReceiptRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGEMMReceiptRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGEMMReceiptRequest proto.InternalMessageInfo
+
+func (m *QueryGEMMReceiptRequest) GetReceiptId() []byte {
+	if m != nil {
+		return m.ReceiptId
+	}
+	return nil
+}
+
+type QueryGEMMReceiptResponse struct {
+	ReceiptJson []byte `protobuf:"bytes,1,opt,name=receipt_json,json=receiptJson,proto3" json:"receipt_json,omitempty"`
+}
+
+func (m *QueryGEMMReceiptResponse) Reset()         { *m = QueryGEMMReceiptResponse{} }
+func (m *QueryGEMMReceiptResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryGEMMReceiptResponse) ProtoMessage()    {}
+func (*QueryGEMMReceiptResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3af1350e5f65f967, []int{11}
+}
+func (m *QueryGEMMReceiptResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGEMMReceiptResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGEMMReceiptResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGEMMReceiptResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGEMMReceiptResponse.Merge(m, src)
+}
+func (m *QueryGEMMReceiptResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGEMMReceiptResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGEMMReceiptResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGEMMReceiptResponse proto.InternalMessageInfo
+
+func (m *QueryGEMMReceiptResponse) GetReceiptJson() []byte {
+	if m != nil {
+		return m.ReceiptJson
+	}
+	return nil
+}
+
+type QueryGEMMWorkerWorkRequest struct {
+	Worker string `protobuf:"bytes,1,opt,name=worker,proto3" json:"worker,omitempty"`
+}
+
+func (m *QueryGEMMWorkerWorkRequest) Reset()         { *m = QueryGEMMWorkerWorkRequest{} }
+func (m *QueryGEMMWorkerWorkRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryGEMMWorkerWorkRequest) ProtoMessage()    {}
+func (*QueryGEMMWorkerWorkRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3af1350e5f65f967, []int{12}
+}
+func (m *QueryGEMMWorkerWorkRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGEMMWorkerWorkRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGEMMWorkerWorkRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGEMMWorkerWorkRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGEMMWorkerWorkRequest.Merge(m, src)
+}
+func (m *QueryGEMMWorkerWorkRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGEMMWorkerWorkRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGEMMWorkerWorkRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGEMMWorkerWorkRequest proto.InternalMessageInfo
+
+func (m *QueryGEMMWorkerWorkRequest) GetWorker() string {
+	if m != nil {
+		return m.Worker
+	}
+	return ""
+}
+
+type QueryGEMMWorkerWorkResponse struct {
+	TotalCanonicalMac uint64 `protobuf:"varint,1,opt,name=total_canonical_mac,json=totalCanonicalMac,proto3" json:"total_canonical_mac,omitempty"`
+}
+
+func (m *QueryGEMMWorkerWorkResponse) Reset()         { *m = QueryGEMMWorkerWorkResponse{} }
+func (m *QueryGEMMWorkerWorkResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryGEMMWorkerWorkResponse) ProtoMessage()    {}
+func (*QueryGEMMWorkerWorkResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3af1350e5f65f967, []int{13}
+}
+func (m *QueryGEMMWorkerWorkResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGEMMWorkerWorkResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGEMMWorkerWorkResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGEMMWorkerWorkResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGEMMWorkerWorkResponse.Merge(m, src)
+}
+func (m *QueryGEMMWorkerWorkResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGEMMWorkerWorkResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGEMMWorkerWorkResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGEMMWorkerWorkResponse proto.InternalMessageInfo
+
+func (m *QueryGEMMWorkerWorkResponse) GetTotalCanonicalMac() uint64 {
+	if m != nil {
+		return m.TotalCanonicalMac
+	}
+	return 0
+}
+
+type QueryGEMMDAStatusRequest struct {
+	GemmTaskId uint64 `protobuf:"varint,1,opt,name=gemm_task_id,json=gemmTaskId,proto3" json:"gemm_task_id,omitempty"`
+}
+
+func (m *QueryGEMMDAStatusRequest) Reset()         { *m = QueryGEMMDAStatusRequest{} }
+func (m *QueryGEMMDAStatusRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryGEMMDAStatusRequest) ProtoMessage()    {}
+func (*QueryGEMMDAStatusRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3af1350e5f65f967, []int{14}
+}
+func (m *QueryGEMMDAStatusRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGEMMDAStatusRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGEMMDAStatusRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGEMMDAStatusRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGEMMDAStatusRequest.Merge(m, src)
+}
+func (m *QueryGEMMDAStatusRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGEMMDAStatusRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGEMMDAStatusRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGEMMDAStatusRequest proto.InternalMessageInfo
+
+func (m *QueryGEMMDAStatusRequest) GetGemmTaskId() uint64 {
+	if m != nil {
+		return m.GemmTaskId
+	}
+	return 0
+}
+
+type QueryGEMMDAStatusResponse struct {
+	RequiredReplicas   uint32 `protobuf:"varint,1,opt,name=required_replicas,json=requiredReplicas,proto3" json:"required_replicas,omitempty"`
+	ValidReplicas      uint32 `protobuf:"varint,2,opt,name=valid_replicas,json=validReplicas,proto3" json:"valid_replicas,omitempty"`
+	OpenChallenges     uint32 `protobuf:"varint,3,opt,name=open_challenges,json=openChallenges,proto3" json:"open_challenges,omitempty"`
+	AvailabilityStatus string `protobuf:"bytes,4,opt,name=availability_status,json=availabilityStatus,proto3" json:"availability_status,omitempty"`
+	AttestationsJson   []byte `protobuf:"bytes,5,opt,name=attestations_json,json=attestationsJson,proto3" json:"attestations_json,omitempty"`
+}
+
+func (m *QueryGEMMDAStatusResponse) Reset()         { *m = QueryGEMMDAStatusResponse{} }
+func (m *QueryGEMMDAStatusResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryGEMMDAStatusResponse) ProtoMessage()    {}
+func (*QueryGEMMDAStatusResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3af1350e5f65f967, []int{15}
+}
+func (m *QueryGEMMDAStatusResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGEMMDAStatusResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGEMMDAStatusResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGEMMDAStatusResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGEMMDAStatusResponse.Merge(m, src)
+}
+func (m *QueryGEMMDAStatusResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGEMMDAStatusResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGEMMDAStatusResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGEMMDAStatusResponse proto.InternalMessageInfo
+
+func (m *QueryGEMMDAStatusResponse) GetRequiredReplicas() uint32 {
+	if m != nil {
+		return m.RequiredReplicas
+	}
+	return 0
+}
+
+func (m *QueryGEMMDAStatusResponse) GetValidReplicas() uint32 {
+	if m != nil {
+		return m.ValidReplicas
+	}
+	return 0
+}
+
+func (m *QueryGEMMDAStatusResponse) GetOpenChallenges() uint32 {
+	if m != nil {
+		return m.OpenChallenges
+	}
+	return 0
+}
+
+func (m *QueryGEMMDAStatusResponse) GetAvailabilityStatus() string {
+	if m != nil {
+		return m.AvailabilityStatus
+	}
+	return ""
+}
+
+func (m *QueryGEMMDAStatusResponse) GetAttestationsJson() []byte {
+	if m != nil {
+		return m.AttestationsJson
+	}
+	return nil
+}
+
+type QueryDAProviderRequest struct {
+	Provider string `protobuf:"bytes,1,opt,name=provider,proto3" json:"provider,omitempty"`
+}
+
+func (m *QueryDAProviderRequest) Reset()         { *m = QueryDAProviderRequest{} }
+func (m *QueryDAProviderRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryDAProviderRequest) ProtoMessage()    {}
+func (*QueryDAProviderRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3af1350e5f65f967, []int{16}
+}
+func (m *QueryDAProviderRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryDAProviderRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryDAProviderRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryDAProviderRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryDAProviderRequest.Merge(m, src)
+}
+func (m *QueryDAProviderRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryDAProviderRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryDAProviderRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryDAProviderRequest proto.InternalMessageInfo
+
+func (m *QueryDAProviderRequest) GetProvider() string {
+	if m != nil {
+		return m.Provider
+	}
+	return ""
+}
+
+type QueryDAProviderResponse struct {
+	ProviderJson []byte `protobuf:"bytes,1,opt,name=provider_json,json=providerJson,proto3" json:"provider_json,omitempty"`
+}
+
+func (m *QueryDAProviderResponse) Reset()         { *m = QueryDAProviderResponse{} }
+func (m *QueryDAProviderResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryDAProviderResponse) ProtoMessage()    {}
+func (*QueryDAProviderResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3af1350e5f65f967, []int{17}
+}
+func (m *QueryDAProviderResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryDAProviderResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryDAProviderResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryDAProviderResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryDAProviderResponse.Merge(m, src)
+}
+func (m *QueryDAProviderResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryDAProviderResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryDAProviderResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryDAProviderResponse proto.InternalMessageInfo
+
+func (m *QueryDAProviderResponse) GetProviderJson() []byte {
+	if m != nil {
+		return m.ProviderJson
+	}
+	return nil
+}
+
+type QueryGraphV2StatusRequest struct {
+	GraphTaskId uint64 `protobuf:"varint,1,opt,name=graph_task_id,json=graphTaskId,proto3" json:"graph_task_id,omitempty"`
+}
+
+func (m *QueryGraphV2StatusRequest) Reset()         { *m = QueryGraphV2StatusRequest{} }
+func (m *QueryGraphV2StatusRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryGraphV2StatusRequest) ProtoMessage()    {}
+func (*QueryGraphV2StatusRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3af1350e5f65f967, []int{18}
+}
+func (m *QueryGraphV2StatusRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGraphV2StatusRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGraphV2StatusRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGraphV2StatusRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGraphV2StatusRequest.Merge(m, src)
+}
+func (m *QueryGraphV2StatusRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGraphV2StatusRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGraphV2StatusRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGraphV2StatusRequest proto.InternalMessageInfo
+
+func (m *QueryGraphV2StatusRequest) GetGraphTaskId() uint64 {
+	if m != nil {
+		return m.GraphTaskId
+	}
+	return 0
+}
+
+type QueryGraphV2StatusResponse struct {
+	StatusJson []byte `protobuf:"bytes,1,opt,name=status_json,json=statusJson,proto3" json:"status_json,omitempty"`
+}
+
+func (m *QueryGraphV2StatusResponse) Reset()         { *m = QueryGraphV2StatusResponse{} }
+func (m *QueryGraphV2StatusResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryGraphV2StatusResponse) ProtoMessage()    {}
+func (*QueryGraphV2StatusResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3af1350e5f65f967, []int{19}
+}
+func (m *QueryGraphV2StatusResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGraphV2StatusResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGraphV2StatusResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGraphV2StatusResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGraphV2StatusResponse.Merge(m, src)
+}
+func (m *QueryGraphV2StatusResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGraphV2StatusResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGraphV2StatusResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGraphV2StatusResponse proto.InternalMessageInfo
+
+func (m *QueryGraphV2StatusResponse) GetStatusJson() []byte {
+	if m != nil {
+		return m.StatusJson
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*QueryTaskRequest)(nil), "prisma.compute.v1.QueryTaskRequest")
 	proto.RegisterType((*QueryTaskResponse)(nil), "prisma.compute.v1.QueryTaskResponse")
@@ -322,39 +978,83 @@ func init() {
 	proto.RegisterType((*QueryModelResponse)(nil), "prisma.compute.v1.QueryModelResponse")
 	proto.RegisterType((*QueryWorkerRequest)(nil), "prisma.compute.v1.QueryWorkerRequest")
 	proto.RegisterType((*QueryWorkerResponse)(nil), "prisma.compute.v1.QueryWorkerResponse")
+	proto.RegisterType((*QueryGEMMTaskRequest)(nil), "prisma.compute.v1.QueryGEMMTaskRequest")
+	proto.RegisterType((*QueryGEMMTaskResponse)(nil), "prisma.compute.v1.QueryGEMMTaskResponse")
+	proto.RegisterType((*QueryGEMMDisputeRequest)(nil), "prisma.compute.v1.QueryGEMMDisputeRequest")
+	proto.RegisterType((*QueryGEMMDisputeResponse)(nil), "prisma.compute.v1.QueryGEMMDisputeResponse")
+	proto.RegisterType((*QueryGEMMReceiptRequest)(nil), "prisma.compute.v1.QueryGEMMReceiptRequest")
+	proto.RegisterType((*QueryGEMMReceiptResponse)(nil), "prisma.compute.v1.QueryGEMMReceiptResponse")
+	proto.RegisterType((*QueryGEMMWorkerWorkRequest)(nil), "prisma.compute.v1.QueryGEMMWorkerWorkRequest")
+	proto.RegisterType((*QueryGEMMWorkerWorkResponse)(nil), "prisma.compute.v1.QueryGEMMWorkerWorkResponse")
+	proto.RegisterType((*QueryGEMMDAStatusRequest)(nil), "prisma.compute.v1.QueryGEMMDAStatusRequest")
+	proto.RegisterType((*QueryGEMMDAStatusResponse)(nil), "prisma.compute.v1.QueryGEMMDAStatusResponse")
+	proto.RegisterType((*QueryDAProviderRequest)(nil), "prisma.compute.v1.QueryDAProviderRequest")
+	proto.RegisterType((*QueryDAProviderResponse)(nil), "prisma.compute.v1.QueryDAProviderResponse")
+	proto.RegisterType((*QueryGraphV2StatusRequest)(nil), "prisma.compute.v1.QueryGraphV2StatusRequest")
+	proto.RegisterType((*QueryGraphV2StatusResponse)(nil), "prisma.compute.v1.QueryGraphV2StatusResponse")
 }
 
 func init() { proto.RegisterFile("prisma/compute/v1/query.proto", fileDescriptor_3af1350e5f65f967) }
 
 var fileDescriptor_3af1350e5f65f967 = []byte{
-	// 424 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x53, 0xcf, 0x6b, 0xd4, 0x40,
-	0x14, 0xde, 0xd4, 0x36, 0xed, 0xbe, 0x46, 0x69, 0x47, 0xd0, 0xba, 0xd2, 0xe0, 0x46, 0x2b, 0x82,
-	0x25, 0xb1, 0xf6, 0xe8, 0xcd, 0x5b, 0x15, 0xc1, 0x0d, 0xd5, 0x82, 0x97, 0x90, 0x4d, 0x1e, 0x18,
-	0xd3, 0x64, 0xa6, 0x33, 0x49, 0x34, 0x7f, 0x82, 0x07, 0xc1, 0x3f, 0xcb, 0x63, 0x8f, 0x1e, 0x65,
-	0xf7, 0x1f, 0x91, 0xf9, 0x91, 0x25, 0xab, 0x6c, 0xf7, 0x32, 0xf0, 0xbe, 0xef, 0x7b, 0xdf, 0x7c,
-	0xf3, 0x1e, 0x03, 0x87, 0x8c, 0x67, 0xa2, 0x88, 0x83, 0x84, 0x16, 0xac, 0xae, 0x30, 0x68, 0x4e,
-	0x82, 0xab, 0x1a, 0x79, 0xeb, 0x33, 0x4e, 0x2b, 0x4a, 0xf6, 0x35, 0xed, 0x1b, 0xda, 0x6f, 0x4e,
-	0xbc, 0xe7, 0xb0, 0x37, 0x91, 0x8a, 0xf3, 0x58, 0xe4, 0x21, 0x5e, 0xd5, 0x28, 0x2a, 0x72, 0x1f,
-	0xb6, 0xab, 0x58, 0xe4, 0x51, 0x96, 0x1e, 0x58, 0x8f, 0xac, 0x67, 0x9b, 0xa1, 0x2d, 0xcb, 0xb3,
-	0xd4, 0x7b, 0x01, 0xfb, 0x3d, 0xb1, 0x60, 0xb4, 0x14, 0x48, 0x1e, 0xc2, 0x50, 0xa9, 0xbf, 0x08,
-	0x5a, 0x2a, 0xbd, 0x13, 0xee, 0x48, 0xe0, 0x8d, 0xa0, 0xa5, 0x37, 0x31, 0x1d, 0xef, 0x68, 0x8a,
-	0x97, 0x9d, 0xff, 0x03, 0xd8, 0x29, 0x64, 0xdd, 0x5d, 0x30, 0x0c, 0xb7, 0x55, 0x7d, 0x96, 0x92,
-	0x31, 0x38, 0x82, 0x61, 0x12, 0x35, 0xc8, 0x45, 0x46, 0xcb, 0x83, 0x0d, 0x45, 0xef, 0x4a, 0xec,
-	0xa3, 0x86, 0xbc, 0x53, 0x20, 0x7d, 0x4b, 0x93, 0xe2, 0x10, 0x40, 0x7b, 0xf6, 0x62, 0x0c, 0x15,
-	0xa2, 0x72, 0x1c, 0x9b, 0xa6, 0x0b, 0xca, 0x73, 0xe4, 0x5d, 0x90, 0x7b, 0x60, 0x7f, 0x55, 0x80,
-	0x89, 0x61, 0x2a, 0xef, 0x87, 0x05, 0x77, 0x97, 0xe4, 0xe6, 0x92, 0x31, 0x38, 0x53, 0x5a, 0xa6,
-	0x98, 0x46, 0x35, 0xe3, 0xa2, 0x30, 0xd3, 0xd9, 0xd5, 0xd8, 0x07, 0x09, 0x91, 0x63, 0x20, 0x25,
-	0x56, 0xd2, 0x27, 0x62, 0xf5, 0xf4, 0x32, 0x4b, 0xa2, 0x1c, 0x5b, 0xf5, 0x0c, 0x27, 0xdc, 0x33,
-	0xcc, 0x7b, 0x45, 0xbc, 0xc5, 0x96, 0x1c, 0xc1, 0x1d, 0x8e, 0x02, 0x79, 0xb3, 0xb0, 0xbc, 0xa5,
-	0x2c, 0x6f, 0x77, 0xa8, 0x32, 0x7d, 0xf9, 0x7d, 0x03, 0xb6, 0x54, 0x1e, 0x32, 0x81, 0x4d, 0x39,
-	0x7c, 0xf2, 0xd8, 0xff, 0x6f, 0x95, 0xfe, 0xbf, 0x7b, 0x1c, 0x3d, 0xb9, 0x59, 0x64, 0x1e, 0x75,
-	0x0e, 0x5b, 0x6a, 0x94, 0x64, 0xa5, 0xbc, 0xbf, 0xbc, 0xd1, 0xd1, 0x1a, 0x95, 0x71, 0xbd, 0x00,
-	0x5b, 0x0f, 0x8f, 0xac, 0x6c, 0x58, 0xda, 0xc5, 0xe8, 0xe9, 0x3a, 0x99, 0x36, 0x7e, 0xfd, 0xea,
-	0xd7, 0xcc, 0xb5, 0xae, 0x67, 0xae, 0xf5, 0x67, 0xe6, 0x5a, 0x3f, 0xe7, 0xee, 0xe0, 0x7a, 0xee,
-	0x0e, 0x7e, 0xcf, 0xdd, 0xc1, 0xa7, 0xb1, 0x36, 0x48, 0x3e, 0xc7, 0x59, 0x19, 0xe8, 0xf3, 0xdb,
-	0xe2, 0x27, 0x54, 0x2d, 0x43, 0x31, 0xb5, 0xd5, 0x3f, 0x38, 0xfd, 0x1b, 0x00, 0x00, 0xff, 0xff,
-	0xb5, 0x64, 0xb5, 0xc6, 0x28, 0x03, 0x00, 0x00,
+	// 897 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x56, 0x5b, 0x6f, 0xdc, 0x44,
+	0x14, 0x8e, 0x4b, 0xae, 0x67, 0xbd, 0x21, 0x99, 0x40, 0x9b, 0xba, 0xca, 0xd2, 0xb8, 0x94, 0x96,
+	0x66, 0xbb, 0x4b, 0x5b, 0x1e, 0x2a, 0x95, 0x8b, 0x4a, 0x8b, 0x50, 0x41, 0x2b, 0x35, 0x26, 0x34,
+	0x12, 0x12, 0xb2, 0x66, 0xed, 0x21, 0x19, 0xd6, 0xeb, 0x71, 0x3c, 0xde, 0x85, 0xfd, 0x11, 0x48,
+	0xfc, 0x2c, 0x1e, 0xfb, 0xc8, 0x23, 0x4a, 0x1e, 0xf8, 0x07, 0x3c, 0x57, 0x73, 0xb1, 0x77, 0xbc,
+	0x57, 0xbf, 0xac, 0x34, 0xdf, 0xf9, 0xce, 0xf9, 0x8e, 0xcf, 0x19, 0x7f, 0x6b, 0x38, 0x48, 0x52,
+	0xca, 0xfb, 0xb8, 0x1d, 0xb0, 0x7e, 0x32, 0xc8, 0x48, 0x7b, 0xf8, 0xa8, 0x7d, 0x31, 0x20, 0xe9,
+	0xa8, 0x95, 0xa4, 0x2c, 0x63, 0x68, 0x57, 0x85, 0x5b, 0x3a, 0xdc, 0x1a, 0x3e, 0x72, 0x8f, 0x60,
+	0xe7, 0x58, 0x30, 0x4e, 0x30, 0xef, 0x79, 0xe4, 0x62, 0x40, 0x78, 0x86, 0x6e, 0xc0, 0x46, 0x86,
+	0x79, 0xcf, 0xa7, 0xe1, 0xbe, 0x75, 0xdb, 0xba, 0xbf, 0xea, 0xad, 0x8b, 0xe3, 0xab, 0xd0, 0xfd,
+	0x0c, 0x76, 0x0d, 0x32, 0x4f, 0x58, 0xcc, 0x09, 0xba, 0x05, 0x5b, 0x92, 0xfd, 0x1b, 0x67, 0xb1,
+	0xe4, 0xdb, 0xde, 0xa6, 0x00, 0xbe, 0xe7, 0x2c, 0x76, 0x8f, 0x75, 0x46, 0x87, 0x85, 0x24, 0xca,
+	0xeb, 0xdf, 0x84, 0xcd, 0xbe, 0x38, 0xe7, 0x02, 0x5b, 0xde, 0x86, 0x3c, 0xbf, 0x0a, 0xd1, 0x21,
+	0xd8, 0x3c, 0x21, 0x81, 0x3f, 0x24, 0x29, 0xa7, 0x2c, 0xde, 0xbf, 0x26, 0xc3, 0x35, 0x81, 0xbd,
+	0x51, 0x90, 0xfb, 0x04, 0x90, 0x59, 0x52, 0x77, 0x71, 0x00, 0xa0, 0x6a, 0x1a, 0x6d, 0x6c, 0x49,
+	0x44, 0xf6, 0xd1, 0xd4, 0x49, 0xa7, 0x2c, 0xed, 0x91, 0x34, 0x6f, 0xe4, 0x3a, 0xac, 0xff, 0x2e,
+	0x01, 0xdd, 0x86, 0x3e, 0xb9, 0x7f, 0x5a, 0xb0, 0x57, 0xa2, 0x6b, 0x91, 0x43, 0xb0, 0xbb, 0x2c,
+	0x0e, 0x49, 0xe8, 0x0f, 0x92, 0x94, 0xf7, 0xf5, 0x74, 0x6a, 0x0a, 0xfb, 0x49, 0x40, 0xa8, 0x09,
+	0x28, 0x26, 0x99, 0xa8, 0xe3, 0x27, 0x83, 0x6e, 0x44, 0x03, 0xbf, 0x47, 0x46, 0xf2, 0x31, 0x6c,
+	0x6f, 0x47, 0x47, 0x5e, 0xcb, 0xc0, 0x0f, 0x64, 0x84, 0xee, 0xc2, 0x76, 0x4a, 0x38, 0x49, 0x87,
+	0x45, 0xc9, 0xf7, 0x64, 0xc9, 0x7a, 0x8e, 0xca, 0xa2, 0xee, 0x53, 0xf8, 0x40, 0xb6, 0xf3, 0xdd,
+	0xb7, 0x9d, 0x8e, 0xb9, 0xa8, 0xdb, 0x60, 0x9f, 0x91, 0x7e, 0xdf, 0x2f, 0x6f, 0x0b, 0x04, 0x76,
+	0xa2, 0x36, 0x76, 0x0a, 0x1f, 0x4e, 0x64, 0x56, 0xd8, 0x9a, 0x78, 0xce, 0x90, 0x72, 0x71, 0x45,
+	0x54, 0x5c, 0xb5, 0x5f, 0xd3, 0x98, 0x1c, 0xe8, 0x33, 0xb8, 0x51, 0x14, 0x7e, 0xa9, 0xf0, 0xea,
+	0x5d, 0x7d, 0x09, 0xfb, 0xd3, 0xc9, 0xe3, 0x19, 0x97, 0xb4, 0xad, 0x69, 0xed, 0xa7, 0x86, 0xb6,
+	0x47, 0x02, 0x42, 0x93, 0x2c, 0xd7, 0x3e, 0x00, 0x48, 0x15, 0x92, 0x2b, 0xdb, 0xde, 0x96, 0x46,
+	0x26, 0x84, 0x8b, 0xcc, 0xb1, 0x70, 0x9e, 0x6a, 0x0a, 0x6b, 0x4c, 0x0a, 0x7f, 0x0e, 0x4e, 0x91,
+	0xae, 0xae, 0x86, 0xf8, 0x5d, 0x76, 0x9b, 0x3a, 0x70, 0x6b, 0x66, 0x96, 0xd6, 0x6d, 0xc1, 0x5e,
+	0xc6, 0x32, 0x1c, 0xf9, 0x01, 0x8e, 0x59, 0x4c, 0x03, 0x1c, 0xf9, 0x7d, 0x1c, 0xe8, 0xa9, 0xed,
+	0xca, 0xd0, 0x8b, 0x3c, 0xd2, 0xc1, 0x81, 0xfb, 0x85, 0x39, 0xbc, 0xe7, 0x3f, 0x66, 0x38, 0x1b,
+	0xf0, 0xea, 0xa3, 0xff, 0xdf, 0x82, 0x9b, 0x33, 0xd2, 0x75, 0x2f, 0x47, 0xb0, 0x9b, 0x92, 0x8b,
+	0x01, 0x4d, 0x49, 0xe8, 0xa7, 0x24, 0x89, 0x68, 0x80, 0xb9, 0x2c, 0x52, 0xf7, 0x76, 0xf2, 0x80,
+	0xa7, 0x71, 0x71, 0x79, 0x87, 0x38, 0xa2, 0x06, 0xf3, 0x9a, 0x64, 0xd6, 0x25, 0x5a, 0xd0, 0xee,
+	0xc1, 0xfb, 0x2c, 0x21, 0xb1, 0x1f, 0x9c, 0xe3, 0x28, 0x22, 0xf1, 0x19, 0xe1, 0xf2, 0x92, 0xd7,
+	0xbd, 0x6d, 0x01, 0xbf, 0x28, 0x50, 0xd4, 0x86, 0x3d, 0x3c, 0xc4, 0x34, 0xc2, 0x5d, 0x1a, 0xd1,
+	0x6c, 0xe4, 0x73, 0xd9, 0xdb, 0xfe, 0xaa, 0x1c, 0x26, 0x32, 0x43, 0xaa, 0x6b, 0xd1, 0x2d, 0xce,
+	0x32, 0x22, 0x78, 0x94, 0xc5, 0x5c, 0xad, 0x6d, 0x4d, 0xbd, 0x6a, 0x66, 0x40, 0xef, 0xee, 0xba,
+	0x7c, 0xee, 0x97, 0xcf, 0x5f, 0xa7, 0x6c, 0x48, 0xc3, 0xb1, 0x0b, 0x38, 0xb0, 0x99, 0x68, 0x48,
+	0x6f, 0xae, 0x38, 0xbb, 0x5f, 0xe9, 0xab, 0x66, 0x66, 0xe9, 0x59, 0xdd, 0x81, 0x7a, 0x4e, 0x33,
+	0x2f, 0x8c, 0x9d, 0x83, 0x52, 0xf5, 0xeb, 0x7c, 0xda, 0x29, 0x4e, 0xce, 0xdf, 0x3c, 0x2e, 0x6f,
+	0xcb, 0x85, 0xfa, 0x99, 0xc0, 0x27, 0xd6, 0x55, 0x93, 0x60, 0xf1, 0xaa, 0x38, 0xb3, 0x0a, 0xe8,
+	0x1e, 0x3e, 0x82, 0x9a, 0x9a, 0x92, 0xd9, 0x01, 0x28, 0x48, 0xe8, 0x3f, 0xfe, 0x6f, 0x03, 0xd6,
+	0x64, 0x3e, 0x3a, 0x86, 0x55, 0x51, 0x12, 0xdd, 0x69, 0x4d, 0xfd, 0x09, 0xb4, 0x26, 0xff, 0x01,
+	0x9c, 0x8f, 0x17, 0x93, 0xb4, 0xfa, 0x09, 0xac, 0x49, 0x13, 0x46, 0x73, 0xe9, 0xa6, 0xed, 0x3b,
+	0x77, 0x97, 0xb0, 0x74, 0xd5, 0x53, 0x58, 0x57, 0x6f, 0x09, 0x9a, 0x9b, 0x50, 0x72, 0x71, 0xe7,
+	0x93, 0x65, 0x34, 0x5d, 0xf8, 0x17, 0xd8, 0xcc, 0x6d, 0x10, 0xdd, 0x9b, 0x97, 0x33, 0x61, 0xb1,
+	0xce, 0xfd, 0xe5, 0x44, 0x5d, 0xfe, 0x57, 0xa8, 0x19, 0x7e, 0x86, 0x1e, 0x2c, 0x4a, 0x2c, 0x3b,
+	0xa6, 0x73, 0x54, 0x89, 0x5b, 0xd6, 0xd1, 0xf6, 0xb5, 0x58, 0xa7, 0xec, 0x8e, 0x8b, 0x75, 0x26,
+	0xfd, 0x90, 0xc1, 0x76, 0xd9, 0xb1, 0xd0, 0xc3, 0x45, 0xe9, 0x53, 0x7e, 0xe8, 0xb4, 0xaa, 0xd2,
+	0xb5, 0x60, 0x04, 0xf5, 0xd2, 0x2d, 0x47, 0xcd, 0xb9, 0x05, 0x66, 0xbc, 0x4d, 0xce, 0xc3, 0x8a,
+	0x6c, 0xad, 0x46, 0xc1, 0x36, 0x2d, 0x10, 0x2d, 0xde, 0x41, 0xd9, 0x67, 0x9d, 0x66, 0x35, 0xb2,
+	0x96, 0x0a, 0x00, 0xc6, 0xfe, 0x81, 0x3e, 0x9d, 0x97, 0x3b, 0xe5, 0x4c, 0xce, 0x83, 0x2a, 0x54,
+	0x25, 0xf2, 0xcd, 0xb3, 0xbf, 0x2f, 0x1b, 0xd6, 0xdb, 0xcb, 0x86, 0xf5, 0xef, 0x65, 0xc3, 0xfa,
+	0xeb, 0xaa, 0xb1, 0xf2, 0xf6, 0xaa, 0xb1, 0xf2, 0xcf, 0x55, 0x63, 0xe5, 0xe7, 0x43, 0x55, 0x24,
+	0x38, 0xc7, 0x34, 0x6e, 0xab, 0xdf, 0x3f, 0x8a, 0x2f, 0xc4, 0x6c, 0x94, 0x10, 0xde, 0x5d, 0x97,
+	0xdf, 0x87, 0x4f, 0xde, 0x05, 0x00, 0x00, 0xff, 0xff, 0x77, 0xfb, 0x2c, 0x5b, 0x40, 0x0a, 0x00,
+	0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -372,6 +1072,18 @@ type QueryClient interface {
 	Task(ctx context.Context, in *QueryTaskRequest, opts ...grpc.CallOption) (*QueryTaskResponse, error)
 	Model(ctx context.Context, in *QueryModelRequest, opts ...grpc.CallOption) (*QueryModelResponse, error)
 	Worker(ctx context.Context, in *QueryWorkerRequest, opts ...grpc.CallOption) (*QueryWorkerResponse, error)
+	GEMMTask(ctx context.Context, in *QueryGEMMTaskRequest, opts ...grpc.CallOption) (*QueryGEMMTaskResponse, error)
+	GEMMDispute(ctx context.Context, in *QueryGEMMDisputeRequest, opts ...grpc.CallOption) (*QueryGEMMDisputeResponse, error)
+	GEMMReceipt(ctx context.Context, in *QueryGEMMReceiptRequest, opts ...grpc.CallOption) (*QueryGEMMReceiptResponse, error)
+	GEMMWorkerWork(ctx context.Context, in *QueryGEMMWorkerWorkRequest, opts ...grpc.CallOption) (*QueryGEMMWorkerWorkResponse, error)
+	// F.5C A5: aggregate read surface for CANONICAL_GRAPH_V2 tasks (task,
+	// DA availability, dispute/wide state, receipt) - external tools and the
+	// watcher recover state without reading the raw store.  Deliverable
+	// deviation (recorded): one aggregate query instead of four separate
+	// ones; the JSON payload carries the same fields.
+	GraphV2Status(ctx context.Context, in *QueryGraphV2StatusRequest, opts ...grpc.CallOption) (*QueryGraphV2StatusResponse, error)
+	GEMMDAStatus(ctx context.Context, in *QueryGEMMDAStatusRequest, opts ...grpc.CallOption) (*QueryGEMMDAStatusResponse, error)
+	DAProvider(ctx context.Context, in *QueryDAProviderRequest, opts ...grpc.CallOption) (*QueryDAProviderResponse, error)
 }
 
 type queryClient struct {
@@ -409,11 +1121,86 @@ func (c *queryClient) Worker(ctx context.Context, in *QueryWorkerRequest, opts .
 	return out, nil
 }
 
+func (c *queryClient) GEMMTask(ctx context.Context, in *QueryGEMMTaskRequest, opts ...grpc.CallOption) (*QueryGEMMTaskResponse, error) {
+	out := new(QueryGEMMTaskResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Query/GEMMTask", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) GEMMDispute(ctx context.Context, in *QueryGEMMDisputeRequest, opts ...grpc.CallOption) (*QueryGEMMDisputeResponse, error) {
+	out := new(QueryGEMMDisputeResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Query/GEMMDispute", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) GEMMReceipt(ctx context.Context, in *QueryGEMMReceiptRequest, opts ...grpc.CallOption) (*QueryGEMMReceiptResponse, error) {
+	out := new(QueryGEMMReceiptResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Query/GEMMReceipt", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) GEMMWorkerWork(ctx context.Context, in *QueryGEMMWorkerWorkRequest, opts ...grpc.CallOption) (*QueryGEMMWorkerWorkResponse, error) {
+	out := new(QueryGEMMWorkerWorkResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Query/GEMMWorkerWork", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) GraphV2Status(ctx context.Context, in *QueryGraphV2StatusRequest, opts ...grpc.CallOption) (*QueryGraphV2StatusResponse, error) {
+	out := new(QueryGraphV2StatusResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Query/GraphV2Status", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) GEMMDAStatus(ctx context.Context, in *QueryGEMMDAStatusRequest, opts ...grpc.CallOption) (*QueryGEMMDAStatusResponse, error) {
+	out := new(QueryGEMMDAStatusResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Query/GEMMDAStatus", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) DAProvider(ctx context.Context, in *QueryDAProviderRequest, opts ...grpc.CallOption) (*QueryDAProviderResponse, error) {
+	out := new(QueryDAProviderResponse)
+	err := c.cc.Invoke(ctx, "/prisma.compute.v1.Query/DAProvider", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 type QueryServer interface {
 	Task(context.Context, *QueryTaskRequest) (*QueryTaskResponse, error)
 	Model(context.Context, *QueryModelRequest) (*QueryModelResponse, error)
 	Worker(context.Context, *QueryWorkerRequest) (*QueryWorkerResponse, error)
+	GEMMTask(context.Context, *QueryGEMMTaskRequest) (*QueryGEMMTaskResponse, error)
+	GEMMDispute(context.Context, *QueryGEMMDisputeRequest) (*QueryGEMMDisputeResponse, error)
+	GEMMReceipt(context.Context, *QueryGEMMReceiptRequest) (*QueryGEMMReceiptResponse, error)
+	GEMMWorkerWork(context.Context, *QueryGEMMWorkerWorkRequest) (*QueryGEMMWorkerWorkResponse, error)
+	// F.5C A5: aggregate read surface for CANONICAL_GRAPH_V2 tasks (task,
+	// DA availability, dispute/wide state, receipt) - external tools and the
+	// watcher recover state without reading the raw store.  Deliverable
+	// deviation (recorded): one aggregate query instead of four separate
+	// ones; the JSON payload carries the same fields.
+	GraphV2Status(context.Context, *QueryGraphV2StatusRequest) (*QueryGraphV2StatusResponse, error)
+	GEMMDAStatus(context.Context, *QueryGEMMDAStatusRequest) (*QueryGEMMDAStatusResponse, error)
+	DAProvider(context.Context, *QueryDAProviderRequest) (*QueryDAProviderResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -428,6 +1215,27 @@ func (*UnimplementedQueryServer) Model(ctx context.Context, req *QueryModelReque
 }
 func (*UnimplementedQueryServer) Worker(ctx context.Context, req *QueryWorkerRequest) (*QueryWorkerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Worker not implemented")
+}
+func (*UnimplementedQueryServer) GEMMTask(ctx context.Context, req *QueryGEMMTaskRequest) (*QueryGEMMTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GEMMTask not implemented")
+}
+func (*UnimplementedQueryServer) GEMMDispute(ctx context.Context, req *QueryGEMMDisputeRequest) (*QueryGEMMDisputeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GEMMDispute not implemented")
+}
+func (*UnimplementedQueryServer) GEMMReceipt(ctx context.Context, req *QueryGEMMReceiptRequest) (*QueryGEMMReceiptResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GEMMReceipt not implemented")
+}
+func (*UnimplementedQueryServer) GEMMWorkerWork(ctx context.Context, req *QueryGEMMWorkerWorkRequest) (*QueryGEMMWorkerWorkResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GEMMWorkerWork not implemented")
+}
+func (*UnimplementedQueryServer) GraphV2Status(ctx context.Context, req *QueryGraphV2StatusRequest) (*QueryGraphV2StatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GraphV2Status not implemented")
+}
+func (*UnimplementedQueryServer) GEMMDAStatus(ctx context.Context, req *QueryGEMMDAStatusRequest) (*QueryGEMMDAStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GEMMDAStatus not implemented")
+}
+func (*UnimplementedQueryServer) DAProvider(ctx context.Context, req *QueryDAProviderRequest) (*QueryDAProviderResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DAProvider not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -488,6 +1296,132 @@ func _Query_Worker_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_GEMMTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGEMMTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GEMMTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Query/GEMMTask",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GEMMTask(ctx, req.(*QueryGEMMTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_GEMMDispute_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGEMMDisputeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GEMMDispute(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Query/GEMMDispute",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GEMMDispute(ctx, req.(*QueryGEMMDisputeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_GEMMReceipt_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGEMMReceiptRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GEMMReceipt(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Query/GEMMReceipt",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GEMMReceipt(ctx, req.(*QueryGEMMReceiptRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_GEMMWorkerWork_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGEMMWorkerWorkRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GEMMWorkerWork(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Query/GEMMWorkerWork",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GEMMWorkerWork(ctx, req.(*QueryGEMMWorkerWorkRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_GraphV2Status_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGraphV2StatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GraphV2Status(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Query/GraphV2Status",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GraphV2Status(ctx, req.(*QueryGraphV2StatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_GEMMDAStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGEMMDAStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GEMMDAStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Query/GEMMDAStatus",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GEMMDAStatus(ctx, req.(*QueryGEMMDAStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_DAProvider_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryDAProviderRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).DAProvider(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/prisma.compute.v1.Query/DAProvider",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).DAProvider(ctx, req.(*QueryDAProviderRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Query_serviceDesc = _Query_serviceDesc
 var _Query_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "prisma.compute.v1.Query",
@@ -504,6 +1438,34 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Worker",
 			Handler:    _Query_Worker_Handler,
+		},
+		{
+			MethodName: "GEMMTask",
+			Handler:    _Query_GEMMTask_Handler,
+		},
+		{
+			MethodName: "GEMMDispute",
+			Handler:    _Query_GEMMDispute_Handler,
+		},
+		{
+			MethodName: "GEMMReceipt",
+			Handler:    _Query_GEMMReceipt_Handler,
+		},
+		{
+			MethodName: "GEMMWorkerWork",
+			Handler:    _Query_GEMMWorkerWork_Handler,
+		},
+		{
+			MethodName: "GraphV2Status",
+			Handler:    _Query_GraphV2Status_Handler,
+		},
+		{
+			MethodName: "GEMMDAStatus",
+			Handler:    _Query_GEMMDAStatus_Handler,
+		},
+		{
+			MethodName: "DAProvider",
+			Handler:    _Query_DAProvider_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -705,6 +1667,445 @@ func (m *QueryWorkerResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *QueryGEMMTaskRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGEMMTaskRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGEMMTaskRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.GemmTaskId != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.GemmTaskId))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryGEMMTaskResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGEMMTaskResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGEMMTaskResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.DisputeJson) > 0 {
+		i -= len(m.DisputeJson)
+		copy(dAtA[i:], m.DisputeJson)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.DisputeJson)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.TaskJson) > 0 {
+		i -= len(m.TaskJson)
+		copy(dAtA[i:], m.TaskJson)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.TaskJson)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryGEMMDisputeRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGEMMDisputeRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGEMMDisputeRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.GemmTaskId != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.GemmTaskId))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryGEMMDisputeResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGEMMDisputeResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGEMMDisputeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.DisputeJson) > 0 {
+		i -= len(m.DisputeJson)
+		copy(dAtA[i:], m.DisputeJson)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.DisputeJson)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryGEMMReceiptRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGEMMReceiptRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGEMMReceiptRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ReceiptId) > 0 {
+		i -= len(m.ReceiptId)
+		copy(dAtA[i:], m.ReceiptId)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.ReceiptId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryGEMMReceiptResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGEMMReceiptResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGEMMReceiptResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ReceiptJson) > 0 {
+		i -= len(m.ReceiptJson)
+		copy(dAtA[i:], m.ReceiptJson)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.ReceiptJson)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryGEMMWorkerWorkRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGEMMWorkerWorkRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGEMMWorkerWorkRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Worker) > 0 {
+		i -= len(m.Worker)
+		copy(dAtA[i:], m.Worker)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.Worker)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryGEMMWorkerWorkResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGEMMWorkerWorkResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGEMMWorkerWorkResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.TotalCanonicalMac != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.TotalCanonicalMac))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryGEMMDAStatusRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGEMMDAStatusRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGEMMDAStatusRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.GemmTaskId != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.GemmTaskId))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryGEMMDAStatusResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGEMMDAStatusResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGEMMDAStatusResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.AttestationsJson) > 0 {
+		i -= len(m.AttestationsJson)
+		copy(dAtA[i:], m.AttestationsJson)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.AttestationsJson)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.AvailabilityStatus) > 0 {
+		i -= len(m.AvailabilityStatus)
+		copy(dAtA[i:], m.AvailabilityStatus)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.AvailabilityStatus)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.OpenChallenges != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.OpenChallenges))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.ValidReplicas != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.ValidReplicas))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.RequiredReplicas != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.RequiredReplicas))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryDAProviderRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryDAProviderRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryDAProviderRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Provider) > 0 {
+		i -= len(m.Provider)
+		copy(dAtA[i:], m.Provider)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.Provider)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryDAProviderResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryDAProviderResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryDAProviderResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ProviderJson) > 0 {
+		i -= len(m.ProviderJson)
+		copy(dAtA[i:], m.ProviderJson)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.ProviderJson)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryGraphV2StatusRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGraphV2StatusRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGraphV2StatusRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.GraphTaskId != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.GraphTaskId))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryGraphV2StatusResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGraphV2StatusResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGraphV2StatusResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.StatusJson) > 0 {
+		i -= len(m.StatusJson)
+		copy(dAtA[i:], m.StatusJson)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.StatusJson)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
 	offset -= sovQuery(v)
 	base := offset
@@ -799,6 +2200,200 @@ func (m *QueryWorkerResponse) Size() (n int) {
 	}
 	if m.ReservedUprsm != 0 {
 		n += 1 + sovQuery(uint64(m.ReservedUprsm))
+	}
+	return n
+}
+
+func (m *QueryGEMMTaskRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.GemmTaskId != 0 {
+		n += 1 + sovQuery(uint64(m.GemmTaskId))
+	}
+	return n
+}
+
+func (m *QueryGEMMTaskResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.TaskJson)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	l = len(m.DisputeJson)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryGEMMDisputeRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.GemmTaskId != 0 {
+		n += 1 + sovQuery(uint64(m.GemmTaskId))
+	}
+	return n
+}
+
+func (m *QueryGEMMDisputeResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.DisputeJson)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryGEMMReceiptRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ReceiptId)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryGEMMReceiptResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ReceiptJson)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryGEMMWorkerWorkRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Worker)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryGEMMWorkerWorkResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TotalCanonicalMac != 0 {
+		n += 1 + sovQuery(uint64(m.TotalCanonicalMac))
+	}
+	return n
+}
+
+func (m *QueryGEMMDAStatusRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.GemmTaskId != 0 {
+		n += 1 + sovQuery(uint64(m.GemmTaskId))
+	}
+	return n
+}
+
+func (m *QueryGEMMDAStatusResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.RequiredReplicas != 0 {
+		n += 1 + sovQuery(uint64(m.RequiredReplicas))
+	}
+	if m.ValidReplicas != 0 {
+		n += 1 + sovQuery(uint64(m.ValidReplicas))
+	}
+	if m.OpenChallenges != 0 {
+		n += 1 + sovQuery(uint64(m.OpenChallenges))
+	}
+	l = len(m.AvailabilityStatus)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	l = len(m.AttestationsJson)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryDAProviderRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Provider)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryDAProviderResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ProviderJson)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryGraphV2StatusRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.GraphTaskId != 0 {
+		n += 1 + sovQuery(uint64(m.GraphTaskId))
+	}
+	return n
+}
+
+func (m *QueryGraphV2StatusResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.StatusJson)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
 	}
 	return n
 }
@@ -1343,6 +2938,1226 @@ func (m *QueryWorkerResponse) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGEMMTaskRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGEMMTaskRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGEMMTaskRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GemmTaskId", wireType)
+			}
+			m.GemmTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GemmTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGEMMTaskResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGEMMTaskResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGEMMTaskResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TaskJson", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TaskJson = append(m.TaskJson[:0], dAtA[iNdEx:postIndex]...)
+			if m.TaskJson == nil {
+				m.TaskJson = []byte{}
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisputeJson", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DisputeJson = append(m.DisputeJson[:0], dAtA[iNdEx:postIndex]...)
+			if m.DisputeJson == nil {
+				m.DisputeJson = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGEMMDisputeRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGEMMDisputeRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGEMMDisputeRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GemmTaskId", wireType)
+			}
+			m.GemmTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GemmTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGEMMDisputeResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGEMMDisputeResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGEMMDisputeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisputeJson", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DisputeJson = append(m.DisputeJson[:0], dAtA[iNdEx:postIndex]...)
+			if m.DisputeJson == nil {
+				m.DisputeJson = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGEMMReceiptRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGEMMReceiptRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGEMMReceiptRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReceiptId", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ReceiptId = append(m.ReceiptId[:0], dAtA[iNdEx:postIndex]...)
+			if m.ReceiptId == nil {
+				m.ReceiptId = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGEMMReceiptResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGEMMReceiptResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGEMMReceiptResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReceiptJson", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ReceiptJson = append(m.ReceiptJson[:0], dAtA[iNdEx:postIndex]...)
+			if m.ReceiptJson == nil {
+				m.ReceiptJson = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGEMMWorkerWorkRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGEMMWorkerWorkRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGEMMWorkerWorkRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Worker", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Worker = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGEMMWorkerWorkResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGEMMWorkerWorkResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGEMMWorkerWorkResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TotalCanonicalMac", wireType)
+			}
+			m.TotalCanonicalMac = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TotalCanonicalMac |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGEMMDAStatusRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGEMMDAStatusRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGEMMDAStatusRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GemmTaskId", wireType)
+			}
+			m.GemmTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GemmTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGEMMDAStatusResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGEMMDAStatusResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGEMMDAStatusResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequiredReplicas", wireType)
+			}
+			m.RequiredReplicas = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.RequiredReplicas |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ValidReplicas", wireType)
+			}
+			m.ValidReplicas = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ValidReplicas |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OpenChallenges", wireType)
+			}
+			m.OpenChallenges = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.OpenChallenges |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AvailabilityStatus", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AvailabilityStatus = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AttestationsJson", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AttestationsJson = append(m.AttestationsJson[:0], dAtA[iNdEx:postIndex]...)
+			if m.AttestationsJson == nil {
+				m.AttestationsJson = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryDAProviderRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryDAProviderRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryDAProviderRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Provider", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Provider = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryDAProviderResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryDAProviderResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryDAProviderResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProviderJson", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ProviderJson = append(m.ProviderJson[:0], dAtA[iNdEx:postIndex]...)
+			if m.ProviderJson == nil {
+				m.ProviderJson = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGraphV2StatusRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGraphV2StatusRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGraphV2StatusRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GraphTaskId", wireType)
+			}
+			m.GraphTaskId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GraphTaskId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGraphV2StatusResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGraphV2StatusResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGraphV2StatusResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StatusJson", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.StatusJson = append(m.StatusJson[:0], dAtA[iNdEx:postIndex]...)
+			if m.StatusJson == nil {
+				m.StatusJson = []byte{}
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipQuery(dAtA[iNdEx:])

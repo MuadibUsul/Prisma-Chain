@@ -1,0 +1,110 @@
+{
+  "scenario": "phase-e-combined",
+  "censor": "validator-a omits GEMM challenge/trace/mid/arbitrate from its proposals",
+  "worker": "prsm1j4wm7lmw5pd6ct97jgqv74r8crnj53fhtj5xg4",
+  "watcher": {
+    "task_id": 1,
+    "providers": [
+      "http://127.0.0.1:8401",
+      "http://127.0.0.1:8402",
+      "http://127.0.0.1:8403"
+    ],
+    "bulk_download_seconds": 2.039,
+    "output_bytes": 1024,
+    "root_verification_seconds": 0.0,
+    "root_verified": true,
+    "freivalds_seconds": 0.0,
+    "freivalds_passed": false,
+    "bad_row": 0,
+    "bad_tile": [
+      0,
+      0
+    ],
+    "challenge_txhash": "4341635205137E125C864FDA5DF84E7EC5586B3F1FE625CF7D0A8B9A63C24E4C",
+    "outcome": "challenge_opened"
+  },
+  "chain_task_id": 1,
+  "da_providers": {
+    "da-a": {
+      "account": "prsm1e0eu2c975ncvfnuheqxnxwrjsh33x4d273yz6s",
+      "port": 8401
+    },
+    "da-b": {
+      "account": "prsm1qyuslzg45fzhgt2s3ffcxcc8zkvhfpz6ugn68m",
+      "port": 8402
+    },
+    "da-c": {
+      "account": "prsm19gnd6uraasqdk6sqcj3kxyje2clkudv34y94p3",
+      "port": 8403
+    }
+  },
+  "replicated_bytes": 1024,
+  "wrong_blob_refused": true,
+  "da_status": {
+    "valid_replicas": 3,
+    "required": 2,
+    "status": "challenge_window_ready"
+  },
+  "one_provider_offline": true,
+  "challenge_timing": {
+    "height": 39,
+    "next_expected": "9B276AD37C69A7312940196B7D62854D853AC7F5",
+    "target": "validator-a"
+  },
+  "mempool_after_broadcast": {
+    "validator-a": "0",
+    "validator-b": "0",
+    "validator-c": "0"
+  },
+  "mempool_after_3s": {
+    "validator-a": "0",
+    "validator-b": "0"
+  },
+  "challenge_inclusion": {
+    "broadcast_height": 40,
+    "blocks": [
+      {
+        "height": 40,
+        "proposer": "validator-a",
+        "included": false
+      },
+      {
+        "height": 41,
+        "proposer": "validator-b",
+        "included": true
+      }
+    ],
+    "censored_by": [
+      40
+    ],
+    "included_height": 41,
+    "included_by": "validator-b",
+    "inclusion_delay_blocks": 1
+  },
+  "bisection_rounds": 1,
+  "final_status": "fraud",
+  "worker_receipt": null,
+  "arbitration_step": 1,
+  "requester_balance": 99964000000,
+  "worker_balance": 5000000,
+  "validator_final_state": {
+    "validator-a": {
+      "height": 50,
+      "app_hash": "5F2DA7B32C38A8849FB8307B048263B1A6E3637DF2DBC57C60BE5098420695D5"
+    },
+    "validator-b": {
+      "height": 50,
+      "app_hash": "5F2DA7B32C38A8849FB8307B048263B1A6E3637DF2DBC57C60BE5098420695D5"
+    },
+    "validator-c": {
+      "height": 50,
+      "app_hash": "5F2DA7B32C38A8849FB8307B048263B1A6E3637DF2DBC57C60BE5098420695D5"
+    },
+    "validator-d": {
+      "height": 50,
+      "app_hash": "5F2DA7B32C38A8849FB8307B048263B1A6E3637DF2DBC57C60BE5098420695D5"
+    }
+  },
+  "validators_converged": true,
+  "da_timeout_scenario": "da-c forgot its blob after attesting"
+}

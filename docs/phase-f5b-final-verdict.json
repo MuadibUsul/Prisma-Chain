@@ -1,0 +1,39 @@
+{
+ "gpu_a": "NVIDIA A40",
+ "gpu_b": "NVIDIA RTX 4000 Ada Generation",
+ "cross_arch": true,
+ "nodes_required_exact": {
+  "a": true,
+  "b": true
+ },
+ "vectors_required_exact": {
+  "a": true,
+  "b": true
+ },
+ "executable_backends": {
+  "a": [
+   "GPU_TC_KARATSUBA3",
+   "GPU_SCHOOLBOOK4"
+  ],
+  "b": [
+   "GPU_TC_KARATSUBA3",
+   "GPU_SCHOOLBOOK4"
+  ]
+ },
+ "platform_limited_backends": {
+  "GPU_SIMT_INT64_REFERENCE": {
+   "a": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'",
+   "b": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+  },
+  "GPU_DP2A_W_SPLIT2": {
+   "a": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'",
+   "b": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+  }
+ },
+ "performance_pass": {
+  "a": false,
+  "b": false
+ },
+ "cross_gpu": "both GPUs bit-exact vs the CPU oracle on all 83 nodes and the vectors; cross-GPU equality follows from bit-exactness",
+ "final": "GPU_CORRECT_BUT_NOT_PRACTICAL"
+}

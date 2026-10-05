@@ -1,0 +1,92 @@
+name: prisma-multivalidator
+
+# Four equal-power validators (25% each) sharing one genesis. One offline
+# validator leaves 75% > 2/3 so the chain keeps finalizing; two offline
+# leaves 50% and the chain halts, which is the expected CometBFT behavior.
+#
+# PRISMA_DEV_CENSOR_GEMM_CHALLENGES is a DEVELOPMENT-ONLY proposer omission
+# harness (see chain/app/devcensor.go). It is empty by default.
+
+services:
+  init:
+    image: prisma-chain:phase-f
+    pull_policy: never
+    entrypoint: ["/bin/sh", "/bootstrap/init.sh"]
+    environment:
+      PRISMA_MV_CHAIN_ID: prisma-mv-1
+      PRISMA_MV_DATA: /data
+    volumes:
+      - ./data:/data
+      - ./init.sh:/bootstrap/init.sh:ro
+
+  validator-a:
+    image: prisma-chain:phase-f
+    pull_policy: never
+    entrypoint:
+      - sh
+      - -c
+      - |
+        rm -f /root/.prisma && ln -s /data/validator-a /root/.prisma
+        exec prismad start --home /data/validator-a --minimum-gas-prices 0uprsm \
+          --pruning default --rpc.laddr tcp://0.0.0.0:26657 \
+          --p2p.laddr tcp://0.0.0.0:26656 --grpc.address 0.0.0.0:9090
+    environment:
+      PRISMA_DEV_CENSOR_GEMM_CHALLENGES: ${CENSOR_A:-}
+    volumes:
+      - ./data/validator-a:/data/validator-a
+    ports:
+      - "127.0.0.1:26661:26657"
+
+  validator-b:
+    image: prisma-chain:phase-f
+    pull_policy: never
+    entrypoint:
+      - sh
+      - -c
+      - |
+        rm -f /root/.prisma && ln -s /data/validator-b /root/.prisma
+        exec prismad start --home /data/validator-b --minimum-gas-prices 0uprsm \
+          --pruning default --rpc.laddr tcp://0.0.0.0:26657 \
+          --p2p.laddr tcp://0.0.0.0:26656 --grpc.address 0.0.0.0:9090
+    environment:
+      PRISMA_DEV_CENSOR_GEMM_CHALLENGES: ${CENSOR_B:-}
+    volumes:
+      - ./data/validator-b:/data/validator-b
+    ports:
+      - "127.0.0.1:26662:26657"
+
+  validator-c:
+    image: prisma-chain:phase-f
+    pull_policy: never
+    entrypoint:
+      - sh
+      - -c
+      - |
+        rm -f /root/.prisma && ln -s /data/validator-c /root/.prisma
+        exec prismad start --home /data/validator-c --minimum-gas-prices 0uprsm \
+          --pruning default --rpc.laddr tcp://0.0.0.0:26657 \
+          --p2p.laddr tcp://0.0.0.0:26656 --grpc.address 0.0.0.0:9090
+    environment:
+      PRISMA_DEV_CENSOR_GEMM_CHALLENGES: ${CENSOR_C:-}
+    volumes:
+      - ./data/validator-c:/data/validator-c
+    ports:
+      - "127.0.0.1:26663:26657"
+
+  validator-d:
+    image: prisma-chain:phase-f
+    pull_policy: never
+    entrypoint:
+      - sh
+      - -c
+      - |
+        rm -f /root/.prisma && ln -s /data/validator-d /root/.prisma
+        exec prismad start --home /data/validator-d --minimum-gas-prices 0uprsm \
+          --pruning default --rpc.laddr tcp://0.0.0.0:26657 \
+          --p2p.laddr tcp://0.0.0.0:26656 --grpc.address 0.0.0.0:9090
+    environment:
+      PRISMA_DEV_CENSOR_GEMM_CHALLENGES: ${CENSOR_D:-}
+    volumes:
+      - ./data/validator-d:/data/validator-d
+    ports:
+      - "127.0.0.1:26664:26657"

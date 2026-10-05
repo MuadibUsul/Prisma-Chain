@@ -164,3 +164,8 @@ func depthFor(count uint32) int {
 	}
 	return depth
 }
+
+// DepthFor exposes the expected inclusion-proof sibling count for a tree
+// with count leaves, so chain code can reject oversized or undersized
+// proofs before hashing anything.
+func DepthFor(count uint32) int { return depthFor(count) }

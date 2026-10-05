@@ -115,3 +115,20 @@ request.
 The [task protocol](docs/protocol.md) and [threat model](docs/threat-model.md)
 describe the exact promises and failure handling. A testnet PRSM faucet token
 has no real monetary value.
+
+
+Phase E adds permissionless verification: a four-validator devnet proves
+that one censoring proposer cannot suppress a valid challenge
+(`docs/phase-e-report.md`), and DA_REPLICA_V1 gives the GEMM output
+bonded, independently verified availability with objective on-chain tile
+challenges. See `docs/phase-e-permissionless-verification.md`.
+
+Phase F adds the canonical operator framework and the verifiable
+Transformer block: frozen Q12.20 integer math with Go/Python bit-exact
+vectors (`docs/canonical-math-v1.md`, `docs/canonical-operators-v1.md`),
+static hashable graphs with first-divergent-node disputes
+(`docs/canonical-graph-v1.md`), and `TRANSFORMER_BLOCK_V1` attention and
+SwiGLU macros settled on chain by a four-validator devnet E2E
+(`docs/phase-f-report.md`, `docs/phase-f-e2e-results.json`). The real
+pinned model block and GPU backends are NOT TESTED; the phase status is
+PARTIAL by the predeclared rule.

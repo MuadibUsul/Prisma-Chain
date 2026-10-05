@@ -1,0 +1,8 @@
+{
+ "honest": {
+  "nodes": 227,
+  "mismatches": 0,
+  "seconds": 4.137491799541749
+ },
+ "note": "exact canonical recomputation of every non-GEMM node"
+}

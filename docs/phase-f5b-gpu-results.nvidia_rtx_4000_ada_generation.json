@@ -1,0 +1,3213 @@
+{
+ "backend_used": "GPU_TC_KARATSUBA3 (primary) + GPU_SCHOOLBOOK4 (independent merge, on-hardware reference)",
+ "environment": {
+  "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "torch": "2.8.0+cu128",
+  "cuda_runtime": "12.8",
+  "cuda_available": true,
+  "device": "cuda",
+  "gpu_name": "NVIDIA RTX 4000 Ada Generation",
+  "compute_capability": "8.9",
+  "sm_count": 48,
+  "total_memory_gb": 19.6,
+  "device_index": null,
+  "nvidia_smi": "NVIDIA RTX 4000 Ada Generation, 595.91.07, 8.9"
+ },
+ "cuda_probe": {
+  "floor_div_int64_ok": true,
+  "int_mm_m_rows_probe": {
+   "16": "RuntimeError: self.size(0) needs to be greater than 16, but got 16",
+   "17": "ok",
+   "24": "ok",
+   "32": "ok"
+  },
+  "padding_rule": "M -> max(32, align16); K -> max(16, align16); N -> max(16, align16)",
+  "padding_rule_justification": "torch._int_mm on CUDA requires left-operand M > 16 (see probe); zero padding is mathematically inert so exactness is preserved"
+ },
+ "float_audit": {
+  "file": "gpu/f5b/f5b_gpu_backends.py",
+  "hits": {
+   "float(": 1,
+   "float32": 1,
+   "half(": 1,
+   "bfloat16": 1,
+   ".to(torch.float": 1,
+   "_int_mm": 7
+  },
+  "note": "_int_mm is the sanctioned integer tensor-core GEMM primitive",
+  "float_primitives_used_for_canonical": 0
+ },
+ "vectors": {
+  "vectors": [
+   {
+    "name": "boundary_all_max",
+    "backends": {
+     "GPU_TC_KARATSUBA3": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "GPU_SCHOOLBOOK4": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "GPU_SIMT_INT64_REFERENCE": {
+      "exact": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     "GPU_DP2A_W_SPLIT2": {
+      "exact": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     }
+    }
+   },
+   {
+    "name": "boundary_all_min",
+    "backends": {
+     "GPU_TC_KARATSUBA3": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "GPU_SCHOOLBOOK4": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "GPU_SIMT_INT64_REFERENCE": {
+      "exact": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     "GPU_DP2A_W_SPLIT2": {
+      "exact": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     }
+    }
+   },
+   {
+    "name": "small_random",
+    "backends": {
+     "GPU_TC_KARATSUBA3": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "GPU_SCHOOLBOOK4": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "GPU_SIMT_INT64_REFERENCE": {
+      "exact": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     "GPU_DP2A_W_SPLIT2": {
+      "exact": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     }
+    }
+   },
+   {
+    "name": "transpose_b",
+    "backends": {
+     "GPU_TC_KARATSUBA3": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "GPU_SCHOOLBOOK4": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "GPU_SIMT_INT64_REFERENCE": {
+      "exact": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     "GPU_DP2A_W_SPLIT2": {
+      "exact": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     }
+    }
+   },
+   {
+    "name": "k1",
+    "backends": {
+     "GPU_TC_KARATSUBA3": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "GPU_SCHOOLBOOK4": {
+      "exact": true,
+      "mismatches": 0
+     },
+     "GPU_SIMT_INT64_REFERENCE": {
+      "exact": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     "GPU_DP2A_W_SPLIT2": {
+      "exact": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     }
+    }
+   }
+  ],
+  "summary": {
+   "GPU_TC_KARATSUBA3": {
+    "exact_nodes": 5,
+    "mismatch_nodes": 0,
+    "error_nodes": 0,
+    "executable": true
+   },
+   "GPU_SCHOOLBOOK4": {
+    "exact_nodes": 5,
+    "mismatch_nodes": 0,
+    "error_nodes": 0,
+    "executable": true
+   },
+   "GPU_SIMT_INT64_REFERENCE": {
+    "exact_nodes": 0,
+    "mismatch_nodes": 0,
+    "error_nodes": 5,
+    "executable": false,
+    "first_error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+   },
+   "GPU_DP2A_W_SPLIT2": {
+    "exact_nodes": 0,
+    "mismatch_nodes": 0,
+    "error_nodes": 5,
+    "executable": false,
+    "first_error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+   }
+  },
+  "executable_backends": [
+   "GPU_TC_KARATSUBA3",
+   "GPU_SCHOOLBOOK4"
+  ],
+  "required_cuda_backends_exact": true,
+  "all_exact": false,
+  "note": "GPU outputs compared elementwise against the CPU int64 oracle"
+ },
+ "nodes": {
+  "summary": {
+   "GPU_TC_KARATSUBA3": {
+    "exact_nodes": 83,
+    "mismatch_nodes": 0,
+    "error_nodes": 0,
+    "executable": true
+   },
+   "GPU_SCHOOLBOOK4": {
+    "exact_nodes": 83,
+    "mismatch_nodes": 0,
+    "error_nodes": 0,
+    "executable": true
+   },
+   "GPU_SIMT_INT64_REFERENCE": {
+    "exact_nodes": 0,
+    "mismatch_nodes": 0,
+    "error_nodes": 83,
+    "executable": false,
+    "first_error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+   },
+   "GPU_DP2A_W_SPLIT2": {
+    "exact_nodes": 0,
+    "mismatch_nodes": 0,
+    "error_nodes": 83,
+    "executable": false,
+    "first_error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+   }
+  },
+  "detail": {
+   "GPU_TC_KARATSUBA3": {
+    "exact": 83,
+    "mismatch": 0,
+    "error": 0,
+    "first_error": null,
+    "nodes": [
+     {
+      "node_id": 2,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7420959770679474
+     },
+     {
+      "node_id": 7,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7425120174884796
+     },
+     {
+      "node_id": 12,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7421119809150696
+     },
+     {
+      "node_id": 17,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7425599992275238
+     },
+     {
+      "node_id": 22,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7419680058956146
+     },
+     {
+      "node_id": 27,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7437120079994202
+     },
+     {
+      "node_id": 32,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7397119998931885
+     },
+     {
+      "node_id": 37,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7399359941482544
+     },
+     {
+      "node_id": 42,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7407039999961853
+     },
+     {
+      "node_id": 47,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7409760057926178
+     },
+     {
+      "node_id": 52,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7451039850711823
+     },
+     {
+      "node_id": 57,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7440319955348969
+     },
+     {
+      "node_id": 62,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7425920069217682
+     },
+     {
+      "node_id": 67,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.739296019077301
+     },
+     {
+      "node_id": 72,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7435199916362762
+     },
+     {
+      "node_id": 77,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7406559884548187
+     },
+     {
+      "node_id": 82,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7410399913787842
+     },
+     {
+      "node_id": 87,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7406879961490631
+     },
+     {
+      "node_id": 89,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7418400049209595
+     },
+     {
+      "node_id": 94,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7405920028686523
+     },
+     {
+      "node_id": 96,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7433919906616211
+     },
+     {
+      "node_id": 101,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7411039769649506
+     },
+     {
+      "node_id": 103,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7417919933795929
+     },
+     {
+      "node_id": 108,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7401120066642761
+     },
+     {
+      "node_id": 110,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7416799962520599
+     },
+     {
+      "node_id": 115,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7391679883003235
+     },
+     {
+      "node_id": 117,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7408799827098846
+     },
+     {
+      "node_id": 122,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7406399846076965
+     },
+     {
+      "node_id": 124,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7444639801979065
+     },
+     {
+      "node_id": 129,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7410080134868622
+     },
+     {
+      "node_id": 131,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7427999973297119
+     },
+     {
+      "node_id": 136,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7413599789142609
+     },
+     {
+      "node_id": 138,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7513439953327179
+     },
+     {
+      "node_id": 143,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.6963360011577606
+     },
+     {
+      "node_id": 145,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.742112010717392
+     },
+     {
+      "node_id": 147,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7479680180549622
+     },
+     {
+      "node_id": 152,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.6970880031585693
+     },
+     {
+      "node_id": 154,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.743151992559433
+     },
+     {
+      "node_id": 156,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7513599991798401
+     },
+     {
+      "node_id": 161,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.6958879828453064
+     },
+     {
+      "node_id": 163,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7433759868144989
+     },
+     {
+      "node_id": 165,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7483199834823608
+     },
+     {
+      "node_id": 170,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.6959360241889954
+     },
+     {
+      "node_id": 172,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7470880150794983
+     },
+     {
+      "node_id": 174,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7519520223140717
+     },
+     {
+      "node_id": 179,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.6947519779205322
+     },
+     {
+      "node_id": 181,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7446080148220062
+     },
+     {
+      "node_id": 183,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7507359981536865
+     },
+     {
+      "node_id": 188,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.6963360011577606
+     },
+     {
+      "node_id": 190,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7418719828128815
+     },
+     {
+      "node_id": 192,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7497279942035675
+     },
+     {
+      "node_id": 197,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.6945119798183441
+     },
+     {
+      "node_id": 199,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7414239943027496
+     },
+     {
+      "node_id": 201,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7501599788665771
+     },
+     {
+      "node_id": 206,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.696256011724472
+     },
+     {
+      "node_id": 208,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7419679760932922
+     },
+     {
+      "node_id": 210,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7531040012836456
+     },
+     {
+      "node_id": 215,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.7051679790019989
+     },
+     {
+      "node_id": 217,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7420320212841034
+     },
+     {
+      "node_id": 219,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7492640018463135
+     },
+     {
+      "node_id": 224,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.6974879801273346
+     },
+     {
+      "node_id": 226,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7430559992790222
+     },
+     {
+      "node_id": 228,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7508479952812195
+     },
+     {
+      "node_id": 233,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.6980800032615662
+     },
+     {
+      "node_id": 235,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7431840002536774
+     },
+     {
+      "node_id": 237,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7479680180549622
+     },
+     {
+      "node_id": 242,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.6949759721755981
+     },
+     {
+      "node_id": 244,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7425920069217682
+     },
+     {
+      "node_id": 246,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7532959878444672
+     },
+     {
+      "node_id": 251,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.6967200040817261
+     },
+     {
+      "node_id": 253,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7428160011768341
+     },
+     {
+      "node_id": 255,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.751440018415451
+     },
+     {
+      "node_id": 260,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.6951040029525757
+     },
+     {
+      "node_id": 262,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7438879907131195
+     },
+     {
+      "node_id": 264,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7502240240573883
+     },
+     {
+      "node_id": 269,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.6958079934120178
+     },
+     {
+      "node_id": 271,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7413440048694611
+     },
+     {
+      "node_id": 273,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7493119835853577
+     },
+     {
+      "node_id": 278,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.6978719830513
+     },
+     {
+      "node_id": 280,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7419680058956146
+     },
+     {
+      "node_id": 300,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 1.6634399890899658
+     },
+     {
+      "node_id": 303,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 1.6583359837532043
+     },
+     {
+      "node_id": 307,
+      "M": 16,
+      "N": 3072,
+      "K": 3072,
+      "transpose_b": false,
+      "median_ms": 1.795695960521698
+     }
+    ]
+   },
+   "GPU_SCHOOLBOOK4": {
+    "exact": 83,
+    "mismatch": 0,
+    "error": 0,
+    "first_error": null,
+    "nodes": [
+     {
+      "node_id": 2,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7669439911842346
+     },
+     {
+      "node_id": 7,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7700319886207581
+     },
+     {
+      "node_id": 12,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7714399993419647
+     },
+     {
+      "node_id": 17,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7700639963150024
+     },
+     {
+      "node_id": 22,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7708320021629333
+     },
+     {
+      "node_id": 27,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7718879878520966
+     },
+     {
+      "node_id": 32,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7714239954948425
+     },
+     {
+      "node_id": 37,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7681280076503754
+     },
+     {
+      "node_id": 42,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7713760137557983
+     },
+     {
+      "node_id": 47,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7698400020599365
+     },
+     {
+      "node_id": 52,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.766895979642868
+     },
+     {
+      "node_id": 57,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7692800164222717
+     },
+     {
+      "node_id": 62,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7679519951343536
+     },
+     {
+      "node_id": 67,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7702719867229462
+     },
+     {
+      "node_id": 72,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7688159942626953
+     },
+     {
+      "node_id": 77,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7691999971866608
+     },
+     {
+      "node_id": 82,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7694720029830933
+     },
+     {
+      "node_id": 87,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7688319981098175
+     },
+     {
+      "node_id": 89,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7721279859542847
+     },
+     {
+      "node_id": 94,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.770143985748291
+     },
+     {
+      "node_id": 96,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.772383987903595
+     },
+     {
+      "node_id": 101,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7705920040607452
+     },
+     {
+      "node_id": 103,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7694399952888489
+     },
+     {
+      "node_id": 108,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7665440142154694
+     },
+     {
+      "node_id": 110,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7678560018539429
+     },
+     {
+      "node_id": 115,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7657119929790497
+     },
+     {
+      "node_id": 117,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7675039768218994
+     },
+     {
+      "node_id": 122,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7712959945201874
+     },
+     {
+      "node_id": 124,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7708000242710114
+     },
+     {
+      "node_id": 129,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7708000242710114
+     },
+     {
+      "node_id": 131,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7705280184745789
+     },
+     {
+      "node_id": 136,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 0.7697440087795258
+     },
+     {
+      "node_id": 138,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7832959890365601
+     },
+     {
+      "node_id": 143,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.7127039730548859
+     },
+     {
+      "node_id": 145,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.768528014421463
+     },
+     {
+      "node_id": 147,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7856639921665192
+     },
+     {
+      "node_id": 152,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.7120000123977661
+     },
+     {
+      "node_id": 154,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7714560031890869
+     },
+     {
+      "node_id": 156,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7817759811878204
+     },
+     {
+      "node_id": 161,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.7109119892120361
+     },
+     {
+      "node_id": 163,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7702080011367798
+     },
+     {
+      "node_id": 165,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7820959985256195
+     },
+     {
+      "node_id": 170,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.7105599939823151
+     },
+     {
+      "node_id": 172,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7764159739017487
+     },
+     {
+      "node_id": 174,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7825759947299957
+     },
+     {
+      "node_id": 179,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.7110079824924469
+     },
+     {
+      "node_id": 181,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7728639841079712
+     },
+     {
+      "node_id": 183,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7820799946784973
+     },
+     {
+      "node_id": 188,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.7109600007534027
+     },
+     {
+      "node_id": 190,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7714079916477203
+     },
+     {
+      "node_id": 192,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7805919945240021
+     },
+     {
+      "node_id": 197,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.7122080028057098
+     },
+     {
+      "node_id": 199,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7719520032405853
+     },
+     {
+      "node_id": 201,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7808479964733124
+     },
+     {
+      "node_id": 206,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.711216002702713
+     },
+     {
+      "node_id": 208,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7714720070362091
+     },
+     {
+      "node_id": 210,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7790400087833405
+     },
+     {
+      "node_id": 215,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.7230880260467529
+     },
+     {
+      "node_id": 217,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7703679800033569
+     },
+     {
+      "node_id": 219,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7828799784183502
+     },
+     {
+      "node_id": 224,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.7114079892635345
+     },
+     {
+      "node_id": 226,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7684639990329742
+     },
+     {
+      "node_id": 228,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7839199900627136
+     },
+     {
+      "node_id": 233,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.7128959894180298
+     },
+     {
+      "node_id": 235,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7696000039577484
+     },
+     {
+      "node_id": 237,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7800799906253815
+     },
+     {
+      "node_id": 242,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.7107200026512146
+     },
+     {
+      "node_id": 244,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7700800001621246
+     },
+     {
+      "node_id": 246,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7836960256099701
+     },
+     {
+      "node_id": 251,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.7118559777736664
+     },
+     {
+      "node_id": 253,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7708800137042999
+     },
+     {
+      "node_id": 255,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7834879755973816
+     },
+     {
+      "node_id": 260,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.7113119959831238
+     },
+     {
+      "node_id": 262,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7719520032405853
+     },
+     {
+      "node_id": 264,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7836000025272369
+     },
+     {
+      "node_id": 269,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.7130720019340515
+     },
+     {
+      "node_id": 271,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7706719934940338
+     },
+     {
+      "node_id": 273,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "median_ms": 0.7808479964733124
+     },
+     {
+      "node_id": 278,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "median_ms": 0.7113440036773682
+     },
+     {
+      "node_id": 280,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "median_ms": 0.7691200077533722
+     },
+     {
+      "node_id": 300,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 1.7620800137519836
+     },
+     {
+      "node_id": 303,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "median_ms": 1.767359972000122
+     },
+     {
+      "node_id": 307,
+      "M": 16,
+      "N": 3072,
+      "K": 3072,
+      "transpose_b": false,
+      "median_ms": 1.9478880167007446
+     }
+    ]
+   },
+   "GPU_SIMT_INT64_REFERENCE": {
+    "exact": 0,
+    "mismatch": 0,
+    "error": 83,
+    "first_error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'",
+    "nodes": [
+     {
+      "node_id": 2,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 7,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 12,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 17,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 22,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 27,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 32,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 37,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 42,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 47,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 52,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 57,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 62,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 67,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 72,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 77,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 82,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 87,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 89,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 94,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 96,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 101,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 103,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 108,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 110,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 115,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 117,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 122,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 124,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 129,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 131,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 136,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 138,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 143,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 145,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 147,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 152,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 154,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 156,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 161,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 163,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 165,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 170,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 172,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 174,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 179,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 181,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 183,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 188,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 190,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 192,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 197,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 199,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 201,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 206,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 208,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 210,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 215,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 217,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 219,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 224,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 226,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 228,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 233,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 235,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 237,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 242,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 244,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 246,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 251,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 253,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 255,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 260,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 262,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 264,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 269,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 271,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 273,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 278,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 280,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 300,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 303,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 307,
+      "M": 16,
+      "N": 3072,
+      "K": 3072,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     }
+    ]
+   },
+   "GPU_DP2A_W_SPLIT2": {
+    "exact": 0,
+    "mismatch": 0,
+    "error": 83,
+    "first_error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'",
+    "nodes": [
+     {
+      "node_id": 2,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 7,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 12,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 17,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 22,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 27,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 32,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 37,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 42,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 47,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 52,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 57,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 62,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 67,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 72,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 77,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 82,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 87,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 89,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 94,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 96,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 101,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 103,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 108,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 110,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 115,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 117,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 122,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 124,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 129,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 131,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 136,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 138,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 143,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 145,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 147,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 152,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 154,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 156,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 161,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 163,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 165,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 170,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 172,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 174,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 179,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 181,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 183,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 188,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 190,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 192,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 197,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 199,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 201,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 206,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 208,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 210,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 215,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 217,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 219,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 224,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 226,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 228,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 233,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 235,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 237,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 242,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 244,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 246,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 251,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 253,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 255,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 260,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 262,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 264,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 269,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 271,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 273,
+      "M": 16,
+      "N": 16,
+      "K": 128,
+      "transpose_b": true,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 278,
+      "M": 16,
+      "N": 16,
+      "K": 16,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 280,
+      "M": 16,
+      "N": 128,
+      "K": 128,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 300,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 303,
+      "M": 16,
+      "N": 1024,
+      "K": 1024,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     },
+     {
+      "node_id": 307,
+      "M": 16,
+      "N": 3072,
+      "K": 3072,
+      "transpose_b": false,
+      "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+     }
+    ]
+   }
+  },
+  "executable_backends": [
+   "GPU_TC_KARATSUBA3",
+   "GPU_SCHOOLBOOK4"
+  ],
+  "required_cuda_backends_exact": true,
+  "all_exact": false
+ },
+ "benchmark": {
+  "shapes": {
+   "16x128x1024": {
+    "M": 16,
+    "N": 128,
+    "K": 1024,
+    "transpose_b": false,
+    "schedule_frequency": 32,
+    "logical_mac": 2097152,
+    "mac_fraction": 0.26556016597510373,
+    "padded_shapes": {
+     "m": 32,
+     "k": 1024,
+     "n": 128
+    },
+    "native_int8": {
+     "median_ms": 0.049136001616716385,
+     "p95_ms": 0.05164799839258194,
+     "min_ms": 0.04841599985957146,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "karatsuba3": {
+     "median_ms": 0.49265599250793457,
+     "p95_ms": 0.5212159752845764,
+     "min_ms": 0.4798400104045868,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "schoolbook4": {
+     "median_ms": 0.5083039999008179,
+     "p95_ms": 0.5349439978599548,
+     "min_ms": 0.4926080107688904,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "simt_int64": {
+     "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+    },
+    "dp2a_w_split2": {
+     "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+    },
+    "karatsuba3_ratio": 10.02637529099091,
+    "schoolbook4_ratio": 10.344838472324732
+   },
+   "16x16x128T": {
+    "M": 16,
+    "N": 16,
+    "K": 128,
+    "transpose_b": true,
+    "schedule_frequency": 16,
+    "logical_mac": 32768,
+    "mac_fraction": 0.002074688796680498,
+    "padded_shapes": {
+     "m": 32,
+     "k": 128,
+     "n": 16
+    },
+    "native_int8": {
+     "median_ms": 0.030688000842928886,
+     "p95_ms": 0.03363199904561043,
+     "min_ms": 0.029952000826597214,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "karatsuba3": {
+     "median_ms": 0.5491360127925873,
+     "p95_ms": 0.6504639983177185,
+     "min_ms": 0.5366399884223938,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "schoolbook4": {
+     "median_ms": 0.5802879929542542,
+     "p95_ms": 0.612064003944397,
+     "min_ms": 0.5673279762268066,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "simt_int64": {
+     "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+    },
+    "dp2a_w_split2": {
+     "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+    },
+    "karatsuba3_ratio": 17.894160509289705,
+    "schoolbook4_ratio": 18.909279751534022
+   },
+   "16x128x16": {
+    "M": 16,
+    "N": 128,
+    "K": 16,
+    "transpose_b": false,
+    "schedule_frequency": 16,
+    "logical_mac": 32768,
+    "mac_fraction": 0.002074688796680498,
+    "padded_shapes": {
+     "m": 32,
+     "k": 16,
+     "n": 128
+    },
+    "native_int8": {
+     "median_ms": 0.030719999223947525,
+     "p95_ms": 0.03948799893260002,
+     "min_ms": 0.029888000339269638,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "karatsuba3": {
+     "median_ms": 0.4909760057926178,
+     "p95_ms": 0.5089600086212158,
+     "min_ms": 0.48073598742485046,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "schoolbook4": {
+     "median_ms": 0.5128479897975922,
+     "p95_ms": 0.5473600029945374,
+     "min_ms": 0.49686399102211,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "simt_int64": {
+     "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+    },
+    "dp2a_w_split2": {
+     "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+    },
+    "karatsuba3_ratio": 15.982292258975106,
+    "schoolbook4_ratio": 16.69427092295646
+   },
+   "16x1024x128": {
+    "M": 16,
+    "N": 1024,
+    "K": 128,
+    "transpose_b": false,
+    "schedule_frequency": 16,
+    "logical_mac": 2097152,
+    "mac_fraction": 0.13278008298755187,
+    "padded_shapes": {
+     "m": 32,
+     "k": 128,
+     "n": 1024
+    },
+    "native_int8": {
+     "median_ms": 0.03270399942994118,
+     "p95_ms": 0.03551999852061272,
+     "min_ms": 0.03129599988460541,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "karatsuba3": {
+     "median_ms": 0.4963679909706116,
+     "p95_ms": 0.5195199847221375,
+     "min_ms": 0.4829759895801544,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "schoolbook4": {
+     "median_ms": 0.5145280063152313,
+     "p95_ms": 0.5431360006332397,
+     "min_ms": 0.5002560019493103,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "simt_int64": {
+     "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+    },
+    "dp2a_w_split2": {
+     "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+    },
+    "karatsuba3_ratio": 15.177592943454389,
+    "schoolbook4_ratio": 15.732877179669055
+   },
+   "16x3072x1024": {
+    "M": 16,
+    "N": 3072,
+    "K": 1024,
+    "transpose_b": false,
+    "schedule_frequency": 2,
+    "logical_mac": 50331648,
+    "mac_fraction": 0.3983402489626556,
+    "padded_shapes": {
+     "m": 32,
+     "k": 1024,
+     "n": 3072
+    },
+    "native_int8": {
+     "median_ms": 0.04995200037956238,
+     "p95_ms": 0.05113599821925163,
+     "min_ms": 0.04912000149488449,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "karatsuba3": {
+     "median_ms": 0.49561600387096405,
+     "p95_ms": 0.5172799825668335,
+     "min_ms": 0.4792959988117218,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "schoolbook4": {
+     "median_ms": 0.5111200213432312,
+     "p95_ms": 0.5360959768295288,
+     "min_ms": 0.5003200173377991,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "simt_int64": {
+     "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+    },
+    "dp2a_w_split2": {
+     "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+    },
+    "karatsuba3_ratio": 9.921844973274442,
+    "schoolbook4_ratio": 10.232223283541483
+   },
+   "16x1024x3072": {
+    "M": 16,
+    "N": 1024,
+    "K": 3072,
+    "transpose_b": false,
+    "schedule_frequency": 1,
+    "logical_mac": 50331648,
+    "mac_fraction": 0.1991701244813278,
+    "padded_shapes": {
+     "m": 32,
+     "k": 3072,
+     "n": 1024
+    },
+    "native_int8": {
+     "median_ms": 0.10851199924945831,
+     "p95_ms": 0.11260800063610077,
+     "min_ms": 0.10793600231409073,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "karatsuba3": {
+     "median_ms": 0.6289760172367096,
+     "p95_ms": 0.6488320231437683,
+     "min_ms": 0.6214399933815002,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "schoolbook4": {
+     "median_ms": 0.7227039933204651,
+     "p95_ms": 0.748416006565094,
+     "min_ms": 0.7134720087051392,
+     "iterations": 100,
+     "warmup": 20
+    },
+    "simt_int64": {
+     "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+    },
+    "dp2a_w_split2": {
+     "error": "NotImplementedError: \"addmm_cuda\" not implemented for 'Long'"
+    },
+    "karatsuba3_ratio": 5.79637295033848,
+    "schoolbook4_ratio": 6.6601297397446375
+   }
+  },
+  "weighted_schedule": {
+   "karatsuba3_total_ms": 41.96887993812561,
+   "schoolbook4_total_ms": 43.73329585790634,
+   "native_int8_total_ms": 3.286560043692589,
+   "ratio": 12.769850354223806,
+   "schoolbook4_ratio": 13.30670831401277
+  },
+  "major_shape_ratios": [
+   {
+    "shape": "16x128x1024",
+    "ratio": 10.02637529099091
+   },
+   {
+    "shape": "16x1024x128",
+    "ratio": 15.177592943454389
+   },
+   {
+    "shape": "16x3072x1024",
+    "ratio": 9.921844973274442
+   },
+   {
+    "shape": "16x1024x3072",
+    "ratio": 5.79637295033848
+   }
+  ],
+  "performance_pass": false,
+  "performance_pass_components": {
+   "exactness_ok": true,
+   "all_shapes_measured": true,
+   "ratio_ok": false,
+   "major_shapes_ok": false,
+   "note": "the gate cannot pass vacuously: exactness, measured shapes and positive totals are all required"
+  },
+  "gates": {
+   "schedule_ratio_max": 6.0,
+   "major_shape_ratio_max": 10.0,
+   "major_shape_fraction": 0.05
+  },
+  "physical_mac_note": "Karatsuba3 performs ~3x physical int8 MAC per logical MAC; protocol work accounting remains 1x logical (F.5B section 23/24)"
+ },
+ "full_block_gpu": "NOT TESTED (gated on GEMM performance PASS, F.5B section 62)"
+}
