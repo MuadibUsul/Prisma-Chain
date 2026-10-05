@@ -1,10 +1,15 @@
 # Phase F.5C progress snapshot — Formal Wide-Integer Protocol Integration
 
-**Status: PARTIAL.**  The protocol core of CANONICAL_GRAPH_V2 is
-implemented, tested and committed; the devnet E2E / dispute / DA / watcher
-layers are NOT finished.  Per the phase rules (any key item NOT TESTED ⇒
-PHASE_F = PARTIAL), Phase F is not declared PASS yet.  This file is the
-resume map for the next session.
+**Status: PHASE_F = PASS (F.5C complete).**  The protocol core, Watcher
+V2, graph DA and the complete A6 4-validator devnet E2E suite are
+implemented, executed and committed — including the REAL 310-node Qwen3
+block runs (honest, GEMM-145 fraud through the 512-MAC wide path,
+ROPE-85 fraud through the bounded table arbiter), false challenge,
+combined censorship+DA-offline, wide-dispute full-stack restart,
+validator offline/recovery and availability failure.  Every scenario has
+an evidence JSON in `docs/` and four-validator app-hash convergence.
+Freeze tag: `transformer-phase-f-wide-integer` (see
+`docs/phase-f-freeze.json`).
 
 Branch `protocol/transformer-phase-f5c-wide-integer` (from
 `research/transformer-phase-f5b2-full-block-gpu`).  Zero protocol files
@@ -39,46 +44,34 @@ were reinterpreted: all V1 domains, objects and behaviours are untouched.
 | A3 (bundle + watcher) | **DONE** (`cb17762`) | 39.6 MB real bundle; watcher V2 root/Freivalds/cheap-op/localization/restart/cost; GEMM+ROPE fraud detected; `full_gemm_calls = 0` |
 | A4 (DA) | **DONE** (`7976d32`, `e022262`) | attestations + quorum gate + typed chunk challenge + timeout + availability refund; Python provider cross-verified |
 | A5 (query/gas) | **DONE** (`4dcbafc`) | aggregate GraphV2Status; per-tx gas; 512-MAC witness 5,550 bytes / 366,347 gas; CLI verb polish deferred to B5 (recorded deviation) |
-| A6 (devnet E2E) | **NOT TESTED** | compose stack + client pattern exist; scenarios covered by chain unit tests; cross-machine runs were not executed in this session |
+| A6 (devnet E2E) | **DONE — all PASS** | **real 310-node block**: honest (`phase-f5c-e2e-honest.json`, exactly one VWR V3 + fee split), GEMM-145 fraud (`…-gemm-fraud.json`, 8 bisection rounds -> 512-MAC -> fraud, 0 VWR), ROPE-85 fraud (`…-rope-fraud.json`, 9 rounds -> bounded table arbiter -> fraud, 0 VWR); fixture-graph runs: false challenge (`…-false-challenge.json`, WorkerWins + bond burned + exactly one VWR), combined adversarial (`…-combined.json`, proposer omission observed per block + 2-of-3 DA), wide-dispute restart (`…-wide-restart.json`, persisted dispute byte-identical), validator recovery (`…-validator-restart.json`), availability failure (`…-availability-failure.json`, refund + 0 VWR). Two defects found by the E2E and fixed with regression tests (arb_ready promotion for single-node disputes; wide-arbitration kind-1 operand panic). |
 | A7 (docs/report/freeze) | **DONE** | 5 specs + phase-f5c-report + phase-f-final-report + phase-f-freeze.json (PARTIAL, no pass tag) |
 
-## Not done (in dependency order)
+## Remaining work
 
-1. **V2 graph dispute chain** (§68–§72): trail claim / midpoint /
-   node arbitration need V2 dispatch (GraphStateRootV2 trails, typed
-   chunk evidence, `graphDescriptorV2` at the remaining call sites —
-   `graph_keeper.go` lines ~264/339/480/542/736 still call the V1
-   `graphDescriptor`).  Bisection state machine and bounded cheap-op
-   evidence follow the V1 shape with V2 roots.
-2. **Wide GEMM on-chain dispute messages** (§73–§83): OpenWideGEMMDispute /
-   WideTraceClaim / WideMidPoint / ArbitrateWide512 (new proto messages
-   or envelope dispatch), wired to `canonical.WIDE_GEMM_DISPUTE_V1`; the
-   Graph→WideGEMM bridge (first divergent node is a GEMM ⇒ wide path);
-   row/column/tile localization helper (§82).
-3. **Watcher V2 + GraphVerificationBundleV2** (§54–§55, §105–§110):
-   bundle codec (descriptor + inputs + node outputs + TensorRootV2 proofs
-   + manifest proofs + final), Python watcher (root phase → Freivalds over
-   83 GEMMs with post-commit randomness → exact cheap-op recompute),
-   `full_gemm_calls = 0` instrumentation, restart-equivalence; bundle size
-   measurement (§136).
-4. **DA integration** (§57–§65, §130–§131): `GRAPH_VERIFICATION_BUNDLE_V2`
-   artifact kind over the Phase E `DA_REPLICA_V1` registry (no second
-   network); provider attestation-time verification; on-chain chunk
-   challenge; quorum-gated finalize; availability-failure path; wrong-blob
-   refusal; after-attest loss.
-5. **Queries + CLI** (§132–§134): graph task/dispute/receipt V3/DA status
-   query surface and CLI verbs for the E2E harness.
-6. **Gas** (§96–§99, §140–§141): measured schedule incl. the 512-MAC
-   arbiter witness (bytes, gas, proof depth) → `docs/phase-f5c-gas-results.json`.
-7. **Devnet E2E** (§111–§129, §166–§172): 4-validator honest / real-GEMM
-   fraud with downstream recompute / real-ROPE fraud / false challenge /
-   combined adversarial (DA-offline + one-proposer censorship) / restarts;
-   balances per scenario; four-validator app-hash convergence.
-8. **Docs + reports** (§142–§143, §173–§174, §191): canonical-tensor-v2.md,
-   canonical-graph-v2.md, wide-gemm-a13w10-v1.md, wide-requant-v1.md,
-   freivalds-a13w10-v1.md, phase-f5c-report.md, phase-f-final-report.md
-   (full lineage incl. the failed W8A8 / groupwise / A-only / int32
-   frontier rounds), Phase F freeze tag.
+None for Phase F.5C.  All A0–A7 items are done; the freeze tag is
+created.  Phase B productization (release build, CLI verb polish B5-01,
+packaging, later-phase MLIR items) starts from the tag per the roadmap.
+
+## Deviations from the roadmap (recorded per §0)
+
+- A6-08's combined artifact is produced by the A6-04 real-block run (the
+  censoring proposer stayed active throughout) and committed as
+  `docs/phase-f5c-e2e-combined.json`.
+- `chain/app/devcensor.go` (devnet-only, off by default) was extended to
+  the CANONICAL_GRAPH_V2 dispute messages so the omission scenario could
+  target the V2 family.
+- Devnet block time is 5 s, so 30-block challenge/DA windows take ~5 min
+  of wall clock; windows were waited out rather than shortened.
+- A6-09 restarts all four validators (stronger than "relevant process").
+- A6-10 evidence exists under both `…-validator-restart.json` (roadmap
+  name) and `…-validator-recovery.json` (harness name).
+- CLI verb polish stays deferred to B5-01; the harness drives Msg-service
+  commands directly.
+- Two chain defects surfaced by the E2E were fixed before the tag:
+  single-node dispute arb-ready promotion (`graphv2_chain.go`) and the
+  kind-1 operand descriptor panic in `wide_dispute.go`, each with a
+  regression test that fails on the pre-fix code.
 
 ## Resume notes (hard-won details)
 

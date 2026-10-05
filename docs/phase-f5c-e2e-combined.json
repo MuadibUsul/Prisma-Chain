@@ -1,0 +1,111 @@
+{
+ "scenario": "combined_adversarial_real",
+ "chain_id": "prisma-mv-1",
+ "graph": "f5c_qwen3_block_v2.json",
+ "graph_id_v2": "8fb86087697e277602bb4b2088ba48eb4172c21d9c4f83914582f2cbf00d4def",
+ "nodes": 310,
+ "fraud_node": 145,
+ "fraud_index": 0,
+ "fraud_delta": 1,
+ "requester_balance_before": 60000000,
+ "divergent_nodes": [
+  145,
+  146,
+  282,
+  283,
+  284
+ ],
+ "task_id": 25,
+ "da_providers_registered": 3,
+ "da_offline_providers": 1,
+ "da_attestations": 2,
+ "bundle_bytes": 39648960,
+ "task_meta": {
+  "graph_id_v2": "8fb86087697e277602bb4b2088ba48eb4172c21d9c4f83914582f2cbf00d4def",
+  "manifest_root_v2": "57e47ab3d19240ea96fb905a10535df89458973021214e1c101b9bdcd6aca3ef",
+  "final_output_root": "a23fae86e8c303b52fef0fe2bc5b1d0cc7f9b10fee2a558c1760db55479ad521",
+  "policy_id": "eb9a9fef403c95cd0ab876893acf14e02928245306f1d1cc6e12f4d99c5eb7a0",
+  "graph_task_id": 25
+ },
+ "challenge_inclusion": {
+  "broadcast_height": 1334,
+  "blocks": [
+   {
+    "height": 1334,
+    "proposer": "validator-c",
+    "included": false
+   },
+   {
+    "height": 1335,
+    "proposer": "validator-a",
+    "included": false
+   },
+   {
+    "height": 1336,
+    "proposer": "validator-b",
+    "included": true
+   }
+  ],
+  "censored_by": [
+   1335
+  ],
+  "included_height": 1336,
+  "included_by": "validator-b",
+  "inclusion_delay_blocks": 2
+ },
+ "censor_omission_window_observed": true,
+ "bisection_rounds": 8,
+ "first_divergent_node": 145,
+ "bisection_interval": [
+  145,
+  146
+ ],
+ "wide_geometry": {
+  "m": 16,
+  "n": 1024,
+  "k": 128
+ },
+ "wide_rounds": 4,
+ "wide_first_divergent_step": 0,
+ "final_status": "fraud",
+ "receipt_id": "",
+ "zero_vwr": true,
+ "challenger_balance_delta": 1500000,
+ "challenger_wins_settlement": true,
+ "requester_refunded": true,
+ "watcher_verdict": "fraud_detected",
+ "watcher_seconds": 7.2,
+ "watcher_gemm_mismatches": [
+  {
+   "node_id": 145,
+   "operator": "GEMM_A13W10_I64_V1",
+   "bad_row": 0,
+   "bad_column": 0,
+   "tile_i": 0,
+   "tile_j": 0
+  }
+ ],
+ "watcher_cheap_mismatches": [],
+ "four_validators": {
+  "validator-a": {
+   "height": 1431,
+   "app_hash": "10A15D2C983AAC7A6BE7E07CBD4ED1BC5F7829F762BC57203967C4E24C64B87C"
+  },
+  "validator-b": {
+   "height": 1431,
+   "app_hash": "10A15D2C983AAC7A6BE7E07CBD4ED1BC5F7829F762BC57203967C4E24C64B87C"
+  },
+  "validator-c": {
+   "height": 1431,
+   "app_hash": "10A15D2C983AAC7A6BE7E07CBD4ED1BC5F7829F762BC57203967C4E24C64B87C"
+  },
+  "validator-d": {
+   "height": 1431,
+   "app_hash": "10A15D2C983AAC7A6BE7E07CBD4ED1BC5F7829F762BC57203967C4E24C64B87C"
+  }
+ },
+ "four_validators_converged": true,
+ "status": "PASS",
+ "roadmap": "A6-08 (real GEMM fraud + DA provider offline + censoring proposer)",
+ "note": "This artifact is the A6-08 evidence captured by the A6-04 real-block run: validator-a ran PRISMA_DEV_CENSOR_GEMM_CHALLENGES=all (V2 family included) during the whole scenario and the challenge inclusion window was observed per block."
+}
