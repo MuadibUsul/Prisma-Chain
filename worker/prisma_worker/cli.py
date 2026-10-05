@@ -18,7 +18,7 @@ import json
 import pathlib
 import sys
 
-from . import chain, gpu, keystore
+from . import chain, gpu, jobs, keystore
 from .identity import WorkerIdentity
 from .join import JoinConfig, JoinError, join as run_join, heartbeat as run_heartbeat
 from .redact import install as install_redaction
@@ -159,6 +159,84 @@ def cmd_heartbeat(args: argparse.Namespace) -> int:
     return 0
 
 
+def _journal(args: argparse.Namespace) -> jobs.Journal:
+    directory = pathlib.Path(args.journal).expanduser() if getattr(args, "journal", "") else (
+        pathlib.Path(args.state).expanduser().parent / "journal")
+    return jobs.Journal(directory)
+
+
+def cmd_jobs_discover(args: argparse.Namespace) -> int:
+    install_redaction()
+    client = chain.ChainClient(_chain_config(args))
+    try:
+        client.validate_chain_id()
+        found = jobs.discover(client, start_id=args.start_id, max_scan=args.max_scan)
+    except chain.ChainError as exc:
+        print(f"prisma-worker: {exc}", file=sys.stderr)
+        return 1
+    rows = []
+    for task in found:
+        ok, reason = jobs.compatibility(task, model_ids=tuple(args.model_id) if args.model_id
+                                        else jobs.FROZEN_PROFILE_MODEL_IDS,
+                                        modes=tuple(args.mode) if args.mode else jobs.FROZEN_MODES)
+        rows.append({"task_id": task.task_id, "model_id": task.model_id, "mode": task.mode,
+                     "spec_version": task.spec_version, "deadline": task.deadline,
+                     "compatible": ok, "reason": reason})
+    if args.json:
+        print(json.dumps(rows, indent=1))
+    else:
+        if not rows:
+            print("no open tasks found")
+        for row in rows:
+            print(f"task {row['task_id']}: model={row['model_id']} mode={row['mode']} "
+                  f"deadline={row['deadline']} {'COMPATIBLE' if row['compatible'] else 'skip: ' + row['reason']}")
+    return 0
+
+
+def cmd_jobs_accept(args: argparse.Namespace) -> int:
+    install_redaction()
+    identity = keystore.load(args.keystore, _passphrase(args))
+    _register(identity)
+    client = chain.ChainClient(_chain_config(args))
+    journal = _journal(args)
+    # Idempotent first: a task this worker already accepted is reported as-is,
+    # without touching the chain (duplicate/late acceptance cannot double-execute).
+    existing = journal.read(args.task_id)
+    if existing and existing.get("phase") in (jobs.PHASE_ACCEPTED, jobs.PHASE_EXECUTING,
+                                              jobs.PHASE_SUBMITTED, jobs.PHASE_TERMINAL):
+        print(json.dumps(existing, indent=1) if args.json else
+              f"task {args.task_id}: already {existing['phase']} "
+              f"(tx {existing.get('txhash', 'n/a')}); nothing submitted")
+        return 0
+    try:
+        client.validate_chain_id()
+        payload = client.task(args.task_id)
+    except chain.ChainError as exc:
+        print(f"prisma-worker: {exc}", file=sys.stderr)
+        return 1
+    if not payload:
+        print(f"prisma-worker: task {args.task_id} does not exist", file=sys.stderr)
+        return 1
+    task = jobs.TaskSummary.from_chain(payload)
+    model_ids = tuple(args.model_id) if args.model_id else jobs.FROZEN_PROFILE_MODEL_IDS
+    ok, reason = jobs.compatibility(task, model_ids=model_ids,
+                                    modes=tuple(args.mode) if args.mode else jobs.FROZEN_MODES)
+    if not ok:
+        print(f"prisma-worker: refusing task {task.task_id}: {reason}", file=sys.stderr)
+        return 1
+    height = int(client.status().get("sync_info", {}).get("latest_block_height", "0") or 0)
+    try:
+        entry = jobs.accept_task(client, journal, task,
+                                 account_scalar_hex=identity.account_scalar.hex(),
+                                 current_height=height, safety_margin=args.safety_margin)
+    except (chain.ChainError, jobs.JobError) as exc:
+        print(f"prisma-worker: {exc}", file=sys.stderr)
+        return 1
+    print(json.dumps(entry, indent=1) if args.json else
+          f"task {task.task_id}: {entry['phase']} (tx {entry.get('txhash', 'n/a')})")
+    return 0
+
+
 def cmd_gpu_probe(args: argparse.Namespace) -> int:
     try:
         report = gpu.probe(nvidia_smi=args.nvidia_smi)
@@ -226,6 +304,36 @@ def build_parser() -> argparse.ArgumentParser:
     hb.add_argument("--interval", type=float, default=30.0, help="seconds between heartbeats")
     hb.add_argument("--iterations", type=int, default=0, help="stop after N ticks (0 = forever)")
     hb.set_defaults(func=cmd_heartbeat)
+
+    jobs_cmd = sub.add_parser("jobs", help="job discovery and acceptance")
+    jobs_actions = jobs_cmd.add_subparsers(dest="action", required=True)
+
+    def jobs_common(cmd: argparse.ArgumentParser) -> None:
+        chain_flags(cmd)
+        cmd.add_argument("--keystore", default=str(keystore.default_path()),
+                         help="keystore path (default: %(default)s)")
+        cmd.add_argument("--passphrase-stdin", action="store_true",
+                         help="read the passphrase from stdin (first line)")
+        cmd.add_argument("--journal", default="", help="journal directory (default: <state dir>/journal)")
+        cmd.add_argument("--model-id", action="append", default=[],
+                         help="accepted model id (repeatable; default: the frozen profile)")
+        cmd.add_argument("--mode", action="append", default=[],
+                         help="accepted task mode (repeatable; default: verifiable)")
+
+    discover = jobs_actions.add_parser("discover", help="list open tasks and compatibility")
+    jobs_common(discover)
+    discover.add_argument("--start-id", type=int, default=1)
+    discover.add_argument("--max-scan", type=int, default=512)
+    discover.add_argument("--json", action="store_true")
+    discover.set_defaults(func=cmd_jobs_discover)
+
+    accept = jobs_actions.add_parser("accept", help="accept one compatible task (journaled)")
+    jobs_common(accept)
+    accept.add_argument("--task-id", type=int, required=True)
+    accept.add_argument("--safety-margin", type=int, default=5,
+                        help="refuse tasks whose deadline is within this many blocks")
+    accept.add_argument("--json", action="store_true")
+    accept.set_defaults(func=cmd_jobs_accept)
 
     gpu_cmd = sub.add_parser("gpu", help="GPU capability probe")
     gpu_actions = gpu_cmd.add_subparsers(dest="action", required=True)

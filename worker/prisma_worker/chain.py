@@ -137,6 +137,32 @@ class ChainClient:
         payload = json.loads(out)
         return int(payload.get("balance", {}).get("amount", "0"))
 
+    def task(self, task_id: int) -> dict:
+        """Task query; a genuinely missing task returns {} (keeper: "task N not found").
+
+        The frozen answer is a base64 ``task_json`` blob (QueryTaskResponse
+        carries bytes), not a flat object — decoded here so callers see the
+        task document.
+        """
+        try:
+            payload = json.loads(self.cli("query", "compute", "task", "--task-id", str(task_id)))
+        except ChainError as exc:
+            if "not found" in str(exc):
+                return {}
+            raise
+        return decode_blob(payload, "task_json")
+
+    def model(self, model_id: str, spec_version: str) -> dict:
+        """Model query, same base64 ``model_json`` envelope as tasks."""
+        try:
+            payload = json.loads(self.cli("query", "compute", "model", "--model-id", model_id,
+                                          "--spec-version", spec_version))
+        except ChainError as exc:
+            if "not found" in str(exc):
+                return {}
+            raise
+        return decode_blob(payload, "model_json")
+
     def query_worker(self, address: str) -> dict:
         """The autocli query takes the address as a flag, not positionally."""
         payload = json.loads(self.cli("query", "compute", "worker", "--worker", address))
@@ -230,6 +256,12 @@ class ChainClient:
         raise TransactionError(f"tx {txhash} was not included within "
                                f"{self.config.tx_timeout_seconds:.0f}s (last: {last})")
 
+    def accept_task(self, task_id: int, account_scalar_hex: str) -> str:
+        with self._temporary_keyring(account_scalar_hex) as root:
+            txhash = self._tx(root, "compute", "accept-task", "--task-id", str(task_id))
+        self.wait_tx(txhash)
+        return txhash
+
     def bond_worker(self, *, amount_uprsm: int, network_public_key_hex: str,
                     network_key_proof_hex: str, account_scalar_hex: str) -> str:
         """Bond (or top up) and bind the protocol key — one frozen transaction.
@@ -261,6 +293,25 @@ def _shred_tree(root: pathlib.Path) -> None:
                     pass
     finally:
         shutil.rmtree(root, ignore_errors=True)
+
+
+def decode_blob(payload: dict, key: str) -> dict:
+    """Decode a ``{key: <base64 json>}`` module query answer into its document.
+
+    Accepts an already-flat document too, so a future chain/proto change that
+    drops the envelope does not silently break discovery.
+    """
+    if not isinstance(payload, dict):
+        raise ChainError(f"query answered {type(payload).__name__}, not a JSON object")
+    if key not in payload:
+        return payload
+    raw = payload[key]
+    if not raw:
+        return {}
+    try:
+        return json.loads(base64.b64decode(raw, validate=True))
+    except (ValueError, json.JSONDecodeError) as exc:
+        raise ChainError(f"query field {key} is not base64 JSON: {exc}") from exc
 
 
 def decode_network_key(b64_value: str) -> bytes:
