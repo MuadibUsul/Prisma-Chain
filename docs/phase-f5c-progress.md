@@ -36,7 +36,11 @@ were reinterpreted: all V1 domains, objects and behaviours are untouched.
 | A2-02..A2-07 | **DONE** | `canonical.WideGEMMDisputeV1` (exported-state machine: claims with trace proofs, K-step bisection, timeout; JSON-persistable) + chain `wide_dispute.go`: OpenWideGEMMDispute (first-divergent GEMM only, challenger-only, tile geometry admission incl. K/N %8), WideTraceClaim (zero-S0, distinct finals, duplicate refusal), WideMidPoint (block-height clock), ArbitrateWide512 (**tile values extracted from type-proven chunks on chain**, exactly 512 logical MAC, next-state equality + trace proofs, Graph bridge via resolveGraphOutcome). E2E test: self-consistent fraudulent wide GEMM -> graph bisection -> wide dispute -> 512-MAC -> ChallengerWins -> fraud status -> zero VWR |
 | A2-03 localization helper (off-chain watcher) | pending (A3) | residual->row->tile localization belongs with the Watcher V2 pipeline |
 | A2-08 wide restart | **DONE (canonical layer)** | the whole wide state machine persists as JSON in `WideDisputeRecord.DisputeJSON` after every step; the true process-restart drill is A6-09 |
-| A3..A7 | pending | watcher/bundle, DA, query/CLI/gas, E2E, docs/freeze |
+| A3 (bundle + watcher) | **DONE** (`cb17762`) | 39.6 MB real bundle; watcher V2 root/Freivalds/cheap-op/localization/restart/cost; GEMM+ROPE fraud detected; `full_gemm_calls = 0` |
+| A4 (DA) | **DONE** (`7976d32`, `e022262`) | attestations + quorum gate + typed chunk challenge + timeout + availability refund; Python provider cross-verified |
+| A5 (query/gas) | **DONE** (`4dcbafc`) | aggregate GraphV2Status; per-tx gas; 512-MAC witness 5,550 bytes / 366,347 gas; CLI verb polish deferred to B5 (recorded deviation) |
+| A6 (devnet E2E) | **NOT TESTED** | compose stack + client pattern exist; scenarios covered by chain unit tests; cross-machine runs were not executed in this session |
+| A7 (docs/report/freeze) | **DONE** | 5 specs + phase-f5c-report + phase-f-final-report + phase-f-freeze.json (PARTIAL, no pass tag) |
 
 ## Not done (in dependency order)
 
