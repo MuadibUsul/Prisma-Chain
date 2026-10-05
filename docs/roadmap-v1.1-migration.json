@@ -1,0 +1,80 @@
+{
+ "from": "v1.0",
+ "to": "v1.1",
+ "generated": "2026-10-05",
+ "phase_f": "PASS",
+ "phase_f_status": "FROZEN",
+ "active_phase": "B",
+ "active_task": "B0-01",
+ "phase_f_tasks_frozen": 61,
+ "phase_f_tasks_frozen_by_group": {
+  "A0": 2,
+  "A1": 8,
+  "A2": 8,
+  "A3": 10,
+  "A4": 7,
+  "A5": 7,
+  "A6": 11,
+  "A7": 8
+ },
+ "old_phase_b_tasks": 28,
+ "new_phase_b_tasks": 33,
+ "new_b0_tasks": [
+  "B0-01",
+  "B0-02",
+  "B0-03",
+  "B0-04",
+  "B0-05"
+ ],
+ "phase_b_refinements": {
+  "B1-01": "subtasks a..h",
+  "B1-02": "subtasks a..i",
+  "B1-03": "subtasks a..i",
+  "B2-01": "subtasks a..h",
+  "B2-02..B2-09": "detailed per v1.1",
+  "B3/B4/B5/B6/B7": "detailed per v1.1",
+  "order_change": "B0 -> B1 -> B2 -> B4 -> B3 -> B5 -> B6 -> B7 (B4 before B3)"
+ },
+ "phase_c_tasks": {
+  "old": 14,
+  "new": 14
+ },
+ "phase_d_tasks": {
+  "old": 13,
+  "new": 13
+ },
+ "phase_e_tasks": {
+  "old": 8,
+  "new": 8
+ },
+ "removed_task_ids": [],
+ "renamed_task_ids": {},
+ "added_task_ids": [
+  "B0-01",
+  "B0-02",
+  "B0-03",
+  "B0-04",
+  "B0-05"
+ ],
+ "freeze_tag": "transformer-phase-f-wide-integer",
+ "freeze_tag_object": "330d27f5fc92d009aca9599cc1e0bb13a496c766",
+ "freeze_commit": "89547fa97b62d72a4cd336a5dfd3b000b03eac60",
+ "frozen_branch_head": "40b4fe353df7d2203d1609cceb10d24380abed7a",
+ "graph_id_v2": "8fb86087697e277602bb4b2088ba48eb4172c21d9c4f83914582f2cbf00d4def",
+ "policy_id": "eb9a9fef403c95cd0ab876893acf14e02928245306f1d1cc6e12f4d99c5eb7a0",
+ "roadmap_files": {
+  "v1.1": "docs/roadmap/Prisma_Chain_AI_Engineering_Roadmap_v1.1.md",
+  "v1.0_historical": "docs/roadmap/Prisma_Chain_AI_Engineering_Roadmap_v1.0_historical.md"
+ },
+ "validation": {
+  "phase_f_partial_as_current_state_occurrences": [],
+  "active_or_next_phase_a_tasks": [],
+  "phase_a_task_has_ACTIVE_status": false,
+  "phase_a_ids_preserved": true,
+  "phase_b_old_ids_preserved": true,
+  "phase_c_ids_preserved": true,
+  "phase_d_ids_preserved": true,
+  "phase_e_ids_preserved": true,
+  "v11_lines": 2593
+ }
+}
