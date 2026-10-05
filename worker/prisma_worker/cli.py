@@ -18,7 +18,7 @@ import json
 import pathlib
 import sys
 
-from . import chain, gpu, jobs, keystore, model
+from . import chain, commit as commit_mod, gpu, jobs, keystore, model
 from .identity import WorkerIdentity
 from .join import JoinConfig, JoinError, join as run_join, heartbeat as run_heartbeat
 from .redact import install as install_redaction
@@ -297,6 +297,40 @@ def cmd_model_check(args: argparse.Namespace) -> int:
     return 0 if ok else 1
 
 
+def cmd_jobs_commit(args: argparse.Namespace) -> int:
+    """Build + sign the frozen CommitV3 for an accepted task (B2-07)."""
+    install_redaction()
+    identity = keystore.load(args.keystore, _passphrase(args))
+    _register(identity)
+    journal = _journal(args)
+    try:
+        graph = json.loads((pathlib.Path(args.profile_dir).expanduser() / "graph.json")
+                           .read_text(encoding="utf-8"))
+        roots = [line.strip() for line in
+                 pathlib.Path(args.roots_file).read_text(encoding="utf-8").splitlines() if line.strip()]
+        unsigned = commit_mod.build_commit_v3(
+            graph, task_id=args.task_id, assignment_ref_hex=args.assignment_ref,
+            worker_public=identity.protocol_public, node_roots_hex=roots,
+            completed_epoch=args.epoch)
+        signed = commit_mod.sign_commit_v3(identity, unsigned)
+        commit_mod.verify_binding(signed, expected_task_id=args.task_id,
+                                  expected_assignment_ref_hex=args.assignment_ref,
+                                  expected_worker_public=identity.protocol_public)
+        identifier = commit_mod.guard_duplicate_submit(journal, args.task_id, signed)
+    except (commit_mod.CommitError, model.ProfileError, OSError, json.JSONDecodeError) as exc:
+        print(f"prisma-worker: {exc}", file=sys.stderr)
+        return 1
+    if args.out:
+        pathlib.Path(args.out).write_text(json.dumps(signed, indent=1) + "\n", encoding="utf-8")
+    if args.json:
+        print(json.dumps({"commit_id": identifier, "commit": signed}, indent=1))
+    else:
+        print(f"task {args.task_id}: commit {identifier[:16]}… signed "
+              f"(manifest {signed['node_output_manifest_root_v2'][:16]}…, "
+              f"final {signed['final_output_root'][:16]}…)")
+    return 0
+
+
 def cmd_gpu_probe(args: argparse.Namespace) -> int:
     try:
         report = gpu.probe(nvidia_smi=args.nvidia_smi)
@@ -386,6 +420,17 @@ def build_parser() -> argparse.ArgumentParser:
     discover.add_argument("--max-scan", type=int, default=512)
     discover.add_argument("--json", action="store_true")
     discover.set_defaults(func=cmd_jobs_discover)
+
+    commit_cmd = jobs_actions.add_parser("commit", help="build and sign the frozen CommitV3")
+    jobs_common(commit_cmd)
+    commit_cmd.add_argument("--task-id", type=int, required=True)
+    commit_cmd.add_argument("--profile-dir", required=True, help="verified profile directory (graph.json)")
+    commit_cmd.add_argument("--roots-file", required=True, help="node output roots, one hex per line")
+    commit_cmd.add_argument("--assignment-ref", required=True, help="assignment reference, hex")
+    commit_cmd.add_argument("--epoch", type=int, required=True, help="completed epoch (chain height)")
+    commit_cmd.add_argument("--out", default="", help="write the signed commit JSON here")
+    commit_cmd.add_argument("--json", action="store_true")
+    commit_cmd.set_defaults(func=cmd_jobs_commit)
 
     accept = jobs_actions.add_parser("accept", help="accept one compatible task (journaled)")
     jobs_common(accept)

@@ -178,6 +178,15 @@ class WorkerIdentity:
 
     # --- signing ----------------------------------------------------------
 
+    def sign_raw(self, data: bytes) -> bytes:
+        """Raw ed25519 signature over exactly these bytes.
+
+        Used by the frozen commit/VWR constructions, whose preimage is a
+        domain-prefixed canonical encoding the caller already built — no extra
+        framing may be added here.
+        """
+        return self._protocol_key.sign(data)
+
     def sign_protocol(self, domain: str, payload: object) -> str:
         """Same wire format as prisma_network.core.Identity.sign."""
         return base64.b64encode(
