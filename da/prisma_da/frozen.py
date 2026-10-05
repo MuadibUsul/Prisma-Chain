@@ -17,6 +17,7 @@ falls back to an approximation.
 
 from __future__ import annotations
 
+import importlib
 import os
 import pathlib
 import sys
@@ -47,9 +48,10 @@ def _roots() -> list[pathlib.Path]:
 
 
 def _import(name: str, *, required_by: str) -> ModuleType:
+    # importlib, not __import__: the latter returns the top-level package for a
+    # dotted name (gemmv1 instead of gemmv1.merkle_proofs).
     try:
-        module = sys.modules.get(name) or __import__(name)
-        return module
+        return importlib.import_module(name)
     except ImportError:
         pass
     for root in _roots():
@@ -58,7 +60,7 @@ def _import(name: str, *, required_by: str) -> ModuleType:
             if candidate.is_dir() and str(candidate) not in sys.path:
                 sys.path.insert(0, str(candidate))
     try:
-        return __import__(name)
+        return importlib.import_module(name)
     except ImportError as exc:
         raise FrozenLibraryMissing(
             f"{name} (needed by {required_by}) is not importable. The DA protocol's frozen "

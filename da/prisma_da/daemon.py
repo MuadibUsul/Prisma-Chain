@@ -54,7 +54,7 @@ class Daemon:
         self.log = log
         self.started_at = time.time()
         self.counters = {"requests": 0, "store_ok": 0, "store_rejected": 0, "attestations": 0,
-                         "output_served": 0, "output_missing": 0, "errors": 0}
+                         "output_served": 0, "tiles_served": 0, "output_missing": 0, "errors": 0}
         self._active = 0
         self._lock = threading.Lock()
         self._shutting_down = False
@@ -164,9 +164,21 @@ class Daemon:
             self.counters["output_served"] += 1
             return 200, {"task_id": task_id, "c_hex": blob.hex()}
         if len(parts) == 6 and parts[3] == "tile":
-            self.counters["errors"] += 1
-            return 501, {"error": "typed chunk proofs land with B4-02; the retrieval surface "
-                                  "currently serves /v1/da/{task}/output only"}
+            try:
+                task_id, tile_i, tile_j = int(parts[2]), int(parts[4]), int(parts[5])
+            except ValueError:
+                self.counters["errors"] += 1
+                return 400, {"error": "tile coordinates must be integers"}
+            try:
+                tile = self.index.tile(task_id, tile_i, tile_j)
+            except IntegrityError as exc:
+                self.counters["errors"] += 1
+                return 500, {"error": str(exc)}
+            if tile is None:
+                self.counters["output_missing"] += 1
+                return 404, {"error": "DATA_UNAVAILABLE"}
+            self.counters["tiles_served"] += 1
+            return 200, tile
         return 404, {"error": "no such endpoint"}
 
     # --- data ------------------------------------------------------------

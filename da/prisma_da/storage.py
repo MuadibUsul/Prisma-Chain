@@ -156,6 +156,42 @@ class ArtifactIndex:
                 f"artifact {task_id} failed its content hash; quarantined, refusing to serve")
         return blob
 
+    def tile(self, task_id: int, tile_i: int, tile_j: int) -> Optional[dict]:
+        """Typed chunk proof for one output tile, in the frozen construction.
+
+        The blob is re-verified (content hash) before any proof is produced, so
+        a corrupted artifact can never be attested for; the proof itself uses
+        the frozen Merkle helpers and verifies with
+        ``merkle_proofs.verify_inclusion``.
+        """
+        meta = self.load_meta(task_id)
+        if meta is None:
+            return None
+        blob = self.output(task_id)          # raises IntegrityError after quarantine
+        if blob is None:
+            return None
+        m, n = int(meta["m"]), int(meta["n"])
+        values = [int.from_bytes(blob[k:k + 4], "big", signed=True)
+                  for k in range(0, len(blob), 4)]
+        tiles = frozen.tensors.output_tiles(values, m, n)
+        cols_c = (n + 7) // 8
+        if tile_i < 0 or tile_j < 0 or tile_i * cols_c + tile_j >= len(tiles):
+            return None
+        task_id32 = bytes.fromhex(str(meta["task_id32"]))
+        assignment_id = bytes.fromhex(str(meta["assignment_id"]))
+        leaves = [frozen.protocol.leaf_output_tile(task_id32, assignment_id,
+                                                   index // cols_c, index % cols_c,
+                                                   frozen.tensors.int32s_to_canonical(tile))
+                  for index, tile in enumerate(tiles)]
+        levels = frozen.merkle.build_levels(leaves)
+        index, count, siblings = frozen.merkle.prove(levels, tile_i * cols_c + tile_j)
+        return {"tile": frozen.tensors.int32s_to_canonical(tiles[index]).hex(),
+                "tile_i": tile_i, "tile_j": tile_j,
+                "proof": {"index": index, "count": count,
+                          "siblings": [sibling.hex() for sibling in siblings]},
+                "leaf": leaves[index].hex(),
+                "output_root": str(meta["output_root"])}
+
     def quarantine(self, task_id: int, *, reason: str) -> pathlib.Path:
         directory = self.task_dir(task_id)
         stamp = time.strftime("%Y%m%d-%H%M%S")

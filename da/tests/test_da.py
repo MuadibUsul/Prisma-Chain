@@ -144,10 +144,29 @@ def test_startup_rescan_quarantines_corruption_it_finds(tmp_path):
     assert list(root.glob("quarantine-*")), "the rescan must move the bad artifact aside"
 
 
-def test_unknown_route_and_tiles_are_explicit(daemon):
+def test_unknown_route_is_explicit(daemon):
     assert daemon.handle("GET", "/nope", None)[0] == 404
+    assert daemon.handle("GET", f"/v1/da/{TASK_ID}/tile/x/0", None)[0] == 400
     code, payload = daemon.handle("GET", f"/v1/da/{TASK_ID}/tile/0/0", None)
-    assert code == 501 and "B4-02" in payload["error"]
+    assert code == 404 and payload["error"] == "DATA_UNAVAILABLE"
+
+
+def test_tile_proof_verifies_with_the_frozen_verifier(daemon):
+    daemon.handle("POST", "/store", store_payload())
+    code, payload = daemon.handle("GET", f"/v1/da/{TASK_ID}/tile/0/0", None)
+    assert code == 200
+    proof = payload["proof"]
+    assert frozen.merkle.verify_inclusion(bytes.fromhex(payload["output_root"]),
+                                          bytes.fromhex(payload["leaf"]),
+                                          proof["index"], proof["count"],
+                                          [bytes.fromhex(s) for s in proof["siblings"]])
+    assert len(bytes.fromhex(payload["tile"])) == 8 * 8 * 4      # one 8x8 int32 tile
+    assert daemon.counters["tiles_served"] == 1
+
+
+def test_tile_out_of_range_is_data_unavailable(daemon):
+    daemon.handle("POST", "/store", store_payload())
+    assert daemon.handle("GET", f"/v1/da/{TASK_ID}/tile/9/9", None)[0] == 404
 
 
 def test_metrics_count_everything(daemon):
