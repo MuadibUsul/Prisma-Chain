@@ -1,0 +1,80 @@
+{
+ "honest": {
+  "verdict": "pass",
+  "checks": [
+   {
+    "check": "artifact_hash",
+    "ok": true
+   },
+   {
+    "check": "version",
+    "ok": true
+   },
+   {
+    "check": "graph_id_v2",
+    "ok": true
+   },
+   {
+    "check": "policy_id",
+    "ok": true
+   },
+   {
+    "check": "input_roots",
+    "ok": true
+   },
+   {
+    "check": "node_output_roots",
+    "ok": true
+   },
+   {
+    "check": "manifest_root_v2",
+    "ok": true
+   },
+   {
+    "check": "final_output_root",
+    "ok": true
+   },
+   {
+    "check": "output_roots",
+    "ok": true
+   }
+  ]
+ },
+ "fraud_bundle_vs_honest_task": {
+  "verdict": "root_mismatch",
+  "failed": [
+   {
+    "check": "manifest_root_v2",
+    "ok": false
+   }
+  ]
+ },
+ "forged_final_root": {
+  "verdict": "root_mismatch",
+  "failed": [
+   {
+    "check": "final_output_root",
+    "ok": false
+   }
+  ]
+ },
+ "forged_manifest_root": {
+  "verdict": "root_mismatch",
+  "failed": [
+   {
+    "check": "manifest_root_v2",
+    "ok": false
+   }
+  ]
+ },
+ "forged_graph_id": {
+  "verdict": "root_mismatch",
+  "failed": [
+   {
+    "check": "graph_id_v2",
+    "ok": false
+   }
+  ]
+ },
+ "all_structural_fraud_rejected": true
+}

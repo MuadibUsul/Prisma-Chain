@@ -1,0 +1,20 @@
+{
+ "honest": {
+  "root_phase_seconds": 2.6363649999839254,
+  "math_seconds": 4.34859010000946,
+  "freivalds_seconds": 1.1279381998174358,
+  "cheap_ops_seconds": 3.216562399727991,
+  "total_wall_seconds": 7.0108670000045095,
+  "bundle_bytes": 39648960,
+  "peak_mem_mb": 214.9
+ },
+ "instrumentation": {
+  "full_gemm_calls": 0,
+  "row_recomputes": 0,
+  "freivalds_rounds": 3320,
+  "randomness_source": "test_seed(TEST ONLY)",
+  "peak_mem_mb": 214.9
+ },
+ "full_gemm_calls": 0,
+ "note": "no full GEMM is ever recomputed: Freivalds is matrix-vector work and localization recomputes a single disputed row"
+}

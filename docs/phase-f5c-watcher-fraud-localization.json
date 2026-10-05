@@ -1,0 +1,45 @@
+{
+ "case": "real wide GEMM element tamper (node 2), self-consistent bundle",
+ "detected": {
+  "node_id": 2,
+  "operator": "GEMM_A13W10_I64_V1",
+  "bad_row": 0,
+  "bad_column": 0,
+  "tile_i": 0,
+  "tile_j": 0
+ },
+ "all_mismatches": [
+  {
+   "node_id": 2,
+   "operator": "GEMM_A13W10_I64_V1",
+   "bad_row": 0,
+   "bad_column": 0,
+   "tile_i": 0,
+   "tile_j": 0
+  }
+ ],
+ "row_recomputes": 1,
+ "rope_case": {
+  "case": "real ROPE element tamper (node 5), self-consistent bundle",
+  "detected": {
+   "node_id": 5,
+   "operator": "ROPE_FIXED_V1",
+   "mismatches": 1,
+   "first_index": [
+    0,
+    0
+   ]
+  },
+  "all_mismatches": [
+   {
+    "node_id": 5,
+    "operator": "ROPE_FIXED_V1",
+    "mismatches": 1,
+    "first_index": [
+     0,
+     0
+    ]
+   }
+  ]
+ }
+}

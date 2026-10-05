@@ -1,0 +1,9 @@
+{
+ "watcher_inputs": [
+  "bundle file",
+  "chain task metadata (graph id, manifest root, final root, output roots)"
+ ],
+ "worker_filesystem_dependencies": 0,
+ "shared_state_with_worker": 0,
+ "note": "the watcher process only opens the bundle path and the task JSON; every other input is derived from the bundle itself.  The full no-worker drill runs in the devnet E2E (A6)."
+}

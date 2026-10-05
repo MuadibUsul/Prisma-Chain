@@ -1,0 +1,19 @@
+{
+ "small": {
+  "total_bytes": 1916,
+  "header_bytes": 1800,
+  "descriptor_bytes": 2339,
+  "input_payload_bytes": 48,
+  "node_output_payload_bytes": 36,
+  "trailer_bytes": 32
+ },
+ "real_qwen_310": {
+  "total_bytes": 39648960,
+  "header_bytes": 120480,
+  "descriptor_bytes": 172844,
+  "input_payload_bytes": 31541248,
+  "node_output_payload_bytes": 7987200,
+  "trailer_bytes": 32
+ },
+ "note": "real bundle built from the frozen F.5B.2 execution artifacts; the whole-bundle artifact hash binds the header and the payload digest"
+}

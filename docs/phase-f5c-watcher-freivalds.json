@@ -1,0 +1,11 @@
+{
+ "honest": {
+  "gemms": 83,
+  "rounds_per_gemm": 40,
+  "mismatches": 0,
+  "seconds": 1.1279381998174358
+ },
+ "per_gemm_false_accept": "2^-40",
+ "union_bound_83": "83 * 2^-40 < 2^-33.6",
+ "randomness_source": "test_seed(TEST ONLY)"
+}

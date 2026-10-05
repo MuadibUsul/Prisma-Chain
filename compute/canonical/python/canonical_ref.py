@@ -1120,3 +1120,107 @@ def verify_trail_proof_v2(root: bytes, graph_id: bytes, step: int, count: int,
         idx //= 2
         cnt = (cnt + 1) // 2
     return h == root
+
+
+# --- minimal canonical-CBOR decoder (mirror of the encoder) ------------------
+
+def decode_canonical(data: bytes):
+    value, offset = _decode_item(data, 0)
+    if offset != len(data):
+        raise ValueError("canonical CBOR: trailing bytes")
+    return value
+
+
+def _decode_head(data: bytes, offset: int):
+    initial = data[offset]
+    major = initial >> 5
+    info = initial & 0x1F
+    offset += 1
+    if info < 24:
+        val = info
+    elif info == 24:
+        val = data[offset]
+        offset += 1
+    elif info == 25:
+        val = int.from_bytes(data[offset:offset + 2], "big")
+        offset += 2
+    elif info == 26:
+        val = int.from_bytes(data[offset:offset + 4], "big")
+        offset += 4
+    elif info == 27:
+        val = int.from_bytes(data[offset:offset + 8], "big")
+        offset += 8
+    else:
+        raise ValueError("canonical CBOR: unsupported head")
+    return major, val, offset
+
+
+def _decode_item(data: bytes, offset: int):
+    major, val, offset = _decode_head(data, offset)
+    if major == 0:
+        return val, offset
+    if major == 1:
+        return -1 - val, offset
+    if major == 2:
+        return data[offset:offset + val], offset + val
+    if major == 3:
+        return data[offset:offset + val].decode(), offset + val
+    if major == 4:
+        out = []
+        for _ in range(val):
+            item, offset = _decode_item(data, offset)
+            out.append(item)
+        return out, offset
+    if major == 5:
+        out = {}
+        for _ in range(val):
+            key, offset = _decode_item(data, offset)
+            item, offset = _decode_item(data, offset)
+            out[key] = item
+        return out, offset
+    raise ValueError(f"canonical CBOR: unsupported major {major}")
+
+
+# --- FREIVALDS_A13W10_I64_V1 (Python mirror, A3-05) --------------------------
+
+FREIVALDS_WIDE_ROUNDS = 40
+
+
+def _ceil_log2(n: int) -> int:
+    bits = 0
+    v = n - 1
+    while v > 0:
+        bits += 1
+        v >>= 1
+    return bits
+
+
+def freivalds_wide_bound_bits(a_bits: int, w_bits: int, m: int, n: int, k: int) -> int:
+    bx = (w_bits - 1) + _ceil_log2(n)
+    by = (a_bits - 1) + _ceil_log2(k) + bx
+    return by + 1
+
+
+def freivalds_wide_check(a, w, c, m: int, n: int, k: int, transpose_b: bool,
+                         w_a13: bool, r_bits) -> tuple:
+    """Exact int64 check (arrays). Returns (ok, row_mismatches) where
+    row_mismatches lists rows with y_i != z_i (empty when ok)."""
+    import numpy as np
+    w_bits = 13 if w_a13 else 10
+    if freivalds_wide_bound_bits(13, w_bits, m, n, k) > 62:
+        raise ValueError("canonical/v2: freivalds intermediates exceed int64")
+    r = np.asarray(r_bits, dtype=np.int64)
+    if r.size != n:
+        raise ValueError("canonical/v2: freivalds needs exactly N random bits")
+    a64 = np.asarray(a, dtype=np.int64).reshape(m, k)
+    c64 = np.asarray(c, dtype=np.int64).reshape(m, n)
+    if transpose_b:
+        w64 = np.asarray(w, dtype=np.int64).reshape(n, k)
+        x = (w64 * r[:, None]).sum(axis=0)          # (K,)
+    else:
+        w64 = np.asarray(w, dtype=np.int64).reshape(k, n)
+        x = w64 @ r                                  # (K,)
+    y = a64 @ x                                      # (M,)
+    z = c64 @ r                                      # (M,)
+    bad_rows = [int(i) for i in np.nonzero(y != z)[0]]
+    return (len(bad_rows) == 0, bad_rows)
