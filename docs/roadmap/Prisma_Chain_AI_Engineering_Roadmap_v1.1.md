@@ -27,7 +27,7 @@ file wins.  The previous roadmap is kept only as historical v1.0 (see
 | protocol_phase | `FROZEN` |
 | phase_f | `PASS` |
 | active_phase | `B` |
-| active_task | `B2-01` |
+| active_task | `B2-03` |
 | freeze_tag | `transformer-phase-f-wide-integer` |
 | freeze_tag_object | `330d27f5fc92d009aca9599cc1e0bb13a496c766` (annotated tag object) |
 | freeze_commit | `89547fa97b62d72a4cd336a5dfd3b000b03eac60` (frozen protocol commit) |
@@ -66,7 +66,7 @@ PHASE_F IS FROZEN.
 AI MUST NOT execute A0-A7 again unless explicitly instructed to perform
 a regression fix or a protocol-versioned follow-up.
 
-The active execution entrypoint is B2-01.
+The active execution entrypoint is B2-03.
 ```
 
 - Phase A tasks (A0-* … A7-*) are `DONE` + `FROZEN`.  They exist in this
@@ -284,7 +284,7 @@ demo.  Never weaken a real-block gate to a mini-graph gate again.
 | M1 — F.5C Dispute PASS | V2 Graph dispute + Graph→Wide bridge + 512-MAC | real wide GEMM fraud deterministically adjudicated on chain | **DONE / FROZEN** |
 | M2 — Watcher/DA PASS | Bundle V2 + Watcher V2 + 2-of-3 DA | worker disappearance still verifiable / challengeable | **DONE / FROZEN** |
 | M3 — PHASE_F PASS | full 4-validator real-Qwen E2E suite | honest/fraud/false/DA/censor/restart all PASS + freeze tag | **DONE / FROZEN** |
-| M4 — Productization Ready | 5 binaries + Job API + Scheduler + docs | a clean machine can install and run the network | **ACTIVE** (unlocked; entrypoint B2-01) |
+| M4 — Productization Ready | 5 binaries + Job API + Scheduler + docs | a clean machine can install and run the network | **ACTIVE** (unlocked; entrypoint B2-03) |
 | M5 — Private Testnet Alpha | multi-host, public-internet, invite-only | external simulated nodes close the loop across the internet | `PLANNED` / `BLOCKED_BY_M4` |
 | M6 — Public Testnet Alpha | strangers can join, submit, execute, verify | ≥1 external Worker + external Watcher produce real settlement | `PLANNED` / `BLOCKED_BY_M5` |
 
@@ -565,10 +565,10 @@ anywhere in this project.
 
 ```text
 ACTIVE:
-  B2-01   worker identity + keystore (B2 unlocks after B1-01/B1-03)
+  B2-03   join (chain admission, bonding, heartbeat)
 
 NEXT (dependency-ordered, unlocked as predecessors complete):
-  B2-02   GPU probe + capability report
+  B2-04   job lifecycle
 
 BLOCKED (do not start):
   B1-02, B1-03            -> after B1-01
@@ -581,7 +581,7 @@ BLOCKED (do not start):
   Phase E                 -> BLOCKED_BY_M6
 ```
 
-Only `B2-01` is `ACTIVE`.  Do not mark all B tasks ACTIVE.
+Only `B2-03` is `ACTIVE`.  Do not mark all B tasks ACTIVE.
 (B0-01 … B0-05 and all of B1 — B1-01, B1-02, B1-03 — are DONE; see their blocks.)
 
 ### 11.1 Phase B execution order (revised in v1.1)
@@ -1445,8 +1445,11 @@ never expose key material; the load/abuse smoke has recorded results.
 
 ```text
 Task ID            B2-01
-Status             ACTIVE
+Status             DONE (2026-10-05)
 Priority           P0
+Evidence           docs/productization/b2-01.md; worker/prisma_worker (identity, keystore,
+                   redaction, CLI); tests 21 passed/1 skipped; address anchored to a
+                   prismad-produced vector; CI worker job added (deviation recorded)
 Goal               local identity: chain account + protocol key, safely stored
 Dependencies       B1-01
 Allowed changes    worker/** ; docs/productization/**
@@ -1482,8 +1485,11 @@ register on testnet, and nothing secret ever appears in logs or images.
 
 ```text
 Task ID            B2-02
-Status             PLANNED
+Status             DONE (2026-10-05)
 Priority           P0
+Evidence           docs/productization/b2-02.md; worker/prisma_worker/gpu.py; tests 7 GPU cases
+                   + CLI regression; real probe on this host = CAPABILITY_UNSUPPORTED (SM75),
+                   exit code 2; explicit error when no GPU/driver, never a guessed capability
 Goal               detect, report and gate on real GPU capability
 Dependencies       B2-01
 Allowed changes    worker/**
