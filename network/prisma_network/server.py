@@ -22,6 +22,7 @@ from pydantic import Field
 
 from .core import (Capability, Conflict, ControlPlane, Identity, ModelPin, Route, SignedCapability,
                    StrictModel, TaskEnvelope, Unavailable, digest, verify)
+from .node_http import PublicNodeHTTP
 
 PRIVACY_NOTICE = (
     "Tier 0 is relative privacy: ingress can see the full input, egress can see the "
@@ -146,9 +147,14 @@ def create_gateway_app(
     receipt_submitter: Callable[[str, dict], Awaitable[None]] | None = None,
     receipt_retry_seconds: float = 5.0,
     gossip_peers: tuple[str, ...] = (),
+    public_node_http: PublicNodeHTTP | None = None,
 ) -> FastAPI:
     if receipt_retry_seconds <= 0:
         raise ValueError("receipt retry interval must be positive")
+    if plane.public_node_admission and (
+            public_node_http is None or worker_call is _default_worker_call
+            or receipt_submitter is _default_receipt_submit or allow_unfunded_dev_tasks):
+        raise ValueError("public nodes require protected transport and funded tasks")
 
     async def admit_announcement(signed: SignedCapability) -> None:
         bonded_account = None
@@ -202,13 +208,14 @@ def create_gateway_app(
                 logging.exception("receipt retry scan failed")
 
     async def refresh() -> None:
-        async with httpx.AsyncClient(timeout=5) as client:
+        async with httpx.AsyncClient(timeout=5, trust_env=False) as client:
             while True:
                 for signed in plane.announcements():
                     c = signed.capability
                     started = time.monotonic()
                     try:
-                        response = await client.get(c.probe_url)
+                        response = (await public_node_http.request("GET", c.probe_url)
+                                    if public_node_http else await client.get(c.probe_url))
                         response.raise_for_status()
                         if len(response.content) < 4096:
                             raise ValueError("short probe response")
@@ -217,7 +224,7 @@ def create_gateway_app(
                                     bandwidth_mbps=len(response.content) * 8 / elapsed / 1_000_000,
                                     queue_depth=int(response.headers.get("x-queue-depth", "0")),
                                     expected_sequence=c.sequence)
-                    except (httpx.HTTPError, ValueError):
+                    except (httpx.HTTPError, ValueError, OSError):
                         plane.probe(c.node_id, ok=False, latency_ms=0, bandwidth_mbps=0,
                                     expected_sequence=c.sequence)
                 for peer in gossip_peers:
@@ -673,10 +680,16 @@ def _token_counter_from_env(pin: ModelPin) -> Callable[[str], Awaitable[int]]:
 def gateway_app_from_env() -> FastAPI:
     """Run with `uvicorn prisma_network.server:gateway_app_from_env --factory`."""
     identity = Identity.from_seed_b64(os.environ["PRISMA_NODE_SEED_B64"])
+    public_nodes = os.environ.get("PRISMA_PUBLIC_NODE_ADMISSION") == "1"
+    if public_nodes and (os.environ.get("PRISMA_CHAIN_ADMISSION") != "1"
+                         or os.environ.get("PRISMA_DEV_HTTP") == "1"
+                         or os.environ.get("PRISMA_DEV_UNFUNDED") == "1"):
+        raise ValueError("public nodes require chain admission, HTTPS and funded tasks")
     plane = ControlPlane(os.environ.get("PRISMA_DB", "prisma-network.sqlite3"), _keys_from_env(),
-                         set(os.environ["PRISMA_ALLOWED_NODE_HOSTS"].split(",")),
+                         set(filter(None, os.environ.get("PRISMA_ALLOWED_NODE_HOSTS", "").split(","))),
                          bound_worker_accounts=_bindings_from_env(),
-                         allow_http=os.environ.get("PRISMA_DEV_HTTP") == "1")
+                         allow_http=os.environ.get("PRISMA_DEV_HTTP") == "1",
+                         public_node_admission=public_nodes)
     authorizer = None
     queries = None
     if os.environ.get("PRISMA_CHAIN_GRPC_ADDR") and os.environ.get("PRISMA_CHAIN_RPC_URL"):
@@ -691,6 +704,18 @@ def gateway_app_from_env() -> FastAPI:
         raise ValueError("chain worker admission requires chain query endpoints")
     billing_pin = None if unfunded else _pin_from_env()
     counter = None if billing_pin is None else _token_counter_from_env(billing_pin)
+    public_http = PublicNodeHTTP() if public_nodes else None
+
+    async def call_public_worker(url: str, request: SignedExecution) -> WorkerResponse:
+        response = await public_http.request("POST", url, json=request.model_dump(), timeout=180)
+        response.raise_for_status()
+        return WorkerResponse.model_validate(response.json())
+
+    async def submit_public_receipt(url: str, receipt: dict) -> None:
+        endpoint = url.rsplit("/", 1)[0] + "/submit-receipt"
+        response = await public_http.request("POST", endpoint, json={"receipt": receipt}, timeout=30)
+        response.raise_for_status()
+
     return create_gateway_app(plane, identity, os.environ["PRISMA_CLIENT_API_KEY"],
                               task_authorizer=authorizer,
                               announcement_authorizer=(ChainAnnouncementAuthorizer(queries)
@@ -698,10 +723,12 @@ def gateway_app_from_env() -> FastAPI:
                               chain_task_query=queries.task if queries else None,
                               chain_height_query=queries.height if queries else None,
                               token_counter=counter, billing_pin=billing_pin,
-                              receipt_submitter=(_default_receipt_submit
+                              worker_call=call_public_worker if public_nodes else _default_worker_call,
+                              receipt_submitter=((submit_public_receipt if public_nodes else _default_receipt_submit)
                                                  if os.environ.get("PRISMA_RECEIPT_AUTOSUBMIT") == "1" else None),
                               allow_unfunded_dev_tasks=unfunded,
-                              gossip_peers=tuple(filter(None, os.environ.get("PRISMA_GOSSIP_PEERS", "").split(","))))
+                              gossip_peers=tuple(filter(None, os.environ.get("PRISMA_GOSSIP_PEERS", "").split(","))),
+                              public_node_http=public_http)
 
 
 def worker_app_from_env() -> FastAPI:

@@ -42,7 +42,8 @@ python -m uvicorn prisma_network.server:gateway_app_from_env --factory --host 0.
 ```
 
 The gateway requires `PRISMA_NODE_SEED_B64`, `PRISMA_TRUSTED_KEYS_FILE`,
-`PRISMA_ALLOWED_NODE_HOSTS`, and `PRISMA_CLIENT_API_KEY`. Its SQLite path is
+and `PRISMA_CLIENT_API_KEY`. In the default operator-managed mode it also
+requires `PRISMA_ALLOWED_NODE_HOSTS`. Its SQLite path is
 `PRISMA_DB` (default `prisma-network.sqlite3`). The trusted keys file is a JSON
 map of `sha256(raw Ed25519 public key)` to base64 raw public key; include the
 gateway and every worker. Node URLs must be HTTPS and have a host in
@@ -61,8 +62,16 @@ announcement against the chain's worker bond and registered Ed25519 key, then
 admits that key and account without adding them to the trusted-key or binding
 files. The first accepted key/account pairing is kept in SQLite across gateway
 restarts; a gateway restart requires a fresh chain-verified announcement before
-the worker becomes routable again. URL hosts still require an explicit
-`PRISMA_ALLOWED_NODE_HOSTS` entry, and this is not yet open Internet admission.
+the worker becomes routable again. Set `PRISMA_PUBLIC_NODE_ADMISSION=1` together
+with `PRISMA_CHAIN_ADMISSION=1` to accept bonded workers without a URL host
+allowlist. This mode requires HTTPS, rejects private or special-use IP literals,
+and resolves every public node request before connecting to a checked public IP.
+It preserves the announced hostname for TLS certificate verification, disables
+environment proxies and redirects, and bounds response size. A DNS change to
+a private address makes the next request fail. Operators still need public TLS
+certificates and gateway egress firewall rules; this is a transport admission
+boundary, not proof of GPU ownership or model correctness. The mode is off by
+default and incompatible with `PRISMA_DEV_HTTP=1`.
 In funded mode the gateway also needs `PRISMA_MODEL_ID`, `PRISMA_MODEL_DIGEST`,
 `PRISMA_WEIGHTS_DIGEST`, `PRISMA_TOKENIZER_DIGEST`, `PRISMA_RUNTIME_DIGEST`,
 `PRISMA_SPEC_VERSION`, `PRISMA_MODEL_DIR`, and `PRISMA_MODEL_FILES_FILE`.
