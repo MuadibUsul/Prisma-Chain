@@ -467,7 +467,7 @@ def scenario_rope(doc, inputs, honest, fraud, report, task_id, wk, ch, node_id):
     live = {(0, i): r for i, r in enumerate(input_roots(doc))}
     honest_roots = node_roots(doc, honest)
     for i in range(node_id):
-        live[(1, i)] = bytes.fromhex(honest_roots[i])
+        live[(1, i)] = honest_roots[i]
     a_root = live[(int(a_ref["kind"]), int(a_ref["index"]))]
 
     w_honest_chunk, w_honest_proof, _ = chunk_of(node["output"], honest[node_id].reshape(-1), 0)
