@@ -141,10 +141,12 @@ def provider_health(provider: DAProvider, *, timeout: float = 10.0) -> dict:
 
 
 def store_bundle(provider: DAProvider, *, task_id: int, c_hex: str, output_root_hex: str,
-                 m: int, n: int, k: int, assignment_id_hex: str, timeout: float = 30.0,
-                 extra: Optional[dict] = None) -> dict:
+                 m: int, n: int, k: int, assignment_id_hex: str, task_id32_hex: str,
+                 timeout: float = 30.0, extra: Optional[dict] = None) -> dict:
     payload = {"task_id": task_id, "c_hex": c_hex, "output_root": output_root_hex,
-               "m": m, "n": n, "k": k, "assignment_id": assignment_id_hex}
+               "m": m, "n": n, "k": k, "assignment_id": assignment_id_hex,
+               # the provider recomputes the root over tiles keyed by the 32-byte task id
+               "task_id32": task_id32_hex}
     payload.update(extra or {})
     result = _post_json(provider.url.rstrip("/") + "/store", payload, timeout)
     if result.get("error"):
@@ -224,7 +226,8 @@ def verify_attestation(wire: dict, *, expected: dict) -> dict:
 
 def ensure_quorum(providers: list[DAProvider], *, quorum: int, bundle_hex: str,
                   output_root_hex: str, m: int, n: int, k: int, task_id: int,
-                  assignment_id_hex: str, available_until: int, attested_height: int,
+                  assignment_id_hex: str, task_id32_hex: str, available_until: int,
+                  attested_height: int,
                   retries: int = 2, backoff_seconds: float = 0.5,
                   per_provider_timeout: float = 20.0,
                   sleep: Callable[[float], None] = time.sleep,
@@ -256,7 +259,8 @@ def ensure_quorum(providers: list[DAProvider], *, quorum: int, bundle_hex: str,
                     raise DAError(f"{provider.name}: provider advertises no public key")
                 store_bundle(provider, task_id=task_id, c_hex=bundle_hex,
                              output_root_hex=output_root_hex, m=m, n=n, k=k,
-                             assignment_id_hex=assignment_id_hex, timeout=per_provider_timeout * 2)
+                             assignment_id_hex=assignment_id_hex, task_id32_hex=task_id32_hex,
+                             timeout=per_provider_timeout * 2)
                 wire = request_attestation(provider, task_id=task_id,
                                            assignment_id_hex=assignment_id_hex,
                                            available_until=available_until,

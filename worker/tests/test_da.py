@@ -162,7 +162,8 @@ def providers():
 def quorum_call(provider_list, **kw):
     return da.ensure_quorum(provider_list, quorum=kw.pop("quorum", 2), bundle_hex="ab" * 64,
                             output_root_hex=OUTPUT_ROOT_HEX, m=M, n=N, k=K, task_id=TASK_ID,
-                            assignment_id_hex=ASSIGNMENT_HEX, available_until=AVAILABLE_UNTIL,
+                            assignment_id_hex=ASSIGNMENT_HEX, task_id32_hex="11" * 32,
+                            available_until=AVAILABLE_UNTIL,
                             attested_height=ATTESTED_HEIGHT, log=lambda _m: None, **kw)
 
 
