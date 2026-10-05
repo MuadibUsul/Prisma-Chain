@@ -18,7 +18,7 @@ import json
 import pathlib
 import sys
 
-from . import keystore
+from . import gpu, keystore
 from .identity import WorkerIdentity
 from .redact import install as install_redaction
 from .redact import register_secret
@@ -115,6 +115,18 @@ def cmd_identity_rotate(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_gpu_probe(args: argparse.Namespace) -> int:
+    try:
+        report = gpu.probe(nvidia_smi=args.nvidia_smi)
+    except gpu.ProbeError as exc:
+        print(f"prisma-worker: {exc}", file=sys.stderr)
+        return 1
+    print(gpu.format_report(report, args.json))
+    # Exit codes: 0 supported, 2 CAPABILITY_UNSUPPORTED (the join flow branches
+    # on this without parsing text), 1 probe error.
+    return 0 if report.backend_supported else 2
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="prisma-worker", description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -147,12 +159,21 @@ def build_parser() -> argparse.ArgumentParser:
     rotate = actions.add_parser("rotate", help="generate a new identity over the same keystore")
     common(rotate)
     rotate.set_defaults(func=cmd_identity_rotate)
+
+    gpu_cmd = sub.add_parser("gpu", help="GPU capability probe")
+    gpu_actions = gpu_cmd.add_subparsers(dest="action", required=True)
+    probe = gpu_actions.add_parser("probe", help="report GPU model/CC/VRAM/driver and backend support")
+    probe.add_argument("--nvidia-smi", default=None, help="path to nvidia-smi (default: PATH lookup)")
+    probe.add_argument("--json", action="store_true", help="machine-readable output")
+    probe.set_defaults(func=cmd_gpu_probe)
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    args.keystore = pathlib.Path(args.keystore).expanduser()
+    # Only the identity subcommands carry a keystore path.
+    if hasattr(args, "keystore"):
+        args.keystore = pathlib.Path(args.keystore).expanduser()
     try:
         return args.func(args)
     except (keystore.KeystoreError, CliError, ValueError) as exc:
