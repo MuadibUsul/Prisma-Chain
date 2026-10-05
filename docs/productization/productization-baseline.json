@@ -1,0 +1,88 @@
+{
+ "freeze_tag": "transformer-phase-f-wide-integer",
+ "freeze_tag_object": "330d27f5fc92d009aca9599cc1e0bb13a496c766",
+ "freeze_commit": "89547fa97b62d72a4cd336a5dfd3b000b03eac60",
+ "source_branch": "protocol/transformer-phase-f5c-wide-integer",
+ "source_branch_head": "40b4fe353df7d2203d1609cceb10d24380abed7a",
+ "source_main_sha": "a01c5edcabb334d629087bba243cd6dc3fb6dcd3",
+ "main_reconciliation_status": "NOT PERFORMED (explicit decision; origin/main does not contain the freeze commit; recorded in docs/productization/b0-repository-reconciliation.md section 4)",
+ "product_branch": "product/testnet-alpha",
+ "product_baseline_sha": "89547fa97b62d72a4cd336a5dfd3b000b03eac60",
+ "product_branch_head": "6451558a45d23fc066d266b93b6dca70089014c2",
+ "roadmap_version": "1.1",
+ "graph_id_v2": "8fb86087697e277602bb4b2088ba48eb4172c21d9c4f83914582f2cbf00d4def",
+ "graph_id_v2_recomputed_from": "tools/f5c_bundle_v2.graph_id_v2_of(testdata/f5c_qwen3_block_v2.json)",
+ "policy_id": "eb9a9fef403c95cd0ab876893acf14e02928245306f1d1cc6e12f4d99c5eb7a0",
+ "policy_id_recomputed_from": "sha256(json.dumps(A13W10 plan minus policy_id, sort_keys, compact)) over docs/phase-f5a-candidate-policies.json",
+ "protocol_versions": {
+  "tensor_v2": "CANONICAL_TENSOR_V2/1.0.0",
+  "graph_v2": "CANONICAL_GRAPH_V2/1.0.0",
+  "gemm_wide": "GEMM_A13W10_I64_V1/1.0.0",
+  "requant_wide": "REQUANTIZE_WIDE_V1/1.0.0",
+  "commit_v3": "3.0.0",
+  "receipt_v3": "3.0.0",
+  "freivalds_wide": "FREIVALDS_A13W10_I64_V1/1.0.0",
+  "graph_da_attestation": "GRAPH_DA_ATTESTATION_V2/1.0.0",
+  "bundle_v2": "GRAPH_VERIFICATION_BUNDLE_V2/1.0.0"
+ },
+ "v1_frozen": {
+  "graph_id_v1": "f1ba2ebb09f54fd37cf779db7d802380de0effa31a0b1e58047cc1d563c43315",
+  "legacy_golden": "testdata/f5c_legacy_golden.json"
+ },
+ "e2e_protocol_fixes_inside_tag": {
+  "c4fa56a": "yes",
+  "dcb4ebc": "yes"
+ },
+ "post_tag_carry": [
+  {
+   "original": "40b4fe3",
+   "product": "e994396",
+   "reason": "freeze record completeness: tag->commit->GraphIDV2/PolicyID mapping + fresh-checkout regression note (docs only)"
+  },
+  {
+   "original": "e550cbb",
+   "product": "71b6bdf",
+   "reason": "non-protocol CI fix: network test extra declares tokenizers (clean-venv CI install parity)"
+  },
+  {
+   "original": "4d4a418",
+   "product": "2b086ad",
+   "reason": "roadmap v1.1 + v1.0 historical copy + migration JSON (single authoritative plan)"
+  },
+  {
+   "original": "a241af9",
+   "product": "6dd06cf",
+   "reason": "B0-01 repository reconciliation report (B0-01 artifact; input to B0-02 decisions)"
+  },
+  {
+   "original": "57be2af",
+   "product": "66a3cff",
+   "reason": "useful network WIP: public-node admission (product line; B0-01 section 9 recommendation; 7/7 tests green)"
+  },
+  {
+   "original": "0f8ebd2",
+   "product": "6451558",
+   "reason": "repo-level Apache-2.0 LICENSE (carry to baseline per B0-01 section 9)"
+  }
+ ],
+ "legacy_compatibility_status": "V1 golden suite green at the baseline commit (compute/canonical legacy_golden_test.go vs testdata/f5c_legacy_golden.json)",
+ "verification": {
+  "fresh_checkout_at_baseline": {
+   "commit": "89547fa",
+   "root_go_test": "green (cmd/prisma-vm, compute/canonical 35.6s, compute/gemmv1, compute/gemmv1/verify, vm)",
+   "chain_go_test": "green (prismachain/chain/x/compute 2.7s)",
+   "go_build": "green (root ./... and chain ./...)",
+   "graph_id_v2_recompute": "MATCH 8fb86087697e277602bb4b2088ba48eb4172c21d9c4f83914582f2cbf00d4def"
+  },
+  "product_tip": {
+   "commit": "6451558a45d23fc066d266b93b6dca70089014c2",
+   "root_go_test": "green",
+   "chain_go_test": "green",
+   "network_tests": "green (31 passed in 8.44s, network/tests full suite incl. 7 public-node admission tests)"
+  },
+  "toolchain": {
+   "go": "go1.24.1 windows/amd64 (E:/tools/go124/bin/go.exe, GOTOOLCHAIN=local)",
+   "python": "3.10.6"
+  }
+ }
+}
