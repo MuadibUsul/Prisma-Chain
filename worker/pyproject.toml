@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prisma-worker"
+version = "0.1.0"
+description = "Prisma Chain worker daemon: identity/keystore, GPU probe, job lifecycle (Phase B productization)"
+requires-python = ">=3.10"
+# prisma-network is the sibling product package in this repository; install
+# both together:  pip install -e ./network -e ./worker
+dependencies = ["cryptography>=41", "prisma-network"]
+
+[project.scripts]
+prisma-worker = "prisma_worker.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["prisma_worker*"]
