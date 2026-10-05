@@ -21,3 +21,4 @@ logs/
 Thumbs.db
 .idea/
 .vscode/
+deploy/runpod_gemm/gemmv1.tgz

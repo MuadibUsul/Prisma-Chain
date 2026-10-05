@@ -104,11 +104,14 @@ reliability, privacy and operator concentration, rather than registered nodes.
   trust limits.
 
 The repository is publicly readable but currently has no `LICENSE` file.
-An optional chain query now admits signed announcements from bonded worker keys
+An optional chain query admits signed announcements from bonded worker keys
 without a pre-provisioned key or account binding; the first pairing remains
-fixed across gateway restarts. The deployed mock stack still uses pre-provisioned
-keys, URL hosts still require an allowlist, and VRAM is advertised but not used
-for admission. Open participation and formal source release remain future gates.
+fixed across gateway restarts. An additional opt-in public-node transport accepts
+bonded workers without a URL host allowlist and pins each outbound HTTPS request
+to a freshly checked public DNS answer. The deployed mock stack still uses
+pre-provisioned keys, VRAM is advertised but not independently measured, and
+the open operator test has not been completed. Open participation and formal
+source release remain future gates.
 
 ## Operational gates
 
@@ -124,3 +127,71 @@ for admission. Open participation and formal source release remain future gates.
 
 The repository README tracks which gates are actually met. Unmet gates remain
 open work; they are never described as shipped behavior.
+
+## Verifiable GEMM gate
+
+GEMM_INT8_V1 (docs/gemm-protocol-v0.1.1.md) is a second verifiable operator
+next to the bounded-integer VM. The gate is complete only when the
+following hold against the real implementation, not a plan:
+
+1. The Go reference and an independent implementation produce the identical
+   task ID, matrix roots, output root and receipt ID for fixed vectors
+   (cross-language determinism).
+2. A normal worker reaches FINALIZED and holds a Verified Work Receipt with
+   `verification_mode = optimistic_unchallenged`.
+3. A single corrupted output tile is detected by a challenger that never
+   received the worker's intermediates.
+4. The resulting dispute creates an execution trace for the disputed tile
+   only; no full-task trace is ever committed or generated on the normal
+   path, including at 4096x4096x4096.
+5. Interactive bisection localizes the first differing K-step, and the
+   arbiter resolves the dispute by recomputing exactly one 8x8x8 micro-step
+   (512 canonical MACs) after checking both input tiles against the
+   committed matrix roots.
+6. A worker that submitted a wrong tile receives no receipt; a challenger
+   that submitted a wrong tile cannot defeat a correct worker; replays of
+   ResultCommits, assignments and tile proofs across tasks or workers are
+   rejected; response timeouts resolve by the existing refund rules.
+7. Two independent GPU nodes complete the honest and fraud E2E scenarios
+   over the network with a bit-exact INT8 x INT8 -> INT32 backend, and the
+   measured benchmark ladder (128 through 4096) is published with the
+   normal-path overhead and the challenge overhead against full
+   recomputation.
+
+Phases A and B (library, CLI, local two-process E2E) and the two-GPU
+RunPod E2E of item 7 have passed: two pods with different GPU models
+(RTX 4000 Ada, RTX 2000 Ada) both pass the `torch._int_mm` bit-exactness
+gate, and the honest and fraud scenarios complete across them
+(`docs/gemm-e2e-results.json`). The GPU benchmark ladder and the Phase D
+chain integration (GEMM task spec, dispute state and VWR settlement in the
+compute module) remain open; the gate is not fully met until Phase D lands
+and the measured GPU ladder is published.
+
+## Cheap verification gate
+
+v0.1.2 (docs/gemm-verification-v0.1.2.md) adds Freivalds detection so the
+challenger no longer needs a full recomputation to find fraud. The gate is
+met only when all of the following hold against the real implementation:
+
+1. An honest C passes every detection round.
+2. A fraudulent C is detected without full recomputation.
+3. The fast path never calls the full reference GEMM (asserted by
+   instrumentation in the E2E).
+4. The bad output row is localized and confirmed by an exact O(KN) row
+   recomputation.
+5. The bad 8x8 tile is derived from exact row recomputations, never from
+   worker data.
+6. The existing v0.1.1 dispute proves the fraud end to end and ends
+   ChallengerWins with no receipt for the worker.
+7. The final arbiter remains exactly 512 canonical MACs.
+8. The 4096^3 benchmark is published with DetectionRatio and
+   TotalFraudPathRatio measured on one machine, separating probabilistic
+   detection cost from deterministic arbitration cost.
+9. A false-accept simulation is published next to the 2^-rounds
+   theoretical bound, with PASS / FAIL / NOT TESTED kept distinct.
+
+Status: items 1-7 and 9 pass on the CPU path (`docs/gemm-v0.1.2-report.md`);
+the 4096^3 CPU ladder is published (`docs/gemm-v0.1.2-benchmark-results.json`,
+detection ratio 0.0080 at 8 rounds, total fraud-path ratio 0.0692 at 40
+rounds including the exact 8-row tile build). The GPU fast-verification benchmark remains NOT TESTED until two
+pods are available again. Phase D chain integration is still open.

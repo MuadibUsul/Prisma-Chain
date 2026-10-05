@@ -1,0 +1,81 @@
+{
+  "gpu_bit_exact": true,
+  "gpu_checks": {
+    "worker": {
+      "backend": {
+        "backend": "torch_int_mm_cuda",
+        "device": "NVIDIA RTX 4000 Ada Generation"
+      },
+      "bit_exact": true,
+      "size": [
+        512,
+        512,
+        512
+      ],
+      "gpu_s": 0.2334,
+      "oracle_s": 0.93,
+      "sample": [
+        65338,
+        113935,
+        -160617,
+        -53518
+      ]
+    },
+    "challenger": {
+      "backend": {
+        "backend": "torch_int_mm_cuda",
+        "device": "NVIDIA RTX 2000 Ada Generation"
+      },
+      "bit_exact": true,
+      "size": [
+        512,
+        512,
+        512
+      ],
+      "gpu_s": 0.2757,
+      "oracle_s": 0.89,
+      "sample": [
+        65338,
+        113935,
+        -160617,
+        -53518
+      ]
+    }
+  },
+  "honest": {
+    "scenario": "honest",
+    "m": 256,
+    "n": 256,
+    "k": 256,
+    "seed": 42,
+    "worker_backend": "torch_int_mm_cuda",
+    "worker_output_root": "8b144cfb2a33bf8240d2afc4d6241f0be34cd91d02f9288f73d54ba1c5f720d0",
+    "challenger_backend": "torch_int_mm_cuda",
+    "challenger_recompute_s": 0.042,
+    "outcome": "optimistic_unchallenged",
+    "total_s": 41.8
+  },
+  "fraud": {
+    "scenario": "fraud",
+    "m": 256,
+    "n": 256,
+    "k": 256,
+    "seed": 42,
+    "worker_backend": "torch_int_mm_cuda",
+    "worker_output_root": "6b41a50f004f013f8aad2c280144b9c8f2e24f3da6d249cef0993ebf0bc1a4e0",
+    "challenger_backend": "torch_int_mm_cuda",
+    "challenger_recompute_s": 0.042,
+    "outcome": "challenger_wins",
+    "disputed_tile": [
+      1,
+      1
+    ],
+    "bisection_rounds": 5,
+    "arbitration_step": 31,
+    "arbitration_macs": 512,
+    "on_demand_trace_bytes": 16896,
+    "worker_trace_root": "407aad34941f44dbc042ef9b46c208edd57625ab2a10d99c2ac1d9a33204dffc",
+    "challenger_trace_root": "d4fb80c72b7a217cf931b1e72b84ca39dc0f96d6ac901959a13010cfad5c9b48",
+    "total_s": 56.0
+  }
+}
