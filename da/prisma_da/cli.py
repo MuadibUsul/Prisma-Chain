@@ -27,6 +27,7 @@ from prisma_worker.redact import register_secret
 from .chain_tx import ChainTxError, provider_keyring, run_tx
 from .config import ChainConfig, DaemonConfig
 from .daemon import Daemon
+from .policy import RetentionPolicy, gc as run_gc, integrity_scan
 from .storage import ArtifactIndex
 
 
@@ -134,6 +135,31 @@ def cmd_status(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_gc(args: argparse.Namespace) -> int:
+    config = _load_config(args)
+    index = ArtifactIndex(config.resolved_data_dir())
+    index.rescan()
+    policy = RetentionPolicy(quota_bytes=config.quota_bytes,
+                             ttl_seconds=args.ttl_seconds if args.ttl_seconds is not None
+                             else config.ttl_seconds)
+    report = run_gc(index, policy, live_challenges=args.live_challenge, dry_run=args.dry_run)
+    print(json.dumps(report, indent=1) if args.json else
+          f"gc: deleted {len(report['deleted'])} artifact(s), freed {report['freed_bytes']} bytes, "
+          f"kept {len(report['kept'])}{' (dry run)' if report['dry_run'] else ''}")
+    return 0
+
+
+def cmd_scan(args: argparse.Namespace) -> int:
+    config = _load_config(args)
+    index = ArtifactIndex(config.resolved_data_dir())
+    index.rescan()
+    report = integrity_scan(index)
+    print(json.dumps(report, indent=1) if args.json else
+          f"integrity scan: {report['healthy']}/{report['checked']} healthy, "
+          f"{len(report['bad'])} quarantined")
+    return 1 if report["bad"] else 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="prisma-da", description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -164,6 +190,19 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--once", action="store_true",
                      help="start, run restart recovery, and exit (tests/CI)")
     run.set_defaults(func=cmd_run)
+
+    gc_cmd = sub.add_parser("gc", help="delete artifacts past TTL with no live challenge")
+    common(gc_cmd)
+    gc_cmd.add_argument("--ttl-seconds", type=int, default=None,
+                        help="override the configured TTL for this run")
+    gc_cmd.add_argument("--live-challenge", type=int, action="append", default=[],
+                        help="task id with a live challenge (never deleted); repeatable")
+    gc_cmd.add_argument("--dry-run", action="store_true")
+    gc_cmd.set_defaults(func=cmd_gc)
+
+    scan = sub.add_parser("scan", help="full integrity scan (quarantine mismatches)")
+    common(scan)
+    scan.set_defaults(func=cmd_scan)
 
     status = sub.add_parser("status", help="local index and configuration summary")
     common(status)

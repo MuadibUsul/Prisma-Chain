@@ -25,8 +25,9 @@ class DaemonConfig:
     keystore: str = ""                      # provider key keystore (B2-01 rules)
     chain: ChainConfig = field(default_factory=ChainConfig)
     # B4-02 owns enforcement; recorded here so a config file is complete.
-    quota_bytes: int = 0                    # 0 = unlimited (B4-02 enforces the cap)
-    ttl_seconds: int = 0                    # 0 = keep until GC policy exists (B4-02)
+    quota_bytes: int = 0                    # 0 = unlimited
+    ttl_seconds: int = 0                    # 0 = keep forever
+    scan_interval_seconds: int = 0          # 0 = no periodic integrity scan
 
     def to_dict(self) -> dict:
         return asdict(self)

@@ -37,6 +37,7 @@ from typing import Callable, Optional
 
 from .config import DaemonConfig
 from .frozen import frozen
+from .policy import QuotaExceeded, RetentionPolicy, enforce_quota, integrity_scan
 from .storage import ArtifactIndex, IntegrityError, RootMismatch, StorageError
 
 DA_PROTOCOL_VERSION = "DA_REPLICA_V1"
@@ -117,6 +118,8 @@ class Daemon:
                     self.counters["store_rejected"] += 1
                     return 400, {"error": f"missing fields: {', '.join(missing)}"}
                 try:
+                    enforce_quota(self.index, len(str(body["c_hex"])) // 2,
+                                  self.config.quota_bytes, ignore_task=int(body["task_id"]))
                     result = self.index.store(
                         task_id=int(body["task_id"]), c_hex=str(body["c_hex"]),
                         output_root_hex=str(body["output_root"]), m=int(body["m"]),
@@ -125,6 +128,10 @@ class Daemon:
                 except RootMismatch as exc:
                     self.counters["store_rejected"] += 1
                     return 400, {"error": str(exc)}
+                except QuotaExceeded as exc:
+                    self.counters["store_rejected"] += 1
+                    self.counters["quota_rejected"] = self.counters.get("quota_rejected", 0) + 1
+                    return 413, {"error": str(exc)}
                 except (StorageError, ValueError) as exc:
                     self.counters["store_rejected"] += 1
                     return 400, {"error": f"malformed store request: {exc}"}
@@ -263,6 +270,19 @@ class Daemon:
             ready(self.health())
         thread = threading.Thread(target=self.server.serve_forever, daemon=True)
         thread.start()
+        interval = int(getattr(self.config, "scan_interval_seconds", 0) or 0)
+        if interval > 0:
+            def _scanner():
+                while not self._shutting_down:
+                    time.sleep(interval)
+                    if self._shutting_down:
+                        break
+                    report = integrity_scan(self.index, log=self.log)
+                    self.log(f"periodic integrity scan: {report['healthy']} healthy, "
+                             f"{len(report['bad'])} quarantined")
+
+            threading.Thread(target=_scanner, daemon=True).start()
+            self.log(f"periodic integrity scan enabled every {interval}s")
         if run_forever:
             while not stopping.is_set():
                 time.sleep(0.2)
