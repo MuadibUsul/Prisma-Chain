@@ -27,12 +27,14 @@ file wins.  The previous roadmap is kept only as historical v1.0 (see
 | protocol_phase | `FROZEN` |
 | phase_f | `PASS` |
 | active_phase | `B` |
-| active_task | `B0-01` |
+| active_task | `B0-04` |
 | freeze_tag | `transformer-phase-f-wide-integer` |
 | freeze_tag_object | `330d27f5fc92d009aca9599cc1e0bb13a496c766` (annotated tag object) |
 | freeze_commit | `89547fa97b62d72a4cd336a5dfd3b000b03eac60` (frozen protocol commit) |
 | frozen_branch | `protocol/transformer-phase-f5c-wide-integer` |
 | frozen_branch_head | `40b4fe353df7d2203d1609cceb10d24380abed7a` (docs-only commit after the tag) |
+| product_branch | `product/testnet-alpha` (created 2026-10-05 by B0-02, based at the freeze tag commit) |
+| product_baseline_sha | `89547fa97b62d72a4cd336a5dfd3b000b03eac60` (see `docs/productization/productization-baseline.json`) |
 | graph_id_v2 | `8fb86087697e277602bb4b2088ba48eb4172c21d9c4f83914582f2cbf00d4def` |
 | policy_id | `eb9a9fef403c95cd0ab876893acf14e02928245306f1d1cc6e12f4d99c5eb7a0` |
 | predecessor | `Prisma_Chain_AI_Engineering_Roadmap_F5C_to_Public_Testnet_Alpha.md` (v1.0, historical) |
@@ -64,7 +66,7 @@ PHASE_F IS FROZEN.
 AI MUST NOT execute A0-A7 again unless explicitly instructed to perform
 a regression fix or a protocol-versioned follow-up.
 
-The active execution entrypoint is B0-01.
+The active execution entrypoint is B0-04.
 ```
 
 - Phase A tasks (A0-* … A7-*) are `DONE` + `FROZEN`.  They exist in this
@@ -282,7 +284,7 @@ demo.  Never weaken a real-block gate to a mini-graph gate again.
 | M1 — F.5C Dispute PASS | V2 Graph dispute + Graph→Wide bridge + 512-MAC | real wide GEMM fraud deterministically adjudicated on chain | **DONE / FROZEN** |
 | M2 — Watcher/DA PASS | Bundle V2 + Watcher V2 + 2-of-3 DA | worker disappearance still verifiable / challengeable | **DONE / FROZEN** |
 | M3 — PHASE_F PASS | full 4-validator real-Qwen E2E suite | honest/fraud/false/DA/censor/restart all PASS + freeze tag | **DONE / FROZEN** |
-| M4 — Productization Ready | 5 binaries + Job API + Scheduler + docs | a clean machine can install and run the network | **ACTIVE** (unlocked; entrypoint B0-01) |
+| M4 — Productization Ready | 5 binaries + Job API + Scheduler + docs | a clean machine can install and run the network | **ACTIVE** (unlocked; entrypoint B0-04) |
 | M5 — Private Testnet Alpha | multi-host, public-internet, invite-only | external simulated nodes close the loop across the internet | `PLANNED` / `BLOCKED_BY_M4` |
 | M6 — Public Testnet Alpha | strangers can join, submit, execute, verify | ≥1 external Worker + external Watcher produce real settlement | `PLANNED` / `BLOCKED_BY_M5` |
 
@@ -563,12 +565,9 @@ anywhere in this project.
 
 ```text
 ACTIVE:
-  B0-01   Repository reconciliation
+  B0-04   Development environment cleanup
 
 NEXT (dependency-ordered, unlocked as predecessors complete):
-  B0-02   Productization baseline (branch from the freeze tag)
-  B0-03   Roadmap state migration (this document; completion bookkeeping)
-  B0-04   Development environment cleanup
   B0-05   Productization toolchain baseline
   B1-01   prismad reproducible release build
 
@@ -583,7 +582,8 @@ BLOCKED (do not start):
   Phase E                 -> BLOCKED_BY_M6
 ```
 
-Only `B0-01` is `ACTIVE`.  Do not mark all B tasks ACTIVE.
+Only `B0-04` is `ACTIVE`.  Do not mark all B tasks ACTIVE.
+(B0-01, B0-02, B0-03 are DONE — see their task blocks for evidence.)
 
 ### 11.1 Phase B execution order (revised in v1.1)
 
@@ -972,8 +972,11 @@ protocol and product history will diverge silently.
 
 ```text
 Task ID            B0-01
-Status             ACTIVE
+Status             DONE (2026-10-05)
 Priority           P0
+Evidence           docs/productization/b0-repository-reconciliation.md (product line; original
+                   a241af9); pre-existing WIP parked on feature/public-node-admission @ 520abb1;
+                   working tree clean; nothing deleted; roadmap bookkeeping recorded here by B0-03
 Goal               inventory, classify and reconcile every pre-existing
                    working-tree change so the productization baseline
                    starts from a clean, fully-understood tree
@@ -1054,7 +1057,12 @@ unclassified.
 
 ```text
 Task ID            B0-02
-Status             PLANNED (unlocks after B0-01)
+Status             DONE (2026-10-05)
+Evidence           product/testnet-alpha based at 89547fa (freeze tag commit); baseline artifact
+                   docs/productization/productization-baseline.json (commit 10a930f on the
+                   product line); 6 post-tag commits carried with recorded reasons; regression
+                   green at the baseline commit (root+chain go test, builds, GraphIDV2/PolicyID
+                   recompute) and at the tip (network suite 31/31); main NOT merged (recorded)
 Priority           P0
 Goal               create the formal productization branch, based on the
                    FROZEN PHASE F TAG as its protocol ancestry
@@ -1130,8 +1138,12 @@ proposed baseline, stop: the baseline is wrong, not the tests.
 
 ```text
 Task ID            B0-03
-Status             PLANNED
+Status             DONE (2026-10-05, this bookkeeping commit)
 Priority           P0
+Evidence           roadmap v1.1 updated in place on the product line: §0 metadata (active_task,
+                   product_branch, product_baseline_sha), §11 execution queue, B0-01/B0-02
+                   status+evidence recorded; migration JSON present with real counts;
+                   §B0-03 checks below verified
 Goal               make roadmap v1.1 the single authoritative plan and
                    close the v1.0 state (PARTIAL-era) bookkeeping
 Dependencies       — (this rewrite is the main artifact; the bookkeeping
@@ -1143,9 +1155,14 @@ Forbidden changes  everything else
 **Implementation**
 
 - This document (v1.1) is the primary artifact: `PHASE_F = PASS /
-  FROZEN`, `PHASE_B = ACTIVE`, active entrypoint `B0-01`.
+  FROZEN`, `PHASE_B = ACTIVE`, active entrypoint `B0-01` at rewrite
+  time — updated to `B0-04` by the B0-03 bookkeeping as tasks complete.
 - Update the v1.0-era progress notes that still describe a PARTIAL
-  state *as current* (historical references may remain).
+  state *as current* (historical references may remain). — DONE: the
+  only remaining `PARTIAL` strings in this file are (a) the §"not a
+  PARTIAL verdict" rule, (b) B0-03's own historical description, and
+  (c) the §Appendix C checklist item that asserts the property; the
+  v1.0 copy carries the superseded banner.
 - Record the migration counts in `docs/roadmap-v1.1-migration.json`
   (machine-generated, see §Appendix C).
 
@@ -1161,7 +1178,7 @@ outside of explicitly historical text.
 
 ```text
 Task ID            B0-04
-Status             PLANNED
+Status             ACTIVE
 Priority           P0 (cheap, do before B1 so the baseline is honest)
 Goal               bring the development environment to a known, minimal,
                    documented state before productization
