@@ -1,0 +1,42 @@
+{
+ "script": "deploy/da_smoke.py",
+ "cases": [
+  {
+   "case": "three daemons serve /health",
+   "expected": "3 healthy",
+   "observed": "3 providers",
+   "pass": true,
+   "note": ""
+  },
+  {
+   "case": "upload + verified attestations",
+   "expected": "3 verified",
+   "observed": "3",
+   "pass": true,
+   "note": ""
+  },
+  {
+   "case": "retrieval from all three",
+   "expected": "identical bytes",
+   "observed": "identical",
+   "pass": true,
+   "note": ""
+  },
+  {
+   "case": "1/3 offline drill",
+   "expected": "quorum 2 reached",
+   "observed": "2",
+   "pass": true,
+   "note": ""
+  },
+  {
+   "case": "2/3 offline drill",
+   "expected": "QuorumNotReached",
+   "observed": "raised",
+   "pass": true,
+   "note": "only 1 of 3 providers produced verified attestations; quorum"
+  }
+ ],
+ "passed": 5,
+ "failed": 0
+}

@@ -11,6 +11,11 @@ coverage.out
 .prisma/
 
 # Local runtime material
+# Generated network config bundles (regenerate with tools/netconfig; specs hold seeds)
+network-config/
+# Go build outputs
+chain/netconfig
+chain/netconfig.exe
 .env
 data/
 logs/

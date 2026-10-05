@@ -1,0 +1,104 @@
+{
+ "scenario": "real_rope",
+ "chain_id": "prisma-mv-1",
+ "graph": "f5c_qwen3_block_v2.json",
+ "graph_id_v2": "8fb86087697e277602bb4b2088ba48eb4172c21d9c4f83914582f2cbf00d4def",
+ "nodes": 310,
+ "fraud_node": 85,
+ "fraud_index": 0,
+ "fraud_delta": 100000,
+ "requester_balance_before": 60000000,
+ "divergent_nodes": [
+  85,
+  86,
+  138,
+  139,
+  140
+ ],
+ "task_id": 27,
+ "da_providers_registered": 3,
+ "da_offline_providers": 1,
+ "da_attestations": 2,
+ "bundle_bytes": 39648960,
+ "task_meta": {
+  "graph_id_v2": "8fb86087697e277602bb4b2088ba48eb4172c21d9c4f83914582f2cbf00d4def",
+  "manifest_root_v2": "da14f15aabfd88aeb4323af215370ed26ddab8579f1b0afc419b9ac697417f93",
+  "final_output_root": "ab73533e5e4f8e078dad3234e3f92f4c9f068593757e546a2992e041bdaef10b",
+  "policy_id": "eb9a9fef403c95cd0ab876893acf14e02928245306f1d1cc6e12f4d99c5eb7a0",
+  "graph_task_id": 27
+ },
+ "challenge_inclusion": {
+  "broadcast_height": 1506,
+  "blocks": [
+   {
+    "height": 1506,
+    "proposer": "validator-c",
+    "included": false
+   },
+   {
+    "height": 1507,
+    "proposer": "validator-a",
+    "included": false
+   },
+   {
+    "height": 1508,
+    "proposer": "validator-b",
+    "included": true
+   }
+  ],
+  "censored_by": [
+   1507
+  ],
+  "included_height": 1508,
+  "included_by": "validator-b",
+  "inclusion_delay_blocks": 2
+ },
+ "censor_omission_window_observed": true,
+ "bisection_rounds": 9,
+ "first_divergent_node": 85,
+ "bisection_interval": [
+  85,
+  86
+ ],
+ "rope_table_values": 2048,
+ "final_status": "fraud",
+ "receipt_id": "",
+ "zero_vwr": true,
+ "challenger_balance_delta": 1500000,
+ "challenger_wins_settlement": true,
+ "requester_refunded": true,
+ "watcher_verdict": "fraud_detected",
+ "watcher_seconds": 7.3,
+ "watcher_gemm_mismatches": [],
+ "watcher_cheap_mismatches": [
+  {
+   "node_id": 85,
+   "operator": "ROPE_FIXED_V1",
+   "mismatches": 1,
+   "first_index": [
+    0,
+    0
+   ]
+  }
+ ],
+ "four_validators": {
+  "validator-a": {
+   "height": 1537,
+   "app_hash": "A999E9F20278BB7919C6C636AF3150E0E74E6FE63654396166A0BC96B4631268"
+  },
+  "validator-b": {
+   "height": 1537,
+   "app_hash": "A999E9F20278BB7919C6C636AF3150E0E74E6FE63654396166A0BC96B4631268"
+  },
+  "validator-c": {
+   "height": 1537,
+   "app_hash": "A999E9F20278BB7919C6C636AF3150E0E74E6FE63654396166A0BC96B4631268"
+  },
+  "validator-d": {
+   "height": 1537,
+   "app_hash": "A999E9F20278BB7919C6C636AF3150E0E74E6FE63654396166A0BC96B4631268"
+  }
+ },
+ "four_validators_converged": true,
+ "status": "PASS"
+}

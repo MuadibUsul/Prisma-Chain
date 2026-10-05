@@ -1,0 +1,40 @@
+{
+ "scenario": "false_challenge",
+ "chain_id": "prisma-mv-1",
+ "graph_id_v2": "9c6979fc5fcb67ea6b0b2fd6af5b5b37efed09dba964d101ce8000cc0efad893",
+ "task_id": 12,
+ "challenger_balance_before": 35000000,
+ "bisection_interval": [
+  0,
+  3
+ ],
+ "dispute_status_after_midpoint": "arb_ready",
+ "status_after_arbitration": "result_submitted",
+ "survived_challenge": true,
+ "challenger_balance_after_arbitration": 34000000,
+ "challenger_bond_burned": true,
+ "final_status": "finalized",
+ "receipt_id": "S92D2nR6gsNOf1d58Dc2D83heOEroZOK0jizJOknokU=",
+ "exactly_one_vwr": true,
+ "second_finalize": "tx 1ABC636E103FCC329D40BDDAE9E63912B66A5C109922273E9F27265F80CC9DEE failed in block: failed to execute message; message index: 0: graph task is not in the expected phase",
+ "four_validators": {
+  "validator-a": {
+   "height": 503,
+   "app_hash": "333140521974A77E3DBA74D66163DA9CDF21D646AF43DEBD05EFA3879582024A"
+  },
+  "validator-b": {
+   "height": 503,
+   "app_hash": "333140521974A77E3DBA74D66163DA9CDF21D646AF43DEBD05EFA3879582024A"
+  },
+  "validator-c": {
+   "height": 503,
+   "app_hash": "333140521974A77E3DBA74D66163DA9CDF21D646AF43DEBD05EFA3879582024A"
+  },
+  "validator-d": {
+   "height": 503,
+   "app_hash": "333140521974A77E3DBA74D66163DA9CDF21D646AF43DEBD05EFA3879582024A"
+  }
+ },
+ "four_validators_converged": true,
+ "status": "PASS"
+}

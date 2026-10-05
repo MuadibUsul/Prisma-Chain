@@ -1,16 +1,20 @@
 # Phase F — final report and lineage
 
-## PHASE_F = PARTIAL
+## PHASE_F = PASS
 
 The frozen gates that would allow a PASS are: real-model accuracy PASS;
 GPU backend PASS; canonical wide protocol PASS; graph V2 PASS; watcher
 PASS; graph DA PASS; wide-GEMM 512 dispute PASS; RoPE E2E PASS; honest
 real-block E2E PASS; false-challenge PASS; 4-validator E2E PASS; all
-regressions PASS.  Accuracy, GPU, protocol, graph, watcher and DA logic
-are done and evidenced; **the four-validator devnet E2E scenarios
-(including the block-level honest/fraud runs on the chain) are NOT
-TESTED**, so by the phase's own rule the status is PARTIAL and **no freeze
-tag with "pass" meaning is created**.
+regressions PASS.  Every gate is now evidenced: the protocol/GPU/
+watcher/DA layers as before, and the complete A6 4-validator devnet
+suite — including the REAL 310-node block's honest, GEMM-fraud (node 145)
+and ROPE-fraud (node 85) runs, the false challenge, the combined
+censorship+DA-offline scenario, the wide-dispute full-stack restart, the
+validator offline/recovery drill and the availability-failure refund —
+each with a committed evidence JSON and four-validator app-hash
+convergence.  The freeze tag `transformer-phase-f-wide-integer` carries
+pass meaning and its mapping is recorded in `docs/phase-f-freeze.json`.
 
 ## Lineage (all branches on origin)
 
@@ -25,7 +29,7 @@ tag with "pass" meaning is created**.
 | F.5B | research/transformer-phase-f5b-gpu-feasibility | exact on two GPUs; **GPU_CORRECT_BUT_NOT_PRACTICAL** (eager 10.5x/12.8x) → fusion required |
 | F.5B.1 | research/transformer-phase-f5b1-fused-gemm | **TRUE_FUSED_MMA_A13W10 weighted 1.17x on both architectures**; 83/83 exact; SM-FACT: `_int_mm` M>16, no generic CUDA integer matmul |
 | F.5B.2 | research/transformer-phase-f5b2-full-block-gpu | **FUSED_GPU_FEASIBLE_A13W10** — full 310-node block 310/310 nodes + roots + final exact on A40 + RTX 2000 Ada; fallback 0; float 0 |
-| F.5C | protocol/transformer-phase-f5c-wide-integer | protocol core delivered (see below); devnet E2E not run → PARTIAL |
+| F.5C | protocol/transformer-phase-f5c-wide-integer | **complete**: protocol core + Watcher V2 + graph DA + real-block 4-validator E2E (honest/GEMM-145 fraud/ROPE-85 fraud/false challenge/combined adversarial/restart/recovery/availability) — **PASS**, freeze tag `transformer-phase-f-wide-integer` |
 
 Failed research is preserved unsoftened in F.2A–F.4A reports: plain W8A8
 and groupwise INT8, activation-only up to A13, and the whole int32 joint
@@ -65,25 +69,43 @@ without full GEMM recomputation? **YES** — 83 GEMMs via 40-round
 Freivalds (1.1 s) + 227 exact cheap nodes (3.2 s); `full_gemm_calls = 0`.
 
 **Q5.** Can verification data remain available after Worker
-disappearance? **YES in protocol** (bundle + DA quorum + typed
-challenges); the live drill is part of the not-tested devnet E2E.
+disappearance? **YES** — bundle + DA quorum + typed challenges; the
+devnet drill ran with only 2-of-3 providers attesting the 39,648,960-byte
+real bundle (one provider offline) and the honest real block still
+finalized on quorum (`phase-f5c-e2e-honest.json`); with quorum
+unreachable the task settles `availability_failed` and the requester is
+refunded (`phase-f5c-e2e-availability-failure.json`).
 
 **Q6.** Can a fraudulent real A13W10 GEMM be reduced to a deterministic
 512-MAC chain proof? **YES** — chain e2e test: self-consistent fraud ->
 bisection -> wide dispute -> 512-MAC -> ChallengerWins -> zero VWR.
 
-**Q7.** Can a real RoPE fraud be adjudicated end-to-end? **At the
-watcher+chain-unit level YES** (watcher detects node 5; bounded RoPE
-arbiter unit-tested); the devnet scenario is NOT TESTED.
+**Q7.** Can a real RoPE fraud be adjudicated end-to-end? **YES** — on
+the real 310-node block a self-consistent ROPE fraud (node 85, δ=100000)
+bisected in 9 rounds to the exact node, and the bounded table-pinned
+arbiter (2048-value committed table + one input chunk) settled
+ChallengerWins -> fraud -> zero VWR; the watcher detects it and the four
+validators converge (`phase-f5c-e2e-rope-fraud.json`).
 
-**Q8.** Does an honest real block finalize exactly one VWR? **YES at the
-chain-unit level** (with the DA quorum gate); devnet run NOT TESTED.
+**Q8.** Does an honest real block finalize exactly one VWR? **YES** —
+the real 310-node block finalized on the devnet with exactly one VWR V3
+(`fk7JvIrf…`), the fee split verified mechanically against balances
+(escrow spent 20% burn / 2×5% monitors / 70% worker) and the watcher
+passing (`phase-f5c-e2e-honest.json`).
 
-**Q9.** Does a fraudulent real block finalize zero VWR? **YES** (unit +
-watcher evidence; devnet NOT TESTED).
+**Q9.** Does a fraudulent real block finalize zero VWR? **YES** — both
+the real GEMM-145 fraud (through the 512-MAC wide path) and the real
+ROPE-85 fraud settle to `fraud` with an empty receipt, challenger
+settlement and requester refund on the devnet.
 
 **Q10.** Do all four validators converge under honest/fraud/DA-offline/
-censorship scenarios? **NOT TESTED** (devnet E2E not run).
+censorship scenarios? **YES** — every A6 scenario records the four
+validators' height and app hash with a single distinct app hash; under a
+censoring proposer the pending challenge was omitted for one block by
+validator-a and included by validator-b the next (`censored_by: [1335]`,
+`included_by: validator-b`); the full-stack restart kept the persisted
+dispute byte-identical; a stopped validator caught up to the same height
+and app hash.
 
 **Q11.** 310 graph nodes / 83 GEMM / 252,706,816 logical MAC preserved?
 **YES** — identical counts and chain-derived work vector.
@@ -100,17 +122,16 @@ real 310-node bundle (inputs 31.5 MB + node outputs 8.0 MB + header).
 (root phase ~1.3 s incl. root recomputation, Freivalds 1.1 s, cheap ops
 3.2 s); peak memory recorded in `phase-f5c-watcher-cost.json`.
 
-**Q15.** Should Phase F be declared PASS? **NO — PARTIAL.** The protocol,
-GPU, watcher and DA gates are evidenced; the 4-validator devnet E2E
-(including block-level honest/fraud scenarios) is NOT TESTED, and the
-phase's own rule forbids softer wording.
+**Q15.** Should Phase F be declared PASS? **YES — PASS.** Every
+predeclared gate is evidenced, including the complete 4-validator devnet
+E2E on the real 310-node block; no key item is NOT TESTED.  The freeze
+tag `transformer-phase-f-wide-integer` is created and mapped in
+`docs/phase-f-freeze.json`.  Two defects were found by the E2E and fixed
+with regression tests before the tag (single-node dispute arb-ready
+promotion; wide-arbitration kind-1 operand panic).
 
-## Next steps (dependency-ordered)
+## Post-freeze work (Phase B, per the roadmap)
 
-1. A6 devnet E2E on the existing compose stack (image rebuilt from this
-   branch): honest real-block scenario first, then GEMM fraud through the
-   wide 512-MAC path, ROPE fraud, false challenge, combined
-   censorship+DA-offline, restarts, availability failure — each scenario
-   producing its docs JSON with four-validator convergence.
-2. Then (and only then) the Phase F freeze tag, followed by Phase B
-   productization (the MLIR of the roadmap's later phases is unchanged).
+Phase B productization starts only now that PHASE_F = PASS: release
+builds, CLI verb polish (B5-01), packaging, MLIR items of the later
+phases.  No protocol semantics change after the tag.

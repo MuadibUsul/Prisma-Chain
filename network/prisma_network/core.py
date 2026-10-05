@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import base64
 import hashlib
+import ipaddress
 import json
 import math
 import sqlite3
@@ -163,12 +164,16 @@ class ControlPlane:
         *,
         bound_worker_accounts: dict[str, str] | None = None,
         allow_http: bool = False,
+        public_node_admission: bool = False,
         clock_ms: Callable[[], int] | None = None,
     ):
+        if public_node_admission and allow_http:
+            raise ValueError("public node admission requires HTTPS")
         self.trusted_keys = trusted_keys
         self.bound_worker_accounts = bound_worker_accounts or {}
         self.allowed_hosts = allowed_hosts
         self.allow_http = allow_http
+        self.public_node_admission = public_node_admission
         self.clock_ms = clock_ms or (lambda: int(time.time() * 1000))
         self.lock = threading.RLock()
         self.db = sqlite3.connect(db_path, check_same_thread=False, isolation_level=None, timeout=10)
@@ -200,7 +205,27 @@ class ControlPlane:
         url = urlsplit(value)
         if url.scheme not in ({"http", "https"} if self.allow_http else {"https"}):
             raise ValueError("node URL must use HTTPS")
-        if not url.hostname or url.hostname not in self.allowed_hosts or url.username or url.password or url.fragment:
+        try:
+            host, port = url.hostname, url.port
+        except ValueError as exc:
+            raise ValueError("invalid node URL port") from exc
+        if (not host or url.username or url.password or url.fragment or url.query
+                or not url.path.startswith("/v1/")):
+            raise ValueError("invalid node URL")
+        if self.public_node_admission:
+            try:
+                address = ipaddress.ip_address(host)
+            except ValueError:
+                if not host.isascii() or len(host) > 253 or not all(
+                        part and len(part) <= 63 and part[0].isalnum() and part[-1].isalnum()
+                        and all(c.isalnum() or c == "-" for c in part)
+                        for part in host.split(".")) or "." not in host:
+                    raise ValueError("invalid public node hostname")
+            else:
+                if not address.is_global:
+                    raise ValueError("node URL is not public")
+            return
+        if host not in self.allowed_hosts:
             raise ValueError("node URL host is not allowed")
 
     def announce(self, signed: SignedCapability, *, bonded_account: str | None = None) -> None:

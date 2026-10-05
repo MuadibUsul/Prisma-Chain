@@ -1,0 +1,110 @@
+{
+ "scenario": "combined_adversarial",
+ "chain_id": "prisma-mv-1",
+ "censoring_validator": "validator-a",
+ "validator_addresses": {
+  "5603098C82199985F069C4A0C85C495045F91F13": "validator-a",
+  "FF1E6E806DBC64AC309E50205C0766363527C16F": "validator-b",
+  "35B669B54CE97A25C4F327572A6090BC1D25C302": "validator-c",
+  "28C6F40957065B4C06A67320B4B3F9C493E660BE": "validator-d"
+ },
+ "graph_id_v2": "0c81f15182616503a860202aead6725229c2610c7ce0046def5f9b6af0ae3567",
+ "requester_balance_before": 40000000,
+ "task_id": 17,
+ "da_attestations": 1,
+ "da_quorum_required": 2,
+ "broadcast_window": {
+  "height": 750,
+  "last_proposer": "validator-c",
+  "next_expected": "validator-a"
+ },
+ "challenge_inclusion": {
+  "broadcast_height": 750,
+  "blocks": [
+   {
+    "height": 750,
+    "proposer": "validator-c",
+    "included": false
+   },
+   {
+    "height": 751,
+    "proposer": "validator-a",
+    "included": false
+   },
+   {
+    "height": 752,
+    "proposer": "validator-b",
+    "included": true
+   }
+  ],
+  "censored_by": [
+   751
+  ],
+  "included_height": 752,
+  "included_by": "validator-b",
+  "inclusion_delay_blocks": 2
+ },
+ "censor_omission_window_observed": true,
+ "arbitration_inclusion": {
+  "broadcast_height": 762,
+  "blocks": [
+   {
+    "height": 762,
+    "proposer": "validator-c",
+    "included": false
+   },
+   {
+    "height": 763,
+    "proposer": "validator-a",
+    "included": false
+   },
+   {
+    "height": 764,
+    "proposer": "validator-b",
+    "included": true
+   }
+  ],
+  "censored_by": [
+   763
+  ],
+  "included_height": 764,
+  "included_by": "validator-b",
+  "inclusion_delay_blocks": 2
+ },
+ "final_status": "fraud",
+ "receipt_id": "",
+ "zero_vwr": true,
+ "requester_balance_after": 40000000,
+ "requester_refunded": true,
+ "watcher_verdict": "fraud_detected",
+ "watcher_localization": [
+  {
+   "node_id": 0,
+   "operator": "GEMM_A13W10_I64_V1",
+   "bad_row": 0,
+   "bad_column": 0,
+   "tile_i": 0,
+   "tile_j": 0
+  }
+ ],
+ "four_validators": {
+  "validator-a": {
+   "height": 764,
+   "app_hash": "B28B90613122BA4E4ED8750506DF16CF36B1528A6CF733ED0895DA7CCB71F7C6"
+  },
+  "validator-b": {
+   "height": 764,
+   "app_hash": "B28B90613122BA4E4ED8750506DF16CF36B1528A6CF733ED0895DA7CCB71F7C6"
+  },
+  "validator-c": {
+   "height": 764,
+   "app_hash": "B28B90613122BA4E4ED8750506DF16CF36B1528A6CF733ED0895DA7CCB71F7C6"
+  },
+  "validator-d": {
+   "height": 764,
+   "app_hash": "B28B90613122BA4E4ED8750506DF16CF36B1528A6CF733ED0895DA7CCB71F7C6"
+  }
+ },
+ "four_validators_converged": true,
+ "status": "PASS"
+}

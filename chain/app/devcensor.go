@@ -34,8 +34,10 @@ func (app *App) txConfig() client.TxConfig {
 // maybeEnableDevCensorship installs the devnet-only proposer filter when
 // the environment asks for it. mode:
 //
-//	"1" or "challenge"  -> omit MsgOpenGEMMChallenge
+//	"1" or "challenge"  -> omit MsgOpenGEMMChallenge and MsgOpenGraphChallenge
 //	"all"               -> omit challenge, trace, midpoint and arbitration
+//	                       transactions of both the V1 GEMM family and the
+//	                       CANONICAL_GRAPH_V2 family
 //	"" or "0"           -> disabled (default)
 func maybeEnableDevCensorship(app *App) {
 	mode := os.Getenv("PRISMA_DEV_CENSOR_GEMM_CHALLENGES")
@@ -76,9 +78,11 @@ func devCensorOmits(txConfig client.TxConfig, raw []byte, omitTrace bool) bool {
 	}
 	for _, msg := range tx.GetMsgs() {
 		switch msg.(type) {
-		case *types.MsgOpenGEMMChallenge:
+		case *types.MsgOpenGEMMChallenge, *types.MsgOpenGraphChallenge:
 			return true
-		case *types.MsgCommitGEMMTrace, *types.MsgSubmitGEMMMidState, *types.MsgArbitrateGEMM:
+		case *types.MsgCommitGEMMTrace, *types.MsgSubmitGEMMMidState, *types.MsgArbitrateGEMM,
+			*types.MsgGraphTrailClaim, *types.MsgGraphMidPoint, *types.MsgArbitrateGraphNode,
+			*types.MsgOpenWideGEMMDispute, *types.MsgWideTraceClaim, *types.MsgArbitrateWide512:
 			if omitTrace {
 				return true
 			}

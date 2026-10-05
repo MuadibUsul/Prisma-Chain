@@ -289,6 +289,12 @@ func (s msgServer) lockTrailClaimV2(ctx context.Context, task *GraphTask,
 		}
 		record.Snapshot = snapshot
 		record.Status = GraphDisputeBisection
+		if dispute.ArbReady() {
+			// A single-node graph converges the moment both trails lock:
+			// no midpoint round can be submitted, so promote the record
+			// immediately or the arbitration would be unreachable.
+			record.Status = GraphDisputeArbReady
+		}
 		record.TranscriptDigest, err = graphTranscriptStep(record.TranscriptDigest, "claims_locked_v2",
 			map[string]any{"worker_root": fmt.Sprintf("%x", record.WorkerClaim.Root),
 				"challenger_root": fmt.Sprintf("%x", record.ChallengerClaim.Root)})

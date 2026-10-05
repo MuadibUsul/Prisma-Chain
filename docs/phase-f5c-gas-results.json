@@ -23,7 +23,7 @@
   },
   {
    "step": "finalize_with_quorum",
-   "gas": 186066
+   "gas": 186696
   },
   {
    "step": "post_graph_v2_fraud_case",

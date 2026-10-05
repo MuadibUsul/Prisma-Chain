@@ -1,0 +1,42 @@
+{
+ "scenario": "gemm_fraud",
+ "chain_id": "prisma-mv-1",
+ "graph_id_v2": "0c81f15182616503a860202aead6725229c2610c7ce0046def5f9b6af0ae3567",
+ "task_id": 9,
+ "fraud_committed_height": 344,
+ "dispute_status_before_wide": "arb_ready",
+ "final_status": "fraud",
+ "receipt_id": "",
+ "zero_vwr": true,
+ "watcher_verdict": "fraud_detected",
+ "watcher_localization": [
+  {
+   "node_id": 0,
+   "operator": "GEMM_A13W10_I64_V1",
+   "bad_row": 0,
+   "bad_column": 0,
+   "tile_i": 0,
+   "tile_j": 0
+  }
+ ],
+ "four_validators": {
+  "validator-a": {
+   "height": 355,
+   "app_hash": "57AF16A6564ADF28C7B0C6EBCE9AC4C7C4F4D47766C8627DEA7D1263AF4F6D31"
+  },
+  "validator-b": {
+   "height": 355,
+   "app_hash": "57AF16A6564ADF28C7B0C6EBCE9AC4C7C4F4D47766C8627DEA7D1263AF4F6D31"
+  },
+  "validator-c": {
+   "height": 355,
+   "app_hash": "57AF16A6564ADF28C7B0C6EBCE9AC4C7C4F4D47766C8627DEA7D1263AF4F6D31"
+  },
+  "validator-d": {
+   "height": 355,
+   "app_hash": "57AF16A6564ADF28C7B0C6EBCE9AC4C7C4F4D47766C8627DEA7D1263AF4F6D31"
+  }
+ },
+ "four_validators_converged": true,
+ "status": "PASS"
+}

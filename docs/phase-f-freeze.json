@@ -1,8 +1,8 @@
 {
  "phase": "F",
- "decision": "PARTIAL",
- "freeze_tag_created": false,
- "reason": "The 4-validator devnet E2E scenarios (including block-level honest/fraud runs) are NOT TESTED; the phase's own rule forbids a pass tag in this state.",
+ "decision": "PASS",
+ "freeze_tag_created": true,
+ "reason": "All predeclared gates are evidenced, including the complete A6 4-validator devnet E2E on the REAL 310-node block (honest, GEMM-145 fraud via the 512-MAC wide path, ROPE-85 fraud via the bounded table arbiter, false challenge, combined censorship+DA-offline, wide-dispute full-stack restart, validator offline/recovery, availability failure) with four-validator app-hash convergence; each scenario has a committed evidence JSON in docs/.",
  "recorded": {
   "branch": "protocol/transformer-phase-f5c-wide-integer",
   "graph_id_v2": "8fb86087697e277602bb4b2088ba48eb4172c21d9c4f83914582f2cbf00d4def",
@@ -18,9 +18,38 @@
    "graph_da_attestation": "GRAPH_DA_ATTESTATION_V2/1.0.0",
    "bundle_v2": "GRAPH_VERIFICATION_BUNDLE_V2/1.0.0"
   },
-  "v1_frozen": {"graph_id_v1": "f1ba2ebb09f54fd37cf779db7d802380de0effa31a0b1e58047cc1d563c43315",
-                "legacy_golden": "testdata/f5c_legacy_golden.json"},
+  "v1_frozen": {
+   "graph_id_v1": "f1ba2ebb09f54fd37cf779db7d802380de0effa31a0b1e58047cc1d563c43315",
+   "legacy_golden": "testdata/f5c_legacy_golden.json"
+  },
   "gpu_evidence": "F.5B.2 (FUSED_GPU_FEASIBLE_A13W10) on A40 + RTX 2000 Ada",
-  "next": "A6 devnet E2E, then freeze tag per docs/phase-f-final-report.md"
- }
+  "next": "A6 devnet E2E, then freeze tag per docs/phase-f-final-report.md",
+  "a6_e2e": {
+   "chain_id": "prisma-mv-1",
+   "validators": 4,
+   "power": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "honest_real_block": "docs/phase-f5c-e2e-honest.json",
+   "gemm_fraud_real_node145": "docs/phase-f5c-e2e-gemm-fraud.json",
+   "rope_fraud_real_node85": "docs/phase-f5c-e2e-rope-fraud.json",
+   "false_challenge": "docs/phase-f5c-e2e-false-challenge.json",
+   "combined_adversarial": "docs/phase-f5c-e2e-combined.json",
+   "wide_dispute_restart": "docs/phase-f5c-e2e-wide-restart.json",
+   "validator_recovery": "docs/phase-f5c-e2e-validator-restart.json",
+   "availability_failure": "docs/phase-f5c-e2e-availability-failure.json",
+   "fixture_variants": "docs/phase-f5c-e2e-*-small.json",
+   "defects_found_and_fixed": [
+    "single-node V2 dispute never promoted to arb_ready (fix + TestGraphV2SingleNodeDisputeArbitration)",
+    "wide arbitration panicked on node-output (kind 1) A operands (fix + TestWideGEMMDisputeNodeOperandArbitration)"
+   ]
+  },
+  "fresh_checkout_regression": "fresh clone of the tag tree: go test ./compute/... (canonical+gemmv1) green, cd chain && go test ./... green, tools build green, GraphIDV2 recomputed from the tag tree == 8fb86087697e277602bb4b2088ba48eb4172c21d9c4f83914582f2cbf00d4def"
+ },
+ "freeze_tag": "transformer-phase-f-wide-integer",
+ "next": "Phase B productization (roadmap B1+: release build, CLI polish, packaging); no protocol change after this tag.",
+ "freeze_tag_commit": "89547fa97b62d72a4cd336a5dfd3b000b03eac60"
 }

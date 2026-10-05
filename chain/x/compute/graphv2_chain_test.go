@@ -571,3 +571,188 @@ func TestGraphV2RequantArbitration(t *testing.T) {
 	}
 }
 
+
+// buildSingleNodeGraphV2Fixture is the minimal legal V2 graph: one cheap
+// SILU node over a Q12.20 input.  Its dispute interval converges at
+// creation (high == 1), which is the case a midpoint round can never
+// promote to arb-ready.
+func buildSingleNodeGraphV2Fixture(t *testing.T) *chainGraphV2Fixture {
+	t.Helper()
+	mk := func(desc canonical.TensorDescriptorV2, data []int64) *canonical.TensorV2 {
+		tensor, err := canonical.NewTensorV2(desc, data)
+		if err != nil {
+			t.Fatal(err)
+		}
+		return tensor
+	}
+	desc := canonical.NewDescV2(canonical.DtypeV2Q12_20, 8)
+	x := mk(desc, []int64{100, -200, 300, -400, 500, -600, 700, -800})
+	xroot, _ := x.TensorRootV2()
+	g := &canonical.GraphDescriptorV2{
+		ProtocolVersion: canonical.ProtocolVersionGraphV2,
+		Spec:            "TEST_SINGLE_NODE_V1",
+		Arithmetic:      canonical.A13W10I64Profile(),
+		Inputs:          []canonical.GraphInputV2{{Name: "x", Desc: desc, Root: xroot[:]}},
+		Nodes: []canonical.GraphNodeV2{{
+			NodeID: 0, OperatorID: canonical.OpSiLUFixedV1, Version: canonical.VersionFxFusion,
+			Inputs: []canonical.TensorRef{{Kind: 0, Index: 0}}, Output: desc,
+			Params: canonical.ParamList{},
+		}},
+		Outputs: []canonical.TensorRef{{Kind: 1, Index: 0}},
+	}
+	exec, err := canonical.ExecuteGraphV2(g, map[uint32]*canonical.TensorV2{0: x})
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw, err := json.Marshal(g)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return &chainGraphV2Fixture{graph: g, graphJSON: raw,
+		inputs: map[uint32]*canonical.TensorV2{0: x}, exec: exec}
+}
+
+// TestGraphV2SingleNodeDisputeArbitration proves that a one-node graph's
+// dispute is promoted to arb-ready as soon as both trails lock (no
+// midpoint round exists) and that the typed node arbitration settles it:
+// the honest worker's chunk is reproduced, the fabricated chunk is not.
+func TestGraphV2SingleNodeDisputeArbitration(t *testing.T) {
+	h := newGemmHarness(t, 100)
+	fx := buildSingleNodeGraphV2Fixture(t)
+	taskID, _ := h.postGraphV2(t, fx)
+	assignmentRef := h.acceptGraph(t, taskID)
+
+	var taskRef [8]byte
+	binary.BigEndian.PutUint64(taskRef[:], taskID)
+	rc, err := canonical.NewGraphResultCommitV3(fx.graph, taskRef[:], assignmentRef,
+		h.workKeys.networkPub, fx.exec, 42)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := canonical.SignGraphResultCommitV3(rc, h.workKeys.networkPriv); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := h.msg.SubmitGraphResultV2(h.ctx, &types.MsgSubmitGraphResultV2{
+		Worker: h.worker, GraphTaskId: taskID,
+		NodeOutputManifestRoot: rc.NodeOutputManifestRootV2,
+		OutputRoots:            rc.OutputRoots, FinalOutputRoot: rc.FinalOutputRoot,
+		CompletedEpoch: rc.CompletedEpoch, WorkerSignature: rc.Signature,
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	// the challenger's counter-claim: element 0 of the SILU output shifted
+	// by one (a self-consistent root the arbiter must still reject)
+	honestOut := fx.exec.Tensors[canonical.TensorRef{Kind: 1, Index: 0}]
+	if honestOut == nil {
+		t.Fatal("fixture has no node 0 output")
+	}
+	tamperedData := append([]int64(nil), honestOut.Data...)
+	tamperedData[0]++
+	tampered, err := canonical.NewTensorV2(honestOut.Desc, tamperedData)
+	if err != nil {
+		t.Fatal(err)
+	}
+	honestRoot, _ := honestOut.TensorRootV2()
+	tamperedRoot, _ := tampered.TensorRootV2()
+	challengerFinal := canonical.FinalOutputRoot([]canonical.Hash{tamperedRoot})
+
+	h.bondWorker(h.challenger, h.chalKeys)
+	if _, err := h.msg.OpenGraphChallenge(h.ctx, &types.MsgOpenGraphChallenge{
+		Challenger: h.challenger, GraphTaskId: taskID,
+		ChallengerOutputRoots: [][]byte{tamperedRoot[:]}, ChallengeBond: MinBond,
+	}); err != nil {
+		t.Fatal(err)
+	}
+	_ = challengerFinal
+
+	graphID, err := fx.graph.GraphIDV2()
+	if err != nil {
+		t.Fatal(err)
+	}
+	honest := fx.exec.Trail
+	bad := append([]canonical.Hash(nil), honest...)
+	bad[1] = tamperedRoot
+	lock := func(party string, trail []canonical.Hash) {
+		pi, err := canonical.TrailProofV2(graphID, trail, 0)
+		if err != nil {
+			t.Fatal(err)
+		}
+		pf, err := canonical.TrailProofV2(graphID, trail, uint32(len(trail)-1))
+		if err != nil {
+			t.Fatal(err)
+		}
+		root, err := canonical.TrailRootV2(graphID, trail)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if _, err := h.msg.GraphTrailClaim(h.ctx, &types.MsgGraphTrailClaim{
+			Party: party, GraphTaskId: taskID,
+			TrailRoot: root[:], InitialRoot: trail[0][:], InitialProof: siblingsOfV2(pi),
+			FinalRoot: trail[len(trail)-1][:], FinalProof: siblingsOfV2(pf),
+		}); err != nil {
+			t.Fatal(err)
+		}
+	}
+	lock(h.worker, honest)
+	lock(h.challenger, bad)
+
+	record, err := h.keeper.GetGraphDispute(h.ctx, taskID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if record.Status != GraphDisputeArbReady {
+		t.Fatalf("single-node dispute status %q, want %q (no midpoint exists)",
+			record.Status, GraphDisputeArbReady)
+	}
+
+	// evidence: the committed x chunk (index 0, count 1 => no siblings) and
+	// the state-tree leaf for that input (single-leaf tree => no siblings)
+	xChunk, xProof, err := fx.inputs[0].ChunkProofV2(0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	descJSON, err := json.Marshal(fx.inputs[0].Desc)
+	if err != nil {
+		t.Fatal(err)
+	}
+	evidence := []*types.GraphChunkEvidence{{
+		DescJson: descJSON, RefKind: 0, RefIndex: 0, Root: fx.graph.Inputs[0].Root,
+		ChunkIndex: 0, Count: 1, Chunk: xChunk, Proof: siblingsOfV2(xProof),
+		StateProof: [][]byte{},
+	}}
+	workerChunk, workerProof, err := honestOut.ChunkProofV2(0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	chalChunk, chalProof, err := tampered.ChunkProofV2(0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	res, err := h.msg.ArbitrateGraphNode(h.ctx, &types.MsgArbitrateGraphNode{
+		Actor: h.challenger, GraphTaskId: taskID,
+		WorkerOutRoot:        honestRoot[:],
+		WorkerChunkIndex:     0,
+		WorkerChunk:          workerChunk,
+		WorkerChunkProof:     siblingsOfV2(workerProof),
+		ChallengerOutRoot:    tamperedRoot[:],
+		ChallengerChunkIndex: 0,
+		ChallengerChunk:      chalChunk,
+		ChallengerChunkProof: siblingsOfV2(chalProof),
+		Evidence:             evidence,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if res.Outcome != "worker_wins" {
+		t.Fatalf("outcome %q, want worker_wins", res.Outcome)
+	}
+	task, err := h.keeper.GetGraphTask(h.ctx, taskID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if task.Status != GraphStatusResultSubmitted || !task.SurvivedChallenge {
+		t.Fatalf("task status %s survived=%v, want result_submitted/survived",
+			task.Status, task.SurvivedChallenge)
+	}
+}

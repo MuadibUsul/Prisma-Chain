@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prisma-cli"
+version = "0.1.0"
+description = "Prisma Chain operator/developer CLI (Phase B productization)"
+requires-python = ">=3.10"
+# One entrypoint over the product packages; the daemons' own CLIs stay usable.
+dependencies = ["cryptography>=41", "prisma-network", "prisma-worker", "prisma-da", "prisma-watcher"]
+
+[project.scripts]
+prisma = "prisma_cli.main:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["prisma_cli*"]

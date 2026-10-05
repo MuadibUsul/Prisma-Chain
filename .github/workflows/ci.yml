@@ -53,3 +53,18 @@ jobs:
           python-version: '3.10'
       - run: python -m pip install -e './network[test]'
       - run: python -m pytest -q network/tests
+
+  worker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      # The Go toolchain is here so the Python/Go cross-language gate
+      # (tools/f5c_verify_commit) runs in CI, not only locally.
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - run: python -m pip install -e './network[test]' -e './worker[test]' -e ./da -e ./watcher -e ./api -e ./cli -e ./faucet
+      - run: python -m pytest -q worker/tests da/tests watcher/tests api/tests cli/tests faucet/tests

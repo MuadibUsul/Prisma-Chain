@@ -120,6 +120,16 @@ func NewRootCmd() *cobra.Command {
 	if err := autoCliOpts.EnhanceRootCommand(root); err != nil {
 		panic(err)
 	}
+	prismaVersion := NewVersionCmd()
+	root.AddCommand(prismaVersion, NewHealthCmd(), NewRPCProxyCmd())
+	// The SDK registers a generic `version` command; replace it so that
+	// `prismad version` reports the Prisma build and frozen-protocol
+	// identity (B1-01b) instead of the SDK's build info.
+	for _, c := range root.Commands() {
+		if c.Name() == "version" && c != prismaVersion {
+			root.RemoveCommand(c)
+		}
+	}
 	root.SetOut(os.Stdout)
 	root.SetErr(os.Stderr)
 	return root

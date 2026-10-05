@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prisma-da"
+version = "0.1.0"
+description = "Prisma Chain DA provider daemon (DA_REPLICA_V1, Phase B productization)"
+requires-python = ">=3.10"
+# prisma-worker supplies the shared identity/keystore/redaction rules (B2-01)
+# and prisma-network the wire conventions; install all three from the repo:
+#   pip install -e ./network -e ./worker -e ./da
+dependencies = ["cryptography>=41", "prisma-network", "prisma-worker"]
+
+[project.scripts]
+prisma-da = "prisma_da.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["prisma_da*"]

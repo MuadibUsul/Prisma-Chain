@@ -1,0 +1,64 @@
+{
+ "script": "deploy/worker_join_smoke.py",
+ "chain_id": "prisma-joinsmoke-1",
+ "cases": [
+  {
+   "case": "worker account funded",
+   "expected": ">= 3000000",
+   "observed": "91498D443F788E3901769641D80362F7C0A5CF92D2EC94FCA973CF89DEDD190D",
+   "pass": true,
+   "note": ""
+  },
+  {
+   "case": "join",
+   "expected": "exit 0",
+   "observed": "0",
+   "pass": true,
+   "note": ""
+  },
+  {
+   "case": "bonded on chain",
+   "expected": ">= 1000000",
+   "observed": "1000000",
+   "pass": true,
+   "note": ""
+  },
+  {
+   "case": "protocol key registered on chain",
+   "expected": "32-byte ed25519 key",
+   "observed": "32 bytes, node_id=00bb7c1a4136b62c2ba6b8d761e8cf8dc597adc0d7c1f2a17624fe9b6aeda14f",
+   "pass": true,
+   "note": ""
+  },
+  {
+   "case": "state file written",
+   "expected": "chain/address/node_id/capability",
+   "observed": "['account_address', 'allow_unsupported_reason', 'bond_txhash', 'bonded_uprsm', 'capability', 'chain_id', 'gateway_announcement_pending', 'joined_at_ms', 'node_id', 'protocol_public_b64', 'reserved_uprsm', 'schema']",
+   "pass": true,
+   "note": ""
+  },
+  {
+   "case": "wrong chain-id refused",
+   "expected": "exit 1",
+   "observed": "1",
+   "pass": true,
+   "note": ""
+  },
+  {
+   "case": "unfunded account: actionable failure",
+   "expected": "exit 1",
+   "observed": "1",
+   "pass": true,
+   "note": ""
+  },
+  {
+   "case": "heartbeat tick",
+   "expected": "exit 0",
+   "observed": "0",
+   "pass": true,
+   "note": ""
+  }
+ ],
+ "passed": 8,
+ "failed": 0
+}

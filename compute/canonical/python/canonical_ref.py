@@ -1224,3 +1224,45 @@ def freivalds_wide_check(a, w, c, m: int, n: int, k: int, transpose_b: bool,
     z = c64 @ r                                      # (M,)
     bad_rows = [int(i) for i in np.nonzero(y != z)[0]]
     return (len(bad_rows) == 0, bad_rows)
+
+# --- WIDE_GEMM_DISPUTE_V1 trace material (A6 fraud scenario) -----------------
+
+DOMAIN_WIDE_GEMM_TRACE_V1 = b"PRISMA_WIDE_GEMM_TRACE_V1\x00"
+
+
+def wide_state_bytes(values) -> bytes:
+    """64 int64 -> 64 x BE64 two's complement."""
+    out = bytearray()
+    for v in values:
+        v = int(v) & ((1 << 64) - 1)
+        out += v.to_bytes(8, "big")
+    return bytes(out)
+
+
+def wide_state_leaf_v1(ti: int, tj: int, step: int, state_bytes: bytes) -> bytes:
+    return hash_bytes(DOMAIN_WIDE_GEMM_TRACE_V1, _u32be(ti), _u32be(tj),
+                      _u32be(step), state_bytes)
+
+
+def wide_trace_root_v1(ti: int, tj: int, states) -> bytes:
+    level = [wide_state_leaf_v1(ti, tj, i, s) for i, s in enumerate(states)]
+    while len(level) > 1:
+        level = [hash_bytes(level[i] + (level[i + 1] if i + 1 < len(level) else level[i]))
+                 for i in range(0, len(level), 2)]
+    return level[0]
+
+
+def wide_trace_proof_v1(ti: int, tj: int, states, index: int) -> list:
+    level = [wide_state_leaf_v1(ti, tj, i, s) for i, s in enumerate(states)]
+    levels = [level]
+    while len(levels[-1]) > 1:
+        lvl = levels[-1]
+        levels.append([hash_bytes(lvl[i] + (lvl[i + 1] if i + 1 < len(lvl) else lvl[i]))
+                       for i in range(0, len(lvl), 2)])
+    siblings = []
+    idx = index
+    for lvl in levels[:-1]:
+        sib = idx ^ 1
+        siblings.append(lvl[sib] if sib < len(lvl) else lvl[idx])
+        idx //= 2
+    return siblings

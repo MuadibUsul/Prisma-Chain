@@ -1,0 +1,64 @@
+{
+ "script": "deploy/worker_accept_smoke.py",
+ "chain_id": "prisma-acceptsmoke-1",
+ "cases": [
+  {
+   "case": "worker joined",
+   "expected": "exit 0",
+   "observed": "0",
+   "pass": true,
+   "note": ""
+  },
+  {
+   "case": "compatible task posted",
+   "expected": "task id",
+   "observed": "1",
+   "pass": true,
+   "note": ""
+  },
+  {
+   "case": "discover exit",
+   "expected": "exit 0",
+   "observed": "0",
+   "pass": true,
+   "note": ""
+  },
+  {
+   "case": "accept exit",
+   "expected": "exit 0",
+   "observed": "0",
+   "pass": true,
+   "note": ""
+  },
+  {
+   "case": "chain shows our worker as assignee",
+   "expected": "prsm153uaxptxsc97j2uug6ezvyv623qrzg4asrsuqt",
+   "observed": "prsm153uaxptxsc97j2uug6ezvyv623qrzg4asrsuqt",
+   "pass": true,
+   "note": ""
+  },
+  {
+   "case": "journaled accepted before side effects",
+   "expected": "phase accepted + txhash",
+   "observed": "accepted",
+   "pass": true,
+   "note": ""
+  },
+  {
+   "case": "duplicate accept submits nothing",
+   "expected": "history stays 2",
+   "observed": "2",
+   "pass": true,
+   "note": ""
+  },
+  {
+   "case": "incompatible task refused",
+   "expected": "exit 1 + still unassigned",
+   "observed": "exit=1 worker=''",
+   "pass": true,
+   "note": ""
+  }
+ ],
+ "passed": 8,
+ "failed": 0
+}
