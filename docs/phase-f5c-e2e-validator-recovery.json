@@ -1,0 +1,64 @@
+{
+ "scenario": "validator_offline_recovery",
+ "chain_id": "prisma-mv-1",
+ "heights_before_outage": {
+  "validator-a": {
+   "height": 703,
+   "app_hash": "1E765E7F448B2489D5163CB794BBEA92D546760A18B8182F52939F8370DD4D4A"
+  },
+  "validator-b": {
+   "height": 703,
+   "app_hash": "1E765E7F448B2489D5163CB794BBEA92D546760A18B8182F52939F8370DD4D4A"
+  },
+  "validator-c": {
+   "height": 703,
+   "app_hash": "1E765E7F448B2489D5163CB794BBEA92D546760A18B8182F52939F8370DD4D4A"
+  },
+  "validator-d": {
+   "height": 703,
+   "app_hash": "1E765E7F448B2489D5163CB794BBEA92D546760A18B8182F52939F8370DD4D4A"
+  }
+ },
+ "stop_height": 703,
+ "txs_sent_during_outage": 2,
+ "height_advanced_without_d": true,
+ "heights_during_outage": {
+  "validator-a": {
+   "height": 709,
+   "app_hash": "8CAC75F1E4102075A8EA8A82B14C50E9B0C356A47C4430707E0DCE20EBC2B9D6"
+  },
+  "validator-b": {
+   "height": 709,
+   "app_hash": "8CAC75F1E4102075A8EA8A82B14C50E9B0C356A47C4430707E0DCE20EBC2B9D6"
+  },
+  "validator-c": {
+   "height": 709,
+   "app_hash": "8CAC75F1E4102075A8EA8A82B14C50E9B0C356A47C4430707E0DCE20EBC2B9D6"
+  },
+  "validator-d": null
+ },
+ "peers_converged_during_outage": true,
+ "recovery_seconds": 9.6,
+ "heights_after_recovery": {
+  "validator-a": {
+   "height": 711,
+   "app_hash": "61562F0184B4A098B9DCD5C52AEA047BAA8BC91E0015CC090BBE33B3814C22D4"
+  },
+  "validator-b": {
+   "height": 711,
+   "app_hash": "61562F0184B4A098B9DCD5C52AEA047BAA8BC91E0015CC090BBE33B3814C22D4"
+  },
+  "validator-c": {
+   "height": 711,
+   "app_hash": "61562F0184B4A098B9DCD5C52AEA047BAA8BC91E0015CC090BBE33B3814C22D4"
+  },
+  "validator-d": {
+   "height": 711,
+   "app_hash": "61562F0184B4A098B9DCD5C52AEA047BAA8BC91E0015CC090BBE33B3814C22D4"
+  }
+ },
+ "recovered_converged": true,
+ "app_hash_after_recovery": "61562F0184B4A098B9DCD5C52AEA047BAA8BC91E0015CC090BBE33B3814C22D4",
+ "validator_d_height_lag": 0,
+ "status": "PASS"
+}
