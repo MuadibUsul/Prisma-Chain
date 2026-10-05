@@ -18,7 +18,7 @@ import json
 import pathlib
 import sys
 
-from . import chain, gpu, jobs, keystore
+from . import chain, gpu, jobs, keystore, model
 from .identity import WorkerIdentity
 from .join import JoinConfig, JoinError, join as run_join, heartbeat as run_heartbeat
 from .redact import install as install_redaction
@@ -237,6 +237,66 @@ def cmd_jobs_accept(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_model_build_manifest(args: argparse.Namespace) -> int:
+    manifest = model.build_manifest(pathlib.Path(args.dir).expanduser(), model_id=args.model_id,
+                                    spec_version=args.spec_version,
+                                    digests={d.split("=", 1)[0]: d.split("=", 1)[1]
+                                             for d in args.digest})
+    print(json.dumps(manifest.to_dict(), indent=1) if args.json else
+          f"manifest written for {manifest.model_id}/{manifest.spec_version} "
+          f"({len(manifest.files)} files, graph_id_v2 {manifest.graph_id_v2[:12]}…)")
+    return 0
+
+
+def cmd_model_verify(args: argparse.Namespace) -> int:
+    try:
+        manifest = model.verify(pathlib.Path(args.dir).expanduser())
+    except model.ProfileError as exc:
+        print(f"prisma-worker: {exc}", file=sys.stderr)
+        return 1
+    print(json.dumps(manifest.to_dict(), indent=1) if args.json else
+          f"profile {manifest.model_id}/{manifest.spec_version} verified "
+          f"(graph_id_v2 {manifest.graph_id_v2[:12]}…, policy_id {manifest.policy_id[:12]}…)")
+    return 0
+
+
+def cmd_model_install(args: argparse.Namespace) -> int:
+    try:
+        report = model.install(args.source, pathlib.Path(args.models_dir).expanduser(),
+                              model_id=args.model_id or None,
+                              spec_version=args.spec_version or None)
+    except model.ProfileError as exc:
+        print(f"prisma-worker: {exc}", file=sys.stderr)
+        return 1
+    if args.json:
+        print(json.dumps({"model_id": report.model_id, "spec_version": report.spec_version,
+                          "files": report.files, "cached": report.cached,
+                          "resumed": report.resumed}, indent=1))
+    else:
+        print(f"installed {report.model_id}/{report.spec_version}: {len(report.files)} files "
+              f"({len(report.cached)} from cache, {len(report.resumed)} resumed)")
+    return 0
+
+
+def cmd_model_check(args: argparse.Namespace) -> int:
+    directory = pathlib.Path(args.dir).expanduser()
+    try:
+        manifest = model.verify(directory)
+        client = chain.ChainClient(_chain_config(args))
+        client.validate_chain_id()
+        remote = client.model(manifest.model_id, manifest.spec_version)
+    except (model.ProfileError, chain.ChainError) as exc:
+        print(f"prisma-worker: {exc}", file=sys.stderr)
+        return 1
+    ok, reason = model.chain_check(manifest, remote)
+    if args.json:
+        print(json.dumps({"ok": ok, "reason": reason, "model_id": manifest.model_id,
+                          "spec_version": manifest.spec_version}, indent=1))
+    else:
+        print(("OK   " if ok else "FAIL ") + reason)
+    return 0 if ok else 1
+
+
 def cmd_gpu_probe(args: argparse.Namespace) -> int:
     try:
         report = gpu.probe(nvidia_smi=args.nvidia_smi)
@@ -334,6 +394,37 @@ def build_parser() -> argparse.ArgumentParser:
                         help="refuse tasks whose deadline is within this many blocks")
     accept.add_argument("--json", action="store_true")
     accept.set_defaults(func=cmd_jobs_accept)
+
+    model_cmd = sub.add_parser("model", help="frozen model/profile artifacts")
+    model_actions = model_cmd.add_subparsers(dest="action", required=True)
+
+    build = model_actions.add_parser("build-manifest", help="write a manifest for an artifact dir")
+    build.add_argument("--dir", required=True)
+    build.add_argument("--model-id", required=True)
+    build.add_argument("--spec-version", required=True)
+    build.add_argument("--digest", action="append", default=[],
+                       help="name=value digest recorded in the manifest (repeatable)")
+    build.add_argument("--json", action="store_true")
+    build.set_defaults(func=cmd_model_build_manifest)
+
+    verify = model_actions.add_parser("verify", help="verify a profile directory end to end")
+    verify.add_argument("--dir", required=True)
+    verify.add_argument("--json", action="store_true")
+    verify.set_defaults(func=cmd_model_verify)
+
+    install = model_actions.add_parser("install", help="resumable install into the model cache")
+    install.add_argument("--from", dest="source", required=True, help="directory path or URL base")
+    install.add_argument("--models-dir", required=True)
+    install.add_argument("--model-id", default="")
+    install.add_argument("--spec-version", default="")
+    install.add_argument("--json", action="store_true")
+    install.set_defaults(func=cmd_model_install)
+
+    check = model_actions.add_parser("check", help="verify locally and against the registered model")
+    chain_flags(check)
+    check.add_argument("--dir", required=True)
+    check.add_argument("--json", action="store_true")
+    check.set_defaults(func=cmd_model_check)
 
     gpu_cmd = sub.add_parser("gpu", help="GPU capability probe")
     gpu_actions = gpu_cmd.add_subparsers(dest="action", required=True)
