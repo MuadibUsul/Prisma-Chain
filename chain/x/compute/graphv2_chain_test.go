@@ -554,3 +554,4 @@ func TestGraphV2RequantArbitration(t *testing.T) {
 		t.Fatal("fraud task produced a receipt")
 	}
 }
+
