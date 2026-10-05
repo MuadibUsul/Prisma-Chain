@@ -1,0 +1,35 @@
+{
+ "scenario": "availability_failure",
+ "chain_id": "prisma-mv-1",
+ "requester_balance_before_post": 40000000,
+ "task_id": 14,
+ "result_submitted_height": 576,
+ "da_attestations": 1,
+ "da_quorum_required": 2,
+ "fail_not_before_height": 636,
+ "final_status": "availability_failed",
+ "receipt_id": "",
+ "zero_vwr": true,
+ "requester_balance_after_failure": 40000000,
+ "requester_refunded": true,
+ "four_validators": {
+  "validator-a": {
+   "height": 639,
+   "app_hash": "8E112989326A12A7F5E5484D93AFB793C7198E23619D2DF80E3828FC4EDFF77B"
+  },
+  "validator-b": {
+   "height": 639,
+   "app_hash": "8E112989326A12A7F5E5484D93AFB793C7198E23619D2DF80E3828FC4EDFF77B"
+  },
+  "validator-c": {
+   "height": 639,
+   "app_hash": "8E112989326A12A7F5E5484D93AFB793C7198E23619D2DF80E3828FC4EDFF77B"
+  },
+  "validator-d": {
+   "height": 639,
+   "app_hash": "8E112989326A12A7F5E5484D93AFB793C7198E23619D2DF80E3828FC4EDFF77B"
+  }
+ },
+ "four_validators_converged": true,
+ "status": "PASS"
+}
