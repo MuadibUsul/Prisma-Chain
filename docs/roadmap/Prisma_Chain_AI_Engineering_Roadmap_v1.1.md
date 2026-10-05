@@ -27,7 +27,7 @@ file wins.  The previous roadmap is kept only as historical v1.0 (see
 | protocol_phase | `FROZEN` |
 | phase_f | `PASS` |
 | active_phase | `B` |
-| active_task | `B7-01` |
+| active_task | `M4` |
 | freeze_tag | `transformer-phase-f-wide-integer` |
 | freeze_tag_object | `330d27f5fc92d009aca9599cc1e0bb13a496c766` (annotated tag object) |
 | freeze_commit | `89547fa97b62d72a4cd336a5dfd3b000b03eac60` (frozen protocol commit) |
@@ -66,7 +66,7 @@ PHASE_F IS FROZEN.
 AI MUST NOT execute A0-A7 again unless explicitly instructed to perform
 a regression fix or a protocol-versioned follow-up.
 
-The active execution entrypoint is B7-01.
+The active execution entrypoint is M4 (the productization gate).
 ```
 
 - Phase A tasks (A0-* … A7-*) are `DONE` + `FROZEN`.  They exist in this
@@ -284,7 +284,7 @@ demo.  Never weaken a real-block gate to a mini-graph gate again.
 | M1 — F.5C Dispute PASS | V2 Graph dispute + Graph→Wide bridge + 512-MAC | real wide GEMM fraud deterministically adjudicated on chain | **DONE / FROZEN** |
 | M2 — Watcher/DA PASS | Bundle V2 + Watcher V2 + 2-of-3 DA | worker disappearance still verifiable / challengeable | **DONE / FROZEN** |
 | M3 — PHASE_F PASS | full 4-validator real-Qwen E2E suite | honest/fraud/false/DA/censor/restart all PASS + freeze tag | **DONE / FROZEN** |
-| M4 — Productization Ready | 5 binaries + Job API + Scheduler + docs | a clean machine can install and run the network | **ACTIVE** (unlocked; entrypoint B7-01) |
+| M4 — Productization Ready | 5 binaries + Job API + Scheduler + docs | a clean machine can install and run the network | **ACTIVE** (unlocked; entrypoint M4) |
 | M5 — Private Testnet Alpha | multi-host, public-internet, invite-only | external simulated nodes close the loop across the internet | `PLANNED` / `BLOCKED_BY_M4` |
 | M6 — Public Testnet Alpha | strangers can join, submit, execute, verify | ≥1 external Worker + external Watcher produce real settlement | `PLANNED` / `BLOCKED_BY_M5` |
 
@@ -581,7 +581,7 @@ BLOCKED (do not start):
   Phase E                 -> BLOCKED_BY_M6
 ```
 
-Only `B7-01` is `ACTIVE` (B2-06 is PARTIAL: GPU_REAL_SMOKE blocked on SM86/SM89 hardware).  Do not mark all B tasks ACTIVE.
+Only `M4` is `ACTIVE` (all B tasks are DONE; M4 = the productization gate) (B2-06 is PARTIAL: GPU_REAL_SMOKE blocked on SM86/SM89 hardware).  Do not mark all B tasks ACTIVE.
 (B0-01 … B0-05 and all of B1 — B1-01, B1-02, B1-03 — are DONE; see their blocks.)
 
 ### 11.1 Phase B execution order (revised in v1.1)
@@ -2311,7 +2311,8 @@ proves.
 
 ```text
 Task ID            B7-01
-Status             PLANNED
+Status             DONE (2026-10-06)
+Evidence           docs/productization/b7-01.md; faucet/prisma_faucet policy core (validation, cooldown, per-IP bucket, anti-loop, balance alert, metrics, no-value notice); tests 8 (bucket first-request bug fixed); HTTP wrapper + funded account = Phase C
 Priority           P1
 Goal               test-token faucet for onboarding
 Dependencies       B1-02, B3-03 (network + observability surface)
@@ -2342,7 +2343,8 @@ limits are enforced and documented.
 
 ```text
 Task ID            B7-02
-Status             PLANNED
+Status             DONE (2026-10-06)
+Evidence           docs/productization/b7-02.md; docs/site/ (13 pages from shipped CLIs' tested flags, honest limitations/security); rendering = Phase C
 Priority           P1
 Goal               documentation a stranger can follow
 Dependencies       B5-01, B6-06, B7-01
@@ -2374,7 +2376,8 @@ against the private testnet; every claim is backed by a shipped component.
 
 ```text
 Task ID            B7-03
-Status             PLANNED
+Status             DONE (2026-10-06)
+Evidence           docs/productization/b7-03.md; docs/site/status.md manifest (live-endpoint-driven or unknown, never hand-typed); rendered page = Phase C
 Priority           P1
 Goal               read-only public picture of the network
 Dependencies       B1-02
