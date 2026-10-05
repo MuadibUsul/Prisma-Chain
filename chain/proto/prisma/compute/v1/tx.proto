@@ -43,6 +43,10 @@ service Msg {
   rpc GraphMidPoint(MsgGraphMidPoint) returns (MsgGraphMidPointResponse);
   rpc ArbitrateGraphNode(MsgArbitrateGraphNode) returns (MsgArbitrateGraphNodeResponse);
   rpc FinalizeGraphTask(MsgFinalizeGraphTask) returns (MsgFinalizeGraphTaskResponse);
+  rpc OpenWideGEMMDispute(MsgOpenWideGEMMDispute) returns (MsgOpenWideGEMMDisputeResponse);
+  rpc WideTraceClaim(MsgWideTraceClaim) returns (MsgWideTraceClaimResponse);
+  rpc WideMidPoint(MsgWideMidPoint) returns (MsgWideMidPointResponse);
+  rpc ArbitrateWide512(MsgArbitrateWide512) returns (MsgArbitrateWide512Response);
 }
 
 message MsgRegisterModel {
@@ -480,6 +484,66 @@ message MsgArbitrateGraphNode {
   repeated int64 rope_table = 12;
 }
 message MsgArbitrateGraphNodeResponse { string outcome = 1; }
+
+// --- WIDE_GEMM_DISPUTE_V1 (F.5C A2) -----------------------------------------
+// A wide-GEMM dispute is opened only when the graph bisection localized the
+// first divergent node to a GEMM_A13W10_I64_V1 node.  Every message binds
+// the task, the node and the K-step geometry; the chain only ever performs
+// bounded evidence checks plus one exact 512-MAC recomputation.
+
+message MsgOpenWideGEMMDispute {
+  option (cosmos.msg.v1.signer) = "challenger";
+  string challenger = 1;
+  uint64 graph_task_id = 2;
+  uint32 node_id = 3;   // must equal the first divergent node
+  uint32 tile_i = 4;
+  uint32 tile_j = 5;
+  uint64 challenge_bond = 6;
+}
+message MsgOpenWideGEMMDisputeResponse { uint64 deadline = 1; }
+
+message MsgWideTraceClaim {
+  option (cosmos.msg.v1.signer) = "party";
+  string party = 1;
+  uint64 graph_task_id = 2;
+  // Merkle root over WideStateLeafV1(step) leaves of the party's partial
+  // state chain (S0 = zero state .. S_steps).
+  bytes trace_root = 3;
+  // endpoint states: 64 x BE64 two's complement.
+  bytes initial_state = 4;
+  repeated bytes initial_proof = 5;
+  bytes final_state = 6;
+  repeated bytes final_proof = 7;
+}
+message MsgWideTraceClaimResponse {}
+
+message MsgWideMidPoint {
+  option (cosmos.msg.v1.signer) = "party";
+  string party = 1;
+  uint64 graph_task_id = 2;
+  // state at the canonical midpoint step (64 x BE64) + inclusion proof.
+  bytes state = 3;
+  repeated bytes proof = 4;
+  uint64 epoch = 5;
+}
+message MsgWideMidPointResponse {}
+
+message MsgArbitrateWide512 {
+  option (cosmos.msg.v1.signer) = "actor";
+  string actor = 1;
+  uint64 graph_task_id = 2;
+  // each party's claimed state after the disputed K-step (64 x BE64),
+  // with an inclusion proof against its locked trace root.
+  bytes worker_next_state = 3;
+  repeated bytes worker_next_proof = 4;
+  bytes challenger_next_state = 5;
+  repeated bytes challenger_next_proof = 6;
+  // operand evidence: 8 A-row chunks and 8 W-row chunks (GraphChunkEvidence),
+  // each carrying the 64-element row window that contains the 8 K-columns
+  // of this step; the chain extracts the 8x8 tiles from these chunks.
+  repeated GraphChunkEvidence evidence = 7;
+}
+message MsgArbitrateWide512Response { string outcome = 1; }
 
 message MsgFinalizeGraphTask {
   option (cosmos.msg.v1.signer) = "actor";
