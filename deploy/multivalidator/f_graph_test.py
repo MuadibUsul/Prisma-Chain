@@ -129,8 +129,11 @@ def cli_big(args) -> str:
     container = f"prisma-multivalidator-{G.SERVICE}-1"
     subprocess.run(["docker", "cp", str(local), f"{container}:/tmp/prisma_fgraph_args.json"],
                    check=True, capture_output=True, timeout=120)
+    # NUL-separated items + `xargs -0`: disables xargs quote/backslash
+    # processing so JSON-valued flags (protojson message fields) survive
+    # byte-for-byte.
     cmd = ["docker", "exec", container, "sh", "-c",
-           'jq -r ".[]" /tmp/prisma_fgraph_args.json | xargs -d "\n" prismad']
+           'jq -j \'.[] + "\\u0000"\' /tmp/prisma_fgraph_args.json | xargs -0 prismad']
     proc = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
     out = proc.stdout.strip()
     if proc.returncode != 0:
