@@ -1,0 +1,84 @@
+{
+ "outcome": "challenger_wins",
+ "records": [
+  {
+   "step": "post_graph_v2",
+   "gas": 101510
+  },
+  {
+   "step": "accept",
+   "gas": 124972
+  },
+  {
+   "step": "submit_result_v3",
+   "gas": 111726
+  },
+  {
+   "step": "da_attestation_1",
+   "gas": 104758
+  },
+  {
+   "step": "da_attestation_2",
+   "gas": 129506
+  },
+  {
+   "step": "finalize_with_quorum",
+   "gas": 186066
+  },
+  {
+   "step": "post_graph_v2_fraud_case",
+   "gas": 101564
+  },
+  {
+   "step": "accept_fraud_case",
+   "gas": 125338
+  },
+  {
+   "step": "submit_fraud_v3",
+   "gas": 111822
+  },
+  {
+   "step": "open_graph_challenge",
+   "gas": 134856
+  },
+  {
+   "step": "graph_trail_claims",
+   "gas": 167620
+  },
+  {
+   "step": "graph_midpoint_round",
+   "gas": 217592
+  },
+  {
+   "step": "open_wide_dispute",
+   "gas": 104160
+  },
+  {
+   "step": "wide_trace_claims",
+   "gas": 390760
+  },
+  {
+   "step": "arbitrate_wide_512",
+   "gas": 366347
+  }
+ ],
+ "schedule": {
+  "arb_unit": 4,
+  "evidence": 800,
+  "hash_base": 1000,
+  "store": 2000,
+  "tx_base": 20000,
+  "version": "GraphGasV1"
+ },
+ "version": "f5c-gas-results/1.0.0",
+ "wide512_witness": {
+  "chunk_payload_bytes": 128,
+  "evidence_chunks": 10,
+  "mac": 512,
+  "manifest_proof_depth_expected": 0,
+  "note": "the chain recomputes exactly 512 logical MAC in exact int64; the witness is bounded state bytes plus typed chunk proofs",
+  "proof_siblings_challenger": 1,
+  "proof_siblings_worker": 1,
+  "witness_bytes": 5550
+ }
+}

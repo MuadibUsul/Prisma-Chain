@@ -10,6 +10,12 @@ service Query {
   rpc GEMMDispute(QueryGEMMDisputeRequest) returns (QueryGEMMDisputeResponse);
   rpc GEMMReceipt(QueryGEMMReceiptRequest) returns (QueryGEMMReceiptResponse);
   rpc GEMMWorkerWork(QueryGEMMWorkerWorkRequest) returns (QueryGEMMWorkerWorkResponse);
+  // F.5C A5: aggregate read surface for CANONICAL_GRAPH_V2 tasks (task,
+  // DA availability, dispute/wide state, receipt) - external tools and the
+  // watcher recover state without reading the raw store.  Deliverable
+  // deviation (recorded): one aggregate query instead of four separate
+  // ones; the JSON payload carries the same fields.
+  rpc GraphV2Status(QueryGraphV2StatusRequest) returns (QueryGraphV2StatusResponse);
   rpc GEMMDAStatus(QueryGEMMDAStatusRequest) returns (QueryGEMMDAStatusResponse);
   rpc DAProvider(QueryDAProviderRequest) returns (QueryDAProviderResponse);
 }
@@ -48,3 +54,6 @@ message QueryGEMMDAStatusResponse {
 
 message QueryDAProviderRequest { string provider = 1; }
 message QueryDAProviderResponse { bytes provider_json = 1; }
+
+message QueryGraphV2StatusRequest { uint64 graph_task_id = 1; }
+message QueryGraphV2StatusResponse { bytes status_json = 1; }
