@@ -47,6 +47,11 @@ service Msg {
   rpc WideTraceClaim(MsgWideTraceClaim) returns (MsgWideTraceClaimResponse);
   rpc WideMidPoint(MsgWideMidPoint) returns (MsgWideMidPointResponse);
   rpc ArbitrateWide512(MsgArbitrateWide512) returns (MsgArbitrateWide512Response);
+  rpc SubmitGraphDAAttestation(MsgSubmitGraphDAAttestation) returns (MsgSubmitGraphDAAttestationResponse);
+  rpc FailGraphAvailability(MsgFailGraphAvailability) returns (MsgFailGraphAvailabilityResponse);
+  rpc OpenGraphDAChallenge(MsgOpenGraphDAChallenge) returns (MsgOpenGraphDAChallengeResponse);
+  rpc RespondGraphDAChallenge(MsgRespondGraphDAChallenge) returns (MsgRespondGraphDAChallengeResponse);
+  rpc TimeoutGraphDAChallenge(MsgTimeoutGraphDAChallenge) returns (MsgTimeoutGraphDAChallengeResponse);
 }
 
 message MsgRegisterModel {
@@ -544,6 +549,66 @@ message MsgArbitrateWide512 {
   repeated GraphChunkEvidence evidence = 7;
 }
 message MsgArbitrateWide512Response { string outcome = 1; }
+
+// --- GRAPH_VERIFICATION_BUNDLE_V2 availability (F.5C A4) --------------------
+// The DA layer proves STORAGE of the artifact the worker committed: typed
+// GraphDAAttestationV2 objects plus objective chunk challenges.  Providers
+// never execute the Transformer.
+
+message MsgSubmitGraphDAAttestation {
+  option (cosmos.msg.v1.signer) = "provider";
+  string provider = 1;
+  uint64 graph_task_id = 2;
+  // canonical GraphDAAttestationV2 (CBOR preimage signed by the provider).
+  bytes attestation_json = 3;
+}
+message MsgSubmitGraphDAAttestationResponse {}
+
+message MsgFailGraphAvailability {
+  option (cosmos.msg.v1.signer) = "actor";
+  string actor = 1;
+  uint64 graph_task_id = 2;
+}
+message MsgFailGraphAvailabilityResponse {}
+
+message MsgOpenGraphDAChallenge {
+  option (cosmos.msg.v1.signer) = "challenger";
+  string challenger = 1;
+  uint64 graph_task_id = 2;
+  string provider = 3;
+  uint32 node_id = 4;
+  uint32 chunk_index = 5;
+  bytes nonce = 6;
+  uint64 bond = 7;
+}
+message MsgOpenGraphDAChallengeResponse {
+  uint64 challenge_id = 1;
+  uint64 deadline = 2;
+}
+
+message MsgRespondGraphDAChallenge {
+  option (cosmos.msg.v1.signer) = "provider";
+  string provider = 1;
+  uint64 challenge_id = 2;
+  // the committed node descriptor (typed), its manifest inclusion proof
+  // against the task's node-output manifest root, and the typed chunk with
+  // its TensorRootV2 inclusion proof.
+  bytes node_root = 9;
+  bytes node_desc_json = 3;
+  repeated bytes manifest_proof = 4;
+  bytes chunk = 5;
+  uint32 chunk_index = 6;
+  uint32 chunk_count = 7;
+  repeated bytes chunk_proof = 8;
+}
+message MsgRespondGraphDAChallengeResponse {}
+
+message MsgTimeoutGraphDAChallenge {
+  option (cosmos.msg.v1.signer) = "actor";
+  string actor = 1;
+  uint64 challenge_id = 2;
+}
+message MsgTimeoutGraphDAChallengeResponse {}
 
 message MsgFinalizeGraphTask {
   option (cosmos.msg.v1.signer) = "actor";

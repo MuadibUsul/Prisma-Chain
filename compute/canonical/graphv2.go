@@ -1032,3 +1032,36 @@ func VerifyTrailProofV2(root, graphID Hash, step uint32, count uint32, stateRoot
 	proof := MerkleProof{Index: step, Count: count, Siblings: siblings}
 	return VerifyLeafInclusion(root, leaf, proof)
 }
+
+// NodeOutputManifestProofV2 derives the manifest root and one node's
+// inclusion proof from the executed node roots (chain evidence assembly).
+func NodeOutputManifestProofV2(g *GraphDescriptorV2, nodeRoots []Hash,
+	nodeIndex uint32) (Hash, []Hash, error) {
+	if len(nodeRoots) != len(g.Nodes) {
+		return Hash{}, nil, errors.New("canonical/v2: manifest needs one root per node")
+	}
+	graphID, err := g.GraphIDV2()
+	if err != nil {
+		return Hash{}, nil, err
+	}
+	if int(nodeIndex) >= len(g.Nodes) {
+		return Hash{}, nil, errors.New("canonical/v2: node index out of range")
+	}
+	leaves := make([]Hash, len(g.Nodes))
+	for i, node := range g.Nodes {
+		leaf, err := NodeOutputLeafV2(graphID, node)
+		if err != nil {
+			return Hash{}, nil, err
+		}
+		leaves[i] = hashBytes(leaf[:], nodeRoots[i][:])
+	}
+	levels, err := buildLevels(leaves)
+	if err != nil {
+		return Hash{}, nil, err
+	}
+	siblings, err := proveLeaf(levels, int(nodeIndex))
+	if err != nil {
+		return Hash{}, nil, err
+	}
+	return levels[len(levels)-1][0], siblings, nil
+}

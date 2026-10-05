@@ -157,6 +157,22 @@ func TestGraphV2HonestFlow(t *testing.T) {
 	if task.CommitVersion != "3" {
 		t.Fatalf("commit version = %q, want 3", task.CommitVersion)
 	}
+	// A4-03: finalization requires the two-provider DA quorum
+	prov1, prov2 := newGemmKeys(45), newGemmKeys(46)
+	h.bondWorker(h.monitorA, prov1)
+	h.bondWorker(h.monitorB, prov2)
+	if _, err := h.msg.RegisterDAProvider(h.ctx, &types.MsgRegisterDAProvider{Provider: h.monitorA}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := h.msg.RegisterDAProvider(h.ctx, &types.MsgRegisterDAProvider{Provider: h.monitorB}); err != nil {
+		t.Fatal(err)
+	}
+	if err := h.submitGraphDA(taskID, h.monitorA, h.graphDARaw(t, taskID, h.monitorA, prov1, nil)); err != nil {
+		t.Fatal(err)
+	}
+	if err := h.submitGraphDA(taskID, h.monitorB, h.graphDARaw(t, taskID, h.monitorB, prov2, nil)); err != nil {
+		t.Fatal(err)
+	}
 	h.advance(task.ChallengeEnd + 1)
 	res, err := h.msg.FinalizeGraphTask(h.ctx, &types.MsgFinalizeGraphTask{Actor: h.requester, GraphTaskId: taskID})
 	if err != nil {

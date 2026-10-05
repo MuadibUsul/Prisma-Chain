@@ -825,6 +825,13 @@ func (s msgServer) finalizeGraphOptimistic(ctx context.Context, task *GraphTask)
 	var receiptID canonical.Hash
 	var receiptJSON []byte
 	if task.CommitVersion == "3" {
+		// A4-03: graph tasks finalize only with an available verification
+		// bundle (2-of-3-style quorum over typed provider attestations).
+		requiredUntil := task.ResultSubmittedHeight + task.ChallengeWindow + DAWindowBlocks
+		if len(s.validGraphDAAttesters(ctx, task, requiredUntil, height)) < canonical.GraphDARequiredReplicas {
+			return nil, errors.New("graph DA quorum not met; finalization requires two " +
+				"valid GraphVerificationBundleV2 attestations")
+		}
 		graph2, err := graphDescriptorV2(task)
 		if err != nil {
 			return nil, err
