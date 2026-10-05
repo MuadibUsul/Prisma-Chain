@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/hex"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -408,6 +409,12 @@ func cmdProvision(args []string) error {
 		return err
 	}
 	if err := pinClientToml(*home); err != nil {
+		return err
+	}
+	// Import the account key so the provisioned home can sign transactions
+	// (rewards, sends, governance) — without it the keyring has no signer.
+	if _, err := runPrismad(spec.PrismadBinary(), append([]string{"keys", "import-hex", "validator",
+		hex.EncodeToString(keys.Account.Key)}, keysFlags(*home)...)...); err != nil {
 		return err
 	}
 	genesisRaw, err := os.ReadFile(filepath.Join(*bundleDir, "genesis.json"))

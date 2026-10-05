@@ -18,8 +18,9 @@ import json
 import pathlib
 import sys
 
-from . import gpu, keystore
+from . import chain, gpu, keystore
 from .identity import WorkerIdentity
+from .join import JoinConfig, JoinError, join as run_join, heartbeat as run_heartbeat
 from .redact import install as install_redaction
 from .redact import register_secret
 
@@ -115,6 +116,49 @@ def cmd_identity_rotate(args: argparse.Namespace) -> int:
     return 0
 
 
+def _chain_config(args: argparse.Namespace) -> chain.ChainConfig:
+    return chain.ChainConfig(rpc_urls=[u.strip() for u in args.node.split(",") if u.strip()],
+                             chain_id=args.chain_id, prismad=args.prismad)
+
+
+def cmd_join(args: argparse.Namespace) -> int:
+    install_redaction()
+    identity = keystore.load(args.keystore, _passphrase(args))
+    _register(identity)
+    config = JoinConfig(chain=_chain_config(args), bond_amount_uprsm=args.bond,
+                        state_path=pathlib.Path(args.state).expanduser(),
+                        allow_unsupported_reason=args.allow_unsupported or "")
+    try:
+        state = run_join(config, identity)
+    except (chain.ChainError, JoinError) as exc:
+        print(f"prisma-worker: {exc}", file=sys.stderr)
+        return 1
+    if args.json:
+        print(json.dumps(state, indent=1))
+    else:
+        print(f"joined chain {state['chain_id']} as {state['account_address']} "
+              f"(node_id {state['node_id']}, bonded {state['bonded_uprsm']} uprsm, "
+              f"status {state['capability']['status']})")
+        print(f"state: {config.state_path}")
+    return 0
+
+
+def cmd_heartbeat(args: argparse.Namespace) -> int:
+    install_redaction()
+    identity = keystore.load(args.keystore, _passphrase(args))
+    _register(identity)
+    config = JoinConfig(chain=_chain_config(args), state_path=pathlib.Path(args.state).expanduser())
+    try:
+        state = run_heartbeat(config, identity, interval_seconds=args.interval,
+                              iterations=args.iterations)
+    except (chain.ChainError, JoinError) as exc:
+        print(f"prisma-worker: {exc}", file=sys.stderr)
+        return 1
+    if args.json:
+        print(json.dumps(state, indent=1))
+    return 0
+
+
 def cmd_gpu_probe(args: argparse.Namespace) -> int:
     try:
         report = gpu.probe(nvidia_smi=args.nvidia_smi)
@@ -160,6 +204,29 @@ def build_parser() -> argparse.ArgumentParser:
     common(rotate)
     rotate.set_defaults(func=cmd_identity_rotate)
 
+    def chain_flags(cmd: argparse.ArgumentParser) -> None:
+        cmd.add_argument("--chain-id", required=True, help="expected chain id (refused on mismatch)")
+        cmd.add_argument("--node", required=True, help="RPC endpoint(s), comma-separated for fail-over")
+        cmd.add_argument("--prismad", default="prismad", help="prismad binary for queries/transactions")
+        cmd.add_argument("--state", default=str(pathlib.Path.home() / ".prisma-worker" / "state.json"),
+                         help="worker state file (default: %(default)s)")
+
+    join_cmd = sub.add_parser("join", help="join the network: validate, bond, register")
+    common(join_cmd)
+    chain_flags(join_cmd)
+    join_cmd.add_argument("--bond", type=int, default=1_000_000,
+                          help="bond target in uprsm (default: %(default)s = frozen MinBond)")
+    join_cmd.add_argument("--allow-unsupported", default="",
+                          help="join even if the GPU is not a proven target; REASON is recorded")
+    join_cmd.set_defaults(func=cmd_join)
+
+    hb = sub.add_parser("heartbeat", help="periodic liveness + capability refresh")
+    common(hb)
+    chain_flags(hb)
+    hb.add_argument("--interval", type=float, default=30.0, help="seconds between heartbeats")
+    hb.add_argument("--iterations", type=int, default=0, help="stop after N ticks (0 = forever)")
+    hb.set_defaults(func=cmd_heartbeat)
+
     gpu_cmd = sub.add_parser("gpu", help="GPU capability probe")
     gpu_actions = gpu_cmd.add_subparsers(dest="action", required=True)
     probe = gpu_actions.add_parser("probe", help="report GPU model/CC/VRAM/driver and backend support")
@@ -171,9 +238,11 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    # Only the identity subcommands carry a keystore path.
+    # Only the identity/join/heartbeat subcommands carry a keystore path.
     if hasattr(args, "keystore"):
         args.keystore = pathlib.Path(args.keystore).expanduser()
+    if hasattr(args, "iterations") and not args.iterations:
+        args.iterations = None
     try:
         return args.func(args)
     except (keystore.KeystoreError, CliError, ValueError) as exc:

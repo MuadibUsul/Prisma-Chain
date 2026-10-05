@@ -62,11 +62,15 @@ defaults to `~/.prisma-worker/worker-key.json` (override with
   (hex or a file containing it), so an operator outlives a lost disk. After
   re-import, re-announce the network-key binding so the chain learns the
   key again.
-- **Compromised key → rotate.** `identity rotate` replaces the identity in
-  place and prints the retired and new public records; announce the new
-  protocol key to the chain (network-key binding) **before** removing the
-  old one anywhere, and keep the old key usable until the announcement is
-  accepted (B2-01g).
+- **Compromised key → rotate, with a frozen-chain caveat.** The chain
+  refuses to replace a bonded network key (`bonded network key cannot be
+  replaced`, chain/x/compute/keeper.go), so a protocol-key rotation means a
+  **fresh chain account with its own bond** — the old account keeps its
+  bond until it is unbonded by whatever path the chain offers. `identity
+  rotate` replaces the local identity in place and prints both public
+  records; use `join` with the new account to bond it. Rotating only the
+  *account* while keeping the protocol key is possible (bond the new
+  account with the same protocol key and proof).
 
 ## No secrets in logs (B2-01f)
 
