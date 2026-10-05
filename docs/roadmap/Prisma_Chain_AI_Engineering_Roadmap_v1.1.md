@@ -27,7 +27,7 @@ file wins.  The previous roadmap is kept only as historical v1.0 (see
 | protocol_phase | `FROZEN` |
 | phase_f | `PASS` |
 | active_phase | `B` |
-| active_task | `B0-04` |
+| active_task | `B0-05` |
 | freeze_tag | `transformer-phase-f-wide-integer` |
 | freeze_tag_object | `330d27f5fc92d009aca9599cc1e0bb13a496c766` (annotated tag object) |
 | freeze_commit | `89547fa97b62d72a4cd336a5dfd3b000b03eac60` (frozen protocol commit) |
@@ -66,7 +66,7 @@ PHASE_F IS FROZEN.
 AI MUST NOT execute A0-A7 again unless explicitly instructed to perform
 a regression fix or a protocol-versioned follow-up.
 
-The active execution entrypoint is B0-04.
+The active execution entrypoint is B0-05.
 ```
 
 - Phase A tasks (A0-* … A7-*) are `DONE` + `FROZEN`.  They exist in this
@@ -284,7 +284,7 @@ demo.  Never weaken a real-block gate to a mini-graph gate again.
 | M1 — F.5C Dispute PASS | V2 Graph dispute + Graph→Wide bridge + 512-MAC | real wide GEMM fraud deterministically adjudicated on chain | **DONE / FROZEN** |
 | M2 — Watcher/DA PASS | Bundle V2 + Watcher V2 + 2-of-3 DA | worker disappearance still verifiable / challengeable | **DONE / FROZEN** |
 | M3 — PHASE_F PASS | full 4-validator real-Qwen E2E suite | honest/fraud/false/DA/censor/restart all PASS + freeze tag | **DONE / FROZEN** |
-| M4 — Productization Ready | 5 binaries + Job API + Scheduler + docs | a clean machine can install and run the network | **ACTIVE** (unlocked; entrypoint B0-04) |
+| M4 — Productization Ready | 5 binaries + Job API + Scheduler + docs | a clean machine can install and run the network | **ACTIVE** (unlocked; entrypoint B0-05) |
 | M5 — Private Testnet Alpha | multi-host, public-internet, invite-only | external simulated nodes close the loop across the internet | `PLANNED` / `BLOCKED_BY_M4` |
 | M6 — Public Testnet Alpha | strangers can join, submit, execute, verify | ≥1 external Worker + external Watcher produce real settlement | `PLANNED` / `BLOCKED_BY_M5` |
 
@@ -565,10 +565,9 @@ anywhere in this project.
 
 ```text
 ACTIVE:
-  B0-04   Development environment cleanup
+  B0-05   Productization toolchain baseline
 
 NEXT (dependency-ordered, unlocked as predecessors complete):
-  B0-05   Productization toolchain baseline
   B1-01   prismad reproducible release build
 
 BLOCKED (do not start):
@@ -582,8 +581,8 @@ BLOCKED (do not start):
   Phase E                 -> BLOCKED_BY_M6
 ```
 
-Only `B0-04` is `ACTIVE`.  Do not mark all B tasks ACTIVE.
-(B0-01, B0-02, B0-03 are DONE — see their task blocks for evidence.)
+Only `B0-05` is `ACTIVE`.  Do not mark all B tasks ACTIVE.
+(B0-01, B0-02, B0-03, B0-04 are DONE — see their task blocks for evidence.)
 
 ### 11.1 Phase B execution order (revised in v1.1)
 
@@ -1178,8 +1177,12 @@ outside of explicitly historical text.
 
 ```text
 Task ID            B0-04
-Status             ACTIVE
+Status             DONE (2026-10-05)
 Priority           P0 (cheap, do before B1 so the baseline is honest)
+Evidence           docs/productization/b0-04-environment-cleanup.md; devnet stopped via
+                   deploy/multivalidator/stop.sh after recording chain_id prisma-mv-1 height
+                   2120; containers+network removed, ports 26661-26664 released, data
+                   preserved; nothing referenced by reports deleted
 Goal               bring the development environment to a known, minimal,
                    documented state before productization
 Dependencies       B0-01 (so cleanup cannot destroy unclassified WIP)
