@@ -23,9 +23,9 @@ func NewHealthCmd() *cobra.Command {
 	var rpc string
 	var timeout time.Duration
 	cmd := &cobra.Command{
-		Use:   "health",
-		Short: "Check the node RPC health (bounded timeout; for container healthchecks)",
-		Args:  cobra.NoArgs,
+		Use:               "health",
+		Short:             "Check the node RPC health (bounded timeout; for container healthchecks)",
+		Args:              cobra.NoArgs,
 		PersistentPreRunE: func(*cobra.Command, []string) error { return nil },
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			client := &http.Client{Timeout: timeout}
